@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class character {
+public class Character : MonoBehaviour {
 
     public string graphicAsset;
 
     public string identifier;
     public string name;
 
-    public type mainType;
-	public type[] materialTypes;
+    public Type mainType;
+	public Type[] materialTypes;
 	public float[] materialTypesDistribution;
 
     public int width;
@@ -30,11 +30,11 @@ public class character {
     public int wisdom;
     public int intelligence;
 
-    public character(
+    public Character(
     	string ga,
     	string id,
     	string nm,
-    	type[] mt,
+    	Type[] mt,
     	float[] mtd,
     	int w,
     	int l,

@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class type {
+public class Type {
 	public string name;
 
-	public type parent;
+	public Type parent;
 	public bool originator;
 
-	public type (string n, type p) {
+	public Type (string n, Type p) {
 		name = n;
 		parent = p;
 		originator = false;
 	}
 
-	public type (string n) {
+	public Type (string n) {
 		name = n;
 		parent = null;
 		originator = true;

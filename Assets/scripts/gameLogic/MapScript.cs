@@ -12,24 +12,25 @@ public class MapScript : MonoBehaviour {
 
     public float cubeSize = 1;
 
-    public GameTile[,,] gameMap;
+    public GameCoord[,,] gameBoard;
 
-    public GameObject targetPrefab;
+    public GameObject layerPrefab;
 
     // Use this for initialization
     void Start() {
-        assetScript = GameObject.Find("Assets").GetComponent<AssetScript>();
-
         for (int i = 0; i < sizeY; i++) {
-            var layer = Instantiate(targetPrefab, new Vector3(transform.position.x, transform.position.y + i * cubeSize, transform.position.z), Quaternion.identity, transform);
+            var layer = Instantiate(layerPrefab, new Vector3(transform.position.x, transform.position.y + i * cubeSize, transform.position.z), Quaternion.identity, transform);
             layer.name = "layer" + i.ToString();
         }
 
-        gameMap = new GameTile[sizeX,sizeY,sizeZ];
+        gameBoard = new GameCoord[sizeX,sizeY,sizeZ];
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
-                    gameMap[x, y, z] = new GameTile(assetScript.tiles[0], x, y, z);
+                    gameBoard[x, y, z] = gameObject.AddComponent<GameCoord>();
+                    gameBoard[x, y, z].x = x;
+                    gameBoard[x, y, z].y = y;
+                    gameBoard[x, y, z].z = z;
                 }
             }
         }

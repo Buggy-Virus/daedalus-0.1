@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class relationalActionIGT {
-    public type[] targetTypes;
+public class RelationalActionIGT : MonoBehaviour {
+    public Type[] targetTypes;
     public float priority;
 
     public string actorAnimation;

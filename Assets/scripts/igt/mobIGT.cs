@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class mob {
-
-    public string graphicAsset;
-
+public class Mob : MonoBehaviour {
     public string identifier;
+    public string uniqueIdentifier;
+    public string graphicAsset;
+    public GameObject robject;
     public string name;
 
-    public type mainType;
-	public type[] materialTypes;
-	public float[] materialTypesDistribution;
+    public Index position;
+
+    public Type mainType;
+	public List<Type> materialTypes;
+	public List<float> materialTypesDistribution;
 	
     public int width;
     public int length;
@@ -30,11 +32,13 @@ public class mob {
     public int wisdom;
     public int intelligence;
 
-    public mob(
-    	string ga,
+    public Mob(
     	string id,
-    	type[] mt,
-    	float[] mtd,
+        string uid,
+        string ga,
+        Type t,
+    	List<Type> mt,
+    	List<float> mtd,
     	string nm,
     	int w,
     	int l,
@@ -46,11 +50,17 @@ public class mob {
     	int end,
     	int con,
     	int wis,
-    	int intl
+    	int inl
     	) {
         graphicAsset = ga;
 
         identifier = id;
+        uniqueIdentifier = uid;
+
+        mainType = t;
+        materialTypes = mt;
+        materialTypesDistribution = mtd;
+
         name = nm;
 
         width = w;
@@ -58,13 +68,15 @@ public class mob {
         height = h;
 
         hitScore = hs;
+        hitPoints = hs;
         moveScore = ms;
+        movePoints = ms;
         
         strength = str;
         dexterity = dex;
         endurance = end;
         constitution = con;
         wisdom = wis;
-        intelligence = intl;
+        intelligence = inl;
     }
 }

@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cube {
+public class Cube : MonoBehaviour {
 
+    public string identifier;
+    public string uniqueIdentifier;
 	public string graphicAsset;
-	public string identifier;
+    public GameObject robject;
 
-	public type mainType;
-	public type[] materialTypes;
-	public float[] materialTypesDistribution;
+    public Index position;
+
+	public Type mainType;
+	public List<Type> materialTypes;
+	public List<float> materialTypesDistribution;
 	
 	public int state;
 
-	public float transperancy;
+	public float transparency;
 
 	public int viscosity;
 	public bool flow;
@@ -21,12 +25,13 @@ public class cube {
 	public int hitScore;
 	public int hitPoints;
     
-    public cube (
+    public Cube (
+        string id,
+        string uid,
     	string ga,
-    	string id,
-    	type t,
-    	type[] mt,
-    	float[] mtd,
+    	Type t,
+    	List<Type> mt,
+    	List<float> mtd,
     	int st,
     	float ty,
     	int vy,
@@ -34,6 +39,7 @@ public class cube {
     	int hs
     	) {
     	graphicAsset = ga;
+        uniqueIdentifier = uid;
     	identifier = id;
 
     	mainType = t;
@@ -41,7 +47,7 @@ public class cube {
 
     	state = st;
 
-    	transperancy = ty;
+    	transparency = ty;
     	viscosity = vy;
     	flow = fl;
 

@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class tile {
+public class Tile : MonoBehaviour {
 
 	public string graphicAsset;
 	public string identifier;
 
-	public type mainType;
-	public type[] materialTypes;
+	public Type mainType;
+	public Type[] materialTypes;
 	public float[] materialTypesDistribution;
 
 	public float transperancy;
 
 	public int hitScore;
     
-    public tile (
+    public Tile (
     	string ga,
     	string id,
-    	type[] mt,
+    	Type[] mt,
     	float[] mtd,
     	float ty,
     	int hs

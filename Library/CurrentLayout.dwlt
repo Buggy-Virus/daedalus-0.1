@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 0
+    x: 1920
     y: 43
     width: 1920
     height: 997
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 950, y: 548}
+  m_MinSize: {x: 950, y: 398}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -40,13 +40,13 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 202
+    width: 204
     height: 947
-  m_MinSize: {x: 202, y: 224}
-  m_MaxSize: {x: 4002, y: 4024}
-  m_ActualView: {fileID: 14}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 15}
   m_Panes:
-  - {fileID: 14}
+  - {fileID: 15}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &3
@@ -66,13 +66,13 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 699
-    height: 673
+    width: 698
+    height: 668
   m_MinSize: {x: 204, y: 224}
   m_MaxSize: {x: 4004, y: 4024}
-  m_ActualView: {fileID: 18}
+  m_ActualView: {fileID: 19}
   m_Panes:
-  - {fileID: 18}
+  - {fileID: 19}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &4
@@ -94,12 +94,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1306
-    height: 673
+    width: 1304
+    height: 668
   m_MinSize: {x: 408, y: 224}
   m_MaxSize: {x: 8008, y: 4024}
   vertical: 0
-  controlID: 109
+  controlID: 88
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -116,15 +116,16 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 673
-    width: 1306
-    height: 274
-  m_MinSize: {x: 234, y: 274}
-  m_MaxSize: {x: 10004, y: 10024}
-  m_ActualView: {fileID: 16}
+    y: 668
+    width: 1304
+    height: 279
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 13}
   m_Panes:
-  - {fileID: 16}
-  m_Selected: 0
+  - {fileID: 17}
+  - {fileID: 13}
+  m_Selected: 1
   m_LastSelected: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -148,7 +149,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 950, y: 548}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &7
 MonoBehaviour:
@@ -194,10 +195,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 712, y: 498}
-  m_MaxSize: {x: 18008, y: 14048}
+  m_MinSize: {x: 885, y: 348}
+  m_MaxSize: {x: 16010, y: 8048}
   vertical: 0
-  controlID: 107
+  controlID: 86
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -236,14 +237,14 @@ MonoBehaviour:
   - {fileID: 5}
   m_Position:
     serializedVersion: 2
-    x: 202
+    x: 204
     y: 0
-    width: 1306
+    width: 1304
     height: 947
-  m_MinSize: {x: 408, y: 498}
-  m_MaxSize: {x: 10004, y: 14048}
+  m_MinSize: {x: 408, y: 348}
+  m_MaxSize: {x: 8008, y: 8048}
   vertical: 1
-  controlID: 108
+  controlID: 87
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -263,14 +264,14 @@ MonoBehaviour:
     y: 0
     width: 412
     height: 947
-  m_MinSize: {x: 102, y: 124}
+  m_MinSize: {x: 277, y: 74}
   m_MaxSize: {x: 4002, y: 4024}
-  m_ActualView: {fileID: 13}
+  m_ActualView: {fileID: 16}
   m_Panes:
-  - {fileID: 15}
-  - {fileID: 13}
-  m_Selected: 1
-  m_LastSelected: 0
+  - {fileID: 16}
+  - {fileID: 14}
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -286,18 +287,44 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 699
+    x: 698
     y: 0
-    width: 607
-    height: 673
-  m_MinSize: {x: 204, y: 224}
-  m_MaxSize: {x: 4004, y: 4024}
-  m_ActualView: {fileID: 17}
+    width: 606
+    height: 668
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 18}
   m_Panes:
-  - {fileID: 17}
+  - {fileID: 18}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &13
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12003, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Console
+    m_Image: {fileID: 111653112392082826, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 2124
+    y: 741
+    width: 1300
+    height: 259
+  m_PersistentViewDataDictionary: {fileID: 0}
+--- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -327,11 +354,11 @@ MonoBehaviour:
   timeSinceLastRotation: -1
   currentBranchAndRemoteHasUpdate: 0
   currentTrackingStatusHasUpdate: 0
-  currentStatusEntriesHasUpdate: 0
-  repositoryProgressHasUpdate: 0
-  appManagerProgressHasUpdate: 0
-  changeTab: 5
-  activeTab: 5
+  currentStatusEntriesHasUpdate: 1
+  repositoryProgressHasUpdate: 1
+  appManagerProgressHasUpdate: 1
+  changeTab: 3
+  activeTab: 3
   initProjectView:
     hasCompletedInitialCheck: 0
     isUserDataPresent: 0
@@ -374,6 +401,16 @@ MonoBehaviour:
         isActive: 0
         treeIsCheckable: 0
         checkState: 0
+      - path: master
+        label: master
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 1
+        treeIsCheckable: 0
+        checkState: 0
       selectedNode:
         path: 
         label: 
@@ -390,10 +427,21 @@ MonoBehaviour:
       folders:
         keys:
         - Remote branches
+        - origin
         values:
         - path: Remote branches
           label: Remote branches
           level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 0
+          checkState: 0
+        - path: origin
+          label: origin
+          level: 1
           isFolder: 1
           isContainer: 0
           isCollapsed: 0
@@ -420,6 +468,26 @@ MonoBehaviour:
         isActive: 0
         treeIsCheckable: 0
         checkState: 0
+      - path: origin
+        label: origin
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 0
+        checkState: 0
+      - path: origin/master
+        label: master
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 0
+        checkState: 0
       selectedNode:
         path: 
         label: 
@@ -437,14 +505,14 @@ MonoBehaviour:
     disableDelete: 1
     disableCreate: 1
     lastLocalAndRemoteBranchListChangedEvent:
-      updatedTimeString: 2019-01-25T23:23:51.541-05:00
+      updatedTimeString: 2019-01-26T15:06:47.938-05:00
       cacheType: 2
     lastCurrentBranchAndRemoteChange:
-      updatedTimeString: 2019-01-25T23:25:03.636-05:00
+      updatedTimeString: 2019-01-26T13:14:52.954-05:00
       cacheType: 1
     currentBranch:
       name: master
-      tracking: 
+      tracking: origin/master
     currentRemote:
       name: origin
       url: https://github.com/Buggy-Virus/daedalus-0.1.git
@@ -453,23 +521,1224 @@ MonoBehaviour:
       host: 
       function: 0
       token: 
-    localBranches: []
-    remoteBranches: []
+    localBranches:
+    - name: master
+      tracking: origin/master
+    remoteBranches:
+    - name: origin/master
+      tracking: '[None]'
   changesView:
-    currentBranchHasUpdate: 0
-    currentStatusEntriesHasUpdate: 0
-    currentLocksHasUpdate: 0
-    commitBody: Here it is
-    commitMessage: Initial Commit
+    currentBranchHasUpdate: 1
+    currentStatusEntriesHasUpdate: 1
+    currentLocksHasUpdate: 1
+    commitBody: Restructuring code to fit with plan for how the code will be organized
+    commitMessage: Midway through code base clean up
     currentBranch: '[master]'
-    treeScroll: {x: 0, y: 0}
+    treeScroll: {x: 0, y: 1861}
     treeChanges:
       assets:
-        keys: []
-        values: []
+        keys:
+        - 00000000000000001000000000000000
+        - 4f704ae4b4f98ae41a0bce26658850c1
+        - 99c9720ab356a0642a771bea13969a05
+        - 2b4efec9854af6540ac2a14932783e52
+        - 7db232739a5be1b41884ccf187fefe6a
+        - fd15e40b0b0fbcf4d9858811e248d46f
+        - b97627c8be7e93d4d858a8e0230d11ab
+        - c20fb2d81ff24c449bb58e4ceff0daff
+        - 75ee1f609b423f34ab1b2bcd354b59b6
+        - 733d0e6b938e7a246a82cf7dc14dfa71
+        - b73596f0900b3a14bbacfbd45594dc07
+        - 61b3849dbb432c941b6ae4018d1e5a8f
+        - 6d417475746954e4dba33ae8e82d54fc
+        - e6f6c54d940a12641bf0284a6e8a835d
+        - ffac4f2650e6b9744a3f5acd3413a037
+        - e80c39bd3f0094b43ab237579de35a1c
+        - 617d2871f83986a40946597ab7f6dfa3
+        - 0ac6c90a6a605464cbaef31d065476f4
+        - 7e65adadc9e1eb241a377d6724b5af10
+        - 3c971e742c07a5641be81df6015a7b93
+        - d7a72fa6e59b880409121c0154230c26
+        - 058df450bf5fc564fa9c42367480b673
+        - 66528c8e5abf937408c963b05fa8fd27
+        - 00000000000000009000000000000000
+        - 0000000000000000a100000000000000
+        values:
+        - path: Assets
+          label: Assets
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\Scenes
+          label: Scenes
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\Scenes\SampleScene.unity
+          label: SampleScene.unity
+          level: 2
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\Scenes\SampleScene.unity
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\Scenes\SampleScene.unity
+            projectPath: Assets\Scenes\SampleScene.unity
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: Assets\scripts
+          label: scripts
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\gameLogic
+          label: gameLogic
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\gameLogic\GraphicScript.cs
+          label: GraphicScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\gameLogic\GraphicScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\GraphicScript.cs
+            projectPath: Assets\scripts\gameLogic\GraphicScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\gameLogic\Index.cs
+          label: Index.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\gameLogic\Index.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\Index.cs
+            projectPath: Assets\scripts\gameLogic\Index.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\gameLogic\LayerScript.cs
+          label: LayerScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\gameLogic\LayerScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\LayerScript.cs
+            projectPath: Assets\scripts\gameLogic\LayerScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\gameLogic\MapScript.cs
+          label: MapScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\gameLogic\MapScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MapScript.cs
+            projectPath: Assets\scripts\gameLogic\MapScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\gameLogic\MouseControls.cs
+          label: MouseControls.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\gameLogic\MouseControls.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MouseControls.cs
+            projectPath: Assets\scripts\gameLogic\MouseControls.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\gameLogic\type.cs
+          label: type.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\gameLogic\type.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\type.cs
+            projectPath: Assets\scripts\gameLogic\type.cs
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: Assets\scripts\ig
+          label: ig
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\ig\CubeListScript.cs
+          label: CubeListScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\ig\CubeListScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\CubeListScript.cs
+            projectPath: Assets\scripts\ig\CubeListScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\ig\IgListScript.cs
+          label: IgListScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\ig\IgListScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\IgListScript.cs
+            projectPath: Assets\scripts\ig\IgListScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\ig\MobListScript.cs
+          label: MobListScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\ig\MobListScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\MobListScript.cs
+            projectPath: Assets\scripts\ig\MobListScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\ig\TypeTreeScript.cs
+          label: TypeTreeScript.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\ig\TypeTreeScript.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\TypeTreeScript.cs
+            projectPath: Assets\scripts\ig\TypeTreeScript.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\igt
+          label: igt
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\igt\characterIGT.cs
+          label: characterIGT.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\igt\characterIGT.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\characterIGT.cs
+            projectPath: Assets\scripts\igt\characterIGT.cs
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: Assets\scripts\igt\cubeIGT.cs
+          label: cubeIGT.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\igt\cubeIGT.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\cubeIGT.cs
+            projectPath: Assets\scripts\igt\cubeIGT.cs
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: Assets\scripts\igt\GameCoordIGT.cs
+          label: GameCoordIGT.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\igt\GameCoordIGT.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\GameCoordIGT.cs
+            projectPath: Assets\scripts\igt\GameCoordIGT.cs
+            originalPath: 
+            status: 1
+            staged: 0
+        - path: Assets\scripts\igt\mobIGT.cs
+          label: mobIGT.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\igt\mobIGT.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\mobIGT.cs
+            projectPath: Assets\scripts\igt\mobIGT.cs
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: Assets\scripts\igt\relationalActionIGT.cs
+          label: relationalActionIGT.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\igt\relationalActionIGT.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\relationalActionIGT.cs
+            projectPath: Assets\scripts\igt\relationalActionIGT.cs
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: Assets\scripts\igt\tileIGT.cs
+          label: tileIGT.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\scripts\igt\tileIGT.cs
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\tileIGT.cs
+            projectPath: Assets\scripts\igt\tileIGT.cs
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: ProjectSettings\QualitySettings.asset
+          label: QualitySettings.asset
+          level: 1
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: ProjectSettings\QualitySettings.asset
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\QualitySettings.asset
+            projectPath: ProjectSettings\QualitySettings.asset
+            originalPath: 
+            status: 3
+            staged: 0
+        - path: ProjectSettings\UnityConnectSettings.asset
+          label: UnityConnectSettings.asset
+          level: 1
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: ProjectSettings\UnityConnectSettings.asset
+            fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\UnityConnectSettings.asset
+            projectPath: ProjectSettings\UnityConnectSettings.asset
+            originalPath: 
+            status: 3
+            staged: 0
       folders:
-        keys: []
-        values: []
+        keys:
+        - Assets
+        - Assets\Scenes
+        - Assets\scripts
+        - Assets\scripts\gameLogic
+        - Assets\scripts\ig
+        - Assets\scripts\igt
+        - Library
+        - Library\gfu
+        - Library\gfu\cache
+        - Library\metadata
+        - Library\metadata\00
+        - Library\metadata\05
+        - Library\metadata\0a
+        - Library\metadata\3c
+        - Library\metadata\5d
+        - Library\metadata\65
+        - Library\metadata\66
+        - Library\metadata\6d
+        - Library\metadata\73
+        - Library\metadata\75
+        - Library\metadata\7e
+        - Library\metadata\99
+        - Library\metadata\b7
+        - Library\metadata\b9
+        - Library\metadata\be
+        - Library\metadata\c2
+        - Library\metadata\d7
+        - Library\metadata\e6
+        - Library\metadata\e8
+        - Library\metadata\fd
+        - Library\metadata\ff
+        - Library\ScriptAssemblies
+        - Library\StateCache
+        - Library\StateCache\Hierarchy
+        - Library\StateCache\SceneView
+        - ProjectSettings
+        - Temp
+        - Temp\ProcessJobs
+        values:
+        - path: Assets
+          label: Assets
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\Scenes
+          label: Scenes
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts
+          label: scripts
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\gameLogic
+          label: gameLogic
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\ig
+          label: ig
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Assets\scripts\igt
+          label: igt
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library
+          label: Library
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\gfu
+          label: gfu
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\gfu\cache
+          label: cache
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata
+          label: metadata
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\00
+          label: 00
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\05
+          label: 05
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\0a
+          label: 0a
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\3c
+          label: 3c
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\5d
+          label: 5d
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\65
+          label: 65
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\66
+          label: 66
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\6d
+          label: 6d
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\73
+          label: 73
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\75
+          label: 75
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\7e
+          label: 7e
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\99
+          label: 99
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\b7
+          label: b7
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\b9
+          label: b9
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\be
+          label: be
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\c2
+          label: c2
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\d7
+          label: d7
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\e6
+          label: e6
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\e8
+          label: e8
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\fd
+          label: fd
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\metadata\ff
+          label: ff
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\ScriptAssemblies
+          label: ScriptAssemblies
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\StateCache
+          label: StateCache
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\StateCache\Hierarchy
+          label: Hierarchy
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Library\StateCache\SceneView
+          label: SceneView
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: ProjectSettings
+          label: ProjectSettings
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Temp
+          label: Temp
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
+        - path: Temp\ProcessJobs
+          label: ProcessJobs
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            status: 0
+            staged: 0
       checkedFileNodes:
         keys: []
         values: []
@@ -498,6 +1767,2652 @@ MonoBehaviour:
           originalPath: 
           status: 0
           staged: 0
+      - path: Assembly-CSharp.csproj
+        label: Assembly-CSharp.csproj
+        level: 0
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assembly-CSharp.csproj
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp.csproj
+          projectPath: Assembly-CSharp.csproj
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assembly-CSharp-Editor-firstpass.csproj
+        label: Assembly-CSharp-Editor-firstpass.csproj
+        level: 0
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assembly-CSharp-Editor-firstpass.csproj
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp-Editor-firstpass.csproj
+          projectPath: Assembly-CSharp-Editor-firstpass.csproj
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets
+        label: Assets
+        level: 0
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Assets\Scenes
+        label: Scenes
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Assets\Scenes\SampleScene.unity
+        label: SampleScene.unity
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Scenes\SampleScene.unity
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\Scenes\SampleScene.unity
+          projectPath: Assets\Scenes\SampleScene.unity
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts
+        label: scripts
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Assets\scripts\gameLogic
+        label: gameLogic
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Assets\scripts\gameLogic\GraphicScript.cs
+        label: GraphicScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\GraphicScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\GraphicScript.cs
+          projectPath: Assets\scripts\gameLogic\GraphicScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\GraphicScript.cs.meta
+        label: GraphicScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\GraphicScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\GraphicScript.cs.meta
+          projectPath: Assets\scripts\gameLogic\GraphicScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\Index.cs
+        label: Index.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\Index.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\Index.cs
+          projectPath: Assets\scripts\gameLogic\Index.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\Index.cs.meta
+        label: Index.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\Index.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\Index.cs.meta
+          projectPath: Assets\scripts\gameLogic\Index.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\LayerScript.cs
+        label: LayerScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\LayerScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\LayerScript.cs
+          projectPath: Assets\scripts\gameLogic\LayerScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\LayerScript.cs.meta
+        label: LayerScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\LayerScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\LayerScript.cs.meta
+          projectPath: Assets\scripts\gameLogic\LayerScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\MapScript.cs
+        label: MapScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\MapScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MapScript.cs
+          projectPath: Assets\scripts\gameLogic\MapScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\MapScript.cs.meta
+        label: MapScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\MapScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MapScript.cs.meta
+          projectPath: Assets\scripts\gameLogic\MapScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\MouseControls.cs
+        label: MouseControls.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\MouseControls.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MouseControls.cs
+          projectPath: Assets\scripts\gameLogic\MouseControls.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\MouseControls.cs.meta
+        label: MouseControls.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\MouseControls.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MouseControls.cs.meta
+          projectPath: Assets\scripts\gameLogic\MouseControls.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\gameLogic\type.cs
+        label: type.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\gameLogic\type.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\type.cs
+          projectPath: Assets\scripts\gameLogic\type.cs
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts\ig
+        label: ig
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Assets\scripts\ig\CubeListScript.cs
+        label: CubeListScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\CubeListScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\CubeListScript.cs
+          projectPath: Assets\scripts\ig\CubeListScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\CubeListScript.cs.meta
+        label: CubeListScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\CubeListScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\CubeListScript.cs.meta
+          projectPath: Assets\scripts\ig\CubeListScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\IgListScript.cs
+        label: IgListScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\IgListScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\IgListScript.cs
+          projectPath: Assets\scripts\ig\IgListScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\IgListScript.cs.meta
+        label: IgListScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\IgListScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\IgListScript.cs.meta
+          projectPath: Assets\scripts\ig\IgListScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\MobListScript.cs
+        label: MobListScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\MobListScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\MobListScript.cs
+          projectPath: Assets\scripts\ig\MobListScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\MobListScript.cs.meta
+        label: MobListScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\MobListScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\MobListScript.cs.meta
+          projectPath: Assets\scripts\ig\MobListScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\TypeTreeScript.cs
+        label: TypeTreeScript.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\TypeTreeScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\TypeTreeScript.cs
+          projectPath: Assets\scripts\ig\TypeTreeScript.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\ig\TypeTreeScript.cs.meta
+        label: TypeTreeScript.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\ig\TypeTreeScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\TypeTreeScript.cs.meta
+          projectPath: Assets\scripts\ig\TypeTreeScript.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\igt
+        label: igt
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Assets\scripts\igt\characterIGT.cs
+        label: characterIGT.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\characterIGT.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\characterIGT.cs
+          projectPath: Assets\scripts\igt\characterIGT.cs
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts\igt\cubeIGT.cs
+        label: cubeIGT.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\cubeIGT.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\cubeIGT.cs
+          projectPath: Assets\scripts\igt\cubeIGT.cs
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts\igt\GameCoordIGT.cs
+        label: GameCoordIGT.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\GameCoordIGT.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\GameCoordIGT.cs
+          projectPath: Assets\scripts\igt\GameCoordIGT.cs
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\igt\GameCoordIGT.cs.meta
+        label: GameCoordIGT.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\GameCoordIGT.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\GameCoordIGT.cs.meta
+          projectPath: Assets\scripts\igt\GameCoordIGT.cs.meta
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Assets\scripts\igt\mobIGT.cs
+        label: mobIGT.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\mobIGT.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\mobIGT.cs
+          projectPath: Assets\scripts\igt\mobIGT.cs
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts\igt\relationalActionIGT.cs
+        label: relationalActionIGT.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\relationalActionIGT.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\relationalActionIGT.cs
+          projectPath: Assets\scripts\igt\relationalActionIGT.cs
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts\igt\tileIGT.cs
+        label: tileIGT.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\igt\tileIGT.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\tileIGT.cs
+          projectPath: Assets\scripts\igt\tileIGT.cs
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Assets\scripts\LayerScript.cs
+        label: LayerScript.cs
+        level: 2
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\LayerScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\LayerScript.cs
+          projectPath: Assets\scripts\LayerScript.cs
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Assets\scripts\LayerScript.cs.meta
+        label: LayerScript.cs.meta
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\LayerScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\LayerScript.cs.meta
+          projectPath: Assets\scripts\LayerScript.cs.meta
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Assets\scripts\MapScript.cs
+        label: MapScript.cs
+        level: 2
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\MapScript.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MapScript.cs
+          projectPath: Assets\scripts\MapScript.cs
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Assets\scripts\MapScript.cs.meta
+        label: MapScript.cs.meta
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\MapScript.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MapScript.cs.meta
+          projectPath: Assets\scripts\MapScript.cs.meta
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Assets\scripts\MouseControls.cs
+        label: MouseControls.cs
+        level: 2
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\MouseControls.cs
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MouseControls.cs
+          projectPath: Assets\scripts\MouseControls.cs
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Assets\scripts\MouseControls.cs.meta
+        label: MouseControls.cs.meta
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\scripts\MouseControls.cs.meta
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MouseControls.cs.meta
+          projectPath: Assets\scripts\MouseControls.cs.meta
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Library
+        label: Library
+        level: 0
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\assetDatabase3
+        label: assetDatabase3
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\assetDatabase3
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\assetDatabase3
+          projectPath: Library\assetDatabase3
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\CurrentLayout.dwlt
+        label: CurrentLayout.dwlt
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\CurrentLayout.dwlt
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\CurrentLayout.dwlt
+          projectPath: Library\CurrentLayout.dwlt
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\EditorInstance.json
+        label: EditorInstance.json
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\EditorInstance.json
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\EditorInstance.json
+          projectPath: Library\EditorInstance.json
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\expandedItems
+        label: expandedItems
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\expandedItems
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\expandedItems
+          projectPath: Library\expandedItems
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu
+        label: gfu
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\gfu\cache
+        label: cache
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\gfu\cache\branches.yaml
+        label: branches.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\branches.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\branches.yaml
+          projectPath: Library\gfu\cache\branches.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu\cache\gitlocks.yaml
+        label: gitlocks.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\gitlocks.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitlocks.yaml
+          projectPath: Library\gfu\cache\gitlocks.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu\cache\gitlog.yaml
+        label: gitlog.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\gitlog.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitlog.yaml
+          projectPath: Library\gfu\cache\gitlog.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu\cache\gitstatusentries.yaml
+        label: gitstatusentries.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\gitstatusentries.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitstatusentries.yaml
+          projectPath: Library\gfu\cache\gitstatusentries.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu\cache\gittrackingstatus.yaml
+        label: gittrackingstatus.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\gittrackingstatus.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gittrackingstatus.yaml
+          projectPath: Library\gfu\cache\gittrackingstatus.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu\cache\gituser.yaml
+        label: gituser.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\gituser.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gituser.yaml
+          projectPath: Library\gfu\cache\gituser.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\gfu\cache\repoinfo.yaml
+        label: repoinfo.yaml
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\gfu\cache\repoinfo.yaml
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\repoinfo.yaml
+          projectPath: Library\gfu\cache\repoinfo.yaml
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata
+        label: metadata
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\00
+        label: 00
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\00\00000000000000009000000000000000
+        label: 00000000000000009000000000000000
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\00\00000000000000009000000000000000
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\00\00000000000000009000000000000000
+          projectPath: Library\metadata\00\00000000000000009000000000000000
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\00\0000000000000000a100000000000000
+        label: 0000000000000000a100000000000000
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\00\0000000000000000a100000000000000
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\00\0000000000000000a100000000000000
+          projectPath: Library\metadata\00\0000000000000000a100000000000000
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\05
+        label: 05
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\05\058df450bf5fc564fa9c42367480b673
+        label: 058df450bf5fc564fa9c42367480b673
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\05\058df450bf5fc564fa9c42367480b673
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\05\058df450bf5fc564fa9c42367480b673
+          projectPath: Library\metadata\05\058df450bf5fc564fa9c42367480b673
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+        label: 058df450bf5fc564fa9c42367480b673.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+          projectPath: Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\0a
+        label: 0a
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+        label: 0ac6c90a6a605464cbaef31d065476f4
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+          projectPath: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+        label: 0ac6c90a6a605464cbaef31d065476f4.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+          projectPath: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\3c
+        label: 3c
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+        label: 3c971e742c07a5641be81df6015a7b93
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+          projectPath: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+        label: 3c971e742c07a5641be81df6015a7b93.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+          projectPath: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\5d
+        label: 5d
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+        label: 5da59041198d31f43a77d9a6b04b8fd2
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+          projectPath: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\65
+        label: 65
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+        label: 6562d3d129d981f4ba7297fac6bec235
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+          projectPath: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\66
+        label: 66
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+        label: 66528c8e5abf937408c963b05fa8fd27
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+          projectPath: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+        label: 66528c8e5abf937408c963b05fa8fd27.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+          projectPath: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\6d
+        label: 6d
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+        label: 6d417475746954e4dba33ae8e82d54fc
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+          projectPath: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+        label: 6d417475746954e4dba33ae8e82d54fc.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+          projectPath: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\73
+        label: 73
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+        label: 733d0e6b938e7a246a82cf7dc14dfa71
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+          projectPath: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+        label: 733d0e6b938e7a246a82cf7dc14dfa71.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+          projectPath: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\75
+        label: 75
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+        label: 75ee1f609b423f34ab1b2bcd354b59b6
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+          projectPath: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+        label: 75ee1f609b423f34ab1b2bcd354b59b6.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+          projectPath: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\7e
+        label: 7e
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+        label: 7e65adadc9e1eb241a377d6724b5af10
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+          projectPath: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+        label: 7e65adadc9e1eb241a377d6724b5af10.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+          projectPath: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\99
+        label: 99
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\99\99c9720ab356a0642a771bea13969a05
+        label: 99c9720ab356a0642a771bea13969a05
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\99\99c9720ab356a0642a771bea13969a05
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\99\99c9720ab356a0642a771bea13969a05
+          projectPath: Library\metadata\99\99c9720ab356a0642a771bea13969a05
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\b7
+        label: b7
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+        label: b73596f0900b3a14bbacfbd45594dc07
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+          projectPath: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+        label: b73596f0900b3a14bbacfbd45594dc07.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+          projectPath: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\b9
+        label: b9
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+        label: b97627c8be7e93d4d858a8e0230d11ab
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+          projectPath: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+        label: b97627c8be7e93d4d858a8e0230d11ab.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+          projectPath: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\be
+        label: be
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+        label: be8ccc38013085644b9cbcbf34bba64a
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+          projectPath: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\c2
+        label: c2
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+        label: c20fb2d81ff24c449bb58e4ceff0daff
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+          projectPath: Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\d7
+        label: d7
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+        label: d7a72fa6e59b880409121c0154230c26
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+          projectPath: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+        label: d7a72fa6e59b880409121c0154230c26.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+          projectPath: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\metadata\e6
+        label: e6
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+        label: e6f6c54d940a12641bf0284a6e8a835d
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+          projectPath: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+        label: e6f6c54d940a12641bf0284a6e8a835d.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+          projectPath: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\e8
+        label: e8
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+        label: e80c39bd3f0094b43ab237579de35a1c
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+          projectPath: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+        label: e80c39bd3f0094b43ab237579de35a1c.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+          projectPath: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\fd
+        label: fd
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+        label: fd15e40b0b0fbcf4d9858811e248d46f
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+          projectPath: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+        label: fd15e40b0b0fbcf4d9858811e248d46f.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+          projectPath: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\ff
+        label: ff
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+        label: ffac4f2650e6b9744a3f5acd3413a037
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+          projectPath: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+        label: ffac4f2650e6b9744a3f5acd3413a037.info
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+          projectPath: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Library\ScriptAssemblies
+        label: ScriptAssemblies
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\ScriptAssemblies\Assembly-CSharp.dll
+        label: Assembly-CSharp.dll
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\ScriptAssemblies\Assembly-CSharp.dll
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\Assembly-CSharp.dll
+          projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+        label: Assembly-CSharp.dll.mdb
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+          projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Library\ScriptAssemblies\BuiltinAssemblies.stamp
+        label: BuiltinAssemblies.stamp
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\ScriptAssemblies\BuiltinAssemblies.stamp
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\BuiltinAssemblies.stamp
+          projectPath: Library\ScriptAssemblies\BuiltinAssemblies.stamp
+          originalPath: 
+          status: 5
+          staged: 0
+      - path: Library\shadercompiler-UnityShaderCompiler.exe0.log
+        label: shadercompiler-UnityShaderCompiler.exe0.log
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\shadercompiler-UnityShaderCompiler.exe0.log
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\shadercompiler-UnityShaderCompiler.exe0.log
+          projectPath: Library\shadercompiler-UnityShaderCompiler.exe0.log
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\StateCache
+        label: StateCache
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\StateCache\Hierarchy
+        label: Hierarchy
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+        label: e34291-a22808023c5567b44a.json
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+          projectPath: Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Library\StateCache\SceneView
+        label: SceneView
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Library\StateCache\SceneView\3e62a3-mainStage.json
+        label: 3e62a3-mainStage.json
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Library\StateCache\SceneView\3e62a3-mainStage.json
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\StateCache\SceneView\3e62a3-mainStage.json
+          projectPath: Library\StateCache\SceneView\3e62a3-mainStage.json
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: ProjectSettings
+        label: ProjectSettings
+        level: 0
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: ProjectSettings\QualitySettings.asset
+        label: QualitySettings.asset
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: ProjectSettings\QualitySettings.asset
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\QualitySettings.asset
+          projectPath: ProjectSettings\QualitySettings.asset
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: ProjectSettings\UnityConnectSettings.asset
+        label: UnityConnectSettings.asset
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: ProjectSettings\UnityConnectSettings.asset
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\UnityConnectSettings.asset
+          projectPath: ProjectSettings\UnityConnectSettings.asset
+          originalPath: 
+          status: 3
+          staged: 0
+      - path: Temp
+        label: Temp
+        level: 0
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Temp\ProcessJobs
+        label: ProcessJobs
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          status: 0
+          staged: 0
+      - path: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+        label: 1f068db059d5cf0261a3b566803bc6c6.bakert
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+          projectPath: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityLockfile
+        label: UnityLockfile
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityLockfile
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityLockfile
+          projectPath: Temp\UnityLockfile
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+        label: UnityTempFile-29f4504091a75224192aa7ac79132287
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+          projectPath: Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+        label: UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+          projectPath: Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+        label: UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+          projectPath: Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+        label: UnityTempFile-3663b998d717697409afefb67e4bd863
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+          projectPath: Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+        label: UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+          projectPath: Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+        label: UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+          projectPath: Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+        label: UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+          projectPath: Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+        label: UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+          projectPath: Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+        label: UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+          projectPath: Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+        label: UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+          projectPath: Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+        label: UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+          projectPath: Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+        label: UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+          projectPath: Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+        label: UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+          projectPath: Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+        label: UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+          projectPath: Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+        label: UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+          projectPath: Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+          originalPath: 
+          status: 1
+          staged: 0
+      - path: Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+        label: UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+          fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+          projectPath: Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+          originalPath: 
+          status: 1
+          staged: 0
       selectedNode:
         path: 
         label: 
@@ -517,16 +4432,670 @@ MonoBehaviour:
           originalPath: 
           status: 0
           staged: 0
-    gitStatusEntries: []
-    changedFilesText: No changed files
+    gitStatusEntries:
+    - path: Assembly-CSharp.csproj
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp.csproj
+      projectPath: Assembly-CSharp.csproj
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assembly-CSharp-Editor-firstpass.csproj
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp-Editor-firstpass.csproj
+      projectPath: Assembly-CSharp-Editor-firstpass.csproj
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\Scenes\SampleScene.unity
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\Scenes\SampleScene.unity
+      projectPath: Assets\Scenes\SampleScene.unity
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\gameLogic\GraphicScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\GraphicScript.cs
+      projectPath: Assets\scripts\gameLogic\GraphicScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\GraphicScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\GraphicScript.cs.meta
+      projectPath: Assets\scripts\gameLogic\GraphicScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\Index.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\Index.cs
+      projectPath: Assets\scripts\gameLogic\Index.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\Index.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\Index.cs.meta
+      projectPath: Assets\scripts\gameLogic\Index.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\LayerScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\LayerScript.cs
+      projectPath: Assets\scripts\gameLogic\LayerScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\LayerScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\LayerScript.cs.meta
+      projectPath: Assets\scripts\gameLogic\LayerScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\MapScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MapScript.cs
+      projectPath: Assets\scripts\gameLogic\MapScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\MapScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MapScript.cs.meta
+      projectPath: Assets\scripts\gameLogic\MapScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\MouseControls.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MouseControls.cs
+      projectPath: Assets\scripts\gameLogic\MouseControls.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\MouseControls.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MouseControls.cs.meta
+      projectPath: Assets\scripts\gameLogic\MouseControls.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\gameLogic\type.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\type.cs
+      projectPath: Assets\scripts\gameLogic\type.cs
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\ig\CubeListScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\CubeListScript.cs
+      projectPath: Assets\scripts\ig\CubeListScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\CubeListScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\CubeListScript.cs.meta
+      projectPath: Assets\scripts\ig\CubeListScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\IgListScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\IgListScript.cs
+      projectPath: Assets\scripts\ig\IgListScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\IgListScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\IgListScript.cs.meta
+      projectPath: Assets\scripts\ig\IgListScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\MobListScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\MobListScript.cs
+      projectPath: Assets\scripts\ig\MobListScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\MobListScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\MobListScript.cs.meta
+      projectPath: Assets\scripts\ig\MobListScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\TypeTreeScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\TypeTreeScript.cs
+      projectPath: Assets\scripts\ig\TypeTreeScript.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\ig\TypeTreeScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\ig\TypeTreeScript.cs.meta
+      projectPath: Assets\scripts\ig\TypeTreeScript.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\igt\characterIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\characterIGT.cs
+      projectPath: Assets\scripts\igt\characterIGT.cs
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\igt\cubeIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\cubeIGT.cs
+      projectPath: Assets\scripts\igt\cubeIGT.cs
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\igt\GameCoordIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\GameCoordIGT.cs
+      projectPath: Assets\scripts\igt\GameCoordIGT.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\igt\GameCoordIGT.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\GameCoordIGT.cs.meta
+      projectPath: Assets\scripts\igt\GameCoordIGT.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\igt\mobIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\mobIGT.cs
+      projectPath: Assets\scripts\igt\mobIGT.cs
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\igt\relationalActionIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\relationalActionIGT.cs
+      projectPath: Assets\scripts\igt\relationalActionIGT.cs
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\igt\tileIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\tileIGT.cs
+      projectPath: Assets\scripts\igt\tileIGT.cs
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\LayerScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\LayerScript.cs
+      projectPath: Assets\scripts\LayerScript.cs
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Assets\scripts\LayerScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\LayerScript.cs.meta
+      projectPath: Assets\scripts\LayerScript.cs.meta
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Assets\scripts\MapScript.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MapScript.cs
+      projectPath: Assets\scripts\MapScript.cs
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Assets\scripts\MapScript.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MapScript.cs.meta
+      projectPath: Assets\scripts\MapScript.cs.meta
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Assets\scripts\MouseControls.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MouseControls.cs
+      projectPath: Assets\scripts\MouseControls.cs
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Assets\scripts\MouseControls.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\MouseControls.cs.meta
+      projectPath: Assets\scripts\MouseControls.cs.meta
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Library\assetDatabase3
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\assetDatabase3
+      projectPath: Library\assetDatabase3
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\CurrentLayout.dwlt
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\CurrentLayout.dwlt
+      projectPath: Library\CurrentLayout.dwlt
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\EditorInstance.json
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\EditorInstance.json
+      projectPath: Library\EditorInstance.json
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\expandedItems
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\expandedItems
+      projectPath: Library\expandedItems
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\branches.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\branches.yaml
+      projectPath: Library\gfu\cache\branches.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gitlocks.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitlocks.yaml
+      projectPath: Library\gfu\cache\gitlocks.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gitlog.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitlog.yaml
+      projectPath: Library\gfu\cache\gitlog.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gitstatusentries.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitstatusentries.yaml
+      projectPath: Library\gfu\cache\gitstatusentries.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gittrackingstatus.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gittrackingstatus.yaml
+      projectPath: Library\gfu\cache\gittrackingstatus.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gituser.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gituser.yaml
+      projectPath: Library\gfu\cache\gituser.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\repoinfo.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\repoinfo.yaml
+      projectPath: Library\gfu\cache\repoinfo.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\00\00000000000000009000000000000000
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\00\00000000000000009000000000000000
+      projectPath: Library\metadata\00\00000000000000009000000000000000
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\00\0000000000000000a100000000000000
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\00\0000000000000000a100000000000000
+      projectPath: Library\metadata\00\0000000000000000a100000000000000
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\05\058df450bf5fc564fa9c42367480b673
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\05\058df450bf5fc564fa9c42367480b673
+      projectPath: Library\metadata\05\058df450bf5fc564fa9c42367480b673
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+      projectPath: Library\metadata\05\058df450bf5fc564fa9c42367480b673.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+      projectPath: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+      projectPath: Library\metadata\0a\0ac6c90a6a605464cbaef31d065476f4.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+      projectPath: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+      projectPath: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+      projectPath: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+      projectPath: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+      projectPath: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+      projectPath: Library\metadata\66\66528c8e5abf937408c963b05fa8fd27.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+      projectPath: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+      projectPath: Library\metadata\6d\6d417475746954e4dba33ae8e82d54fc.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+      projectPath: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+      projectPath: Library\metadata\73\733d0e6b938e7a246a82cf7dc14dfa71.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+      projectPath: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+      projectPath: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+      projectPath: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+      projectPath: Library\metadata\7e\7e65adadc9e1eb241a377d6724b5af10.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\99\99c9720ab356a0642a771bea13969a05
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\99\99c9720ab356a0642a771bea13969a05
+      projectPath: Library\metadata\99\99c9720ab356a0642a771bea13969a05
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+      projectPath: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+      projectPath: Library\metadata\b7\b73596f0900b3a14bbacfbd45594dc07.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+      projectPath: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+      projectPath: Library\metadata\b9\b97627c8be7e93d4d858a8e0230d11ab.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+      projectPath: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+      projectPath: Library\metadata\c2\c20fb2d81ff24c449bb58e4ceff0daff
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+      projectPath: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+      projectPath: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26.info
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+      projectPath: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+      projectPath: Library\metadata\e6\e6f6c54d940a12641bf0284a6e8a835d.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+      projectPath: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+      projectPath: Library\metadata\e8\e80c39bd3f0094b43ab237579de35a1c.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+      projectPath: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+      projectPath: Library\metadata\fd\fd15e40b0b0fbcf4d9858811e248d46f.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+      projectPath: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+      projectPath: Library\metadata\ff\ffac4f2650e6b9744a3f5acd3413a037.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\ScriptAssemblies\Assembly-CSharp.dll
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\Assembly-CSharp.dll
+      projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+      projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Library\ScriptAssemblies\BuiltinAssemblies.stamp
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\BuiltinAssemblies.stamp
+      projectPath: Library\ScriptAssemblies\BuiltinAssemblies.stamp
+      originalPath: 
+      status: 5
+      staged: 0
+    - path: Library\shadercompiler-UnityShaderCompiler.exe0.log
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\shadercompiler-UnityShaderCompiler.exe0.log
+      projectPath: Library\shadercompiler-UnityShaderCompiler.exe0.log
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+      projectPath: Library\StateCache\Hierarchy\e34291-a22808023c5567b44a.json
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\StateCache\SceneView\3e62a3-mainStage.json
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\StateCache\SceneView\3e62a3-mainStage.json
+      projectPath: Library\StateCache\SceneView\3e62a3-mainStage.json
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: ProjectSettings\QualitySettings.asset
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\QualitySettings.asset
+      projectPath: ProjectSettings\QualitySettings.asset
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: ProjectSettings\UnityConnectSettings.asset
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\UnityConnectSettings.asset
+      projectPath: ProjectSettings\UnityConnectSettings.asset
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+      projectPath: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityLockfile
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityLockfile
+      projectPath: Temp\UnityLockfile
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+      projectPath: Temp\UnityTempFile-29f4504091a75224192aa7ac79132287
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+      projectPath: Temp\UnityTempFile-30b21908016dc1340b32a0df3bbf1d95
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+      projectPath: Temp\UnityTempFile-35294cdc13c967e439e8ccda1de5016d
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+      projectPath: Temp\UnityTempFile-3663b998d717697409afefb67e4bd863
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+      projectPath: Temp\UnityTempFile-37477f4d8f06dc3488489a7a16ee67f5
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+      projectPath: Temp\UnityTempFile-785de9d3def46cd4db1ae94ba1fa0d63
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+      projectPath: Temp\UnityTempFile-83a591f8822275e429fcaa8cbe9a23a9
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+      projectPath: Temp\UnityTempFile-905c6124d22b38d4e91c1f3e9c8d2ad5
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+      projectPath: Temp\UnityTempFile-9e8594e0bacdefb4a9abd091b6d3cb39
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+      projectPath: Temp\UnityTempFile-9fe182eb54a894147b92cc4d6a9d4dbb
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+      projectPath: Temp\UnityTempFile-a4dbdcb13ca368b418f58b263eb0587c
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+      projectPath: Temp\UnityTempFile-a65dd00df33457e4aa50169ccac72a5b
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+      projectPath: Temp\UnityTempFile-b412fd92432517349a24c9037c3eb9b6
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+      projectPath: Temp\UnityTempFile-bc959b3d1a9b7864cbc03e60ea969c8f
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+      projectPath: Temp\UnityTempFile-cc86bd0fe2d534b45bb50485aeacb799
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+      projectPath: Temp\UnityTempFile-e974092aa6db8a54aa0367a0841058e9
+      originalPath: 
+      status: 1
+      staged: 0
+    changedFilesText: 109 changed files
     lastCurrentBranchChangedEvent:
-      updatedTimeString: 2019-01-25T23:25:03.636-05:00
+      updatedTimeString: 2019-01-28T18:15:45.964-05:00
       cacheType: 1
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2019-01-25T23:25:04.432-05:00
+      updatedTimeString: 2019-01-28T22:37:21.092-05:00
       cacheType: 5
     lastLocksChangedEvent:
-      updatedTimeString: 2019-01-25T23:25:04.460-05:00
+      updatedTimeString: 2019-01-28T22:35:29.806-05:00
       cacheType: 6
   historyView:
     currentLogHasUpdate: 0
@@ -604,7 +5173,7 @@ MonoBehaviour:
       changingManually: 0
     hasRemote: 1
     lastCurrentRemoteChangedEvent:
-      updatedTimeString: 2019-01-25T23:25:03.636-05:00
+      updatedTimeString: 2019-01-26T13:14:52.954-05:00
       cacheType: 1
     metricsEnabled: 1
     newRepositoryRemoteUrl: https://github.com/Buggy-Virus/daedalus-0.1.git
@@ -618,7 +5187,7 @@ MonoBehaviour:
       newGitEmail: oliver_hare@brown.edu
       needsSaving: 0
       lastCheckUserChangedEvent:
-        updatedTimeString: 2019-01-25T23:23:41.628-05:00
+        updatedTimeString: 2019-01-26T15:04:27.254-05:00
         cacheType: 7
     webTimeout: 3000
     gitTimeout: 5000
@@ -647,16 +5216,214 @@ MonoBehaviour:
         gitFileStatus: 0
         lockedAt: 1 Jan 0001, 00:00
     lastCurrentRemoteChangedEvent:
-      updatedTimeString: 2019-01-25T23:25:03.636-05:00
+      updatedTimeString: 2019-01-26T13:14:52.954-05:00
       cacheType: 1
     lastLocksChangedEvent:
-      updatedTimeString: 2019-01-25T23:27:56.565-05:00
+      updatedTimeString: 0001-01-01T00:00:00.000+00:00
       cacheType: 6
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2019-01-25T23:27:56.233-05:00
+      updatedTimeString: 2019-01-26T15:06:49.154-05:00
       cacheType: 5
     lockedFiles: []
-    gitStatusEntries: []
+    gitStatusEntries:
+    - path: Assembly-CSharp.csproj
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp.csproj
+      projectPath: Assembly-CSharp.csproj
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assembly-CSharp-Editor-firstpass.csproj
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp-Editor-firstpass.csproj
+      projectPath: Assembly-CSharp-Editor-firstpass.csproj
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Assets\scripts\igt\gameCoordIGT.cs
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\gameCoordIGT.cs
+      projectPath: Assets\scripts\igt\gameCoordIGT.cs
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Assets\scripts\igt\gameCoordIGT.cs.meta
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\gameCoordIGT.cs.meta
+      projectPath: Assets\scripts\igt\gameCoordIGT.cs.meta
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\assetDatabase3
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\assetDatabase3
+      projectPath: Library\assetDatabase3
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\EditorInstance.json
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\EditorInstance.json
+      projectPath: Library\EditorInstance.json
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\gfu\cache\branches.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\branches.yaml
+      projectPath: Library\gfu\cache\branches.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gitlocks.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitlocks.yaml
+      projectPath: Library\gfu\cache\gitlocks.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gitstatusentries.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gitstatusentries.yaml
+      projectPath: Library\gfu\cache\gitstatusentries.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gittrackingstatus.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gittrackingstatus.yaml
+      projectPath: Library\gfu\cache\gittrackingstatus.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\gituser.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gituser.yaml
+      projectPath: Library\gfu\cache\gituser.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\gfu\cache\repoinfo.yaml
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\repoinfo.yaml
+      projectPath: Library\gfu\cache\repoinfo.yaml
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\00\00000000000000009000000000000000
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\00\00000000000000009000000000000000
+      projectPath: Library\metadata\00\00000000000000009000000000000000
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\00\0000000000000000a100000000000000
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\00\0000000000000000a100000000000000
+      projectPath: Library\metadata\00\0000000000000000a100000000000000
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+      projectPath: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+      projectPath: Library\metadata\3c\3c971e742c07a5641be81df6015a7b93.info
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+      projectPath: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+      projectPath: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+      projectPath: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\ScriptAssemblies\Assembly-CSharp.dll
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\Assembly-CSharp.dll
+      projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+      projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll.mdb
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\shadercompiler-UnityShaderCompiler.exe0.log
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\shadercompiler-UnityShaderCompiler.exe0.log
+      projectPath: Library\shadercompiler-UnityShaderCompiler.exe0.log
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Library\StateCache\Hierarchy\e34291-mainStage.json
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\StateCache\Hierarchy\e34291-mainStage.json
+      projectPath: Library\StateCache\Hierarchy\e34291-mainStage.json
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: ProjectSettings\QualitySettings.asset
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\QualitySettings.asset
+      projectPath: ProjectSettings\QualitySettings.asset
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: ProjectSettings\UnityConnectSettings.asset
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\ProjectSettings\UnityConnectSettings.asset
+      projectPath: ProjectSettings\UnityConnectSettings.asset
+      originalPath: 
+      status: 3
+      staged: 0
+    - path: Temp\__Backupscenes\0.backup
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\__Backupscenes\0.backup
+      projectPath: Temp\__Backupscenes\0.backup
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+      projectPath: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityLockfile
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityLockfile
+      projectPath: Temp\UnityLockfile
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-132e0fc5c72daf24db0f4aaba064e971
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-132e0fc5c72daf24db0f4aaba064e971
+      projectPath: Temp\UnityTempFile-132e0fc5c72daf24db0f4aaba064e971
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-803c996e8c44ddb4f9e2b4e118295893
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-803c996e8c44ddb4f9e2b4e118295893
+      projectPath: Temp\UnityTempFile-803c996e8c44ddb4f9e2b4e118295893
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-a08704aa09c2ce643a7ea74877b39068
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a08704aa09c2ce643a7ea74877b39068
+      projectPath: Temp\UnityTempFile-a08704aa09c2ce643a7ea74877b39068
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-a7d547d4d026f8742b645233befdd89c
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a7d547d4d026f8742b645233befdd89c
+      projectPath: Temp\UnityTempFile-a7d547d4d026f8742b645233befdd89c
+      originalPath: 
+      status: 1
+      staged: 0
+    - path: Temp\UnityTempFile-b4393a70348383b46b58e7b139974f20
+      fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b4393a70348383b46b58e7b139974f20
+      projectPath: Temp\UnityTempFile-b4393a70348383b46b58e7b139974f20
+      originalPath: 
+      status: 1
+      staged: 0
     currentUsername: Buggy-Virus
     unlockFileMenuContent:
       m_Text: Release Lock
@@ -672,8 +5439,8 @@ MonoBehaviour:
   currentRemoteUrl: https://github.com/Buggy-Virus/daedalus-0.1.git
   statusAhead: 0
   statusBehind: 0
-  hasItemsToCommit: 0
-  isTrackingRemoteBranch: 0
+  hasItemsToCommit: 1
+  isTrackingRemoteBranch: 1
   currentBranchContent:
     m_Text: master
     m_Image: {fileID: 0}
@@ -683,13 +5450,13 @@ MonoBehaviour:
     m_Image: {fileID: 0}
     m_Tooltip: Url of the origin remote
   lastCurrentBranchAndRemoteChangedEvent:
-    updatedTimeString: 2019-01-25T23:25:03.636-05:00
+    updatedTimeString: 2019-01-27T20:46:42.643-05:00
     cacheType: 1
   lastTrackingStatusChangedEvent:
-    updatedTimeString: 0001-01-01T00:00:00.000+00:00
+    updatedTimeString: 2019-01-27T20:46:43.946-05:00
     cacheType: 4
   lastStatusEntriesChangedEvent:
-    updatedTimeString: 2019-01-25T23:29:25.743-05:00
+    updatedTimeString: 2019-01-28T00:33:20.963-05:00
     cacheType: 5
   pullButtonContent:
     m_Text: Pull
@@ -709,11 +5476,11 @@ MonoBehaviour:
     m_Tooltip: 
   repositoryProgressValue: 0
   repositoryProgressMessage: 
-  appManagerProgressValue: 0
-  appManagerProgressMessage: 
+  appManagerProgressValue: 1
+  appManagerProgressMessage: Initialized
   connections: []
   primaryConnectionUsername: Buggy-Virus
---- !u!114 &14
+--- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -734,17 +5501,17 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
+    x: 1920
     y: 73
-    width: 200
+    width: 202
     height: 927
   m_PersistentViewDataDictionary: {fileID: 0}
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: d4fbffff
+      m_SelectedIDs: ea0c0000
+      m_LastClickedID: 3306
+      m_ExpandedIDs: 4ad2ffff30d5ffffd4fbffffda0c0000ea0c0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -760,7 +5527,7 @@ MonoBehaviour:
         m_IsRenaming: 0
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 0}
+        m_ClientGUIView: {fileID: 2}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -768,7 +5535,7 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: e3429139b26c0cc44be10a4698455e07
---- !u!114 &15
+--- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -789,7 +5556,7 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1508
+    x: 3428
     y: 73
     width: 410
     height: 927
@@ -803,7 +5570,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_PreviewWindow: {fileID: 0}
---- !u!114 &16
+--- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -824,10 +5591,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 202
-    y: 746
-    width: 1302
-    height: 254
+    x: 2124
+    y: 741
+    width: 1300
+    height: 259
   m_PersistentViewDataDictionary: {fileID: 0}
   m_SearchFilter:
     m_NameFilter: 
@@ -841,20 +5608,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/scripts/igt
+    - Assets/scripts/gameLogic
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/scripts/igt
+  - Assets/scripts/gameLogic
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\ohare\Documents\Daedalus 0.1
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 59}
-    m_SelectedIDs: e0090000
-    m_LastClickedID: 2528
-    m_ExpandedIDs: 00000000a6090000100b000000ca9a3b
+    scrollPos: {x: 0, y: 70}
+    m_SelectedIDs: ac0a0000
+    m_LastClickedID: 2732
+    m_ExpandedIDs: 00000000220a0000fc0a0000a40b0000600c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -870,7 +5637,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 5}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -882,7 +5649,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a6090000100b0000
+    m_ExpandedIDs: 00000000220a0000fc0a0000a40b0000600c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -907,8 +5674,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: c80c0000
+    m_LastClickedInstanceID: 3272
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
@@ -937,7 +5704,7 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 64
   m_DirectoriesAreaWidth: 217
---- !u!114 &17
+--- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -958,10 +5725,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 901
+    x: 2822
     y: 73
-    width: 603
-    height: 653
+    width: 602
+    height: 648
   m_PersistentViewDataDictionary: {fileID: 0}
   m_MaximizeOnPlay: 0
   m_Gizmos: 0
@@ -973,10 +5740,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -301.5
-    m_HBaseRangeMax: 301.5
-    m_VBaseRangeMin: -318
-    m_VBaseRangeMax: 318
+    m_HBaseRangeMin: -301
+    m_HBaseRangeMax: 301
+    m_VBaseRangeMin: -315.5
+    m_VBaseRangeMax: 315.5
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -994,30 +5761,30 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 17
-      width: 603
-      height: 636
+      width: 602
+      height: 631
     m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 301.5, y: 318}
+    m_Translation: {x: 301, y: 315.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -301.5
-      y: -318
-      width: 603
-      height: 636
+      x: -301
+      y: -315.5
+      width: 602
+      height: 631
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_TargetTexture: {fileID: 0}
   m_CurrentColorSpace: 0
-  m_LastWindowPixelSize: {x: 603, y: 653}
+  m_LastWindowPixelSize: {x: 602, y: 648}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000100000100
   m_XRRenderMode: 0
---- !u!114 &18
+--- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1037,10 +5804,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 202
+    x: 2124
     y: 73
-    width: 695
-    height: 653
+    width: 694
+    height: 648
   m_PersistentViewDataDictionary: {fileID: 0}
   m_WindowGUID: 3e62a30f42a7ed948b363cfb0dee4beb
   m_SceneLighting: 1
@@ -1082,9 +5849,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_Size:
-    m_Target: 10
+    m_Target: 22
     speed: 2
-    m_Value: 10
+    m_Value: 22
   m_Ortho:
     m_Target: 0
     speed: 2
