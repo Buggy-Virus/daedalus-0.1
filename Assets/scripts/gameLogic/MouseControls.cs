@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System;
 using UnityEngine;
 
 public class MouseControls : MonoBehaviour {
@@ -33,13 +34,10 @@ public class MouseControls : MonoBehaviour {
     public Color cursorClickHighlight;
     Color normalColor;
 
-    public Token selectedToken;
+    public Mob selectedMob;
     public GameObject selectedObject;
 
-    moveTile[,,] moveMap;
-
-    public Dictionary<Token, GameObject> tokenToObject;
-    public Dictionary<GameObject, Token> objectToToken;
+    //moveTile[,,] moveMap;
 
     public int activeLayer = 0;
     int lastActiveLayer = -1;
@@ -49,13 +47,18 @@ public class MouseControls : MonoBehaviour {
 
     public bool deleteMode = false;
 
-    public int cubeType = 0;
-    int lastCubeType;
+    public string cubeType = "testCube";
+    string lastCubeType = "testCube";
 
-    public int tokenType = 0;
-    int lastTokenType;
+    public string mobType = "testMob";
+    string lastMobType = "testMob";
+
+    bool usedDiagnolMove;
 
     void Start() {
+    	cubeType = "testCube";
+    	mobType = "testMob";
+    	Debug.Log(cubeType);
     	cubesObject = GameObject.Find("Cubes");
         mobsObject = GameObject.Find("Mobs");
 
@@ -91,11 +94,14 @@ public class MouseControls : MonoBehaviour {
                     cubeMode(currentCoord, currentIndex);
                     break;
                 case 2:
-                    tokenMode(currentCoord, currentIndex);
+                    mobMode(currentCoord, currentIndex);
                     break;
                 case 3:
                     selectMode();
                     break;
+                case 4:
+                	moveMode(currentCoord, currentIndex);
+                	break;
                 // case 4:
                 //     moveMode(currentCoord, currentIndex);
                 //     break;
@@ -127,6 +133,7 @@ public class MouseControls : MonoBehaviour {
         if (lastControlMode != 0 || lastCubeType != cubeType) {
             Debug.Log("Cube mode");
             destroyCursor();
+            Debug.Log((string)cubeType);
             addCursor(curPosition, graphicScript.cubePrefabs[cubeType], "cursorCube");
             lastControlMode = controlMode;
             lastCubeType = cubeType;
@@ -223,46 +230,43 @@ public class MouseControls : MonoBehaviour {
 
     }
 
-    void placeCube(Vector3 curPosition, Index curIndex, int cubeType) {
+    void placeCube(Vector3 curPosition, Index curIndex, string cubeType) {
         GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
-
-        Debug.Log(curIndex.x);
-    	Debug.Log(curIndex.z);
-
-        Cube newCube = igListScript.createCube(igListScript.cubeParameterList[cubeType]);
-        newCube.position = curIndex;
-
-        gameCoord.cube = newCube;
 
         Debug.Log(gameCoord.cube);
 
         if (gameCoord.cube != null) {
             Destroy(gameCoord.cube.robject);
+            Destroy(gameCoord.cube);
         }
+        Cube newCube = igListScript.createCube(igListScript.cubeParameters[cubeType]);
+        newCube.index = curIndex;
+
+        gameCoord.cube = newCube;
+
+        Debug.Log(graphicScript.cubePrefabs[cubeType]);
         GameObject graphicCube = Instantiate(graphicScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
 
         newCube.robject = graphicCube;
+        graphicCube.GetComponent<CubePrefabScript>().cube = newCube;
         graphicCube.name = newCube.uniqueIdentifier;
     }
 
     void deleteCube(Index curIndex) {
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
-    	Debug.Log(curIndex.x);
-    	Debug.Log(curIndex.z);
-    	Debug.Log(gameCoord.cube);
     	if (gameCoord.cube != null) {
             Destroy(gameCoord.cube.robject);
         }
     	gameCoord.cube = null;
     }
 
-    void tokenMode(Vector3 curPosition, Index curIndex) {
-        if (lastControlMode != 2 || lastTokenType != tokenType) {
-            Debug.Log("token mode");
+    void mobMode(Vector3 curPosition, Index curIndex) {
+        if (lastControlMode != 2 || lastMobType != mobType) {
+            Debug.Log("mob mode");
             destroyCursor();
-            addCursor(curPosition, graphicScript.mobPrefabs[tokenType], "cursorToken");
+            addCursor(curPosition, graphicScript.mobPrefabs[mobType], "cursorMob");
             lastControlMode = controlMode;
-            lastTokenType = tokenType;
+            lastMobType = mobType;
         }
 
         if (!deleteMode) {
@@ -270,8 +274,8 @@ public class MouseControls : MonoBehaviour {
 	            cursorObjectRenderer.material.color = cursorClickHighlight;
 	        }
 
-	        if (Input.GetMouseButtonUp(0) && tokenType != 0) {
-	            placeToken(curPosition, curIndex, tokenType);
+	        if (Input.GetMouseButtonUp(0)) {
+	            placeMob(curPosition, curIndex, mobType);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
@@ -280,16 +284,20 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void placeToken(Vector3 curPosition, Index curIndex, int tokenType) {
+    void placeMob(Vector3 curPosition, Index curIndex, string mobType) {
+    	Debug.Log("Placed Mob");
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
 
-    	Mob newMob = igListScript.createMob(igListScript.mobParameterList[tokenType]);
-    	newMob.position = curIndex;
+    	Mob newMob = igListScript.createMob(igListScript.mobParameters[mobType]);
+    	newMob.index = curIndex;
 
     	gameCoord.mobs.Add(newMob);
 
-    	GameObject graphicMob = Instantiate(graphicScript.mobPrefabs[tokenType], curPosition, Quaternion.identity, mobsObject.transform);
+    	GameObject graphicMob = Instantiate(graphicScript.mobPrefabs[mobType], curPosition, Quaternion.identity, mobsObject.transform);
+    	
     	newMob.robject = graphicMob;
+    	graphicMob.GetComponent<MobPrefabScript>().mob = newMob;
+    	graphicMob.name = newMob.uniqueIdentifier;
     }
 
     void destroyCursor () {
@@ -323,6 +331,73 @@ public class MouseControls : MonoBehaviour {
 
     bool indexEqual(Index ind1, Index ind2) {
 		return (ind1.x == ind2.x && ind1.y == ind2.y && ind1.z == ind2.z);
+	}
+
+	void moveMode(Vector3 curPosition, Index curIndex) {
+		if (lastControlMode != 4) {
+            Debug.Log("move mode");
+            destroyCursor();
+            addCursor(curPosition, graphicScript.mobPrefabs[selectedMob.graphicAsset], "cursorMob");
+            lastControlMode = controlMode;
+        }
+
+        if (Input.GetMouseButtonDown(0)) {
+	            cursorObjectRenderer.material.color = cursorClickHighlight;
+	    }
+
+	    if (Input.GetMouseButtonUp(0)) {
+           	Index startIndex = selectedMob.index;
+           	if (startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) <= selectedMob.movePoints) {
+           		displaceMob(selectedMob, curPosition, curIndex);
+           		selectedMob.movePoints -= Math.Abs(startIndex.x - curIndex.x);
+           	} else if (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) <= selectedMob.movePoints) {
+           		displaceMob(selectedMob, curPosition, curIndex);
+           		selectedMob.movePoints -= Math.Abs(startIndex.z - curIndex.z);
+           	} else if (Math.Abs(startIndex.z - curIndex.z) == Math.Abs(startIndex.x - curIndex.x)) {
+           		int diagnolDisplacement = Math.Abs(startIndex.z - curIndex.z);
+           		int moveCost;
+           		if (diagnolDisplacement % 2 == 0) {
+           			moveCost = (int)((float)diagnolDisplacement * 1.5);
+           		} else if (usedDiagnolMove) { 
+           			moveCost = (int)(((float)diagnolDisplacement - 1) * 1.5 + 2);
+           			usedDiagnolMove = false;
+           		} else {
+           			moveCost = (int)(((float)diagnolDisplacement - 1) * 1.5 + 1);
+           			usedDiagnolMove = true;
+           		}
+           		if (moveCost <= selectedMob.movePoints) {
+           			displaceMob(selectedMob, curPosition, curIndex);
+           			selectedMob.movePoints -= moveCost;
+           		} else {
+           			Debug.Log("Not enough movepoints");
+           		}
+           	} else if (
+           			(startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) > selectedMob.movePoints)
+           			|| (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) > selectedMob.movePoints)
+           		) {
+           		Debug.Log("Not enough movepoints");
+           	} else {
+           		Debug.Log("Not a valid move square");
+           	}
+	    }
+
+	    if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
+	        cursorObjectRenderer.material.color = normalColor;
+	    }
+	}
+
+	void displaceMob(Mob curMob, Vector3 destPosition, Index destIndex) {
+		Index startIndex = curMob.index;
+		GameCoord startGameCoord = mapScript.gameBoard[startIndex.x, startIndex.y, startIndex.z];
+		GameCoord destGameCoord = mapScript.gameBoard[destIndex.x, destIndex.y, destIndex.z];
+		GameObject mobObject = curMob.robject;
+
+		startGameCoord.mobs.Remove(curMob);
+		destGameCoord.mobs.Add(curMob);
+
+		mobObject.transform.position = destPosition;
+		curMob.index = destIndex;
+
 	}
 
     // void moveMode(Vector3 position, Dictionary<string, int> index) {

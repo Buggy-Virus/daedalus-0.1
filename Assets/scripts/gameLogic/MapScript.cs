@@ -31,6 +31,8 @@ public class MapScript : MonoBehaviour {
                     gameBoard[x, y, z].x = x;
                     gameBoard[x, y, z].y = y;
                     gameBoard[x, y, z].z = z;
+                    gameBoard[x, y, z].mobs = new List<Mob>();
+                    gameBoard[x, y, z].characters = new List<Character>();
                 }
             }
         }

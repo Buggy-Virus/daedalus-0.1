@@ -9,7 +9,7 @@ public class Mob : MonoBehaviour {
     public GameObject robject;
     public string name;
 
-    public Index position;
+    public Index index;
 
     public Type mainType;
 	public List<Type> materialTypes;

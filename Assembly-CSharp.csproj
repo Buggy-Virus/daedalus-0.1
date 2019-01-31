@@ -54,11 +54,14 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\AssetScript.cs" />
+     <Compile Include="Assets\scripts\gameLogic\CubePrefabScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\GraphicScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\Index.cs" />
      <Compile Include="Assets\scripts\gameLogic\LayerScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\MapScript.cs" />
+     <Compile Include="Assets\scripts\gameLogic\MobPrefabScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\MouseControls.cs" />
+     <Compile Include="Assets\scripts\gameLogic\SelectScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\Type.cs" />
      <Compile Include="Assets\scripts\ig\CubeListScript.cs" />
      <Compile Include="Assets\scripts\ig\IgListScript.cs" />

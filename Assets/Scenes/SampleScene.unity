@@ -236,11 +236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd15e40b0b0fbcf4d9858811e248d46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefabs: []
-  mobPrefabs: []
   testCubePrefab: {fileID: 1443257276442714, guid: f196b931ab7225d49bb5c3ccb33c96e3,
     type: 3}
-  testMobPrefab: {fileID: 1725936486362168, guid: 350770e31c05b8a46b38f1311ce0b5c7,
+  testMobPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
     type: 3}
 --- !u!4 &246738982
 Transform:
@@ -659,9 +657,10 @@ MonoBehaviour:
   dragPrefab: {fileID: 1477668792116364, guid: 13d1af1fa5e8aaf4cb01ebfd4f39babb, type: 3}
   cursorTint: {r: 0, g: 0.7830189, b: 0.027808037, a: 0.49803922}
   cursorClickHighlight: {r: 0.8773585, g: 0.86854476, b: 0, a: 0.49803922}
+  selectedMob: {fileID: 0}
   selectedObject: {fileID: 0}
   activeLayer: 0
   controlMode: 0
   deleteMode: 0
-  cubeType: 0
-  tokenType: 0
+  cubeType: 
+  mobType: 

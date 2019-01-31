@@ -9,7 +9,7 @@ public class Cube : MonoBehaviour {
 	public string graphicAsset;
     public GameObject robject;
 
-    public Index position;
+    public Index index;
 
 	public Type mainType;
 	public List<Type> materialTypes;

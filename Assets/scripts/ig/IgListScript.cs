@@ -10,8 +10,8 @@ public class IgListScript : MonoBehaviour
 
 	TypeTreeScript typeTreeScript;
 
-	public List<object[]> cubeParameterList = new List<object[]>();
-	public List<object[]> mobParameterList = new List<object[]>();
+	public Dictionary<string, object[]> cubeParameters = new Dictionary<string, object[]>();
+	public Dictionary<string, object[]> mobParameters = new Dictionary<string, object[]>();
 
     // Start is called before the first frame update
     void Start()
@@ -21,8 +21,8 @@ public class IgListScript : MonoBehaviour
 
     	typeTreeScript = GameObject.Find("GameLogic").GetComponent<TypeTreeScript>();
 
-        cubeParameterList.Add(new object[] {"testCube", "testCubePrefab", "cube", new List<string>(), new List<float>(), 1, 0, 1, false, 100});
-        mobParameterList.Add(new object[] {"testMob", "testMobPrefab", "mob", new List<string>(), new List<float>(), "Tester Mob", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
+        cubeParameters.Add("testCube", new object[] {"testCube", "testCube", "cube", new List<string>(), new List<float>(), 1, 0, 1, false, 100});
+        mobParameters.Add("testMob", new object[] {"testMob", "testMob", "mob", new List<string>(), new List<float>(), "Tester Mob", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
     }
 
     // Update is called once per frame

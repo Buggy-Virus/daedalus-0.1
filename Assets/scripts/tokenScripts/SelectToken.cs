@@ -33,6 +33,7 @@ public class SelectToken : MonoBehaviour {
                 }
             }
         } else {
+            Debug.Log("Here");
         	if (Input.GetMouseButtonUp(0) && controlScript.selectedObject == gameObject.transform.parent.gameObject) {
                     controlScript.selectedObject = null;
                     Debug.Log("nothing selected");
