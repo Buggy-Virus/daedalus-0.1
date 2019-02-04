@@ -1,0 +1,9 @@
+Assets/
+Library/
+Logs/
+obj/
+Packages/
+ProjectSettings/
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor-firstpass.csproj
+Daedalus 0.1.sln

@@ -12,6 +12,7 @@ public class IgListScript : MonoBehaviour
 
 	public Dictionary<string, object[]> cubeParameters = new Dictionary<string, object[]>();
 	public Dictionary<string, object[]> mobParameters = new Dictionary<string, object[]>();
+    public Dictionary<string, object[]> relationalActionParameters = new Dictionary<string, object[]>();
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class IgListScript : MonoBehaviour
 
     	typeTreeScript = GameObject.Find("GameLogic").GetComponent<TypeTreeScript>();
 
-        cubeParameters.Add("testCube", new object[] {"testCube", "testCube", "cube", new List<string>(), new List<float>(), 1, 0, 1, false, 100});
+        cubeParameters.Add("testCube", new object[] {"testCube", "testCube", "cube", new List<string>(), new List<float>(), 1, 100});
         mobParameters.Add("testMob", new object[] {"testMob", "testMob", "mob", new List<string>(), new List<float>(), "Tester Mob", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
     }
 
@@ -29,31 +30,6 @@ public class IgListScript : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public Cube createCube(object[] cubeParams) {  	
-    	Cube newCube = cubesObject.AddComponent<Cube>();
-
-        newCube.identifier = (string)cubeParams[0];
-        newCube.uniqueIdentifier = newCube.identifier + "_" + System.Guid.NewGuid().ToString();
-
-        newCube.graphicAsset = (string)cubeParams[1];
-
-        newCube.mainType = typeTreeScript.typeDict[(string)cubeParams[2]];
-        List<string> mt = (List<string>)cubeParams[3];
-        for  (int i = 0; i < mt.Count; i++) {
-                newCube.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
-        }
-        newCube.materialTypesDistribution = (List<float>)cubeParams[4];
-
-        newCube.state = (int)cubeParams[5];
-        newCube.transparency = (float)(int)cubeParams[6];
-        newCube.viscosity = (int)cubeParams[7];
-        newCube.flow = (bool)cubeParams[8];
-        newCube.hitScore = (int)cubeParams[9];
-        newCube.hitPoints = (int)cubeParams[9];
-
-        return newCube;
     }
 
     public Mob createMob(object[] mobParams) {
@@ -74,17 +50,43 @@ public class IgListScript : MonoBehaviour
         newMob.width = (int)mobParams[6];
         newMob.length = (int)mobParams[7];
         newMob.height = (int)mobParams[8];
-        newMob.hitScore = (int)mobParams[9];
-        newMob.hitPoints = (int)mobParams[9];
-        newMob.moveScore = (int)mobParams[10];
-        newMob.movePoints = (int)mobParams[10];
-        newMob.strength = (int)mobParams[11];
-        newMob.dexterity = (int)mobParams[12];
-        newMob.endurance = (int)mobParams[13];
-        newMob.constitution = (int)mobParams[14];
-        newMob.wisdom = (int)mobParams[15];
-        newMob.intelligence = (int)mobParams[16];
+
+        newMob.boolVars.Add("cheapDiagMove", false);
+
+        newMob.intVars.Add("hitScore", (int)mobParams[9]);
+        newMob.intVars.Add("hitPoints", (int)mobParams[9]);
+        newMob.intVars.Add("moveScore", (int)mobParams[10]);
+        newMob.intVars.Add("movePoints", (int)mobParams[10]);
+        newMob.intVars.Add("strength", (int)mobParams[11]);
+        newMob.intVars.Add("dexterity", (int)mobParams[12]);
+        newMob.intVars.Add("endurance", (int)mobParams[13]);
+        newMob.intVars.Add("constitution", (int)mobParams[14]);
+        newMob.intVars.Add("wisdom", (int)mobParams[15]);
+        newMob.intVars.Add("intelligence", (int)mobParams[16]);
 
         return newMob;
     }
+
+    public Cube createCube(object[] cubeParams) {   
+        Cube newCube = cubesObject.AddComponent<Cube>();
+
+        newCube.identifier = (string)cubeParams[0];
+        newCube.uniqueIdentifier = newCube.identifier + "_" + System.Guid.NewGuid().ToString();
+
+        newCube.graphicAsset = (string)cubeParams[1];
+
+        newCube.mainType = typeTreeScript.typeDict[(string)cubeParams[2]];
+        List<string> mt = (List<string>)cubeParams[3];
+        for  (int i = 0; i < mt.Count; i++) {
+                newCube.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
+        }
+        newCube.materialTypesDistribution = (List<float>)cubeParams[4];
+
+        newCube.intVars.Add("state", (int)cubeParams[5]);
+        newCube.intVars.Add("hitScore", (int)cubeParams[6]);
+        newCube.intVars.Add("hitPoints", (int)cubeParams[6]);
+
+        return newCube;
+    }
+    
 }

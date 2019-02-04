@@ -7,11 +7,11 @@ public class Cube : MonoBehaviour {
     public string identifier;
     public string uniqueIdentifier;
 	public string graphicAsset;
-    public GameObject robject;
+    public GameObject gameObject;
 
     public Index index;
 
-	public Type mainType;
+	public Type type;
 	public List<Type> materialTypes;
 	public List<float> materialTypesDistribution;
 	
@@ -24,33 +24,10 @@ public class Cube : MonoBehaviour {
 
 	public int hitScore;
 	public int hitPoints;
+
+    public Dictionary<string, bool> boolVars = new Dictionary<string, bool>();
+    public Dictionary<string, string> stringVars = new Dictionary<string, string>();
+    public Dictionary<string, int> intVars = new Dictionary<string, int>();
+    public Dictionary<string, float> floatVars = new Dictionary<string, float>();
     
-    public Cube (
-        string id,
-        string uid,
-    	string ga,
-    	Type t,
-    	List<Type> mt,
-    	List<float> mtd,
-    	int st,
-    	float ty,
-    	int vy,
-    	bool fl,
-    	int hs
-    	) {
-    	graphicAsset = ga;
-        uniqueIdentifier = uid;
-    	identifier = id;
-
-    	mainType = t;
-    	materialTypes = mt;
-
-    	state = st;
-
-    	transparency = ty;
-    	viscosity = vy;
-    	flow = fl;
-
-    	hitScore = hs;
-    }
 }

@@ -236,7 +236,7 @@ public class MouseControls : MonoBehaviour {
         Debug.Log(gameCoord.cube);
 
         if (gameCoord.cube != null) {
-            Destroy(gameCoord.cube.robject);
+            Destroy(gameCoord.cube.gameObject);
             Destroy(gameCoord.cube);
         }
         Cube newCube = igListScript.createCube(igListScript.cubeParameters[cubeType]);
@@ -247,7 +247,7 @@ public class MouseControls : MonoBehaviour {
         Debug.Log(graphicScript.cubePrefabs[cubeType]);
         GameObject graphicCube = Instantiate(graphicScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
 
-        newCube.robject = graphicCube;
+        newCube.gameObject = graphicCube;
         graphicCube.GetComponent<CubePrefabScript>().cube = newCube;
         graphicCube.name = newCube.uniqueIdentifier;
     }
@@ -255,7 +255,7 @@ public class MouseControls : MonoBehaviour {
     void deleteCube(Index curIndex) {
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
     	if (gameCoord.cube != null) {
-            Destroy(gameCoord.cube.robject);
+            Destroy(gameCoord.cube.gameObject);
         }
     	gameCoord.cube = null;
     }
@@ -295,7 +295,7 @@ public class MouseControls : MonoBehaviour {
 
     	GameObject graphicMob = Instantiate(graphicScript.mobPrefabs[mobType], curPosition, Quaternion.identity, mobsObject.transform);
     	
-    	newMob.robject = graphicMob;
+    	newMob.gameObject = graphicMob;
     	graphicMob.GetComponent<MobPrefabScript>().mob = newMob;
     	graphicMob.name = newMob.uniqueIdentifier;
     }
@@ -347,12 +347,13 @@ public class MouseControls : MonoBehaviour {
 
 	    if (Input.GetMouseButtonUp(0)) {
            	Index startIndex = selectedMob.index;
-           	if (startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) <= selectedMob.movePoints) {
+            int movePoints = selectedMob.intVars["movePoints"];
+           	if (startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) <= movePoints) {
            		displaceMob(selectedMob, curPosition, curIndex);
-           		selectedMob.movePoints -= Math.Abs(startIndex.x - curIndex.x);
-           	} else if (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) <= selectedMob.movePoints) {
+           		movePoints -= Math.Abs(startIndex.x - curIndex.x);
+           	} else if (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) <= movePoints) {
            		displaceMob(selectedMob, curPosition, curIndex);
-           		selectedMob.movePoints -= Math.Abs(startIndex.z - curIndex.z);
+           		movePoints -= Math.Abs(startIndex.z - curIndex.z);
            	} else if (Math.Abs(startIndex.z - curIndex.z) == Math.Abs(startIndex.x - curIndex.x)) {
            		int diagnolDisplacement = Math.Abs(startIndex.z - curIndex.z);
            		int moveCost;
@@ -365,15 +366,15 @@ public class MouseControls : MonoBehaviour {
            			moveCost = (int)(((float)diagnolDisplacement - 1) * 1.5 + 1);
            			usedDiagnolMove = true;
            		}
-           		if (moveCost <= selectedMob.movePoints) {
+           		if (moveCost <= movePoints) {
            			displaceMob(selectedMob, curPosition, curIndex);
-           			selectedMob.movePoints -= moveCost;
+           			movePoints -= moveCost;
            		} else {
            			Debug.Log("Not enough movepoints");
            		}
            	} else if (
-           			(startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) > selectedMob.movePoints)
-           			|| (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) > selectedMob.movePoints)
+           			(startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) > movePoints)
+           			|| (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) > movePoints)
            		) {
            		Debug.Log("Not enough movepoints");
            	} else {
@@ -390,7 +391,7 @@ public class MouseControls : MonoBehaviour {
 		Index startIndex = curMob.index;
 		GameCoord startGameCoord = mapScript.gameBoard[startIndex.x, startIndex.y, startIndex.z];
 		GameCoord destGameCoord = mapScript.gameBoard[destIndex.x, destIndex.y, destIndex.z];
-		GameObject mobObject = curMob.robject;
+		GameObject mobObject = curMob.gameObject;
 
 		startGameCoord.mobs.Remove(curMob);
 		destGameCoord.mobs.Add(curMob);
