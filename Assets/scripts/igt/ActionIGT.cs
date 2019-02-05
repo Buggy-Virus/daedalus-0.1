@@ -81,7 +81,9 @@ public class Taction {
 	public int maxRange;
 	public int minRange;
 
-	public List<Effect> effects;
+	public List<Effect> selfEffects;
+	public List<Effect> targetEffects;
+	public List<Tffect> teffects;
 
 	public List<Tcheck> tchecks;
 
