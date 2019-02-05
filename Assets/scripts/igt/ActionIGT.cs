@@ -18,6 +18,7 @@ public class Action {
 	public int aoe;
 
 	public List<Raction> aoeRactions;
+	public List<Taction> aoeTactions;
 
 	public List<Action> followupActions;
 	
@@ -51,6 +52,7 @@ public class Raction {
 	public int aoe;
 
 	public List<Raction> aoeRactions;
+	public List<Taction> aoeTactions;
 	
 	public List<Action> followupActions;
 	public List<Raction> followupRactions;
@@ -86,6 +88,7 @@ public class Taction {
 	public int aoe;
 
 	public List<Raction> aoeRactions;
+	public List<Taction> aoeTactions;
 
 	public List<Action> followupActions;
 	public List<Taction> followupTactions;
