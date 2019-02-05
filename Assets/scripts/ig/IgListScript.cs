@@ -40,7 +40,7 @@ public class IgListScript : MonoBehaviour
 
         newMob.graphicAsset = (string)mobParams[1];
 
-        newMob.mainType = typeTreeScript.typeDict[(string)mobParams[2]];
+        newMob.type = typeTreeScript.typeDict[(string)mobParams[2]];
         List<string> mt = (List<string>)mobParams[3];
         for  (int i = 0; i < mt.Count; i++) {
                 newMob.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
@@ -75,7 +75,7 @@ public class IgListScript : MonoBehaviour
 
         newCube.graphicAsset = (string)cubeParams[1];
 
-        newCube.mainType = typeTreeScript.typeDict[(string)cubeParams[2]];
+        newCube.type = typeTreeScript.typeDict[(string)cubeParams[2]];
         List<string> mt = (List<string>)cubeParams[3];
         for  (int i = 0; i < mt.Count; i++) {
                 newCube.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
