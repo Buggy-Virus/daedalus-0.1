@@ -50,7 +50,7 @@ public class Raction {
 	public int aoe;
 
 	public List<Raction> aoeRactions;
-
+	
 	public List<Action> followupActions;
 	public List<Raction> followupRactions;
 	public List<Taction> followupTactions;
@@ -91,6 +91,9 @@ public class Taction {
 	public List<Action> followupActions;
 	public List<Raction> followupRactions;
 	public List<Taction> followupTactions;
+	
+	public List<Raction> targetFollowupRactions;
+	public List<Taction> targetFollowupTactions;
 }
 
 public class Check {
