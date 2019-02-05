@@ -6,7 +6,7 @@ public class ResolveActionsScript : MonoBehaviour
 {
 	Random _random = new Random();
 
-    public void resolveAction(ref Mob self, Action action) {
+	public void resolveAction(ref Mob self, Action action) {
 	
 		List<string> failedConditions = resolveConditions(self.boolVars, action.conditions, action.conditionMatch);
 		if (failedConditions.Count == 0) {
@@ -16,8 +16,8 @@ public class ResolveActionsScript : MonoBehaviour
 				resolveChecks(ref self, action.checks);
 				resolveAoe(mob.index, action.aoe, action.aoeRactions);
 				resolveActions(ref self, action.followupActions);
-				resolveRactions(ref self, action.followupRactions);
-				resolveTactions(ref self, action.followupTactions);
+				resolveTargetedRactions(ref self, action.followupRactions);
+				resolveTargetedTactions(ref self, action.followupTactions);
 			} else {
 				Debug.Log("Failed Currencies(s)");
 				for (int i = 0; i < failedConditions.Count; i++) {
@@ -38,12 +38,44 @@ public class ResolveActionsScript : MonoBehaviour
 		}
 	}
 	
-	public void resolveRaction(ref Mob self, Mob target, Raction raction) {
+	public void resolveRaction(ref Mob self, ref Mob target, Raction raction) {
 		
 	}
 	
-	public void resolveTaction(ref Mob self, Cube target, Taction taction) {
+	public void resolveRactions(ref Mob self, ref Mob target, List<Raction> ractions) {
+		for (int i = 0; i < ractions.Count; i++) {
+			resolveRaction(ref self, ref target, ractions[i]);
+		}
+	}
+	
+	public void resolveTaction(ref Mob self, ref Cube target, Taction taction) {
 		
+	}
+	
+	public void resolveTactions(ref Mob self, ref Cube target, List<Taction> tactions) {
+		for (int i = 0; i < tactions.Count; i++) {
+			resolveTaction(ref self, target, tactions[i]);
+		}
+	}
+	
+	public void resolveTargetedRaction(ref Mob self, Raction raction) {
+	
+	}
+	
+	public void resolveTargetedRaction(ref Mob self, List<Raction> ractions) {
+		for (int i = 0; i < ractions.Count; i++) {
+			resolveTargetedRaction(ref self, ractions[i]);
+		}
+	}
+	
+	public void resolveTargetedTaction(ref Mob self, Taction taction) {
+		
+	}
+	
+	public void resolveTargetedTactions(ref Mob self, List<Taction> tactions) {
+		for (int i = 0; i < tactions.Count; i++) {
+			resolveTargetedTaction(ref self, tactions[i]);
+		}
 	}
 	
 	public List<string> resolveConditions(Dictionary<string, bool> boolVars, List<string> conditions, List<bool> conditionMatch) {
@@ -121,6 +153,57 @@ public class ResolveActionsScript : MonoBehaviour
 			resolveActions(check.successActions);
 		} else {
 			resolveActions(check.failureActions);
+		}
+	}
+	
+	public void resolveAoe(ref Mob self, int radius, List<Raction> ractions, List<Taction> tactions) {
+		List<Mob> nearbyMobs = detectMobs(self.index, radius);
+		nearbyMobs.Remove(self);
+		for (int i = 0; i < nearbyMobs.Count; i++) {
+			resolveRactions(ref self, ref nearbyMobs[i], ractions);
+		}
+		
+		List<Cube> nearbyCubes = detectCubes(self.index, radius);
+		for (int i = 0; i < nearbyCubes.Count; i++) {
+			resolveTactions(ref self, ref nearbyCubes[i], tactions);
+		}
+	}
+	
+	public List<Mob> detectMobs(Index center, Int radius) {
+	
+	}
+	
+	public List<Cube> detectCubes(Index center, Int, radius) {
+	
+	}
+	
+	public void resolveEffect(ref Mob self, Effect effect) {
+		
+	}
+	
+	public void resolveEffects(ref Mob self, List<Effect> effects) {
+		for (int i = 0; i < effects.Count; i++) {
+			resolveEffect(ref self, effects[i]);
+		}
+	}
+	
+	public void resolveReffect(ref Mob self, Reffect reffect) {
+	
+	}
+	
+	public void resolveReffects(ref Mob self, List<Reffect> reffects) {
+		for (int i = 0; i < reffects.Count; i++) {
+			resolveReffect(ref self, reffects[i]);
+		}
+	}
+	
+	public void resolveTeffect(ref Mob self, Teffect teffect) {
+	
+	}
+	
+	public void resolveTeffects(ref Mob self, List<Teffect> teffects) {
+		for (int i = 0; i < teffects.Count; i++) {
+			resolveTeffect(ref self, teffects[i]);
 		}
 	}
 }
