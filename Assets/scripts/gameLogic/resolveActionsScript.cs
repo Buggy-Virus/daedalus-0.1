@@ -7,29 +7,12 @@ public class ResolveActionsScript : MonoBehaviour
 	Random _random = new Random();
 
 	public void resolveAction(ref Mob self, Action action) {
-	
-		List<string> failedConditions = resolveConditions(self.boolVars, action.conditions, action.conditionMatch);
-		if (failedConditions.Count == 0) {
-			List<string> failedCurrencies = resolveCosts(ref self.intVars, action.currencies, action.costs);
-			if (failedCurrencies.Count == 0) {
-				resolveEffects(ref self, action.effects);
-				resolveChecks(ref self, action.checks);
-				resolveAoe(mob.index, action.aoe, action.aoeRactions);
-				resolveActions(ref self, action.followupActions);
-				resolveTargetedRactions(ref self, action.followupRactions);
-				resolveTargetedTactions(ref self, action.followupTactions);
-			} else {
-				Debug.Log("Failed Currencies(s)");
-				for (int i = 0; i < failedConditions.Count; i++) {
-					Debug.Log(failedConditions[i]);
-				}
-			}			
-		} else {
-			Debug.Log("Failed Condition(s)");
-			for (int i = 0; i < failedConditions.Count; i++) {
-				Debug.Log(failedConditions[i]);
-			}
-		}
+		resolveEffects(ref self, action.effects);
+		resolveChecks(ref self, action.checks);
+		resolveAoe(self.index, action.aoe, action.aoeRactions, action.aoeTactions);
+		// resolveActions(ref self, action.followupActions);
+		resolveTargetedRactions(ref self, action.followupRactions);
+		resolveTargetedTactions(ref self, action.followupTactions);
 	}
 	
 	public void resolveActions(ref Mob self, List<Action> actions) {
@@ -39,7 +22,17 @@ public class ResolveActionsScript : MonoBehaviour
 	}
 	
 	public void resolveRaction(ref Mob self, ref Mob target, Raction raction) {
-		
+		resolveEffects(ref self, raction.selfEffects);
+		resolveEffects(ref target, raction.targetEffects);
+		resolveReffects(ref self, ref target, raction.reffects)
+		resolveChecks(ref self, ref target, raction.rchecks);
+		resolveAoe(target.index, raction.aoe, raction.aoeRactions, raction.aoeTactions);
+		// resolveActions(ref self, raction.followupActions);
+		// resolveRaction(ref self, ref target, raction.followupRactions);
+		// resolveActions(ref target, raction.followupTargetActions);
+		// resolveRaction(ref target, ref self, raction.followupTargetRactions);
+		resolveTargetedRactions(ref self, raction.followupRactions);
+		resolveTargetedTactions(ref self, raction.followupTactions);
 	}
 	
 	public void resolveRactions(ref Mob self, ref Mob target, List<Raction> ractions) {
@@ -49,7 +42,7 @@ public class ResolveActionsScript : MonoBehaviour
 	}
 	
 	public void resolveTaction(ref Mob self, ref Cube target, Taction taction) {
-		
+		resolveEffects
 	}
 	
 	public void resolveTactions(ref Mob self, ref Cube target, List<Taction> tactions) {
@@ -160,12 +153,12 @@ public class ResolveActionsScript : MonoBehaviour
 		List<Mob> nearbyMobs = detectMobs(self.index, radius);
 		nearbyMobs.Remove(self);
 		for (int i = 0; i < nearbyMobs.Count; i++) {
-			resolveRactions(ref self, ref nearbyMobs[i], ractions);
+			// resolveRactions(ref self, ref nearbyMobs[i], ractions);
 		}
 		
 		List<Cube> nearbyCubes = detectCubes(self.index, radius);
 		for (int i = 0; i < nearbyCubes.Count; i++) {
-			resolveTactions(ref self, ref nearbyCubes[i], tactions);
+			// resolveTactions(ref self, ref nearbyCubes[i], tactions);
 		}
 	}
 	
