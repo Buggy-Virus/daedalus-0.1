@@ -20,8 +20,9 @@ public class Action {
 	public List<Raction> aoeRactions;
 
 	public List<Action> followupActions;
-	public List<Raction> followupRactions;
-	public List<Taction> followupTactions;
+	
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 }
 
 public class Raction {
@@ -53,14 +54,12 @@ public class Raction {
 	
 	public List<Action> followupActions;
 	public List<Raction> followupRactions;
-	public List<Taction> followupTactions;
 
-	public List<Raction> targetFollowupRactions;
-	public List<Taction> targetFollowupTactions;
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 
 	public List<Action> followupTargetActions;
 	public List<Raction> followupTargetRactions;
-	public List<Taction> followupTargetTactions;
 }
 
 public class Taction {
@@ -89,11 +88,10 @@ public class Taction {
 	public List<Raction> aoeRactions;
 
 	public List<Action> followupActions;
-	public List<Raction> followupRactions;
 	public List<Taction> followupTactions;
 	
-	public List<Raction> targetFollowupRactions;
-	public List<Taction> targetFollowupTactions;
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 }
 
 public class Check {
