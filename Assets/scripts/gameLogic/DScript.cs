@@ -19,46 +19,63 @@ public class DScript {
 
 	Result interpret(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		switch (expression.expressionType) {
-            case 1: //e-int
-            	Value returnValue = new Value();
-                returnValue.valueType = 1;
-                returnValue.vInt = expression.eInt;
-                return new Result(returnValue, store);
-            case 2: //e-float
-            	Value returnValue = new Value();
-                returnValue.valueType = 2;
-                returnValue.vFloat = expression.eFloat;
-                return new Result(returnValue, store);
-            case 3: //e-string
-            	Value returnValue = new Value();
-            	returnValue.valueType = 3;
-            	returnValue.vString = expression.eString;
-            	return new Result(returnValue, store);
-            case 4: //e-bool
-            	Value returnValue = new Value();
-            	returnValue.valueType = 4;
-            	returnValue.vBool = expression.eBool;
-            	return new Result(returnValue, store);
+			case 1: //e-int
+				return interpInt(expression.eInt, env, store);
+			case 2: //e-float
+				return interpFloat(expression.eFloat, env, store);
+			case 3: //e-string
+				return interpFloat(expression.eString, env, store);
+			case 4: //e-bool
+				return interpFloat(expression.eBool, env, store);
 			case 5: // e-list
 				return interpList(expression.eList, env, store);
-            case 6: //e-op
-            	return interpOperator(expression.eOperatorOp, expression.eOperatorLeft, expression.eOperatorRight, env, store);
-            case 7: //e-if
-            	return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store);
-            case 8: //e-lam
-            	return interpLam(expression.eLamParam, expression.eLamBody, env, store);
-            case 9: //e-app
-            	return interpApp(expression.eAppFunc, expression.eAppArg, env, store);
-            case 10: //e-set
-            	return interpSet(expression.eSetName, expression.eSetValue, env, store);
-            case 11: //e-do
-            	return interpDo(expression.eDo, env, store);	
-            case 12: //e-while
-            	return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store);
+			case 6: //e-op
+				return interpOperator(expression.eOperatorOp, expression.eOperatorLeft, expression.eOperatorRight, env, store);
+			case 7: //e-if
+				return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store);
+			case 8: //e-lam
+				return interpLam(expression.eLamParam, expression.eLamBody, env, store);
+			case 9: //e-app
+				return interpApp(expression.eAppFunc, expression.eAppArg, env, store);
+			case 10: //e-set
+				return interpSet(expression.eSetName, expression.eSetValue, env, store);
+			case 11: //e-do
+				return interpDo(expression.eDo, env, store);	
+			case 12: //e-while
+				return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store);
 			case 13: //e-define
 				return interpret(expression.eDefineValue, env, store);
-        }
+		}
 	}
+
+	Result interpInt(int eInt, Dictionary<string, string> env, Dictionary<string, Value> store) {
+		Value returnValue = new Value();
+		returnValue.valueType = 1;
+		returnValue.vInt = eInt;
+		return new Result(returnValue, store);
+	}
+
+	Result interpFloat(float eFloat, Dictionary<string, string> env, Dictionary<string, Value> store) {
+		Value returnValue = new Value();
+		returnValue.valueType = 2;
+		returnValue.vFloat = eFloat;
+		return new Result(returnValue, store);
+	}
+
+	Result interpString(string eString, Dictionary<string, string> env, Dictionary<string, Value> store) {
+		Value returnValue = new Value();
+		returnValue.valueType = 3;
+		returnValue.vString = eString;
+		return new Result(returnValue, store);
+	}
+
+	Result interpBool(bool eBool, Dictionary<string, string> env, Dictionary<string, Value> store) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = eBool;
+		return new Result(returnValue, store);
+	}
+
 	Result interpList(List<Expression> expressionList, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value();
 		returnValue.valueType = 5;
@@ -75,228 +92,168 @@ public class DScript {
 		Value returnValue = new Value();
 		switch (op.operatorType) {
 			case 1: //Addition
-				l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 2;
-						returnValue.vFloat = l_result.value.vFloat + r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(additionValue, left, right, 2, 2);
 			case 2: //Subtraction
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 2;
-						returnValue.vFloat = l_result.value.vFloat - r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(subtractionValue, left, right, 2, 2);
 			case 3: //Multiplication
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 2;
-						returnValue.vFloat = l_result.value.vFloat * r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(multiplicationValue, left, right, 2, 2);
 			case 4: //Division
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 2;
-						returnValue.vFloat = l_result.value.vFloat / r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(divisionValue, left, right, 2, 2);
 			case 5: //Exponent
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 2;
-						returnValue.vFloat = (float)Math.Pow(l_result.value.vFloat, r_result.value.vFloat);
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(exponentValue, left, right, 2, 2);
 			case 6: //Modulo
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 2;
-						returnValue.vFloat = l_result.value.vFloat % r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(moduloValue, left, right, 2, 2);
 			case 7: //List Concat
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 5) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 5) {
-						returnValue.valueType = 5;
-						returnValue.vList = l_result.value.vList.Concat(r_result.value.vList).ToList();
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(5, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(5, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(listConcatValue, left, right, 5, 5);
 			case 8: // String Concant
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 3) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 3) {
-						returnValue.valueType = 3;
-						returnValue.vString = l_result.value.vString + r_result.value.vString;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(stringConcatValue, left, right, 3, 3);
 			case 9: // string equal
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 3) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 3) {
-						returnValue.valueType = 4;
-						returnValue.vBool = l_result.value.vString == r_result.value.vString;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(stringEqualValue, left, right, 3, 3);
 			case 10: // num equal
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 4;
-						returnValue.vBool = l_result.value.vFloat == r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(floatEqualValue, left, right, 2, 2);
 			case 11: // num greater than
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 4;
-						returnValue.vBool = l_result.value.vFloat > r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(floatGreaterValue, left, right, 2, 2);
 			case 12: // num less than
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 4;
-						returnValue.vBool = l_result.value.vFloat < r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(floatLesserValue, left, right, 2, 2);
 			case 13: // num geq
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 4;
-						returnValue.vBool = l_result.value.vFloat >= r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(floatGeqValue, left, right, 2, 2);
 			case 14: // num leq
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 2) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 4;
-						returnValue.vBool = l_result.value.vFloat <= r_result.value.vFloat;
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(2, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(floatLeqValue, left, right, 2, 2);
 			case 15: // List Index
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 5) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						return new Result(l_result.value.vList[(int)r_result.value.vFloat], store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(5, l_result.value.valueType), store); //Throw Error
-				}
-			case 16: // num leq
-				Result l_result = interpret(left, env, store);
-				if (l_result.value.valueType == 3) {
-					Result r_result = interpret(right, env, store);
-					if (r_result.value.valueType == 2) {
-						returnValue.valueType = 3;
-						returnValue.vString = l_result.value.vString[(int)r_result.value.vFloat].ToString();
-						return new Result(returnValue, store);
-					} else {
-						return new Result(new Value(2, r_result.value.valueType), store); //Throw Error
-					}
-				} else {
-					return new Result(new Value(3, l_result.value.valueType), store); //Throw Error
-				}
+				return interpOperatorHelper(listIndexValue, left, right, 5, 2);
+			case 16: // String Index
+				return interpOperatorHelper(stringIndexValue, left, right, 3, 2);
 		}
+	}
+
+	Result interpOperatorHelper(Func<Value, Value, Value> valueFunc, Expression left, Expression right, Expression leftType, Expression rightType) {
+		Result l_result = interpret(left, env, store);
+		if (l_result.value.valueType == leftType) {
+			Result r_result = interpret(right, env, store);
+			if (r_result.value.valueType == rightType) {
+				Value returnValue = valueFunc(l_result.value, r_result.value);
+				return new Result(returnValue, r_result.store);
+			} else {
+				return new Result(new Value(rightType, r_result.value.valueType), r_result.store); //Throw Error
+			}
+		} else {
+			return new Result(new Value(leftType, l_result.value.valueType), l_result.store); //Throw Error
+		}
+	}
+
+	Value additionValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 2;
+		returnValue.vFloat = leftValue.vFloat + rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value subtractionValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 2;
+		returnValue.vFloat = leftValue.vFloat - rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value multiplicationValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 2;
+		returnValue.vFloat = leftValue.vFloat * rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value divisionValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		
+		if (rightValue.vFloat == 9) {
+			returnValue.valueType = 0;
+			returnValue.errorMessage = "Divide by zero error";
+		} else {
+			returnValue.valueType = 2;
+			returnValue.vFloat = leftValue.vFloat / rightValue.vFloat;
+		}
+		return returnValue;
+	}
+
+	Value exponentValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 2;
+		returnValue.vFloat = (float)Math.Pow(leftValue.vFloat, rightValue.vFloat);
+		return returnValue;
+	}
+
+	Value moduloValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 2;
+		returnValue.vFloat = leftValue.vFloat % rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value listConcatValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 5;
+		returnValue.vList = l_result.value.vList.Concat(r_result.value.vList).ToList();
+		return returnValue;
+	}
+
+	Value strintConcatValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 3;
+		returnValue.vString = leftValue.vString + rightValue.vString;
+		return returnValue;
+	}
+
+	Value strintEqualValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = leftValue.vString == rightValue.vString;
+		return returnValue;
+	}
+
+	Value floatEqualValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = leftValue.vFloat == rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value floatGreaterValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = leftValue.vFloat > rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value floatLesserValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = leftValue.vFloat < rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value floatGeqValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = leftValue.vFloat >= rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value floatLeqValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 4;
+		returnValue.vBool = leftValue.vFloat <= rightValue.vFloat;
+		return returnValue;
+	}
+
+	Value listIndexValue(Value leftValue, Value rightValue) {
+		return leftValue.value.vList[(int)rightValue.value.vFloat];
+	}
+
+	Value stringIndexValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value();
+		returnValue.valueType = 3;
+		returnValue.vString = leftValue.value.vString[(int)rightValue.value.vFloat].ToString();
+		return returnValue;
 	}
 
 	Result interpIf(Expression cond, Expression consq, Expression alter, Dictionary<string, string> env, Dictionary<string, Value> store) {
