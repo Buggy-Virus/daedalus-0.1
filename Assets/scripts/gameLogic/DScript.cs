@@ -31,54 +31,53 @@ public class DScript {
 				return interpList(expression.eList, env, store);
 			case 6: //e-op
 				return interpOperator(expression.eOperatorOp, expression.eOperatorLeft, expression.eOperatorRight, env, store);
-			case 7: //e-if
+			case 7: //e-triOp
+				return interpTriOperator(expression.eTriOperatorOp, expression.eTriOperatorTarget, expression.eTriOperatorLeft, expression.eTriOperatorRight, env, store);
+			case 8: //e-if
 				return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store);
-			case 8: //e-lam
+			case 9: //e-lam
 				return interpLam(expression.eLamParam, expression.eLamBody, env, store);
-			case 9: //e-app
+			case 10: //e-app
 				return interpApp(expression.eAppFunc, expression.eAppArg, env, store);
-			case 10: //e-set
+			case 11: //e-set
 				return interpSet(expression.eSetName, expression.eSetValue, env, store);
-			case 11: //e-do
+			case 12: //e-do
 				return interpDo(expression.eDo, env, store);	
-			case 12: //e-while
+			case 13: //e-while
 				return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store);
-			case 13: //e-define
+			case 14: //e-define
 				return interpret(expression.eDefineValue, env, store);
 		}
 	}
 
+	// ================================= Interpret Values Functions =================================
+
 	Result interpInt(int eInt, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value();
-		returnValue.valueType = 1;
+		Value returnValue = new Value(1);
 		returnValue.vInt = eInt;
 		return new Result(returnValue, store);
 	}
 
 	Result interpFloat(float eFloat, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value();
-		returnValue.valueType = 2;
+		Value returnValue = new Value(2);
 		returnValue.vFloat = eFloat;
 		return new Result(returnValue, store);
 	}
 
 	Result interpString(string eString, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value();
-		returnValue.valueType = 3;
+		Value returnValue = new Value(3);
 		returnValue.vString = eString;
 		return new Result(returnValue, store);
 	}
 
 	Result interpBool(bool eBool, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = eBool;
 		return new Result(returnValue, store);
 	}
 
 	Result interpList(List<Expression> expressionList, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value();
-		returnValue.valueType = 5;
+		Value returnValue = new Value(5);
 		returnValue.vList = new List<Value>();
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expression in expressionList) {
@@ -87,9 +86,10 @@ public class DScript {
 		}
 		return new Result(returnValue, last_result.store);
 	}
+
+	// ================================= Interpret Operator Functions =================================
 	
 	Result interpOperator(Operator op, Expression left, Expression right, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value();
 		switch (op.operatorType) {
 			case 1: //Addition
 				return interpOperatorHelper(additionValue, left, right, 2, 2);
@@ -141,119 +141,178 @@ public class DScript {
 		}
 	}
 
+	// SPECIFIC OPERATOR FUNCTIONS
+
 	Value additionValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 2;
+		Value returnValue = new Value(2);
 		returnValue.vFloat = leftValue.vFloat + rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value subtractionValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 2;
+		Value returnValue = new Value(2);Value returnValue = new Value(2);
 		returnValue.vFloat = leftValue.vFloat - rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value multiplicationValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 2;
+		Value returnValue = new Value(2);
 		returnValue.vFloat = leftValue.vFloat * rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value divisionValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		
-		if (rightValue.vFloat == 9) {
-			returnValue.valueType = 0;
+		if (rightValue.vFloat == 0) {
+			Value returnValue = new Value(0);
 			returnValue.errorMessage = "Divide by zero error";
+			return returnValue;
 		} else {
-			returnValue.valueType = 2;
+			Value returnValue = new Value(2);
 			returnValue.vFloat = leftValue.vFloat / rightValue.vFloat;
+			return returnValue;
 		}
-		return returnValue;
 	}
 
 	Value exponentValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 2;
+		Value returnValue = new Value(2);
 		returnValue.vFloat = (float)Math.Pow(leftValue.vFloat, rightValue.vFloat);
 		return returnValue;
 	}
 
 	Value moduloValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 2;
+		Value returnValue = new Value(2);
 		returnValue.vFloat = leftValue.vFloat % rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value listConcatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 5;
+		Value returnValue = new Value(5);
 		returnValue.vList = l_result.value.vList.Concat(r_result.value.vList).ToList();
 		return returnValue;
 	}
 
 	Value strintConcatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 3;
+		Value returnValue = new Value(3);
 		returnValue.vString = leftValue.vString + rightValue.vString;
 		return returnValue;
 	}
 
 	Value strintEqualValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = leftValue.vString == rightValue.vString;
 		return returnValue;
 	}
 
 	Value floatEqualValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = leftValue.vFloat == rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatGreaterValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = leftValue.vFloat > rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatLesserValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = leftValue.vFloat < rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatGeqValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = leftValue.vFloat >= rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatLeqValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 4;
+		Value returnValue = new Value(4);
 		returnValue.vBool = leftValue.vFloat <= rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value listIndexValue(Value leftValue, Value rightValue) {
-		return leftValue.value.vList[(int)rightValue.value.vFloat];
+		if (Math.abs(rightValue.vFloat) < leftValue.vList.Count) {
+			return leftValue.value.vList[(int)rightValue.value.vFloat];
+		} else {
+			return indexOutOfRangeError();
+		}
+		
 	}
 
 	Value stringIndexValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value();
-		returnValue.valueType = 3;
-		returnValue.vString = leftValue.value.vString[(int)rightValue.value.vFloat].ToString();
-		return returnValue;
+		if (Math.abs(rightValue.vFloat) < leftValue.vString.Length) {
+			Value returnValue = new Value(3);
+			returnValue.vString = leftValue.value.vString[(int)rightValue.value.vFloat].ToString();
+			return returnValue;
+		} else {
+			return indexOutOfRangeError();
+		}
+	}
+
+	Value indexOutOfRangeError() {
+		Value returnValue = new Value(0);
+		returnValue.errorMessage = "Index out of range";
+		return returnValue
+	}
+
+	// ================================= Interpret triOperator Functions =================================
+
+	Result interpTriOperator(Operator op, Expression target, Expression left, Expression right, Dictionary<string, string> env, Dictionary<string, Value> store) {
+		switch (op.operatorType) {
+			case(17):
+				return interpOperatorHelper(listSublistValue, target, left, right, 5, 2, 2);
+			case(18)
+				return interpOperatorHelper(stringSubstringValue, target, left, right, 3, 2, 2);
+		}
+	}
+
+	Result interpTriOperatorHelper(Func<Value, Value, Value, Value> valueFunc, Expression target, Expression left, Expression right, Expression targetType, Expression leftType, Expression rightType){
+		Result t_result = interpret(target, env, store);
+		if (t_result.value.valueType == targetType) {
+			Result l_result = interpret(left, env, store);
+			if (l_result.value.valueType == leftType) {
+				Result r_result = interpret(right, env, store);
+				if (r_result.value.valueType == rightType) {
+					Value returnValue = valueFunc(t_result.value, l_result.value, r_result.value);
+					return new Result(returnValue, r_result.store);
+				} else {
+					return new Result(new Value(rightType, r_result.value.valueType), r_result.store); //Throw Error
+				}
+			} else {
+				return new Result(new Value(leftType, l_result.value.valueType), l_result.store); //Throw Error
+			}
+		} else {
+			return new Result(new Value(targetType, t_result.value.valueType), t_result.store) //Throw Error
+		}
+	}
+
+	// SPECIFIC TRIOPERATOR FUNCTIONS
+
+	Value listSublistValue(Value targetValue, Value leftValue, Value rightValue) {
+		if (leftValue >= 0 && leftValue < rightValue && rightValue <= targetValue.vList.Count) {
+			Value returnValue = new Value(5);
+			int idx = (int)leftValue.vFloat
+			int num = (int)rightValue.vFloat - (int)LeftValue.vFloat
+			returnValue.vList = targetValue.vList.GetRange(idx, num);
+			return returnValue;
+		} else {
+			return indexOutOfRangeError();
+		}
+	} 
+
+	Value stringSubstringValue(Value targetValue, Value leftValue, Value rightValue) {
+		if (leftValue >= 0 && leftValue < rightValue && rightValue <= targetValue.vString.Length) {
+			Value returnValue = new Value(3);
+			int idx = (int)leftValue.vFloat
+			int num = (int)rightValue.vFloat - (int)LeftValue.vFloat
+			returnValue.vString = targetValue.vList.Substring(idx, num);
+			return returnValue;
+		} else {
+			return indexOutOfRangeError();
+		}
 	}
 
 	Result interpIf(Expression cond, Expression consq, Expression alter, Dictionary<string, string> env, Dictionary<string, Value> store) {
@@ -298,12 +357,12 @@ public class DScript {
 				newValue_result.store[pointer] = newValue_result.value;
 				return new Result(newValue_result.value, newValue_result.store);
 			} else {
-				Value errorValue = new Value();
+				Value errorValue = new Value(0);
 				errorValue.errorMessage = "Identifier Pointing To Nothing: " + name;
 				return new Result(errorValue, store);
 			}
 		} else {
-			Value errorValue = new Value();
+			Value errorValue = new Value(0);
 			errorValue.errorMessage = "Unbound identifier: " + name;
 			return new Result(errorValue, store);
 		}
@@ -384,6 +443,10 @@ public class Value {
 		errorExpected = expected;
 		errorGot = got;
 	}
+
+	public Value(int vType) {
+		valueType = vType;
+	}
 }
 
 public class Expression {
@@ -399,25 +462,30 @@ public class Expression {
 	public Expression eOperatorLeft;
 	public Expression eOperatorRight;
 
-	public Expression eIfCond; // type=7
+	public Operator eTriOperatorOp; // type=7
+	public Expression eTriOperatorOpTarget;
+	public Expression eTriOperatorOpLeft;
+	public Expression eTriOperatorOpRight;
+
+	public Expression eIfCond; // type=8
 	public Expression eIfConsq;
 	public Expression eIfAlter;
 
-	public string eLamParam; // type=8
+	public string eLamParam; // type=9
 	public Expression eLamBody;
 
-	public Expression eAppFunc; // type=9
+	public Expression eAppFunc; // type=10
 	public Expression eAppArg;
 
-	public string eSetName; // type=10
+	public string eSetName; // type=11
 	public Expression eSetValue;
 
-	public List<Expression> eDo; //type=11
+	public List<Expression> eDo; //type=12
 
-	public Expression eWhileCond; //type=12
+	public Expression eWhileCond; //type=13
 	public Expression eWhileBody; 
 
-	public string eDefineName; //type=13
+	public string eDefineName; //type=14
 	public Expression eDefineValue;
 
 	//Sugar
@@ -462,6 +530,9 @@ public class Operator {
 
 	// op-list-index type=15
 	// op-string-index type=16	
+
+	// op-list-sublist type=17
+	// op-string-substring type=18
 }
 
 public class BuiltInFunctions {
