@@ -13,38 +13,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 5
-  lastUpdatedAtString: 2019-02-05T23:03:40.659-05:00
-  initializedAtString: 2019-02-05T20:53:15.617-05:00
+  lastUpdatedAtString: 2019-02-06T20:46:23.316-05:00
+  initializedAtString: 2019-02-06T19:17:16.413-05:00
   entries:
-  - path: Assembly-CSharp.csproj
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp.csproj
-    projectPath: Assembly-CSharp.csproj
+  - path: .vscode\settings.json
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\.vscode\settings.json
+    projectPath: .vscode\settings.json
     originalPath: 
-    status: 3
+    status: 1
     staged: 0
   - path: Assets\scripts\gameLogic\DScript.cs
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\DScript.cs
     projectPath: Assets\scripts\gameLogic\DScript.cs
     originalPath: 
-    status: 1
-    staged: 0
-  - path: Assets\scripts\gameLogic\DScript.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\DScript.cs.meta
-    projectPath: Assets\scripts\gameLogic\DScript.cs.meta
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Assets\scripts\gameLogic\dump.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\dump.cs
-    projectPath: Assets\scripts\gameLogic\dump.cs
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Assets\scripts\gameLogic\dump.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\dump.cs.meta
-    projectPath: Assets\scripts\gameLogic\dump.cs.meta
-    originalPath: 
-    status: 1
+    status: 3
     staged: 0
   - path: Library\assetDatabase3
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\assetDatabase3
@@ -68,7 +50,7 @@ MonoBehaviour:
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\gittrackingstatus.yaml
     projectPath: Library\gfu\cache\gittrackingstatus.yaml
     originalPath: 
-    status: 5
+    status: 3
     staged: 0
   - path: Library\gfu\cache\repoinfo.yaml
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\repoinfo.yaml
@@ -76,9 +58,27 @@ MonoBehaviour:
     originalPath: 
     status: 3
     staged: 0
+  - path: Library\InspectorExpandedItems.asset
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\InspectorExpandedItems.asset
+    projectPath: Library\InspectorExpandedItems.asset
+    originalPath: 
+    status: 3
+    staged: 0
   - path: Library\shadercompiler-UnityShaderCompiler.exe0.log
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\shadercompiler-UnityShaderCompiler.exe0.log
     projectPath: Library\shadercompiler-UnityShaderCompiler.exe0.log
+    originalPath: 
+    status: 3
+    staged: 0
+  - path: obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+    projectPath: obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+    originalPath: 
+    status: 3
+    staged: 0
+  - path: obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+    projectPath: obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
     originalPath: 
     status: 3
     staged: 0
@@ -94,87 +94,57 @@ MonoBehaviour:
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-00758eead50ae074b8d6248dcd7e75a2
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-00758eead50ae074b8d6248dcd7e75a2
-    projectPath: Temp\UnityTempFile-00758eead50ae074b8d6248dcd7e75a2
+  - path: Temp\UnityTempFile-21d064704eed3144c86158bcd66a3120
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-21d064704eed3144c86158bcd66a3120
+    projectPath: Temp\UnityTempFile-21d064704eed3144c86158bcd66a3120
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-20df1e14dfe8f4b4c824132fe627f07d
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-20df1e14dfe8f4b4c824132fe627f07d
-    projectPath: Temp\UnityTempFile-20df1e14dfe8f4b4c824132fe627f07d
+  - path: Temp\UnityTempFile-312722d043dd2fc4abb79baf020565ac
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-312722d043dd2fc4abb79baf020565ac
+    projectPath: Temp\UnityTempFile-312722d043dd2fc4abb79baf020565ac
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-22569eccd2eddcf44908f56595026b3e
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-22569eccd2eddcf44908f56595026b3e
-    projectPath: Temp\UnityTempFile-22569eccd2eddcf44908f56595026b3e
+  - path: Temp\UnityTempFile-494bb40195cc11241b55ea1dffc03330
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-494bb40195cc11241b55ea1dffc03330
+    projectPath: Temp\UnityTempFile-494bb40195cc11241b55ea1dffc03330
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-36b3c7eb5e95c2a4fa1a89226db62a1d
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-36b3c7eb5e95c2a4fa1a89226db62a1d
-    projectPath: Temp\UnityTempFile-36b3c7eb5e95c2a4fa1a89226db62a1d
+  - path: Temp\UnityTempFile-5dc691aa448732248a16ff2a8e3e706b
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-5dc691aa448732248a16ff2a8e3e706b
+    projectPath: Temp\UnityTempFile-5dc691aa448732248a16ff2a8e3e706b
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-7898cba1ff1a3bb408c79a4429018f67
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-7898cba1ff1a3bb408c79a4429018f67
-    projectPath: Temp\UnityTempFile-7898cba1ff1a3bb408c79a4429018f67
+  - path: Temp\UnityTempFile-895fb702fccc4024f80ad3ef7e67fc26
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-895fb702fccc4024f80ad3ef7e67fc26
+    projectPath: Temp\UnityTempFile-895fb702fccc4024f80ad3ef7e67fc26
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-8178483a275452447856296b4c30a690
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-8178483a275452447856296b4c30a690
-    projectPath: Temp\UnityTempFile-8178483a275452447856296b4c30a690
+  - path: Temp\UnityTempFile-a562b967659795849be2507ba94a1bf8
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a562b967659795849be2507ba94a1bf8
+    projectPath: Temp\UnityTempFile-a562b967659795849be2507ba94a1bf8
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-900b5adfacf744b47809794290fc7a6e
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-900b5adfacf744b47809794290fc7a6e
-    projectPath: Temp\UnityTempFile-900b5adfacf744b47809794290fc7a6e
+  - path: Temp\UnityTempFile-ba9a0070c09ed9a448d85591a55bbed1
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-ba9a0070c09ed9a448d85591a55bbed1
+    projectPath: Temp\UnityTempFile-ba9a0070c09ed9a448d85591a55bbed1
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-996d6f6cd498d8f49999fa3f9d0a2a65
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-996d6f6cd498d8f49999fa3f9d0a2a65
-    projectPath: Temp\UnityTempFile-996d6f6cd498d8f49999fa3f9d0a2a65
+  - path: Temp\UnityTempFile-f6ad28e3e7338994ba7195a59bce4861
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f6ad28e3e7338994ba7195a59bce4861
+    projectPath: Temp\UnityTempFile-f6ad28e3e7338994ba7195a59bce4861
     originalPath: 
     status: 1
     staged: 0
-  - path: Temp\UnityTempFile-b0d06b007f6b4ef4f80903d5bc7f6370
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b0d06b007f6b4ef4f80903d5bc7f6370
-    projectPath: Temp\UnityTempFile-b0d06b007f6b4ef4f80903d5bc7f6370
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Temp\UnityTempFile-de408043216adfc46afe0fa8fa712b73
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-de408043216adfc46afe0fa8fa712b73
-    projectPath: Temp\UnityTempFile-de408043216adfc46afe0fa8fa712b73
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Temp\UnityTempFile-e9237d20e1d870a49929292021249064
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-e9237d20e1d870a49929292021249064
-    projectPath: Temp\UnityTempFile-e9237d20e1d870a49929292021249064
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Temp\UnityTempFile-ec7f9f0f47a1c174ea212a58bd6f985f
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-ec7f9f0f47a1c174ea212a58bd6f985f
-    projectPath: Temp\UnityTempFile-ec7f9f0f47a1c174ea212a58bd6f985f
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Temp\UnityTempFile-f593dc32e0df52449bfb896c687c58b3
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f593dc32e0df52449bfb896c687c58b3
-    projectPath: Temp\UnityTempFile-f593dc32e0df52449bfb896c687c58b3
-    originalPath: 
-    status: 1
-    staged: 0
-  - path: Temp\UnityTempFile-f7e170eb6f03d1143890b32df02cb621
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f7e170eb6f03d1143890b32df02cb621
-    projectPath: Temp\UnityTempFile-f7e170eb6f03d1143890b32df02cb621
+  - path: Temp\UnityTempFile-fb8fe6a7abaa50f4489c206e9cdc3824
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-fb8fe6a7abaa50f4489c206e9cdc3824
+    projectPath: Temp\UnityTempFile-fb8fe6a7abaa50f4489c206e9cdc3824
     originalPath: 
     status: 1
     staged: 0
