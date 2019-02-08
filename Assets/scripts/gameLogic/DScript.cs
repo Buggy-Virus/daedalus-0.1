@@ -10,6 +10,9 @@ public class DScript {
 	public Dictionary<string, Token> tokenEnv;
     public Dictionary<string, Cube> cubeEnv;
 
+    public Dictionary<string, string> builtInEnv;
+    public Dictionary<string, Value> builtInStore; 
+
 	void Start(){
 		igListScript = GameObject.Find("GameLogic").GetComponent<IgListScript>();
 		tokenEnv = igListScript.tokenDict;
@@ -17,6 +20,22 @@ public class DScript {
 	}
 
 	public Value evaluate(string input) {
+		return interpret(desugar(parse(input)));
+	}
+
+	public Value evaluateSelfToken(string input, Token self) {
+		return interpret(desugar(parse(input)));
+	}
+
+	public Value evaluateSelfCube(string input, Cube self) {
+		return interpret(desugar(parse(input)));
+	}
+
+	public Value evaluateSelfTokenTargetToken(string input, Token self, Token target) {
+		return interpret(desugar(parse(input)));
+	}
+
+	public Value evaluateSelfTokenTargetCube(string input, Token self, Cube cube) {
 		return interpret(desugar(parse(input)));
 	}
 
@@ -969,12 +988,5 @@ public class BuiltInFunctions {
 	// op-logarithm, type=6
 	// op-round
 
-
-	// public Expression eSublistList; //type=13
-	// public int eSublistStart;
-	// public int eSublistEnd;
-
-	// public Expression eSubstringString; //type=13
-	// public int eSubstringStart;
-	// public int eSubstringEnd;
+	// casting between types
 }
