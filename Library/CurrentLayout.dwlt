@@ -5089,13 +5089,13 @@ MonoBehaviour:
       staged: 0
     changedFilesText: 109 changed files
     lastCurrentBranchChangedEvent:
-      updatedTimeString: 2019-02-06T19:17:15.988-05:00
+      updatedTimeString: 2019-02-07T21:40:40.583-05:00
       cacheType: 1
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2019-02-06T20:46:23.316-05:00
+      updatedTimeString: 2019-02-07T23:06:51.916-05:00
       cacheType: 5
     lastLocksChangedEvent:
-      updatedTimeString: 2019-02-06T19:17:18.097-05:00
+      updatedTimeString: 2019-02-07T21:40:41.642-05:00
       cacheType: 6
   historyView:
     currentLogHasUpdate: 0
@@ -5509,8 +5509,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: da080000
-      m_LastClickedID: 0
+      m_SelectedIDs: 5a290000
+      m_LastClickedID: 10586
       m_ExpandedIDs: b8fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -5608,19 +5608,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/scripts/gameLogic
+    - Assets/scripts/ig
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/scripts/gameLogic
+  - Assets/scripts/ig
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\ohare\Documents\Daedalus 0.1
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 136}
-    m_SelectedIDs: 56270000
-    m_LastClickedID: 10070
+    m_SelectedIDs: ea280000
+    m_LastClickedID: 10474
     m_ExpandedIDs: 00000000cc260000a6270000462800004e2800000a29000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0

@@ -10,6 +10,9 @@ public class IgListScript : MonoBehaviour
 
 	TypeTreeScript typeTreeScript;
 
+    public Dictionary<string, Mob> mobDict = new Dictionary<string, Mob>();
+    public Dictionary<string, Cube> cubeDict = new Dictionary<string, Cube>();
+
 	public Dictionary<string, object[]> cubeParameters = new Dictionary<string, object[]>();
 	public Dictionary<string, object[]> mobParameters = new Dictionary<string, object[]>();
     public Dictionary<string, object[]> relationalActionParameters = new Dictionary<string, object[]>();
