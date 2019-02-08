@@ -7,13 +7,13 @@ using UnityEngine;
 public class DScript {
 
 	IgListScript igListScript;
-	public Dictionary<string, Mob> mobDict;
-    public Dictionary<string, Cube> cubeDict;
+	public Dictionary<string, Token> tokenEnv;
+    public Dictionary<string, Cube> cubeEnv;
 
 	void Start(){
 		igListScript = GameObject.Find("GameLogic").GetComponent<IgListScript>();
-		mobDict = igListScript.mobDict;
-		cubeDict = igListScript.cubeDict;
+		tokenEnv = igListScript.tokenDict;
+		cubeEnv = igListScript.cubeDict;
 	}
 
 	public Value evaluate(string input) {
@@ -28,42 +28,49 @@ public class DScript {
 
 	}
 
-	Result interpret(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpret(
+		Expression expression, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store,
+		Dictionary<string, Token> tokenEnv,
+		Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		switch (expression.expressionType) {
 			case 1: //e-int
-				return interpInt(expression.eInt, env, store);
+				return interpInt(expression.eInt, env, store, tokenEnv, cubeEnv);
 			case 2: //e-float
-				return interpFloat(expression.eFloat, env, store);
+				return interpFloat(expression.eFloat, env, store, tokenEnv, cubeEnv);
 			case 3: //e-string
-				return interpString(expression.eString, env, store);
+				return interpString(expression.eString, env, store, tokenEnv, cubeEnv);
 			case 4: //e-bool
-				return interpBool(expression.eBool, env, store);
+				return interpBool(expression.eBool, env, store, tokenEnv, cubeEnv);
 			case 5: // e-list
-				return interpList(expression.eList, env, store);
+				return interpList(expression.eList, env, store, ref tokenEnv, ref cubeEnv);
 			case 6: //e-op
-				return interpOperator(expression.eOperatorOp, expression.eOperatorLeft, expression.eOperatorRight, env, store);
+				return interpOperator(expression.eOperatorOp, expression.eOperatorLeft, expression.eOperatorRight, env, store, ref tokenEnv, ref cubeEnv);
 			case 7: //e-triOp
-				return interpTriOperator(expression.eTriOperatorOp, expression.eTriOperatorTarget, expression.eTriOperatorLeft, expression.eTriOperatorRight, env, store);
+				return interpTriOperator(expression.eTriOperatorOp, expression.eTriOperatorTarget, expression.eTriOperatorLeft, expression.eTriOperatorRight, env, store, ref tokenEnv, ref cubeEnv);
 			case 8: //e-if
-				return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store);
+				return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store, ref tokenEnv, ref cubeEnv);
 			case 9: //e-lam
-				return interpLam(expression.eLamParam, expression.eLamBody, env, store);
+				return interpLam(expression.eLamParam, expression.eLamBody, env, store, ref tokenEnv, ref cubeEnv);
 			case 10: //e-app
-				return interpApp(expression.eAppFunc, expression.eAppArg, env, store);
+				return interpApp(expression.eAppFunc, expression.eAppArg, env, store, ref tokenEnv, ref cubeEnv);
 			case 11: //e-set
-				return interpSet(expression.eSetName, expression.eSetValue, env, store);
+				return interpSet(expression.eSetName, expression.eSetValue, env, store, ref tokenEnv, ref cubeEnv);
 			case 12: //e-do
-				return interpDo(expression.eDo, env, store);	
+				return interpDo(expression.eDo, env, store, ref tokenEnv, ref cubeEnv);	
 			case 13: //e-while
-				return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store);
+				return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store, ref tokenEnv, ref cubeEnv);
 			case 14: //e-define
-				return interpret(expression.eDefineValue, env, store);
+				return interpret(expression.eDefineValue, env, store, ref tokenEnv, ref cubeEnv);
 			case 15: // e-id
-				return interpretId(expression.eId, env, store)
+				return interpretId(expression.eId, env, store, ref tokenEnv, ref cubeEnv)
 			case 16: //e-ig-variable
-				return interpretIgVariable(expression.eIgName, expression.eIgVariable, env, store);
+				return interpretIgVariable(expression.eIgName, expression.eIgVariable, env, store, ref tokenEnv, ref cubeEnv);
 			case 17: //e-set-ig-variable
-				return interpretSetIfVariable(expression.eSetIgName, expression.eSetIgVariable, expression.eSetIgValue, env, store);
+				return interpretSetIfVariable(expression.eSetIgName, expression.eSetIgVariable, expression.eSetIgValue, env, store, ref tokenEnv, ref cubeEnv);
 		}
 	}
 
@@ -93,12 +100,19 @@ public class DScript {
 		return new Result(returnValue, store);
 	}
 
-	Result interpList(List<Expression> expressionList, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpList(
+		List<Expression> expressionList, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		Value returnValue = new Value(5);
 		returnValue.vList = new List<Value>();
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expression in expressionList) {
-			last_result = interpret(expression, env, last_result.store);
+			last_result = interpret(expression, env, last_result.store, ref tokenEnv, ref cubeEnv);
 			returnValue.vList.Add(last_result.value);
 		}
 		return new Result(returnValue, last_result.store);
@@ -106,59 +120,79 @@ public class DScript {
 
 	// ================================= Interpret Operator Functions =================================
 	
-	Result interpOperator(Operator op, Expression left, Expression right, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpOperator(
+		Operator op, 
+		Expression left, 
+		Expression right, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		switch (op.operatorType) {
 			case 1: //Addition
-				return interpOperatorHelper(additionFloatValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(additionFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 2: //Subtraction
-				return interpOperatorHelper(subtractionFloatValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(subtractionFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 3: //Multiplication
-				return interpOperatorHelper(multiplicationFloatValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(multiplicationFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 4: //Division
-				return interpOperatorHelper(divisionFloatValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(divisionFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 5: //Exponent
-				return interpOperatorHelper(exponentFloatValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(exponentFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 6: //Modulo
-				return interpOperatorHelper(moduloFloatValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(moduloFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 7: //List Concat
-				return interpOperatorHelper(listConcatValue, left, right, 5, 5, env, store);
+				return interpOperatorHelper(listConcatValue, left, right, 5, 5, env, store, ref tokenEnv, ref cubeEnv);
 			case 8: // String Concant
-				return interpOperatorHelper(stringConcatValue, left, right, 3, 3, env, store);
+				return interpOperatorHelper(stringConcatValue, left, right, 3, 3, env, store, ref tokenEnv, ref cubeEnv);
 			case 9: // string equal
-				return interpOperatorHelper(stringEqualValue, left, right, 3, 3, env, store);
+				return interpOperatorHelper(stringEqualValue, left, right, 3, 3, env, store, ref tokenEnv, ref cubeEnv);
 			case 10: // num equal
-				return interpOperatorHelper(floatEqualValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(floatEqualValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 11: // num greater than
-				return interpOperatorHelper(floatGreaterValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(floatGreaterValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 12: // num less than
-				return interpOperatorHelper(floatLesserValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(floatLesserValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 13: // num geq
-				return interpOperatorHelper(floatGeqValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(floatGeqValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 14: // num leq
-				return interpOperatorHelper(floatLeqValue, left, right, 2, 2, env, store);
+				return interpOperatorHelper(floatLeqValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
 			case 15: // List Index
-				return interpOperatorHelper(listIndexValue, left, right, 5, 1, env, store);
+				return interpOperatorHelper(listIndexValue, left, right, 5, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 16: // String Index
-				return interpOperatorHelper(stringIndexValue, left, right, 3, 1, env, store);
+				return interpOperatorHelper(stringIndexValue, left, right, 3, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 19: //Addition
-				return interpOperatorHelper(additionIntValue, left, right, 1, 1, env, store);
+				return interpOperatorHelper(additionIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 20: //Subtraction
-				return interpOperatorHelper(subtractionIntValue, left, right, 1, 1, env, store);
+				return interpOperatorHelper(subtractionIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 21: //Multiplication
-				return interpOperatorHelper(multiplicationIntValue, left, right, 1, 1, env, store);
+				return interpOperatorHelper(multiplicationIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 22: //Division
-				return interpOperatorHelper(divisionIntValue, left, right, 1, 1, env, store);
+				return interpOperatorHelper(divisionIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 23: //Exponent
-				return interpOperatorHelper(exponentIntValue, left, right, 1, 1, env, store);
+				return interpOperatorHelper(exponentIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case 24: //Modulo
-				return interpOperatorHelper(moduloIntValue, left, right, 1, 1, env, store);
+				return interpOperatorHelper(moduloIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 		}
 	}
 
-	Result interpOperatorHelper(Func<Value, Value, Value> valueFunc, Expression left, Expression right, int leftType, int rightType, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Result l_result = interpret(left, env, store);
+	Result interpOperatorHelper(
+		Func<Value, Value, Value> valueFunc, 
+		Expression left, 
+		Expression right, 
+		int leftType, 
+		int rightType, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
+		Result l_result = interpret(left, env, store, ref tokenEnv, ref cubeEnv);
 		if (l_result.value.valueType == leftType) {
-			Result r_result = interpret(right, env, store);
+			Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
 			if (r_result.value.valueType == rightType) {
 				Value returnValue = valueFunc(l_result.value, r_result.value);
 				return new Result(returnValue, r_result.store);
@@ -331,21 +365,44 @@ public class DScript {
 
 	// ================================= Interpret triOperator Functions =================================
 
-	Result interpTriOperator(Operator op, Expression target, Expression left, Expression right, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpTriOperator(
+		Operator op, 
+		Expression target, 
+		Expression left, 
+		Expression right, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		switch (op.operatorType) {
 			case(17):
-				return interpTriOperatorHelper(listSublistValue, target, left, right, 5, 1, 1, env, store);
+				return interpTriOperatorHelper(listSublistValue, target, left, right, 5, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 			case(18):
-				return interpTriOperatorHelper(stringSubstringValue, target, left, right, 3, 1, 1, env, store);
+				return interpTriOperatorHelper(stringSubstringValue, target, left, right, 3, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
 		}
 	}
 
-	Result interpTriOperatorHelper(Func<Value, Value, Value, Value> valueFunc, Expression target, Expression left, Expression right, int targetType, int leftType, int rightType, Dictionary<string, string> env, Dictionary<string, Value> store){
-		Result t_result = interpret(target, env, store);
+	Result interpTriOperatorHelper(
+		Func<Value, Value, Value, Value> valueFunc, 
+		Expression target, 
+		Expression left, 
+		Expression right, 
+		int targetType, 
+		int leftType, 
+		int rightType, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		)
+	{
+		Result t_result = interpret(target, env, store, ref tokenEnv, ref cubeEnv);
 		if (t_result.value.valueType == targetType) {
-			Result l_result = interpret(left, env, store);
+			Result l_result = interpret(left, env, store, ref tokenEnv, ref cubeEnv);
 			if (l_result.value.valueType == leftType) {
-				Result r_result = interpret(right, env, store);
+				Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
 				if (r_result.value.valueType == rightType) {
 					Value returnValue = valueFunc(t_result.value, l_result.value, r_result.value);
 					return new Result(returnValue, r_result.store);
@@ -386,20 +443,37 @@ public class DScript {
 		}
 	}
 
-	Result interpIf(Expression cond, Expression consq, Expression alter, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Result cond_result = interpret(cond, env, store);
+	Result interpIf(
+		Expression cond, 
+		Expression consq, 
+		Expression alter, 
+		Dictionary<string, string> env,
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
+		Result cond_result = interpret(cond, env, store, ref tokenEnv, ref cubeEnv);
 		if (cond_result.value.valueType == 4) {
 			if (cond_result.value.vBool) {
-				return interpret(consq, env, cond_result.store);
+				return interpret(consq, env, cond_result.store, ref tokenEnv, ref cubeEnv);
 			} else {
-				return interpret(alter, env, cond_result.store);
+				return interpret(alter, env, cond_result.store, ref tokenEnv, ref cubeEnv);
 			}
 		} else {
 			return new Result(new Value(4, cond_result.value.valueType), store);
 		}
 	}
 
-	Result interpLam(string param, Expression body, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpLam(
+		string param, 
+		Expression body, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		Value returnValue = new Value();
 		returnValue.vFunParam = param;
 		returnValue.vFunBody = body;
@@ -407,24 +481,40 @@ public class DScript {
 		return new Result(returnValue, store);
 	}
 
-	Result interpApp(Expression func, Expression arg, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Result func_result = interpret(func, env, store);
+	Result interpApp(
+		Expression func, 
+		Expression arg, 
+		Dictionary<string, string> env,
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
+		Result func_result = interpret(func, env, store, ref tokenEnv, ref cubeEnv);
 		if (func_result.value.valueType == 5) {
-			Result arg_result = interpret(arg, env, func_result.store);
+			Result arg_result = interpret(arg, env, func_result.store, ref tokenEnv, ref cubeEnv);
 			string loc = System.Guid.NewGuid().ToString();
 			func_result.value.vFunEnviroment.Add(func_result.value.vFunParam, loc);
 			arg_result.store.Add(loc, arg_result.value);
-			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, arg_result.store); 
+			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, arg_result.store, ref tokenEnv, ref cubeEnv); 
 		} else {
 			return new Result(new Value(5, func_result.value.valueType), store); //Throw Error
 		}
 	}
 
-	Result interpSet(string name, Expression newValue, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpSet(
+		string name, 
+		Expression newValue, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		if (env.ContainsKey(name)) {
 			string pointer = env[name];
 			if (store.ContainsKey(pointer)) {
-				Result newValue_result = interpret(newValue, env, store);
+				Result newValue_result = interpret(newValue, env, store, ref tokenEnv, ref cubeEnv);
 				newValue_result.store[pointer] = newValue_result.value;
 				return new Result(newValue_result.value, newValue_result.store);
 			} else {
@@ -439,32 +529,49 @@ public class DScript {
 		}
 	}
 
-	Result interpDo(List<Expression> expressionList, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpDo(
+		List<Expression> expressionList, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expression in expressionList) {
 			// If statement in Do handles define statements. Defines are only relevent in Do
 			// The change to the env is only relevent across other Do expressions
 			// In the same Do statement
 			if (expression.expressionType == 12) {
-				Result define_result = interpret(expression.eDefineValue, env, last_result.store);
+				Result define_result = interpret(expression.eDefineValue, env, last_result.store, ref tokenEnv, ref cubeEnv);
 				string loc = System.Guid.NewGuid().ToString();
 				env.Add(expression.eDefineName, loc);
 				define_result.store.Add(loc, define_result.value);
 				last_result = define_result;
 			} else {
-				last_result = interpret(expression, env, last_result.store);
+				last_result = interpret(expression, env, last_result.store, ref tokenEnv, ref cubeEnv);
 			}
 			
 		}
 		return last_result;
 	}
 
-	Result interpWhile(Expression cond, Expression body, Value lastValue, bool useLast, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Result cond_result = interpret(cond, env, store);
+	Result interpWhile(
+		Expression cond, 
+		Expression body, 
+		Value lastValue, 
+		bool useLast, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
+		Result cond_result = interpret(cond, env, store, ref tokenEnv, ref cubeEnv);
 		if (cond_result.value.valueType == 4) {
 			if (cond_result.value.vBool) {
-				Result body_result = interpret(body, env, cond_result.store);
-				return interpWhile(cond, body, body_result.value, true, env, body_result.store);
+				Result body_result = interpret(body, env, cond_result.store, ref tokenEnv, ref cubeEnv);
+				return interpWhile(cond, body, body_result.value, true, env, body_result.store, ref tokenEnv, ref cubeEnv);
 			} else if (useLast) {
 				return new Result(lastValue, cond_result.store);
 			} else {
@@ -475,7 +582,14 @@ public class DScript {
 		}
 	}
 
-	Result interpId(string name, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	Result interpId(
+		string name, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		if (env.ContainsKey(name)) {
 			if (store.ContainsKey(name)) {
 				return new Result(store[env[name]], store);
@@ -495,7 +609,10 @@ public class DScript {
 		string name, 
 		string variable, 
 		Dictionary<string, string> env, 
-		Dictionary<string, Value> store) 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+		) 
 	{
 		if (tokenEnv.ContainsKey(name)) {
 			Token token = tokenEnv[name];
@@ -563,10 +680,12 @@ public class DScript {
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv) {
+		ref Dictionary<string, Cube> cubeEnv
+		) 
+	{
 		if (tokenEnv.ContainsKey(name)) {
 			Token token = tokenEnv[name];
-			Result nv_result = interpret(newValue, env, store, tokenEnv, cubeEnv);
+			Result nv_result = interpret(newValue, env, store, tokenEnv, cubeEnv, ref tokenEnv, ref cubeEnv);
 			if (token.variables.ContainsKey(variable)) {
 				switch(token.variables[variable]) {
 					case 1:
@@ -618,7 +737,7 @@ public class DScript {
 			}
 		} else if (cubeEnv.ContainsKey(name)) {
 			Cube cube = cubeEnv[name];
-			Result nv_result = interpret(newValue, env, store, tokenEnv, cubeEnv);
+			Result nv_result = interpret(newValue, env, store, tokenEnv, cubeEnv, ref tokenEnv, ref cubeEnv);
 			if (cube.variables.ContainsKey(variable)) {
 				switch(cube.variables[variable]) {
 					case 1:
