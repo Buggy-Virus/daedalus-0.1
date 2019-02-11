@@ -5,7 +5,7 @@ using UnityEngine;
 public class SelectScript : MonoBehaviour
 {
 	MouseControls controlScript;
-	MobPrefabScript mobPrefabScript;
+	TokenPrefabScript tokenPrefabScript;
     Collider objectCollider;
 
     bool clicked;
@@ -13,7 +13,7 @@ public class SelectScript : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
     	controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
-    	mobPrefabScript = gameObject.GetComponent<MobPrefabScript>();
+    	tokenPrefabScript = gameObject.GetComponent<TokenPrefabScript>();
         objectCollider = gameObject.transform.GetChild(0).GetComponent<Collider>();
         clicked = false;        
     }
@@ -31,7 +31,7 @@ public class SelectScript : MonoBehaviour
 
                 if (Input.GetMouseButtonUp(0) && clicked) {
                     controlScript.selectedObject = gameObject;
-                    controlScript.selectedMob = mobPrefabScript.mob;
+                    controlScript.selectedToken = tokenPrefabScript.token;
                     Debug.Log(controlScript.selectedObject.transform.name);
                     clicked = false;
                 }

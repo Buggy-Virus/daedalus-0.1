@@ -40,7 +40,147 @@ public class DScript {
 	}
 
 	Expression parse(string input) {
+		List<Atom> atomList = tokenize(input);
 
+
+
+		// returns an expressions by going through the atom list
+	}
+
+	List<Atom> tokenize(string input) {
+		List<Atom> atomList = new List<Atom>();
+
+		bool buildingAtom = false;
+		bool singleQuote = false;
+		Atom curAtom = new Atom();
+
+		for (int i = 0; i < input.Length; i++) {
+			char curChar = input[i];
+
+			if (buildingAtom) {
+				switch(curAtom.atomType) {
+					case "string":
+						if ((curChar == '\'' && singleQuote == true) || (curChar == '\"' && singleQuote == false)) {
+							atomList.Add(curAtom);
+							buildingAtom = false;
+						} else {
+							curAtom.value += curChar.ToString();
+						}
+						break;
+					case "number":
+						if (Char.IsDigit(curChar) || curChar == '.') {
+							curAtom.value += curChar.ToString();
+						} else {
+							atomList.Add(curAtom);
+							buildingAtom = false;
+						}
+						break;
+					case "identifier":
+						if (Char.IsDigit(curChar) || Char.IsLetter(curChar)) {
+							curAtom.value += curChar.ToString();
+						} else {
+							atomList.Add(curAtom);
+							buildingAtom = false;
+						}
+						break;
+				}
+			}
+
+			if (!buildingAtom) {
+				if (isWhiteSpace(curChar)) {
+					
+				} else if (curChar == '\'') {
+					curAtom = new Atom();
+					curAtom.atomType = "string";
+					buildingAtom = true;
+					singleQuote = true;
+				} else if (curChar == '\"') {
+					curAtom = new Atom();
+					curAtom.atomType = "string";
+					buildingAtom = true;
+					singleQuote = false;
+				} else if (isPunctuation(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "punc";
+					curAtom.value = curChar.ToString();
+					atomList.Add(curAtom);
+				} else if (isOperator(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "operator";
+					curAtom.value = curChar.ToString();
+					atomList.Add(curAtom);
+				} else if (Char.IsDigit(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "number";
+					curAtom.value = curChar.ToString();
+					buildingAtom = true;
+				} else if (Char.IsLetter(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "identifier";
+					curAtom.value = curChar.ToString();
+					buildingAtom = true;
+				} else {
+					curAtom = new Atom();
+					curAtom.atomType = "error";
+					atomList.Add(curAtom);
+					break;
+				} 
+			}	
+		}
+		return atomList;
+	}
+
+	bool isPunctuation (char c) {
+		switch(c) {
+			case '(':
+			case ')':
+			case '{':
+			case '}':
+			case ';':
+			case ',':
+			case ']':
+			case '[':
+			case ':':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	bool isWhiteSpace (char c) {
+		switch(c) {
+			case '\t':
+			case '\n':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	bool isOperator (char c) {
+		switch(c) {
+			case '+':
+			case '=':
+			case '-':
+			case '/':
+			case '*':
+			case '>':
+			case '<':
+			case '!':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	bool isString (char c) {
+		switch(c) {
+			case '\"':
+			case '\'':
+				return true;
+			default:
+				return false;
+		}
 	}
 
 	Expression desugar(Expression sugaredExpression) {
@@ -51,70 +191,74 @@ public class DScript {
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store,
-		Dictionary<string, Token> tokenEnv,
-		Dictionary<string, Cube> cubeEnv
+		ref Dictionary<string, Token> tokenEnv,
+		ref Dictionary<string, Cube> cubeEnv
 		) 
 	{
 		switch (expression.expressionType) {
-			case 1: //e-int
-				return interpInt(expression.eInt, env, store, tokenEnv, cubeEnv);
-			case 2: //e-float
-				return interpFloat(expression.eFloat, env, store, tokenEnv, cubeEnv);
-			case 3: //e-string
-				return interpString(expression.eString, env, store, tokenEnv, cubeEnv);
-			case 4: //e-bool
-				return interpBool(expression.eBool, env, store, tokenEnv, cubeEnv);
-			case 5: // e-list
+			case "e-int": //e-int
+				return interpInt(expression.eInt, env, store);
+			case "e-float": //e-float
+				return interpFloat(expression.eFloat, env, store);
+			case "e-string": //e-string
+				return interpString(expression.eString, env, store);
+			case "e-bool": //e-bool
+				return interpBool(expression.eBool, env, store);
+			case "e-list": // e-list
 				return interpList(expression.eList, env, store, ref tokenEnv, ref cubeEnv);
-			case 6: //e-op
+			case "e-op": //e-op
 				return interpOperator(expression.eOperatorOp, expression.eOperatorLeft, expression.eOperatorRight, env, store, ref tokenEnv, ref cubeEnv);
-			case 7: //e-triOp
+			case "e-triOp": //e-triOp
 				return interpTriOperator(expression.eTriOperatorOp, expression.eTriOperatorTarget, expression.eTriOperatorLeft, expression.eTriOperatorRight, env, store, ref tokenEnv, ref cubeEnv);
-			case 8: //e-if
+			case "e-if": //e-if
 				return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store, ref tokenEnv, ref cubeEnv);
-			case 9: //e-lam
+			case "e-lam": //e-lam
 				return interpLam(expression.eLamParam, expression.eLamBody, env, store, ref tokenEnv, ref cubeEnv);
-			case 10: //e-app
+			case "e-app": //e-app
 				return interpApp(expression.eAppFunc, expression.eAppArg, env, store, ref tokenEnv, ref cubeEnv);
-			case 11: //e-set
+			case "e-set": //e-set
 				return interpSet(expression.eSetName, expression.eSetValue, env, store, ref tokenEnv, ref cubeEnv);
-			case 12: //e-do
+			case "e-do": //e-do
 				return interpDo(expression.eDo, env, store, ref tokenEnv, ref cubeEnv);	
-			case 13: //e-while
+			case "e-while": //e-while
 				return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store, ref tokenEnv, ref cubeEnv);
-			case 14: //e-define
+			case "e-def": //e-define
 				return interpret(expression.eDefineValue, env, store, ref tokenEnv, ref cubeEnv);
-			case 15: // e-id
-				return interpretId(expression.eId, env, store, ref tokenEnv, ref cubeEnv)
-			case 16: //e-ig-variable
-				return interpretIgVariable(expression.eIgName, expression.eIgVariable, env, store, ref tokenEnv, ref cubeEnv);
-			case 17: //e-set-ig-variable
-				return interpretSetIfVariable(expression.eSetIgName, expression.eSetIgVariable, expression.eSetIgValue, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-id": // e-id
+				return interpId(expression.eId, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-ig-var": //e-ig-variable
+				return interpIgVariable(expression.eIgName, expression.eIgVariable, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-set-ig-var": //e-set-ig-variable
+				return interpSetIgVariable(expression.eSetIgName, expression.eSetIgVariable, expression.eSetIgValue, env, store, ref tokenEnv, ref cubeEnv);
+			default:
+				Value errorValue = new Value("error"); 
+				errorValue.errorMessage = "Unknown expression type: " + expression.expressionType.ToString();
+				return new Result(errorValue, store); //Throw Error	
 		}
 	}
 
 	// ================================= Interpret Values Functions =================================
 
 	Result interpInt(int eInt, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value(1);
+		Value returnValue = new Value("int");
 		returnValue.vInt = eInt;
 		return new Result(returnValue, store);
 	}
 
 	Result interpFloat(float eFloat, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value(2);
+		Value returnValue = new Value("float");
 		returnValue.vFloat = eFloat;
 		return new Result(returnValue, store);
 	}
 
 	Result interpString(string eString, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value(3);
+		Value returnValue = new Value("string");
 		returnValue.vString = eString;
 		return new Result(returnValue, store);
 	}
 
 	Result interpBool(bool eBool, Dictionary<string, string> env, Dictionary<string, Value> store) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = eBool;
 		return new Result(returnValue, store);
 	}
@@ -127,7 +271,7 @@ public class DScript {
 		ref Dictionary<string, Cube> cubeEnv
 		) 
 	{
-		Value returnValue = new Value(5);
+		Value returnValue = new Value("list");
 		returnValue.vList = new List<Value>();
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expression in expressionList) {
@@ -150,50 +294,66 @@ public class DScript {
 		) 
 	{
 		switch (op.operatorType) {
-			case 1: //Addition
-				return interpOperatorHelper(additionFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 2: //Subtraction
-				return interpOperatorHelper(subtractionFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 3: //Multiplication
-				return interpOperatorHelper(multiplicationFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 4: //Division
-				return interpOperatorHelper(divisionFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 5: //Exponent
-				return interpOperatorHelper(exponentFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 6: //Modulo
-				return interpOperatorHelper(moduloFloatValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 7: //List Concat
-				return interpOperatorHelper(listConcatValue, left, right, 5, 5, env, store, ref tokenEnv, ref cubeEnv);
-			case 8: // String Concant
-				return interpOperatorHelper(stringConcatValue, left, right, 3, 3, env, store, ref tokenEnv, ref cubeEnv);
-			case 9: // string equal
-				return interpOperatorHelper(stringEqualValue, left, right, 3, 3, env, store, ref tokenEnv, ref cubeEnv);
-			case 10: // num equal
-				return interpOperatorHelper(floatEqualValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 11: // num greater than
-				return interpOperatorHelper(floatGreaterValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 12: // num less than
-				return interpOperatorHelper(floatLesserValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 13: // num geq
-				return interpOperatorHelper(floatGeqValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 14: // num leq
-				return interpOperatorHelper(floatLeqValue, left, right, 2, 2, env, store, ref tokenEnv, ref cubeEnv);
-			case 15: // List Index
-				return interpOperatorHelper(listIndexValue, left, right, 5, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 16: // String Index
-				return interpOperatorHelper(stringIndexValue, left, right, 3, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 19: //Addition
-				return interpOperatorHelper(additionIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 20: //Subtraction
-				return interpOperatorHelper(subtractionIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 21: //Multiplication
-				return interpOperatorHelper(multiplicationIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 22: //Division
-				return interpOperatorHelper(divisionIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 23: //Exponent
-				return interpOperatorHelper(exponentIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case 24: //Modulo
-				return interpOperatorHelper(moduloIntValue, left, right, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
+			case "float-add": //Addition
+				return interpOperatorHelper(additionFloatValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-sub": //Subtraction
+				return interpOperatorHelper(subtractionFloatValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-mult": //Multiplication
+				return interpOperatorHelper(multiplicationFloatValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-div": //Division
+				return interpOperatorHelper(divisionFloatValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-exp": //Exponent
+				return interpOperatorHelper(exponentFloatValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-mod": //Modulo
+				return interpOperatorHelper(moduloFloatValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "list-concat": //List Concat
+				return interpOperatorHelper(listConcatValue, left, right, "e-list", "e-list", env, store, ref tokenEnv, ref cubeEnv);
+			case "string-concat": // String Concant
+				return interpOperatorHelper(stringConcatValue, left, right, "e-string", "e-string", env, store, ref tokenEnv, ref cubeEnv);
+			case "string-eql": // string equal
+				return interpOperatorHelper(stringEqualValue, left, right, "e-string", "e-string", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-eql": // num equal
+				return interpOperatorHelper(floatEqualValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-gt": // num greater than
+				return interpOperatorHelper(floatGreaterValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-lt": // num less than
+				return interpOperatorHelper(floatLesserValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-geq": // num geq
+				return interpOperatorHelper(floatGeqValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "float-leq": // num leq
+				return interpOperatorHelper(floatLeqValue, left, right, "e-float", "e-float", env, store, ref tokenEnv, ref cubeEnv);
+			case "list-ind": // List Index
+				return interpOperatorHelper(listIndexValue, left, right, "v-list", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "string-ind": // String Index
+				return interpOperatorHelper(stringIndexValue, left, right, "e-string", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-add": //Addition
+				return interpOperatorHelper(additionIntValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-sub": //Subtraction
+				return interpOperatorHelper(subtractionIntValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-mult": //Multiplication
+				return interpOperatorHelper(multiplicationIntValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-div": //Division
+				return interpOperatorHelper(divisionIntValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-exp": //Exponent
+				return interpOperatorHelper(exponentIntValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-mod": //Modulo
+				return interpOperatorHelper(moduloIntValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-eql":
+				return interpOperatorHelper(intEqualValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-gt":
+				return interpOperatorHelper(intLesserValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-lt":
+				return interpOperatorHelper(intGreaterValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-geq":
+				return interpOperatorHelper(intGeqValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "int-leq":
+				return interpOperatorHelper(intLeqValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
+			case "bool-not":
+				return interpOperatorHelper(boolNot, left, right, "e-bool", "e-bool", env, store, ref tokenEnv, ref cubeEnv);
+			default:
+				Value errorValue = new Value("error"); 
+				errorValue.errorMessage = "Unknown operator type: " + op.operatorType.ToString();
+				return new Result(errorValue, store); //Throw Error	
 		}
 	}
 
@@ -201,8 +361,8 @@ public class DScript {
 		Func<Value, Value, Value> valueFunc, 
 		Expression left, 
 		Expression right, 
-		int leftType, 
-		int rightType, 
+		string leftType, 
+		string rightType, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
@@ -226,91 +386,91 @@ public class DScript {
 	// SPECIFIC OPERATOR FUNCTIONS
 
 	Value additionFloatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(2);
+		Value returnValue = new Value("float");
 		returnValue.vFloat = leftValue.vFloat + rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value subtractionFloatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(2);
+		Value returnValue = new Value("float");
 		returnValue.vFloat = leftValue.vFloat - rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value multiplicationFloatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(2);
+		Value returnValue = new Value("float");
 		returnValue.vFloat = leftValue.vFloat * rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value divisionFloatValue(Value leftValue, Value rightValue) {
 		if (rightValue.vFloat == 0) {
-			Value returnValue = new Value(0);
+			Value returnValue = new Value("error");
 			returnValue.errorMessage = "Divide by zero error";
 			return returnValue;
 		} else {
-			Value returnValue = new Value(2);
+			Value returnValue = new Value("float");
 			returnValue.vFloat = leftValue.vFloat / rightValue.vFloat;
 			return returnValue;
 		}
 	}
 
 	Value exponentFloatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(2);
+		Value returnValue = new Value("float");
 		returnValue.vFloat = (float)Math.Pow(leftValue.vFloat, rightValue.vFloat);
 		return returnValue;
 	}
 
 	Value moduloFloatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(2);
+		Value returnValue = new Value("float");
 		returnValue.vFloat = leftValue.vFloat % rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value listConcatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(5);
+		Value returnValue = new Value("list");
 		returnValue.vList = leftValue.vList.Concat(rightValue.vList).ToList();
 		return returnValue;
 	}
 
 	Value stringConcatValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(3);
+		Value returnValue = new Value("string");
 		returnValue.vString = leftValue.vString + rightValue.vString;
 		return returnValue;
 	}
 
 	Value stringEqualValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = leftValue.vString == rightValue.vString;
 		return returnValue;
 	}
 
 	Value floatEqualValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = leftValue.vFloat == rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatGreaterValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = leftValue.vFloat > rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatLesserValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = leftValue.vFloat < rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatGeqValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = leftValue.vFloat >= rightValue.vFloat;
 		return returnValue;
 	}
 
 	Value floatLeqValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(4);
+		Value returnValue = new Value("bool");
 		returnValue.vBool = leftValue.vFloat <= rightValue.vFloat;
 		return returnValue;
 	}
@@ -326,7 +486,7 @@ public class DScript {
 
 	Value stringIndexValue(Value leftValue, Value rightValue) {
 		if (Math.Abs(rightValue.vFloat) < leftValue.vString.Length) {
-			Value returnValue = new Value(3);
+			Value returnValue = new Value("string");
 			returnValue.vString = leftValue.vString[rightValue.vInt].ToString();
 			return returnValue;
 		} else {
@@ -335,50 +495,86 @@ public class DScript {
 	}
 
 	Value indexOutOfRangeError() {
-		Value returnValue = new Value(0);
+		Value returnValue = new Value("error");
 		returnValue.errorMessage = "Index out of range";
 		return returnValue;
 	}
 
 	Value additionIntValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(1);
+		Value returnValue = new Value("int");
 		returnValue.vInt = leftValue.vInt + rightValue.vInt;
 		return returnValue;
 	}
 
 	Value subtractionIntValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(1);
+		Value returnValue = new Value("int");
 		returnValue.vInt = leftValue.vInt - rightValue.vInt;
 		return returnValue;
 	}
 
 	Value multiplicationIntValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(1);
+		Value returnValue = new Value("int");
 		returnValue.vInt = leftValue.vInt * rightValue.vInt;
 		return returnValue;
 	}
 
 	Value divisionIntValue(Value leftValue, Value rightValue) {
 		if (rightValue.vInt == 0) {
-			Value returnValue = new Value(0);
+			Value returnValue = new Value("error");
 			returnValue.errorMessage = "Divide by zero error";
 			return returnValue;
 		} else {
-			Value returnValue = new Value(1);
+			Value returnValue = new Value("int");
 			returnValue.vInt = leftValue.vInt / rightValue.vInt;
 			return returnValue;
 		}
 	}
 
 	Value exponentIntValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(1);
-		returnValue.vInt = (float)Math.Pow(leftValue.vInt, rightValue.vInt);
+		Value returnValue = new Value("int");
+		returnValue.vInt = (int)Math.Pow(leftValue.vInt, rightValue.vInt);
 		return returnValue;
 	}
 
 	Value moduloIntValue(Value leftValue, Value rightValue) {
-		Value returnValue = new Value(1);
+		Value returnValue = new Value("int");
 		returnValue.vInt = leftValue.vInt % rightValue.vInt;
+		return returnValue;
+	}
+
+	Value intEqualValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("int");
+		returnValue.vBool = leftValue.vInt == rightValue.vInt;
+		return returnValue;
+	}
+
+	Value intGreaterValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("int");
+		returnValue.vBool = leftValue.vInt > rightValue.vInt;
+		return returnValue;
+	}
+
+	Value intLesserValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("int");
+		returnValue.vBool = leftValue.vInt < rightValue.vInt;
+		return returnValue;
+	}
+
+	Value intGeqValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("int");
+		returnValue.vBool = leftValue.vInt >= rightValue.vInt;
+		return returnValue;
+	}
+
+	Value intLeqValue(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("int");
+		returnValue.vBool = leftValue.vInt <= rightValue.vInt;
+		return returnValue;
+	}
+
+	Value boolNot(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("bool");
+		returnValue.vBool = !leftValue.vBool;
 		return returnValue;
 	}
 
@@ -396,10 +592,15 @@ public class DScript {
 		) 
 	{
 		switch (op.operatorType) {
-			case(17):
-				return interpTriOperatorHelper(listSublistValue, target, left, right, 5, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
-			case(18):
-				return interpTriOperatorHelper(stringSubstringValue, target, left, right, 3, 1, 1, env, store, ref tokenEnv, ref cubeEnv);
+			case("list-sublist"):
+				return interpTriOperatorHelper(listSublistValue, target, left, right, "list", "int", "int", env, store, ref tokenEnv, ref cubeEnv);
+			case("string-substring"):
+				return interpTriOperatorHelper(stringSubstringValue, target, left, right, "string", "int", "int", env, store, ref tokenEnv, ref cubeEnv);
+			default:
+				Value errorValue = new Value("error"); 
+				errorValue.errorMessage = "Unknown operator type: " + op.operatorType.ToString();
+				return new Result(errorValue, store); //Throw Error	
+
 		}
 	}
 
@@ -408,9 +609,9 @@ public class DScript {
 		Expression target, 
 		Expression left, 
 		Expression right, 
-		int targetType, 
-		int leftType, 
-		int rightType, 
+		string targetType, 
+		string leftType, 
+		string rightType, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
@@ -440,7 +641,7 @@ public class DScript {
 
 	Value listSublistValue(Value targetValue, Value leftValue, Value rightValue) {
 		if (leftValue.vFloat >= 0 && leftValue.vFloat < rightValue.vFloat && rightValue.vFloat <= targetValue.vList.Count) {
-			Value returnValue = new Value(5);
+			Value returnValue = new Value("list");
 			int idx = leftValue.vInt;
 			int num = rightValue.vInt - idx;
 			returnValue.vList = targetValue.vList.GetRange(idx, num);
@@ -452,7 +653,7 @@ public class DScript {
 
 	Value stringSubstringValue(Value targetValue, Value leftValue, Value rightValue) {
 		if (leftValue.vFloat >= 0 && leftValue.vFloat < rightValue.vFloat && rightValue.vFloat <= targetValue.vString.Length) {
-			Value returnValue = new Value(3);
+			Value returnValue = new Value("string");
 			int idx = leftValue.vInt;
 			int num = rightValue.vInt - idx;
 			returnValue.vString = targetValue.vString.Substring(idx, num);
@@ -462,6 +663,7 @@ public class DScript {
 		}
 	}
 
+	// ================================= End of Operators Functions =================================
 	Result interpIf(
 		Expression cond, 
 		Expression consq, 
@@ -473,14 +675,14 @@ public class DScript {
 		) 
 	{
 		Result cond_result = interpret(cond, env, store, ref tokenEnv, ref cubeEnv);
-		if (cond_result.value.valueType == 4) {
+		if (cond_result.value.valueType == "bool") {
 			if (cond_result.value.vBool) {
 				return interpret(consq, env, cond_result.store, ref tokenEnv, ref cubeEnv);
 			} else {
 				return interpret(alter, env, cond_result.store, ref tokenEnv, ref cubeEnv);
 			}
 		} else {
-			return new Result(new Value(4, cond_result.value.valueType), store);
+			return new Result(new Value("bool", cond_result.value.valueType), store);
 		}
 	}
 
@@ -510,14 +712,14 @@ public class DScript {
 		) 
 	{
 		Result func_result = interpret(func, env, store, ref tokenEnv, ref cubeEnv);
-		if (func_result.value.valueType == 5) {
+		if (func_result.value.valueType == "function") {
 			Result arg_result = interpret(arg, env, func_result.store, ref tokenEnv, ref cubeEnv);
 			string loc = System.Guid.NewGuid().ToString();
 			func_result.value.vFunEnviroment.Add(func_result.value.vFunParam, loc);
 			arg_result.store.Add(loc, arg_result.value);
 			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, arg_result.store, ref tokenEnv, ref cubeEnv); 
 		} else {
-			return new Result(new Value(5, func_result.value.valueType), store); //Throw Error
+			return new Result(new Value("function", func_result.value.valueType), store); //Throw Error
 		}
 	}
 
@@ -537,12 +739,12 @@ public class DScript {
 				newValue_result.store[pointer] = newValue_result.value;
 				return new Result(newValue_result.value, newValue_result.store);
 			} else {
-				Value errorValue = new Value(0);
+				Value errorValue = new Value("error");
 				errorValue.errorMessage = "Identifier Pointing To Nothing: " + name;
 				return new Result(errorValue, store);
 			}
 		} else {
-			Value errorValue = new Value(0);
+			Value errorValue = new Value("error");
 			errorValue.errorMessage = "Unbound identifier: " + name;
 			return new Result(errorValue, store);
 		}
@@ -561,7 +763,7 @@ public class DScript {
 			// If statement in Do handles define statements. Defines are only relevent in Do
 			// The change to the env is only relevent across other Do expressions
 			// In the same Do statement
-			if (expression.expressionType == 12) {
+			if (expression.expressionType == "e-def") {
 				Result define_result = interpret(expression.eDefineValue, env, last_result.store, ref tokenEnv, ref cubeEnv);
 				string loc = System.Guid.NewGuid().ToString();
 				env.Add(expression.eDefineName, loc);
@@ -587,7 +789,7 @@ public class DScript {
 		) 
 	{
 		Result cond_result = interpret(cond, env, store, ref tokenEnv, ref cubeEnv);
-		if (cond_result.value.valueType == 4) {
+		if (cond_result.value.valueType == "list") {
 			if (cond_result.value.vBool) {
 				Result body_result = interpret(body, env, cond_result.store, ref tokenEnv, ref cubeEnv);
 				return interpWhile(cond, body, body_result.value, true, env, body_result.store, ref tokenEnv, ref cubeEnv);
@@ -597,7 +799,7 @@ public class DScript {
 				return cond_result;
 			}
 		} else {
-			return new Result(new Value(4, cond_result.value.valueType), store); //Throw Error
+			return new Result(new Value("list", cond_result.value.valueType), store); //Throw Error
 		}
 	}
 
@@ -613,12 +815,12 @@ public class DScript {
 			if (store.ContainsKey(name)) {
 				return new Result(store[env[name]], store);
 			} else {
-				Value errorValue = new Value(0);
+				Value errorValue = new Value("error");
 				errorValue.errorMessage = "Identifier Pointing To Nothing: " + name;
 				return new Result(errorValue, store); //Throw Error
 			}
 		} else {
-			Value errorValue = new Value(0); 
+			Value errorValue = new Value("error"); 
 			errorValue.errorMessage = "Unbound identifier: " + name;
 			return new Result(errorValue, store); //Throw Error	
 		}
@@ -637,25 +839,29 @@ public class DScript {
 			Token token = tokenEnv[name];
 			if (token.variables.ContainsKey(variable)) {
 				switch(token.variables[variable]) {
-					case 1:
-						Value intValue = new Value(1);
+					case "int":
+						Value intValue = new Value("int");
 						intValue.vInt = token.intVars[variable];
 						return new Result(intValue, store);
-					case 2:
-						Value floatValue = new Value(2);
+					case "float":
+						Value floatValue = new Value("float");
 						floatValue.vFloat = token.floatVars[variable];
 						return new Result(floatValue, store);
-					case 3:
-						Value stringValue = new Value(3);
+					case "string":
+						Value stringValue = new Value("string");
 						stringValue.vString= token.stringVars[variable];
 						return new Result(stringValue, store);
-					case 4:
-						Value boolValue = new Value(4);
+					case "bool":
+						Value boolValue = new Value("bool");
 						boolValue.vBool = token.boolVars[variable];
-						return new Result(intValue, store);
+						return new Result(boolValue, store);
+					default:
+						Value errorValue = new Value("error"); 
+						errorValue.errorMessage = "Unknown variable type: " + token.variables[variable].ToString();
+						return new Result(errorValue, store); //Throw Error	
 				}
 			} else {
-				Value errorValue = new Value(0); 
+				Value errorValue = new Value("error"); 
 				errorValue.errorMessage = "Undefined ig Variable: " + variable;
 				return new Result(errorValue, store); //Throw Error	
 			}
@@ -663,30 +869,34 @@ public class DScript {
 			Cube cube = cubeEnv[name];
 			if (cube.variables.ContainsKey(variable)) {
 				switch(cube.variables[variable]) {
-					case 1:
-						Value intValue = new Value(1);
+					case "int":
+						Value intValue = new Value("int");
 						intValue.vInt = cube.intVars[variable];
 						return new Result(intValue, store);
-					case 2:
-						Value floatValue = new Value(2);
+					case "float":
+						Value floatValue = new Value("float");
 						floatValue.vFloat = cube.floatVars[variable];
 						return new Result(floatValue, store);
-					case 3:
-						Value stringValue = new Value(3);
+					case "string":
+						Value stringValue = new Value("string");
 						stringValue.vString= cube.stringVars[variable];
 						return new Result(stringValue, store);
-					case 4:
-						Value boolValue = new Value(4);
+					case "bool":
+						Value boolValue = new Value("bool");
 						boolValue.vBool = cube.boolVars[variable];
-						return new Result(intValue, store);
+						return new Result(boolValue, store);
+					default:
+						Value errorValue = new Value("error"); 
+						errorValue.errorMessage = "Unknown variable type: " + cube.variables[variable].ToString();
+						return new Result(errorValue, store); //Throw Error	
 				}
 			} else {
-				Value errorValue = new Value(0); 
+				Value errorValue = new Value("error"); 
 				errorValue.errorMessage = "Undefined ig Variable: " + variable;
 				return new Result(errorValue, store); //Throw Error	
 			}
 		} else {
-			Value errorValue = new Value(0); 
+			Value errorValue = new Value("error"); 
 			errorValue.errorMessage = "No ig named: " + name;
 			return new Result(errorValue, store); //Throw Error	
 		}
@@ -704,110 +914,126 @@ public class DScript {
 	{
 		if (tokenEnv.ContainsKey(name)) {
 			Token token = tokenEnv[name];
-			Result nv_result = interpret(newValue, env, store, tokenEnv, cubeEnv, ref tokenEnv, ref cubeEnv);
+			Result nv_result = interpret(newValue, env, store, ref tokenEnv, ref cubeEnv);
 			if (token.variables.ContainsKey(variable)) {
 				switch(token.variables[variable]) {
-					case 1:
-						if (nv_result.value.returnType == 1) {
+					case "int":
+						if (nv_result.value.valueType == "int") {
 							token.intVars[variable] = nv_result.value.vInt;
 							return nv_result;
 						} else {
-							return new Result(new Value(1, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("int", nv_result.value.valueType), nv_result.store);
 						}
-					case 2:
-						if (nv_result.value.returnType == 2) {
-							token.intVars[variable] = nv_result.value.vFloat;
+					case "float":
+						if (nv_result.value.valueType == "float") {
+							token.floatVars[variable] = nv_result.value.vFloat;
 							return nv_result;
 						} else {
-							return new Result(new Value(2, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("float", nv_result.value.valueType), nv_result.store);
 						}
-					case 3:
-						if (nv_result.value.returnType == 3) {
-							token.intVars[variable] = nv_result.value.vString;
+					case "string":
+						if (nv_result.value.valueType == "string") {
+							token.stringVars[variable] = nv_result.value.vString;
 							return nv_result;
 						} else {
-							return new Result(new Value(3, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("string", nv_result.value.valueType), nv_result.store);
 						}
-					case 4:
-						if (nv_result.value.returnType == 4) {
-							token.intVars[variable] = nv_result.value.vBool;
+					case "bool":
+						if (nv_result.value.valueType == "bool") {
+							token.boolVars[variable] = nv_result.value.vBool;
 							return nv_result;
 						} else {
-							return new Result(new Value(4, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("bool", nv_result.value.valueType), nv_result.store);
 						}
+					default:
+						Value errorValue = new Value("error"); 
+						errorValue.errorMessage = "Unknown variable type: " + token.variables[variable].ToString();
+						return new Result(errorValue, store); //Throw Error	
 				}
 			} else {
 				switch(nv_result.value.valueType) {
-					case 0:
+					case "error":
 						return nv_result;
-					case 1:
-						token.intVars.Add(variable, nv_result.vInt);
+					case "int":
+						token.intVars.Add(variable, nv_result.value.vInt);
 						return nv_result;
-					case 2:
-						token.floatVars.Add(variable, nv_result.vFloat);
+					case "float":
+						token.floatVars.Add(variable, nv_result.value.vFloat);
 						return nv_result;
-					case 3:
-						token.stringVars.Add(variable, nv_result.vString);
+					case "string":
+						token.stringVars.Add(variable, nv_result.value.vString);
 						return nv_result;
-					case 4:
-						token.boolVars.Add(variable, nv_result.vBool)
+					case "bool":
+						token.boolVars.Add(variable, nv_result.value.vBool);
 						return nv_result;
+					default:
+						Value errorValue = new Value("error"); 
+						errorValue.errorMessage = "Unknown value type: " + nv_result.value.valueType.ToString();
+						return new Result(errorValue, store); //Throw Error	
 				}
 			}
 		} else if (cubeEnv.ContainsKey(name)) {
 			Cube cube = cubeEnv[name];
-			Result nv_result = interpret(newValue, env, store, tokenEnv, cubeEnv, ref tokenEnv, ref cubeEnv);
+			Result nv_result = interpret(newValue, env, store, ref tokenEnv, ref cubeEnv);
 			if (cube.variables.ContainsKey(variable)) {
 				switch(cube.variables[variable]) {
-					case 1:
-						if (nv_result.value.returnType == 1) {
+					case "int":
+						if (nv_result.value.valueType == "int") {
 							cube.intVars[variable] = nv_result.value.vInt;
 							return nv_result;
 						} else {
-							return new Result(new Value(1, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("int", nv_result.value.valueType), nv_result.store);
 						}
-					case 2:
-						if (nv_result.value.returnType == 2) {
-							cube.intVars[variable] = nv_result.value.vFloat;
+					case "float":
+						if (nv_result.value.valueType == "float") {
+							cube.floatVars[variable] = nv_result.value.vFloat;
 							return nv_result;
 						} else {
-							return new Result(new Value(2, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("float", nv_result.value.valueType), nv_result.store);
 						}
-					case 3:
-						if (nv_result.value.returnType == 3) {
-							cube.intVars[variable] = nv_result.value.vString;
+					case "string":
+						if (nv_result.value.valueType == "string") {
+							cube.stringVars[variable] = nv_result.value.vString;
 							return nv_result;
 						} else {
-							return new Result(new Value(3, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("string", nv_result.value.valueType), nv_result.store);
 						}
-					case 4:
-						if (nv_result.value.returnType == 4) {
-							cube.intVars[variable] = nv_result.value.vBool;
+					case "bool":
+						if (nv_result.value.valueType == "bool") {
+							cube.boolVars[variable] = nv_result.value.vBool;
 							return nv_result;
 						} else {
-							return new Result(new Value(4, nv_result.value.returnType), nv_result.store);
+							return new Result(new Value("bool", nv_result.value.valueType), nv_result.store);
 						}
+					default:
+						Value errorValue = new Value("error"); 
+						errorValue.errorMessage = "Unknown variable type: " + cube.variables[variable].ToString();
+						return new Result(errorValue, store); //Throw Error	
 				}
 			} else {
 				switch(nv_result.value.valueType) {
-					case 0:
+					case "error":
 						return nv_result;
-					case 1:
-						cube.intVars.Add(variable, nv_result.vInt);
+					case "int":
+						cube.intVars.Add(variable, nv_result.value.vInt);
 						return nv_result;
-					case 2:
-						cube.floatVars.Add(variable, nv_result.vFloat);
+					case "float":
+						cube.floatVars.Add(variable, nv_result.value.vFloat);
 						return nv_result;
-					case 3:
-						cube.stringVars.Add(variable, nv_result.vString);
+					case "string":
+						cube.stringVars.Add(variable, nv_result.value.vString);
 						return nv_result;
-					case 4:
-						cube.boolVars.Add(variable, nv_result.vBool);
+					case "bool":
+						cube.boolVars.Add(variable, nv_result.value.vBool);
 						return nv_result;
+					default:
+						Value errorValue = new Value("error"); 
+						errorValue.errorMessage = "Unknown value type: " + nv_result.value.valueType.ToString();
+						return new Result(errorValue, store); //Throw Error	
 				}
 			}
 		} else {
-			Value errorValue = new Value(0); 
+			Value errorValue = new Value("error"); 
 			errorValue.errorMessage = "No ig named: " + name;
 			return new Result(errorValue, store); //Throw Error	
 		}
@@ -830,10 +1056,10 @@ public class Result {
 
 public class Value {
 
-	public int valueType; 
+	public string valueType; 
 
-	public int errorExpected; // type=0
-	public int errorGot;
+	public string errorExpected; // type=0
+	public string errorGot;
 	public string errorMessage;
 
 	public int vInt; // type=1
@@ -851,19 +1077,19 @@ public class Value {
 
 	}
 
-	public Value(int expected, int got) {
-		valueType = 0;
+	public Value(string expected, string got) {
+		valueType = "Error";
 		errorExpected = expected;
 		errorGot = got;
 	}
 
-	public Value(int vType) {
+	public Value(string vType) {
 		valueType = vType;
 	}
 }
 
 public class Expression {
-	public int expressionType;
+	public string expressionType;
 
 	public int eInt; // type=1
 	public float eFloat; // type=2
@@ -905,11 +1131,9 @@ public class Expression {
 
 	public string eIgName; //type=16
 	public string eIgVariable;
-	public int eIgVariableType; //1 int, 2 float, 3 string, 4 bool
 
 	public string eSetIgName; //type=17
-	public string eSetIgVariable; 
-	public int eIgVariableType;
+	public string eSetIgVariable;
 	public Expression eSetIgValue;
 
 
@@ -934,7 +1158,7 @@ public class Expression {
 }
 
 public class Operator {
-	public int operatorType;
+	public string operatorType;
 	// Basic Math Operators
 
 	// op-float-plus, type=1
@@ -987,6 +1211,10 @@ public class BuiltInFunctions {
 	// op-factorial, type=14
 	// op-logarithm, type=6
 	// op-round
-
 	// casting between types
+}
+
+public class Atom {
+	public string atomType;
+	public string value;
 }

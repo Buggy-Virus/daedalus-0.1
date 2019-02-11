@@ -11,7 +11,7 @@ public class TypeTreeScript : MonoBehaviour
     {
     	typeDict.Add("cube", new Type("cube"));
 
-        typeDict.Add("mob", new Type("mob"));
+        typeDict.Add("token", new Type("token"));
     }
 
     // Update is called once per frame

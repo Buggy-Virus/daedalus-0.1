@@ -5,15 +5,15 @@ using UnityEngine;
 public class GraphicScript : MonoBehaviour
 {
 	public Dictionary<string, GameObject> cubePrefabs = new Dictionary<string, GameObject>();
-	public Dictionary<string, GameObject> mobPrefabs = new Dictionary<string, GameObject>();
+	public Dictionary<string, GameObject> tokenPrefabs = new Dictionary<string, GameObject>();
 
 	public GameObject testCubePrefab;
-	public GameObject testMobPrefab;
+	public GameObject testTokenPrefab;
     // Start is called before the first frame update
     void Start()
     {
     	cubePrefabs.Add("testCube", testCubePrefab);
-    	mobPrefabs.Add("testMob", testMobPrefab);
+    	tokenPrefabs.Add("testToken", testTokenPrefab);
     }
 
     // Update is called once per frame

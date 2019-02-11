@@ -7,7 +7,7 @@ using UnityEngine;
 public class MouseControls : MonoBehaviour {
 
 	GameObject cubesObject;
-    GameObject mobsObject;
+    GameObject tokensObject;
 
     MapScript mapScript;
     GraphicScript graphicScript;
@@ -34,7 +34,7 @@ public class MouseControls : MonoBehaviour {
     public Color cursorClickHighlight;
     Color normalColor;
 
-    public Mob selectedMob;
+    public Token selectedToken;
     public GameObject selectedObject;
 
     //moveTile[,,] moveMap;
@@ -50,17 +50,17 @@ public class MouseControls : MonoBehaviour {
     public string cubeType = "testCube";
     string lastCubeType = "testCube";
 
-    public string mobType = "testMob";
-    string lastMobType = "testMob";
+    public string tokenType = "testToken";
+    string lastTokenType = "testToken";
 
     bool usedDiagnolMove;
 
     void Start() {
     	cubeType = "testCube";
-    	mobType = "testMob";
+    	tokenType = "testToken";
     	Debug.Log(cubeType);
     	cubesObject = GameObject.Find("Cubes");
-        mobsObject = GameObject.Find("Mobs");
+        tokensObject = GameObject.Find("Tokens");
 
         mapScript = GameObject.Find("Map").GetComponent<MapScript>();
         graphicScript = GameObject.Find("GameLogic").GetComponent<GraphicScript>();
@@ -94,7 +94,7 @@ public class MouseControls : MonoBehaviour {
                     cubeMode(currentCoord, currentIndex);
                     break;
                 case 2:
-                    mobMode(currentCoord, currentIndex);
+                    tokenMode(currentCoord, currentIndex);
                     break;
                 case 3:
                     selectMode();
@@ -260,13 +260,13 @@ public class MouseControls : MonoBehaviour {
     	gameCoord.cube = null;
     }
 
-    void mobMode(Vector3 curPosition, Index curIndex) {
-        if (lastControlMode != 2 || lastMobType != mobType) {
-            Debug.Log("mob mode");
+    void tokenMode(Vector3 curPosition, Index curIndex) {
+        if (lastControlMode != 2 || lastTokenType != tokenType) {
+            Debug.Log("token mode");
             destroyCursor();
-            addCursor(curPosition, graphicScript.mobPrefabs[mobType], "cursorMob");
+            addCursor(curPosition, graphicScript.tokenPrefabs[tokenType], "cursorToken");
             lastControlMode = controlMode;
-            lastMobType = mobType;
+            lastTokenType = tokenType;
         }
 
         if (!deleteMode) {
@@ -275,7 +275,7 @@ public class MouseControls : MonoBehaviour {
 	        }
 
 	        if (Input.GetMouseButtonUp(0)) {
-	            placeMob(curPosition, curIndex, mobType);
+	            placeToken(curPosition, curIndex, tokenType);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
@@ -284,20 +284,20 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void placeMob(Vector3 curPosition, Index curIndex, string mobType) {
-    	Debug.Log("Placed Mob");
+    void placeToken(Vector3 curPosition, Index curIndex, string tokenType) {
+    	Debug.Log("Placed Token");
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
 
-    	Mob newMob = igListScript.createMob(igListScript.mobParameters[mobType]);
-    	newMob.index = curIndex;
+    	Token newToken = igListScript.createToken(igListScript.tokenParameters[tokenType]);
+    	newToken.index = curIndex;
 
-    	gameCoord.mobs.Add(newMob);
+    	gameCoord.tokens.Add(newToken);
 
-    	GameObject graphicMob = Instantiate(graphicScript.mobPrefabs[mobType], curPosition, Quaternion.identity, mobsObject.transform);
+    	GameObject graphicToken = Instantiate(graphicScript.tokenPrefabs[tokenType], curPosition, Quaternion.identity, tokensObject.transform);
     	
-    	newMob.gameObject = graphicMob;
-    	graphicMob.GetComponent<MobPrefabScript>().mob = newMob;
-    	graphicMob.name = newMob.uniqueIdentifier;
+    	newToken.gameObject = graphicToken;
+    	graphicToken.GetComponent<TokenPrefabScript>().token = newToken;
+    	graphicToken.name = newToken.uniqueIdentifier;
     }
 
     void destroyCursor () {
@@ -337,7 +337,7 @@ public class MouseControls : MonoBehaviour {
 		if (lastControlMode != 4) {
             Debug.Log("move mode");
             destroyCursor();
-            addCursor(curPosition, graphicScript.mobPrefabs[selectedMob.graphicAsset], "cursorMob");
+            addCursor(curPosition, graphicScript.tokenPrefabs[selectedToken.graphicAsset], "cursorToken");
             lastControlMode = controlMode;
         }
 
@@ -346,13 +346,13 @@ public class MouseControls : MonoBehaviour {
 	    }
 
 	    if (Input.GetMouseButtonUp(0)) {
-           	Index startIndex = selectedMob.index;
-            int movePoints = selectedMob.intVars["movePoints"];
+           	Index startIndex = selectedToken.index;
+            int movePoints = selectedToken.intVars["movePoints"];
            	if (startIndex.z == curIndex.z && Math.Abs(startIndex.x - curIndex.x) <= movePoints) {
-           		displaceMob(selectedMob, curPosition, curIndex);
+           		displaceToken(selectedToken, curPosition, curIndex);
            		movePoints -= Math.Abs(startIndex.x - curIndex.x);
            	} else if (startIndex.x == curIndex.x && Math.Abs(startIndex.z - curIndex.z) <= movePoints) {
-           		displaceMob(selectedMob, curPosition, curIndex);
+           		displaceToken(selectedToken, curPosition, curIndex);
            		movePoints -= Math.Abs(startIndex.z - curIndex.z);
            	} else if (Math.Abs(startIndex.z - curIndex.z) == Math.Abs(startIndex.x - curIndex.x)) {
            		int diagnolDisplacement = Math.Abs(startIndex.z - curIndex.z);
@@ -367,7 +367,7 @@ public class MouseControls : MonoBehaviour {
            			usedDiagnolMove = true;
            		}
            		if (moveCost <= movePoints) {
-           			displaceMob(selectedMob, curPosition, curIndex);
+           			displaceToken(selectedToken, curPosition, curIndex);
            			movePoints -= moveCost;
            		} else {
            			Debug.Log("Not enough movepoints");
@@ -387,17 +387,17 @@ public class MouseControls : MonoBehaviour {
 	    }
 	}
 
-	void displaceMob(Mob curMob, Vector3 destPosition, Index destIndex) {
-		Index startIndex = curMob.index;
+	void displaceToken(Token curToken, Vector3 destPosition, Index destIndex) {
+		Index startIndex = curToken.index;
 		GameCoord startGameCoord = mapScript.gameBoard[startIndex.x, startIndex.y, startIndex.z];
 		GameCoord destGameCoord = mapScript.gameBoard[destIndex.x, destIndex.y, destIndex.z];
-		GameObject mobObject = curMob.gameObject;
+		GameObject tokenObject = curToken.gameObject;
 
-		startGameCoord.mobs.Remove(curMob);
-		destGameCoord.mobs.Add(curMob);
+		startGameCoord.tokens.Remove(curToken);
+		destGameCoord.tokens.Add(curToken);
 
-		mobObject.transform.position = destPosition;
-		curMob.index = destIndex;
+		tokenObject.transform.position = destPosition;
+		curToken.index = destIndex;
 
 	}
 

@@ -6,27 +6,27 @@ using UnityEngine;
 public class IgListScript : MonoBehaviour
 {
     GameObject cubesObject;
-    GameObject mobsObject;
+    GameObject tokensObject;
 
 	TypeTreeScript typeTreeScript;
 
-    public Dictionary<string, Mob> mobDict = new Dictionary<string, Mob>();
+    public Dictionary<string, Token> tokenDict = new Dictionary<string, Token>();
     public Dictionary<string, Cube> cubeDict = new Dictionary<string, Cube>();
 
 	public Dictionary<string, object[]> cubeParameters = new Dictionary<string, object[]>();
-	public Dictionary<string, object[]> mobParameters = new Dictionary<string, object[]>();
+	public Dictionary<string, object[]> tokenParameters = new Dictionary<string, object[]>();
     public Dictionary<string, object[]> relationalActionParameters = new Dictionary<string, object[]>();
 
     // Start is called before the first frame update
     void Start()
     {
         cubesObject = GameObject.Find("Cubes");
-        mobsObject = GameObject.Find("Mobs");
+        tokensObject = GameObject.Find("Tokens");
 
     	typeTreeScript = GameObject.Find("GameLogic").GetComponent<TypeTreeScript>();
 
         cubeParameters.Add("testCube", new object[] {"testCube", "testCube", "cube", new List<string>(), new List<float>(), 1, 100});
-        mobParameters.Add("testMob", new object[] {"testMob", "testMob", "mob", new List<string>(), new List<float>(), "Tester Mob", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
+        tokenParameters.Add("testToken", new object[] {"testToken", "testToken", "token", new List<string>(), new List<float>(), "Tester Token", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
     }
 
     // Update is called once per frame
@@ -35,39 +35,39 @@ public class IgListScript : MonoBehaviour
         
     }
 
-    public Mob createMob(object[] mobParams) {
-        Mob newMob = mobsObject.AddComponent<Mob>();
+    public Token createToken(object[] tokenParams) {
+        Token newToken = tokensObject.AddComponent<Token>();
 
-        newMob.identifier = (string)mobParams[0];
-        newMob.uniqueIdentifier = newMob.identifier + "_" + System.Guid.NewGuid().ToString();
+        newToken.identifier = (string)tokenParams[0];
+        newToken.uniqueIdentifier = newToken.identifier + "_" + System.Guid.NewGuid().ToString();
 
-        newMob.graphicAsset = (string)mobParams[1];
+        newToken.graphicAsset = (string)tokenParams[1];
 
-        newMob.type = typeTreeScript.typeDict[(string)mobParams[2]];
-        List<string> mt = (List<string>)mobParams[3];
+        newToken.type = typeTreeScript.typeDict[(string)tokenParams[2]];
+        List<string> mt = (List<string>)tokenParams[3];
         for  (int i = 0; i < mt.Count; i++) {
-                newMob.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
+                newToken.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
         }
-        newMob.materialTypesDistribution = (List<float>)mobParams[4];
+        newToken.materialTypesDistribution = (List<float>)tokenParams[4];
 
-        newMob.width = (int)mobParams[6];
-        newMob.length = (int)mobParams[7];
-        newMob.height = (int)mobParams[8];
+        newToken.width = (int)tokenParams[6];
+        newToken.length = (int)tokenParams[7];
+        newToken.height = (int)tokenParams[8];
 
-        newMob.boolVars.Add("cheapDiagMove", false);
+        newToken.boolVars.Add("cheapDiagMove", false);
 
-        newMob.intVars.Add("hitScore", (int)mobParams[9]);
-        newMob.intVars.Add("hitPoints", (int)mobParams[9]);
-        newMob.intVars.Add("moveScore", (int)mobParams[10]);
-        newMob.intVars.Add("movePoints", (int)mobParams[10]);
-        newMob.intVars.Add("strength", (int)mobParams[11]);
-        newMob.intVars.Add("dexterity", (int)mobParams[12]);
-        newMob.intVars.Add("endurance", (int)mobParams[13]);
-        newMob.intVars.Add("constitution", (int)mobParams[14]);
-        newMob.intVars.Add("wisdom", (int)mobParams[15]);
-        newMob.intVars.Add("intelligence", (int)mobParams[16]);
+        newToken.intVars.Add("hitScore", (int)tokenParams[9]);
+        newToken.intVars.Add("hitPoints", (int)tokenParams[9]);
+        newToken.intVars.Add("moveScore", (int)tokenParams[10]);
+        newToken.intVars.Add("movePoints", (int)tokenParams[10]);
+        newToken.intVars.Add("strength", (int)tokenParams[11]);
+        newToken.intVars.Add("dexterity", (int)tokenParams[12]);
+        newToken.intVars.Add("endurance", (int)tokenParams[13]);
+        newToken.intVars.Add("constitution", (int)tokenParams[14]);
+        newToken.intVars.Add("wisdom", (int)tokenParams[15]);
+        newToken.intVars.Add("intelligence", (int)tokenParams[16]);
 
-        return newMob;
+        return newToken;
     }
 
     public Cube createCube(object[] cubeParams) {   

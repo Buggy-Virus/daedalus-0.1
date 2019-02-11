@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobPrefabScript : MonoBehaviour
+public class TokenPrefabScript : MonoBehaviour
 {
-	public Mob mob;
+	public Token token;
 
     // Start is called before the first frame update
     void Start()
