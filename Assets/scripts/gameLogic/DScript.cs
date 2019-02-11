@@ -39,12 +39,109 @@ public class DScript {
 		return interpret(desugar(parse(input)));
 	}
 
+	bool atomEquals(Atom atom, string targetType, string targetValue) {
+		return atom.atomType == targetType && atom.value == targetValue;
+	}
+
 	Expression parse(string input) {
 		List<Atom> atomList = tokenize(input);
 
+		return parseDo(atomList, 0).expression;
+		 
+	}
 
+	ParseResult parseHelper(List<Atom>, atomList, int pos) {
+		while (pos < atomList.Count) {
+			Atom curAtom = atomList[pos];
 
-		// returns an expressions by going through the atom list
+			switch(curAtom.atomType) {
+				case "string":
+					new Expression expr = new Expression("e-string");
+					expr.eString = curAtom.value; 
+				case "number":
+					if (curAtom.Contains('.')) {
+						new Expression expr = new Expression("e-float");
+						expr.eFloat = (float)curAtom.value;
+					} else {
+						new Expression expr = new Expression("e-int");
+						expr.eInt = (int)curAtom.value;
+					}
+				case "bool":
+					new Expression expr = new Expression("e-bool");
+					expr.eBool = (bool)curAtom.value;
+				case "identifier":
+					new Expression expr = new Expression("e-id");
+					expr.eId = curAtom.value;
+				case "keyword":
+					switch(curAtom.value) {
+						case "if":
+							parseIf(atomList, pos + 1)
+						case "lambda":
+							parseLambda(atomList, pos + 1)
+						case "let":
+							parseLet(atomList, pos + 1)
+						case "while":
+							parseWhile(atomList, pos + 1)
+						default:
+							// does something
+					}
+				case "punctuation":
+					switch(curAtom.value) {
+						case '(':
+							parseHelper(atomList, pos + 1);
+						case '{':
+						case ';':
+						case '[':
+						default:
+							// does something
+					}
+				case "operator":
+					switch(curAtom.Value) {
+						case '+':
+						case '=':
+						case '-':
+						case '/':
+						case '*':
+						case '>':
+						case '<':
+						case '!':
+					}
+				default:
+					// does something
+			}
+		}
+	}
+
+	ParseResult parseDo(List<Atom> atomList, int pos) {
+		List<Expression> expressionList = new List<Expression>();
+		Expression lastExpression;
+
+		if (atomEquals(atomList[pos], "punctuation", "{")) {
+
+		} else {
+			// parse Result error
+		}
+	}
+
+	Expression parseIf(List<Atom> atomList, int pos) {
+		Expression ifExpression = new Expression("e-if");
+
+		if (atomEquals(atomList[pos], "punctuation", "(")) {
+			parseResult condResult = parseHelper(atomList, pos + 1);
+			ifExpression.eIfCond = condResult.expression;
+			pos = condResult.position;
+
+			if (atomEquals(atomList[pos], "punctuation", ")")) {
+				pos += 1
+				parseResult consqResult = parseHelper(atomList, pos);
+				ifExpression.eIfConsq = consqResult.expression;
+				pos = consqResult.position;
+			} else {
+				// throw error
+			}
+		} else {
+			// throw error
+		}
 	}
 
 	List<Atom> tokenize(string input) {
@@ -62,7 +159,9 @@ public class DScript {
 					case "string":
 						if ((curChar == '\'' && singleQuote == true) || (curChar == '\"' && singleQuote == false)) {
 							atomList.Add(curAtom);
-							buildingAtom = false;
+							buildingAtom = false;\
+
+							// this is wrong, shouldn't consider the quotation character if we just finished processing the string
 						} else {
 							curAtom.value += curChar.ToString();
 						}
@@ -79,6 +178,19 @@ public class DScript {
 						if (Char.IsDigit(curChar) || Char.IsLetter(curChar)) {
 							curAtom.value += curChar.ToString();
 						} else {
+							switch(curAtom.value) {
+								case "if":
+								case "else":
+								case "lambda":
+								case "let":
+								case "while":
+								case "def":
+									curAtom.atomType = "keyword";
+									break;
+								case "true":
+								case "false":
+									curAtom.atomType = "bool";
+							}
 							atomList.Add(curAtom);
 							buildingAtom = false;
 						}
@@ -1155,6 +1267,10 @@ public class Expression {
 	public int eStringIndexIndex;
 
 	public Expression eStringIndexOfString; //type=14
+
+	public Expression(string etype) {
+		expressionType = etype;
+	}
 }
 
 public class Operator {
@@ -1217,4 +1333,9 @@ public class BuiltInFunctions {
 public class Atom {
 	public string atomType;
 	public string value;
+}
+
+public class ParseResult {
+	public int position;
+	public Expression expression;
 }
