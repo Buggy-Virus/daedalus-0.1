@@ -55,6 +55,7 @@ public class DScript {
 	ParseResult parseHelper(List<Atom> atomList, int pos) {
 		// take whether it is delimited by paranthesis, braces, or semicolon
 		// returns position AFTER the end of the Expression
+		// checks surrounding punctuation
 		while (pos < atomList.Count) {
 			Atom curAtom = atomList[pos];
 
@@ -131,35 +132,23 @@ public class DScript {
 	ParseResult parseIf(List<Atom> atomList, int pos) {
 		Expression ifExpression = new Expression("e-if");
 
-		if (atomEquals(atomList[pos], "punctuation", "(")) {
-			ParseResult condResult = parseHelper(atomList, pos, "(");
-			ifExpression.eIfCond = condResult.expression;
-			pos = condResult.position;
 
-			if (atomEquals(atomList[pos], "punctuation", "{")) {
-				ParseResult consqResult = parseHelper(atomList, pos, "{");
-				ifExpression.eIfConsq = consqResult.expression;
-				pos = consqResult.position;
+		ParseResult condResult = parseHelper(atomList, pos, "(");
+		ifExpression.eIfCond = condResult.expression;
+		pos = condResult.position;
 
-				if (atomEquals(atomList[pos], "punctuation", "else")) {
-					pos += 1;
+		ParseResult consqResult = parseHelper(atomList, pos, "{");
+		ifExpression.eIfConsq = consqResult.expression;
+		pos = consqResult.position;
 
-					if (atomEquals(atomList[pos], "punctuation", "{")) {
-						ParseResult alterResult = parseHelper(atomList, pos, "{");
-						ifExpression.eIfAlter = alterResult.expression;
-						pos = alterResult.position;
+		if (atomEquals(atomList[pos], "punctuation", "else")) {
+			pos += 1;
 
-						return new ParseResult(ifExpression, pos);
-					} else {
-						// throw error
-					}
-				} else {
-					// throw error
-				}
-			} else {
-				// throw error
-			}
+			ParseResult alterResult = parseHelper(atomList, pos, "{");
+			ifExpression.eIfAlter = alterResult.expression;
+			pos = alterResult.position;
 
+			return new ParseResult(ifExpression, pos);
 		} else {
 			// throw error
 		}
@@ -178,15 +167,13 @@ public class DScript {
 				if (atomEquals(atomList[pos], "punctuation", ")")) {
 					pos += 1;
 
-					if (atomEquals(atomList[pos], "punctuation", "{")) {
-						ParseResult bodyResult = parseHelper(atomList, pos, "{");
-						lamExpression.eLamBody = bodyResult.expression;
-						pos = bodyResult.position;
+					ParseResult bodyResult = parseHelper(atomList, pos, "{");
+					lamExpression.eLamBody = bodyResult.expression;
+					pos = bodyResult.position;
 
-						return new ParseResult(lamExpression, pos);
-					}				
+					return new ParseResult(lamExpression, pos);
 				} else {
-					// throw error
+
 				}
 			} else {
 				// throw error
@@ -206,7 +193,7 @@ public class DScript {
 			if (atomEquals(atomList[pos], "operator", "=")) {
 				pos += 1;
 
-				ParseResult letValueResult = parseHelper(atomList, pos);
+				ParseResult letValueResult = parseHelper(atomList, pos, "");
 				letExpression.eLetValue = letValueResult.expression;
 				
 				return new ParseResult(letExpression, pos);
@@ -221,26 +208,60 @@ public class DScript {
 	ParseResult parseWhile(List<Atom> atomList, int pos) {
 		Expression whileExpression = new Expression("e-while");
 
-		if (atomEquals(atomList[pos], "punctuation", "(")) {
-			ParseResult condResult parseHelper(atomList, pos, "(");
-			whileExpression.eWhileCond = condResult.expression;
-			pos = condResult.position;
+		ParseResult condResult = parseHelper(atomList, pos, "(");
+		whileExpression.eWhileCond = condResult.expression;
+		pos = condResult.position;
 
-			if (atomEquals(atomList[pos], "punctuation", "{")) {
-				ParseResult bodyResult = parseHelper(atomList, pos, "{");
-				whileExpression.eLamBody = bodyResult.expression;
-				pos = bodyResult.position;
+		ParseResult bodyResult = parseHelper(atomList, pos, "{");
+		whileExpression.eLamBody = bodyResult.expression;
+		pos = bodyResult.position;
 
-				return new ParseResult(lamExpression, pos);
+		return new ParseResult(lamExpression, pos);
+	}
+
+	ParseResult parseIg(List<Atom> atomList, int pos) {
+		String igName;
+		stinrg igVariable;
+
+		if (atomList[pos].atomType == "identifier") {
+			igName = atomList[pos].value;
+			pos += 1;
+
+			if (atomEquals(atomList[pos], "punctuation", ".")) {
+				pos += 1;
+
+				if (atomList[pos].atomType == "identifier") {
+					igVariable = atomList[pos].value;
+					pos += 1;
+
+					if (atomEquals(atomList[pos], "operator", "=")) {
+						pos += 1;
+
+						Expression igVarExpression = new Expression("e-set-ig-var");
+						ParseResult valueResult = parseHelper(atomList, pos, "");
+						igVarExpression.eSetIgName = igName;
+						igVarExpression.eSetIgVariable = igVariable;
+						igVarExpression.eSetIgValue = valueResult.value;
+						pos = valueResult.position;
+
+						return new ParseResult(igVarExpression, pos);
+					} else {
+						Expression igVarExpression = new Expression("e-ig-var");
+						igVarExpression.eIgName = igName;
+						igVarExpression.eIgVariable = igVariable;
+
+						return new ParseResult(igVarExpression, pos);
+					}
+				} else {
+					// throw error
+				}
 			} else {
 				// throw error
-			}			
+			}
 		} else {
 			// throw error
 		}
 	}
-
-	ParseResult parse 
 
 	// ================================= Tokenizer Functions ================================= 
 
@@ -248,6 +269,7 @@ public class DScript {
 		List<Atom> atomList = new List<Atom>();
 
 		bool buildingAtom = false;
+		bool buildingString = false;
 		bool singleQuote = false;
 		Atom curAtom = new Atom();
 
@@ -296,21 +318,64 @@ public class DScript {
 							buildingAtom = false;
 						}
 						break;
+					case "operator":
+						switch(curAtom.value) {
+							case "=":
+							case ">":
+							case "<":
+								if (curChar == '=') {
+									curAtom.value += curChar.ToString();
+								} else {
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								}
+								break;
+							case "*":
+								if (curChar == '*') {
+									curAtom.value += curChar.ToString();
+								} else {
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								}
+								break;
+							case "|":
+								if (curChar == '|') {
+									curAtom.value += curChar.ToString();
+								} else {
+									// Throw Error
+								}
+								break;
+							case "&":
+								if (curChar == '&') {
+									curAtom.value += curChar.ToString();
+								} else {
+									// Throw Error
+								}
+								break;
+							default:
+								atomList.Add(curAtom);
+								buildingAtom = false;
+						}
+						break;
+					default:
+						// throw error
 				}
 			}
 
-			if (!buildingAtom) {
+			if (!buildingAtom && !buildingString) {
 				if (isWhiteSpace(curChar)) {
 					
 				} else if (curChar == '\'') {
 					curAtom = new Atom();
 					curAtom.atomType = "string";
 					buildingAtom = true;
+					buildingString = true;
 					singleQuote = true;
 				} else if (curChar == '\"') {
 					curAtom = new Atom();
 					curAtom.atomType = "string";
 					buildingAtom = true;
+					buildingString = true;
 					singleQuote = false;
 				} else if (isPunctuation(curChar)) {
 					curAtom = new Atom();
@@ -321,7 +386,7 @@ public class DScript {
 					curAtom = new Atom();
 					curAtom.atomType = "operator";
 					curAtom.value = curChar.ToString();
-					atomList.Add(curAtom);
+					buildingAtom = true;
 				} else if (Char.IsDigit(curChar)) {
 					curAtom = new Atom();
 					curAtom.atomType = "number";
@@ -338,7 +403,9 @@ public class DScript {
 					atomList.Add(curAtom);
 					break;
 				} 
-			}	
+			} else if (!buildingAtom && buildingString) {
+				buildingString = false;
+			}
 		}
 		return atomList;
 	}
@@ -566,6 +633,10 @@ public class DScript {
 				return interpOperatorHelper(intLeqValue, left, right, "e-int", "e-int", env, store, ref tokenEnv, ref cubeEnv);
 			case "bool-not":
 				return interpOperatorHelper(boolNot, left, right, "e-bool", "e-bool", env, store, ref tokenEnv, ref cubeEnv);
+			case "bool-and":
+				return interpOperatorHelper(boolAnd, left, right, "e-bool", "e-bool", env, store, ref tokenEnv, ref cubeEnv);
+			case "bool-or":
+				return interpOperatorHelper(boolOr, left, right, "e-bool", "e-bool", env, store, ref tokenEnv, ref cubeEnv);
 			default:
 				Value errorValue = new Value("error"); 
 				errorValue.errorMessage = "Unknown operator type: " + op.operatorType.ToString();
@@ -791,6 +862,18 @@ public class DScript {
 	Value boolNot(Value leftValue, Value rightValue) {
 		Value returnValue = new Value("bool");
 		returnValue.vBool = !leftValue.vBool;
+		return returnValue;
+	}
+
+	Value boolAnd(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("bool");
+		returnValue.vBool = leftValue.vBool && rightValue.vBool;
+		return returnValue;
+	}
+
+	Value boolOr(Value leftValue, Value rightValue) {
+		Value returnValue = new Value("bool");
+		returnValue.vBool = leftValue.vBool || rightValue.vBool;
 		return returnValue;
 	}
 
@@ -1410,6 +1493,10 @@ public class Operator {
 	// op-int-divide, type=22
 	// op-int-exponent, type=23
 	// op-int-modulus, type=24
+
+	// op-bool-not
+	// op-bool-and
+	// op-bool-or
 }
 
 public class BuiltInFunctions {
