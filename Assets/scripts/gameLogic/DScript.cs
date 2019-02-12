@@ -48,14 +48,110 @@ public class DScript {
 	Expression parse(string input) {
 		List<Atom> atomList = tokenize(input);
 
-		return parseDo(atomList, 0).expression;
+		return parseDo(atomList, 0, false).expression;
 		 
 	}
 
-	ParseResult parseHelper(List<Atom> atomList, int pos) {
+	ParseResult ParseDo(List<Atom> atomList, int pos, bool bookended) {
+		Expression doExpression = new Expression("e-do");
+		doExpression.eDo = new List<Expression>();
+
+		if (bookended && atomEquals(atomList[pos], "punctuation", "{")) {
+			pos += 1;
+		} else if (bookended) {
+			// throw error
+		}
+
+		while (
+			pos < atomList.Count 
+			&& !(bookended && atomEquals(atomList[pos], "punctuation", "}"))
+			) 
+		{
+			ParseResult singleResult = ParseSingle(atomList, pos, false);
+			doExpression.Add(singleResult.expression);
+			pos = singleResult.pos;
+		}
+
+		return new ParseResult(doExpression, pos);
+	}
+
+	ParseResult ParseSingle(List<Atom> atomList, int pos, bool bookended) {
+		List<Expression> seenExpressions = new List<Expression>();
+
+		if (bookended && atomEquals(atomList[pos], "punctuation", "(")) {
+			pos += 1;
+		} else if (bookended) {
+			// throw error
+		}
+
+		while (
+			pos < atomList.Count 
+			&& !(bookended && atomEquals(atomList[pos], "punctuation", ")")) 
+			&& !(!bookended && atomEquals(atomList[pos], "punctuation", ";"))
+			) 
+		{
+			Atom curAtom = atomList[pos];
+
+			switch(curAtom.atomType) {
+				case "string":
+					new Expression expr = new Expression("e-string");
+					expr.eString = curAtom.value; 
+				case "number":
+					if (curAtom.Contains('.')) {
+						new Expression expr = new Expression("e-float");
+						expr.eFloat = (float)curAtom.value;
+					} else {
+						new Expression expr = new Expression("e-int");
+						expr.eInt = (int)curAtom.value;
+					}
+				case "bool":
+					new Expression expr = new Expression("e-bool");
+					expr.eBool = (bool)curAtom.value;
+				case "identifier":
+				case "keyword":
+					switch(curAtom.value) {
+						case "if":
+							parseIf(atomList, pos + 1);
+						case "lambda":
+							parseLambda(atomList, pos + 1);
+						case "let":
+							parseLet(atomList, pos + 1);
+						case "while":
+							parseWhile(atomList, pos + 1);
+						default:
+					}
+				default:
+					// throw an error
+			}
+		}
+	}
+
+	ParseResult parseHelper(List<Atom> atomList, int pos, string parseType) {
 		// take whether it is delimited by paranthesis, braces, or semicolon
 		// returns position AFTER the end of the Expression
 		// checks surrounding punctuation
+		bool containerPunc;
+		string startPunc;
+		string endPunc;
+		bool canDo;
+		switch(parseType) {
+			case "cond":
+				containerPunc = true;
+				startPunc = new Atom("punctuation", "(");
+				endPunc = new Atom("punctuation", ")")
+				bool canDo = false
+				break;
+			case "prog":
+				containerPunc = true;
+				startPunc = new Atom("punctuation", "(");
+				endPunc = new Atom("punctuation", ")")
+				bool canDo = false
+				break;
+
+
+		}
+
+
 		while (pos < atomList.Count) {
 			Atom curAtom = atomList[pos];
 
@@ -118,33 +214,22 @@ public class DScript {
 		}
 	}
 
-	ParseResult parseDo(List<Atom> atomList, int pos) {
-		List<Expression> expressionList = new List<Expression>();
-		Expression lastExpression;
-
-		if (atomEquals(atomList[pos], "punctuation", "{")) {
-
-		} else {
-			// parse Result error
-		}
-	}
-
 	ParseResult parseIf(List<Atom> atomList, int pos) {
 		Expression ifExpression = new Expression("e-if");
 
 
-		ParseResult condResult = parseHelper(atomList, pos, "(");
+		ParseResult condResult = parseSingle(atomList, pos, true);
 		ifExpression.eIfCond = condResult.expression;
 		pos = condResult.position;
 
-		ParseResult consqResult = parseHelper(atomList, pos, "{");
+		ParseResult consqResult = parseDo(atomList, pos, true);
 		ifExpression.eIfConsq = consqResult.expression;
 		pos = consqResult.position;
 
 		if (atomEquals(atomList[pos], "punctuation", "else")) {
 			pos += 1;
 
-			ParseResult alterResult = parseHelper(atomList, pos, "{");
+			ParseResult alterResult = parseDo(atomList, pos, true);
 			ifExpression.eIfAlter = alterResult.expression;
 			pos = alterResult.position;
 
@@ -167,7 +252,7 @@ public class DScript {
 				if (atomEquals(atomList[pos], "punctuation", ")")) {
 					pos += 1;
 
-					ParseResult bodyResult = parseHelper(atomList, pos, "{");
+					ParseResult bodyResult = parseDo(atomList, pos, true);
 					lamExpression.eLamBody = bodyResult.expression;
 					pos = bodyResult.position;
 
@@ -193,7 +278,7 @@ public class DScript {
 			if (atomEquals(atomList[pos], "operator", "=")) {
 				pos += 1;
 
-				ParseResult letValueResult = parseHelper(atomList, pos, "");
+				ParseResult letValueResult = parseSingle(atomList, pos, false);
 				letExpression.eLetValue = letValueResult.expression;
 				
 				return new ParseResult(letExpression, pos);
@@ -208,15 +293,19 @@ public class DScript {
 	ParseResult parseWhile(List<Atom> atomList, int pos) {
 		Expression whileExpression = new Expression("e-while");
 
-		ParseResult condResult = parseHelper(atomList, pos, "(");
+		ParseResult condResult = parseSingle(atomList, pos, true;
 		whileExpression.eWhileCond = condResult.expression;
 		pos = condResult.position;
 
-		ParseResult bodyResult = parseHelper(atomList, pos, "{");
+		ParseResult bodyResult = parseDo(atomList, pos, true);
 		whileExpression.eLamBody = bodyResult.expression;
 		pos = bodyResult.position;
 
 		return new ParseResult(lamExpression, pos);
+	}
+
+	ParseResult ParseIdentifier(List<Atom> atomList, int pos) {
+
 	}
 
 	ParseResult parseIg(List<Atom> atomList, int pos) {
@@ -238,7 +327,7 @@ public class DScript {
 						pos += 1;
 
 						Expression igVarExpression = new Expression("e-set-ig-var");
-						ParseResult valueResult = parseHelper(atomList, pos, "");
+						ParseResult valueResult = parseSingle(atomList, pos, false);
 						igVarExpression.eSetIgName = igName;
 						igVarExpression.eSetIgVariable = igVariable;
 						igVarExpression.eSetIgValue = valueResult.value;
@@ -1524,6 +1613,11 @@ public class BuiltInFunctions {
 public class Atom {
 	public string atomType;
 	public string value;
+
+	public Atom(string at, string v) {
+		atomType = at;
+		value = v;
+	}
 }
 
 public class ParseResult {
