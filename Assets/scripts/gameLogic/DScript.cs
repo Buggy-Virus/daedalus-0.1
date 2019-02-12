@@ -53,6 +53,8 @@ public class DScript {
 	}
 
 	ParseResult parseHelper(List<Atom> atomList, int pos) {
+		// take whether it is delimited by paranthesis, braces, or semicolon
+		// returns position AFTER the end of the Expression
 		while (pos < atomList.Count) {
 			Atom curAtom = atomList[pos];
 
@@ -94,6 +96,7 @@ public class DScript {
 						case '{':
 						case ';':
 						case '[':
+						case '$':
 						default:
 							// does something
 					}
@@ -129,16 +132,20 @@ public class DScript {
 		Expression ifExpression = new Expression("e-if");
 
 		if (atomEquals(atomList[pos], "punctuation", "(")) {
-			pos += 1;
+			ParseResult condResult = parseHelper(atomList, pos, "(");
+			ifExpression.eIfCond = condResult.expression;
+			pos = condResult.position;
+
 			if (atomEquals(atomList[pos], "punctuation", "{")) {
-				ParseResult consqResult = parseHelper(atomList, pos);
+				ParseResult consqResult = parseHelper(atomList, pos, "{");
 				ifExpression.eIfConsq = consqResult.expression;
 				pos = consqResult.position;
 
 				if (atomEquals(atomList[pos], "punctuation", "else")) {
 					pos += 1;
+
 					if (atomEquals(atomList[pos], "punctuation", "{")) {
-						ParseResult alterResult = parseHelper(atomList, pos);
+						ParseResult alterResult = parseHelper(atomList, pos, "{");
 						ifExpression.eIfAlter = alterResult.expression;
 						pos = alterResult.position;
 
@@ -152,9 +159,7 @@ public class DScript {
 			} else {
 				// throw error
 			}
-			ParseResult condResult = parseHelper(atomList, pos);
-			ifExpression.eIfCond = condResult.expression;
-			pos = condResult.position;
+
 		} else {
 			// throw error
 		}
@@ -165,13 +170,16 @@ public class DScript {
 
 		if (atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
+
 			if (atomList[pos].atomType == "identifier") {
 				lamExpression.eLamParam = atomList[pos].value;
 				pos += 1;
+
 				if (atomEquals(atomList[pos], "punctuation", ")")) {
 					pos += 1;
+
 					if (atomEquals(atomList[pos], "punctuation", "{")) {
-						ParseResult bodyResult = parseHelper(atomList, pos);
+						ParseResult bodyResult = parseHelper(atomList, pos, "{");
 						lamExpression.eLamBody = bodyResult.expression;
 						pos = bodyResult.position;
 
@@ -188,14 +196,16 @@ public class DScript {
 		}
 	}
 
-	ParseResult parseResult(List<Atom> atomList, int pos) {
+	ParseResult parseLet(List<Atom> atomList, int pos) {
 		Expression letExpression = new Expression("e-let");
 
 		if (atomList[pos].atomType == "identifier") {
 			letExpression.eLetName = atomList[pos].value;
 			pos += 1;
+
 			if (atomEquals(atomList[pos], "operator", "=")) {
 				pos += 1;
+
 				ParseResult letValueResult = parseHelper(atomList, pos);
 				letExpression.eLetValue = letValueResult.expression;
 				
@@ -207,6 +217,30 @@ public class DScript {
 			// throw error
 		}
 	}
+
+	ParseResult parseWhile(List<Atom> atomList, int pos) {
+		Expression whileExpression = new Expression("e-while");
+
+		if (atomEquals(atomList[pos], "punctuation", "(")) {
+			ParseResult condResult parseHelper(atomList, pos, "(");
+			whileExpression.eWhileCond = condResult.expression;
+			pos = condResult.position;
+
+			if (atomEquals(atomList[pos], "punctuation", "{")) {
+				ParseResult bodyResult = parseHelper(atomList, pos, "{");
+				whileExpression.eLamBody = bodyResult.expression;
+				pos = bodyResult.position;
+
+				return new ParseResult(lamExpression, pos);
+			} else {
+				// throw error
+			}			
+		} else {
+			// throw error
+		}
+	}
+
+	ParseResult parse 
 
 	// ================================= Tokenizer Functions ================================= 
 
@@ -320,6 +354,7 @@ public class DScript {
 			case ']':
 			case '[':
 			case ':':
+			case '$':
 				return true;
 			default:
 				return false;
