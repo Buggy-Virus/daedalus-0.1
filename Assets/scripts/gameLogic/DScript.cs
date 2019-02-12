@@ -39,6 +39,8 @@ public class DScript {
 		return interpret(desugar(parse(input)));
 	}
 
+	// ================================= Parse Functions ================================= 
+
 	bool atomEquals(Atom atom, string targetType, string targetValue) {
 		return atom.atomType == targetType && atom.value == targetValue;
 	}
@@ -50,7 +52,7 @@ public class DScript {
 		 
 	}
 
-	ParseResult parseHelper(List<Atom>, atomList, int pos) {
+	ParseResult parseHelper(List<Atom> atomList, int pos) {
 		while (pos < atomList.Count) {
 			Atom curAtom = atomList[pos];
 
@@ -123,19 +125,61 @@ public class DScript {
 		}
 	}
 
-	Expression parseIf(List<Atom> atomList, int pos) {
+	ParseResult parseIf(List<Atom> atomList, int pos) {
 		Expression ifExpression = new Expression("e-if");
 
 		if (atomEquals(atomList[pos], "punctuation", "(")) {
-			parseResult condResult = parseHelper(atomList, pos + 1);
-			ifExpression.eIfCond = condResult.expression;
-			pos = condResult.position;
-
-			if (atomEquals(atomList[pos], "punctuation", ")")) {
-				pos += 1
-				parseResult consqResult = parseHelper(atomList, pos);
+			pos += 1;
+			if (atomEquals(atomList[pos], "punctuation", "{")) {
+				ParseResult consqResult = parseHelper(atomList, pos);
 				ifExpression.eIfConsq = consqResult.expression;
 				pos = consqResult.position;
+
+				if (atomEquals(atomList[pos], "punctuation", "else")) {
+					pos += 1;
+					if (atomEquals(atomList[pos], "punctuation", "{")) {
+						ParseResult alterResult = parseHelper(atomList, pos);
+						ifExpression.eIfAlter = alterResult.expression;
+						pos = alterResult.position;
+
+						return new ParseResult(ifExpression, pos);
+					} else {
+						// throw error
+					}
+				} else {
+					// throw error
+				}
+			} else {
+				// throw error
+			}
+			ParseResult condResult = parseHelper(atomList, pos);
+			ifExpression.eIfCond = condResult.expression;
+			pos = condResult.position;
+		} else {
+			// throw error
+		}
+	}
+
+	ParseResult parseLambda(List<Atom> atomList, int pos) {
+		Expression lamExpression = new Expression("e-lam");
+
+		if (atomEquals(atomList[pos], "punctuation", "(")) {
+			pos += 1;
+			if (atomList[pos].atomType == "identifier") {
+				lamExpression.eLamParam = atomList[pos].value;
+				pos += 1;
+				if (atomEquals(atomList[pos], "punctuation", ")")) {
+					pos += 1;
+					if (atomEquals(atomList[pos], "punctuation", "{")) {
+						ParseResult bodyResult = parseHelper(atomList, pos);
+						lamExpression.eLamBody = bodyResult.expression;
+						pos = bodyResult.position;
+
+						return new ParseResult(lamExpression, pos);
+					}				
+				} else {
+					// throw error
+				}
 			} else {
 				// throw error
 			}
@@ -143,6 +187,28 @@ public class DScript {
 			// throw error
 		}
 	}
+
+	ParseResult parseResult(List<Atom> atomList, int pos) {
+		Expression letExpression = new Expression("e-let");
+
+		if (atomList[pos].atomType == "identifier") {
+			letExpression.eLetName = atomList[pos].value;
+			pos += 1;
+			if (atomEquals(atomList[pos], "operator", "=")) {
+				pos += 1;
+				ParseResult letValueResult = parseHelper(atomList, pos);
+				letExpression.eLetValue = letValueResult.expression;
+				
+				return new ParseResult(letExpression, pos);
+			} else {
+				// throw error
+			}
+		} else {
+			// throw error
+		}
+	}
+
+	// ================================= Tokenizer Functions ================================= 
 
 	List<Atom> tokenize(string input) {
 		List<Atom> atomList = new List<Atom>();
@@ -159,7 +225,7 @@ public class DScript {
 					case "string":
 						if ((curChar == '\'' && singleQuote == true) || (curChar == '\"' && singleQuote == false)) {
 							atomList.Add(curAtom);
-							buildingAtom = false;\
+							buildingAtom = false;
 
 							// this is wrong, shouldn't consider the quotation character if we just finished processing the string
 						} else {
@@ -190,6 +256,7 @@ public class DScript {
 								case "true":
 								case "false":
 									curAtom.atomType = "bool";
+									break;
 							}
 							atomList.Add(curAtom);
 							buildingAtom = false;
@@ -295,6 +362,8 @@ public class DScript {
 		}
 	}
 
+	// ================================= Interpet Functions ================================= 
+
 	Expression desugar(Expression sugaredExpression) {
 
 	}
@@ -334,8 +403,8 @@ public class DScript {
 				return interpDo(expression.eDo, env, store, ref tokenEnv, ref cubeEnv);	
 			case "e-while": //e-while
 				return interpWhile(expression.eWhileCond, expression.eWhileBody, new Value(), false, env, store, ref tokenEnv, ref cubeEnv);
-			case "e-def": //e-define
-				return interpret(expression.eDefineValue, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-let": //e-let
+				return interpret(expression.eLetValue, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-id": // e-id
 				return interpId(expression.eId, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-ig-var": //e-ig-variable
@@ -875,10 +944,10 @@ public class DScript {
 			// If statement in Do handles define statements. Defines are only relevent in Do
 			// The change to the env is only relevent across other Do expressions
 			// In the same Do statement
-			if (expression.expressionType == "e-def") {
-				Result define_result = interpret(expression.eDefineValue, env, last_result.store, ref tokenEnv, ref cubeEnv);
+			if (expression.expressionType == "e-let") {
+				Result define_result = interpret(expression.eLetValue, env, last_result.store, ref tokenEnv, ref cubeEnv);
 				string loc = System.Guid.NewGuid().ToString();
-				env.Add(expression.eDefineName, loc);
+				env.Add(expression.eLetName, loc);
 				define_result.store.Add(loc, define_result.value);
 				last_result = define_result;
 			} else {
@@ -1236,8 +1305,8 @@ public class Expression {
 	public Expression eWhileCond; //type=13
 	public Expression eWhileBody; 
 
-	public string eDefineName; //type=14
-	public Expression eDefineValue;
+	public string eLetName; //type=14
+	public Expression eLetValue;
 
 	public string eId; //type=15
 
@@ -1338,4 +1407,9 @@ public class Atom {
 public class ParseResult {
 	public int position;
 	public Expression expression;
+
+	public ParseResult(Expression e, int p) {
+		position = p;
+		expression = e;
+	}
 }
