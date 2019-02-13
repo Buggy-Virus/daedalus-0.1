@@ -76,7 +76,7 @@ public class DScript {
 	}
 
 	ParseResult ParseSingle(List<Atom> atomList, int pos, bool bookended) {
-		List<Expression> seenExpressions = new List<Expression>();
+		Expression lastExpression;
 
 		if (bookended && atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
@@ -96,122 +96,68 @@ public class DScript {
 				case "string":
 					new Expression expr = new Expression("e-string");
 					expr.eString = curAtom.value; 
+					lastExpression = expr;
+					break;
 				case "number":
 					if (curAtom.Contains('.')) {
 						new Expression expr = new Expression("e-float");
 						expr.eFloat = (float)curAtom.value;
+						lastExpression = expr;
 					} else {
 						new Expression expr = new Expression("e-int");
 						expr.eInt = (int)curAtom.value;
+						lastExpression = expr;
 					}
+					break;
 				case "bool":
 					new Expression expr = new Expression("e-bool");
 					expr.eBool = (bool)curAtom.value;
+					lastExpression = expr;
+					break;
 				case "identifier":
+					break;
 				case "keyword":
 					switch(curAtom.value) {
 						case "if":
-							parseIf(atomList, pos + 1);
+							ParseResult ifResult = parseIf(atomList, pos + 1);
+							lastExpression = ifResult.expression;
+							pos = ifResult.position;
 						case "lambda":
-							parseLambda(atomList, pos + 1);
+							ParseResult lamResult = parseLambda(atomList, pos + 1);
+							lastExpression = lamResult.expression;
+							pos = lamResult.position;
 						case "let":
-							parseLet(atomList, pos + 1);
+							ParseResult letResult = parseLet(atomList, pos + 1);
+							lastExpression = letResult.expression;
+							pos = letResult.position;
 						case "while":
-							parseWhile(atomList, pos + 1);
+							ParseResult whileResult = parseLet(atomList, pos + 1);
+							lastExpression = whileResult.expression;
+							pos = whileResult.position;
 						default:
+							// throw an error
 					}
+					break;
+				case "operator":
+					if (curAtom.value == "!") {
+						ParseResult notResult = pasreNot(atomList, pos);
+						lastExpression = notResult.expression;
+						pos = notResult.position;
+					} else {
+						// thrower an error
+					}
+					break;
 				default:
 					// throw an error
 			}
+			pos += 1;
 		}
+
+		return new ParseResult(lastExpression, pos);
 	}
 
-	ParseResult parseHelper(List<Atom> atomList, int pos, string parseType) {
-		// take whether it is delimited by paranthesis, braces, or semicolon
-		// returns position AFTER the end of the Expression
-		// checks surrounding punctuation
-		bool containerPunc;
-		string startPunc;
-		string endPunc;
-		bool canDo;
-		switch(parseType) {
-			case "cond":
-				containerPunc = true;
-				startPunc = new Atom("punctuation", "(");
-				endPunc = new Atom("punctuation", ")")
-				bool canDo = false
-				break;
-			case "prog":
-				containerPunc = true;
-				startPunc = new Atom("punctuation", "(");
-				endPunc = new Atom("punctuation", ")")
-				bool canDo = false
-				break;
+	parseResult parseNot(List<Atom> atomList, int pos) {
 
-
-		}
-
-
-		while (pos < atomList.Count) {
-			Atom curAtom = atomList[pos];
-
-			switch(curAtom.atomType) {
-				case "string":
-					new Expression expr = new Expression("e-string");
-					expr.eString = curAtom.value; 
-				case "number":
-					if (curAtom.Contains('.')) {
-						new Expression expr = new Expression("e-float");
-						expr.eFloat = (float)curAtom.value;
-					} else {
-						new Expression expr = new Expression("e-int");
-						expr.eInt = (int)curAtom.value;
-					}
-				case "bool":
-					new Expression expr = new Expression("e-bool");
-					expr.eBool = (bool)curAtom.value;
-				case "identifier":
-					new Expression expr = new Expression("e-id");
-					expr.eId = curAtom.value;
-				case "keyword":
-					switch(curAtom.value) {
-						case "if":
-							parseIf(atomList, pos + 1)
-						case "lambda":
-							parseLambda(atomList, pos + 1)
-						case "let":
-							parseLet(atomList, pos + 1)
-						case "while":
-							parseWhile(atomList, pos + 1)
-						default:
-							// does something
-					}
-				case "punctuation":
-					switch(curAtom.value) {
-						case '(':
-							parseHelper(atomList, pos + 1);
-						case '{':
-						case ';':
-						case '[':
-						case '$':
-						default:
-							// does something
-					}
-				case "operator":
-					switch(curAtom.Value) {
-						case '+':
-						case '=':
-						case '-':
-						case '/':
-						case '*':
-						case '>':
-						case '<':
-						case '!':
-					}
-				default:
-					// does something
-			}
-		}
 	}
 
 	ParseResult parseIf(List<Atom> atomList, int pos) {
@@ -220,18 +166,18 @@ public class DScript {
 
 		ParseResult condResult = parseSingle(atomList, pos, true);
 		ifExpression.eIfCond = condResult.expression;
-		pos = condResult.position;
+		pos = condResult.position + 1;
 
 		ParseResult consqResult = parseDo(atomList, pos, true);
 		ifExpression.eIfConsq = consqResult.expression;
-		pos = consqResult.position;
+		pos = consqResult.position + 1;
 
 		if (atomEquals(atomList[pos], "punctuation", "else")) {
 			pos += 1;
 
 			ParseResult alterResult = parseDo(atomList, pos, true);
 			ifExpression.eIfAlter = alterResult.expression;
-			pos = alterResult.position;
+			pos = alterResult.position + 1;
 
 			return new ParseResult(ifExpression, pos);
 		} else {
@@ -254,7 +200,7 @@ public class DScript {
 
 					ParseResult bodyResult = parseDo(atomList, pos, true);
 					lamExpression.eLamBody = bodyResult.expression;
-					pos = bodyResult.position;
+					pos = bodyResult.position + 1;
 
 					return new ParseResult(lamExpression, pos);
 				} else {
@@ -280,6 +226,7 @@ public class DScript {
 
 				ParseResult letValueResult = parseSingle(atomList, pos, false);
 				letExpression.eLetValue = letValueResult.expression;
+				pos = letValueResult.position + 1;
 				
 				return new ParseResult(letExpression, pos);
 			} else {
@@ -295,17 +242,13 @@ public class DScript {
 
 		ParseResult condResult = parseSingle(atomList, pos, true;
 		whileExpression.eWhileCond = condResult.expression;
-		pos = condResult.position;
+		pos = condResult.position + 1;
 
 		ParseResult bodyResult = parseDo(atomList, pos, true);
 		whileExpression.eLamBody = bodyResult.expression;
-		pos = bodyResult.position;
+		pos = bodyResult.position + 1;
 
 		return new ParseResult(lamExpression, pos);
-	}
-
-	ParseResult ParseIdentifier(List<Atom> atomList, int pos) {
-
 	}
 
 	ParseResult parseIg(List<Atom> atomList, int pos) {
@@ -331,7 +274,7 @@ public class DScript {
 						igVarExpression.eSetIgName = igName;
 						igVarExpression.eSetIgVariable = igVariable;
 						igVarExpression.eSetIgValue = valueResult.value;
-						pos = valueResult.position;
+						pos = valueResult.position + 1;
 
 						return new ParseResult(igVarExpression, pos);
 					} else {
