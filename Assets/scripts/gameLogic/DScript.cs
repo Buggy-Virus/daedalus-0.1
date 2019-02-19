@@ -309,24 +309,29 @@ public class DScript {
 			if (atomEquals(atomList[pos], "punctuation", "(")) {
 				pos += 1;
 
-				if (atomList[pos].atomType == "identifier") {
-					funcExpression.eFuncArgument = atomList[pos].value;
-					pos += 1;
-
-					if (atomEquals(atomList[pos], "punctuation", ")")) {
+				List<string> argumentList = new List<string>();
+				while (!atomEquals(atomList[pos], "punctuation", ")")) {
+					if (atomList[pos].atomType == "identifier") {
+						argumentList.(atomList[pos].value);
 						pos += 1;
 
-						ParseResult bodyResult = parseDo(atomList, pos);
-						funcExpression.eFuncBody = bodyResult.expression;
-						pos = bodyResult.position;
-
-						return new ParseResult(funcExpression, pos);
-					} else {
-						// throw error
+						if (atomEquals(atomList[pos], "punctuation", ",")) {
+							pos += 1;
+						} else if (atomEquals(atomList[pos], "punctuation", ")")) {
+							break;
+						} else {
+							// throw error
+						}
 					}
-				} else {
-					// throw error
 				}
+				funcExpression.eFuncArguments = argumentList;
+				pos += 1;
+
+				ParseResult bodyResult = parseDo(atomList, pos);
+				funcExpression.eFuncBody = bodyResult.expression;
+				pos = bodyResult.position;
+
+				return new ParseResult(funcExpression, pos);
 			} else {
 				// throw error
 			}
@@ -377,24 +382,29 @@ public class DScript {
 		if (atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
 
-			if (atomList[pos].atomType == "identifier") {
-				lamExpression.eLamParam = atomList[pos].value;
-				pos += 1;
-
-				if (atomEquals(atomList[pos], "punctuation", ")")) {
+			List<string> argumentList = new List<string>();
+			while (!atomEquals(atomList[pos], "punctuation", ")")) {
+				if (atomList[pos].atomType == "identifier") {
+					argumentList.Add(atomList[pos].value);
 					pos += 1;
 
-					ParseResult bodyResult = parseDo(atomList, pos, true);
-					lamExpression.eLamBody = bodyResult.expression;
-					pos = bodyResult.position;
-
-					return new ParseResult(lamExpression, pos);
-				} else {
-
+					if (atomEquals(atomList[pos], "punctuation", ",")) {
+						pos += 1;
+					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
+						break;
+					} else {
+						// throw error
+					}
 				}
-			} else {
-				// throw error
 			}
+			lamExpression.eLamParams = argumentList;
+			pos += 1;
+
+			ParseResult bodyResult = parseDo(atomList, pos, true);
+			lamExpression.eLamBody = bodyResult.expression;
+			pos = bodyResult.position;
+
+			return new ParseResult(lamExpression, pos);
 		} else {
 			// throw error
 		}
@@ -454,6 +464,30 @@ public class DScript {
 				pos = valueResult.position;
 
 				return new ParseResult(igVarExpression, pos);
+			} else if (atomEquals(atomList[pos], "punctuation", "(")) {
+				pos += 1
+
+				Expression appExpression = new Expression("e-app");
+				appExpression.eAppFunc = identifierName;
+				
+				List<Expression> argumentList = new List<Expression>();
+				while (!atomEquals(atomList[pos], "punctuation", ")")) {
+
+					ParseResult argumentResult = parseSingle
+					argumentList.Add(argumentResult.expression);
+					pos = argumentResult.position += 1;
+
+					if (atomEquals(atomList[pos], "punctuation", ",")) {
+						pos += 1;
+					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
+						break;
+					} else {
+						// throw error
+					}
+				}
+				appExpresion.eAppArguments = argumentList;
+
+				return new ParseResult(appExpression, pos);
 			} else {
 				Expression idExpression = new Expression("e-id");
 				idExpression.eId = identifierName;
@@ -769,9 +803,9 @@ public class DScript {
 			case "e-if": //e-if
 				return interpIf(expression.eIfCond, expression.eIfConsq, expression.eIfAlter, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-lam": //e-lam
-				return interpLam(expression.eLamParam, expression.eLamBody, env, store, ref tokenEnv, ref cubeEnv);
+				return interpLam(expression.eLamParams, expression.eLamBody, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-app": //e-app
-				return interpApp(expression.eAppFunc, expression.eAppArg, env, store, ref tokenEnv, ref cubeEnv);
+				return interpApp(expression.eAppFunc, expression.eAppArguments, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-set": //e-set
 				return interpSet(expression.eSetName, expression.eSetValue, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-do": //e-do
@@ -1387,7 +1421,7 @@ public class DScript {
 	}
 
 	Result interpLam(
-		string param, 
+		List<string> params, 
 		Expression body, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
@@ -1396,7 +1430,7 @@ public class DScript {
 		) 
 	{
 		Value returnValue = new Value();
-		returnValue.vFunParam = param;
+		returnValue.vFunParams = params;
 		returnValue.vFunBody = body;
 		returnValue.vFunEnviroment = env;
 		return new Result(returnValue, store);
@@ -1404,7 +1438,7 @@ public class DScript {
 
 	Result interpApp(
 		Expression func, 
-		Expression arg, 
+		List<Expression> args, 
 		Dictionary<string, string> env,
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
@@ -1413,13 +1447,24 @@ public class DScript {
 	{
 		Result func_result = interpret(func, env, store, ref tokenEnv, ref cubeEnv);
 		if (func_result.value.valueType == "function") {
-			Result arg_result = interpret(arg, env, func_result.store, ref tokenEnv, ref cubeEnv);
-			string loc = System.Guid.NewGuid().ToString();
-			func_result.value.vFunEnviroment.Add(func_result.value.vFunParam, loc);
-			arg_result.store.Add(loc, arg_result.value);
-			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, arg_result.store, ref tokenEnv, ref cubeEnv); 
+			if (args.Count != func_result.value.vFunParams.Count) {
+				Value errorValue = new Value("error");
+				errorValue.errorMessage = "Functions expects " + func_result.value.vFunParams.Count.ToString() + ", got " + args.Count.ToString();
+				return new Result(errorValue, store);
+			}
+
+			Dictionary<string, Value> appStore = func_result.store;
+			for (int i; i < args.Count; i++) {
+				Expression arg = args[i];
+				string param = func_result.value.vFunParams[i];
+				Result arg_result = interpret(arg, env, appStore, ref tokenEnv, ref cubeEnv);
+				string loc = System.Guid.NewGuid().ToString();
+				func_result.value.vFunEnviroment.Add(param, loc);
+				appStore.Add(loc, arg_result.value);
+			}
+			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, appStore, ref tokenEnv, ref cubeEnv); 
 		} else {
-			return new Result(new Value("function", func_result.value.valueType), store); //Throw Error
+			return new Result(new Value("error", func_result.value.valueType), store); //Throw Error
 		}
 	}
 
@@ -1767,7 +1812,7 @@ public class Value {
 	public string vString; // type=3
 	public bool vBool; // type=4
 
-	public string vFunParam; // type=5
+	public List<string> vFunParams; // type=5
 	public Expression vFunBody;
 	public Dictionary<String, String> vFunEnviroment;	
 
@@ -1811,10 +1856,12 @@ public class Expression {
 	public Expression eIfAlter;
 
 	public string eLamParam; // type=9
+	public List<string> eLamParams;
 	public Expression eLamBody;
 
 	public Expression eAppFunc; // type=10
 	public Expression eAppArg;
+	public List<Expression> eAppArguments;
 
 	public string eSetName; // type=11
 	public Expression eSetValue;
@@ -1838,6 +1885,7 @@ public class Expression {
 
 	public string eLetName;
 
+	public 
 
 	//Sugar
 
@@ -1849,6 +1897,7 @@ public class Expression {
 
 	public string eFuncId;
 	public string eFuncArgument;
+	public List<string> eFuncArguments;
 	public Expression eFuncBody;
 
 	public Expression(string etype) {
