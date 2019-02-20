@@ -53,7 +53,7 @@ public class DScript {
 		bool buildingAtom = false;
 		bool buildingString = false;
 		bool singleQuote = false;
-		
+
 		Atom curAtom = new Atom();
 		int character = 1;
 		int line = 1;
@@ -68,7 +68,6 @@ public class DScript {
 							atomList.Add(curAtom);
 							buildingAtom = false;
 
-							// this is wrong, shouldn't consider the quotation character if we just finished processing the string
 						} else {
 							curAtom.value += curChar.ToString();
 						}
@@ -152,7 +151,10 @@ public class DScript {
 
 			if (!buildingAtom && !buildingString) {
 				if (isWhiteSpace(curChar)) {
-					
+					if (curChar == '\n') {
+						line += 1;
+						character = 0;
+					}
 				} else if (curChar == '\'') {
 					curAtom = new Atom();
 					curAtom.atomType = "string";
@@ -194,6 +196,7 @@ public class DScript {
 			} else if (!buildingAtom && buildingString) {
 				buildingString = false;
 			}
+			character += 1;
 		}
 		return atomList;
 	}
@@ -1944,9 +1947,16 @@ public class Atom {
 	public int line;
 	public int character;
 
-	public Atom(string at, string v, line, character) {
+	public Atom(int l, int c) {
+		line = l;
+		character = c;
+	}
+
+	public Atom(string at, string v, int l, int c) {
 		atomType = at;
 		value = v;
+		line = l;
+		character = c;
 	}
 
 	public Atom() {
