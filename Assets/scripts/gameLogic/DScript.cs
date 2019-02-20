@@ -39,7 +39,225 @@ public class DScript {
 		return interpret(desugar(parse(input)));
 	}
 
-	// ================================= Parse Functions ================================= 
+	// ================================= Tokenizer Functions =====================================================================
+	// ================================= Tokenizer Functions =====================================================================
+	// ================================= Tokenizer Functions =====================================================================
+	// ================================= Tokenizer Functions =====================================================================
+	// ================================= Tokenizer Functions =====================================================================
+	// ================================= Tokenizer Functions =====================================================================
+	// ================================= Tokenizer Functions =====================================================================
+
+	List<Atom> tokenize(string input) {
+		List<Atom> atomList = new List<Atom>();
+
+		bool buildingAtom = false;
+		bool buildingString = false;
+		bool singleQuote = false;
+		
+		Atom curAtom = new Atom();
+		int character = 1;
+		int line = 1;
+
+		for (int i = 0; i < input.Length; i++) {
+			char curChar = input[i];
+
+			if (buildingAtom) {
+				switch(curAtom.atomType) {
+					case "string":
+						if ((curChar == '\'' && singleQuote == true) || (curChar == '\"' && singleQuote == false)) {
+							atomList.Add(curAtom);
+							buildingAtom = false;
+
+							// this is wrong, shouldn't consider the quotation character if we just finished processing the string
+						} else {
+							curAtom.value += curChar.ToString();
+						}
+						break;
+					case "number":
+						if (Char.IsDigit(curChar) || curChar == '.') {
+							curAtom.value += curChar.ToString();
+						} else {
+							atomList.Add(curAtom);
+							buildingAtom = false;
+						}
+						break;
+					case "identifier":
+						if (Char.IsDigit(curChar) || Char.IsLetter(curChar)) {
+							curAtom.value += curChar.ToString();
+						} else {
+							switch(curAtom.value) {
+								case "if":
+								case "else":
+								case "lambda":
+								case "let":
+								case "var":
+								case "while":
+								case "function":
+									curAtom.atomType = "keyword";
+									break;
+								case "true":
+								case "false":
+									curAtom.atomType = "bool";
+									break;
+							}
+							atomList.Add(curAtom);
+							buildingAtom = false;
+						}
+						break;
+					case "operator":
+						switch(curAtom.value) {
+							case "=":
+							case ">":
+							case "<":
+								if (curChar == '=') {
+									curAtom.value += curChar.ToString();
+								} else {
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								}
+								break;
+							case "*":
+								if (curChar == '*') {
+									curAtom.value += curChar.ToString();
+								} else {
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								}
+								break;
+							case "|":
+								if (curChar == '|') {
+									curAtom.value += curChar.ToString();
+								} else {
+									// Throw Error
+								}
+								break;
+							case "&":
+								if (curChar == '&') {
+									curAtom.value += curChar.ToString();
+								} else {
+									// Throw Error
+								}
+								break;
+							default:
+								atomList.Add(curAtom);
+								buildingAtom = false;
+								break;
+						}
+						break;
+					default:
+						// throw error
+						break;
+				}
+			}
+
+			if (!buildingAtom && !buildingString) {
+				if (isWhiteSpace(curChar)) {
+					
+				} else if (curChar == '\'') {
+					curAtom = new Atom();
+					curAtom.atomType = "string";
+					buildingAtom = true;
+					buildingString = true;
+					singleQuote = true;
+				} else if (curChar == '\"') {
+					curAtom = new Atom();
+					curAtom.atomType = "string";
+					buildingAtom = true;
+					buildingString = true;
+					singleQuote = false;
+				} else if (isPunctuation(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "punc";
+					curAtom.value = curChar.ToString();
+					atomList.Add(curAtom);
+				} else if (isOperator(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "operator";
+					curAtom.value = curChar.ToString();
+					buildingAtom = true;
+				} else if (Char.IsDigit(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "number";
+					curAtom.value = curChar.ToString();
+					buildingAtom = true;
+				} else if (Char.IsLetter(curChar)) {
+					curAtom = new Atom();
+					curAtom.atomType = "identifier";
+					curAtom.value = curChar.ToString();
+					buildingAtom = true;
+				} else {
+					curAtom = new Atom();
+					curAtom.atomType = "error";
+					atomList.Add(curAtom);
+					break;
+				} 
+			} else if (!buildingAtom && buildingString) {
+				buildingString = false;
+			}
+		}
+		return atomList;
+	}
+
+	bool isPunctuation (char c) {
+		switch(c) {
+			case '(':
+			case ')':
+			case '{':
+			case '}':
+			case ';':
+			case ',':
+			case ']':
+			case '[':
+			case ':':
+			case '$':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	bool isWhiteSpace (char c) {
+		switch(c) {
+			case '\t':
+			case '\n':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	bool isOperator (char c) {
+		switch(c) {
+			case '+':
+			case '=':
+			case '-':
+			case '/':
+			case '*':
+			case '>':
+			case '<':
+			case '!':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	bool isString (char c) {
+		switch(c) {
+			case '\"':
+			case '\'':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	// ================================= Parse Functions =============================================================== 
+	// ================================= Parse Functions =============================================================== 
+	// ================================= Parse Functions =============================================================== 
+	// ================================= Parse Functions =============================================================== 
+	// ================================= Parse Functions =============================================================== 
+	// ================================= Parse Functions =============================================================== 
 
 	bool atomEquals(Atom atom, string targetType, string targetValue) {
 		return atom.atomType == targetType && atom.value == targetValue;
@@ -545,211 +763,12 @@ public class DScript {
 		}
 	}
 
-	// ================================= Tokenizer Functions ================================= 
-
-	List<Atom> tokenize(string input) {
-		List<Atom> atomList = new List<Atom>();
-
-		bool buildingAtom = false;
-		bool buildingString = false;
-		bool singleQuote = false;
-		Atom curAtom = new Atom();
-
-		for (int i = 0; i < input.Length; i++) {
-			char curChar = input[i];
-
-			if (buildingAtom) {
-				switch(curAtom.atomType) {
-					case "string":
-						if ((curChar == '\'' && singleQuote == true) || (curChar == '\"' && singleQuote == false)) {
-							atomList.Add(curAtom);
-							buildingAtom = false;
-
-							// this is wrong, shouldn't consider the quotation character if we just finished processing the string
-						} else {
-							curAtom.value += curChar.ToString();
-						}
-						break;
-					case "number":
-						if (Char.IsDigit(curChar) || curChar == '.') {
-							curAtom.value += curChar.ToString();
-						} else {
-							atomList.Add(curAtom);
-							buildingAtom = false;
-						}
-						break;
-					case "identifier":
-						if (Char.IsDigit(curChar) || Char.IsLetter(curChar)) {
-							curAtom.value += curChar.ToString();
-						} else {
-							switch(curAtom.value) {
-								case "if":
-								case "else":
-								case "lambda":
-								case "let":
-								case "var":
-								case "while":
-								case "function":
-									curAtom.atomType = "keyword";
-									break;
-								case "true":
-								case "false":
-									curAtom.atomType = "bool";
-									break;
-							}
-							atomList.Add(curAtom);
-							buildingAtom = false;
-						}
-						break;
-					case "operator":
-						switch(curAtom.value) {
-							case "=":
-							case ">":
-							case "<":
-								if (curChar == '=') {
-									curAtom.value += curChar.ToString();
-								} else {
-									atomList.Add(curAtom);
-									buildingAtom = false;
-								}
-								break;
-							case "*":
-								if (curChar == '*') {
-									curAtom.value += curChar.ToString();
-								} else {
-									atomList.Add(curAtom);
-									buildingAtom = false;
-								}
-								break;
-							case "|":
-								if (curChar == '|') {
-									curAtom.value += curChar.ToString();
-								} else {
-									// Throw Error
-								}
-								break;
-							case "&":
-								if (curChar == '&') {
-									curAtom.value += curChar.ToString();
-								} else {
-									// Throw Error
-								}
-								break;
-							default:
-								atomList.Add(curAtom);
-								buildingAtom = false;
-								break;
-						}
-						break;
-					default:
-						// throw error
-						break;
-				}
-			}
-
-			if (!buildingAtom && !buildingString) {
-				if (isWhiteSpace(curChar)) {
-					
-				} else if (curChar == '\'') {
-					curAtom = new Atom();
-					curAtom.atomType = "string";
-					buildingAtom = true;
-					buildingString = true;
-					singleQuote = true;
-				} else if (curChar == '\"') {
-					curAtom = new Atom();
-					curAtom.atomType = "string";
-					buildingAtom = true;
-					buildingString = true;
-					singleQuote = false;
-				} else if (isPunctuation(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "punc";
-					curAtom.value = curChar.ToString();
-					atomList.Add(curAtom);
-				} else if (isOperator(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "operator";
-					curAtom.value = curChar.ToString();
-					buildingAtom = true;
-				} else if (Char.IsDigit(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "number";
-					curAtom.value = curChar.ToString();
-					buildingAtom = true;
-				} else if (Char.IsLetter(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "identifier";
-					curAtom.value = curChar.ToString();
-					buildingAtom = true;
-				} else {
-					curAtom = new Atom();
-					curAtom.atomType = "error";
-					atomList.Add(curAtom);
-					break;
-				} 
-			} else if (!buildingAtom && buildingString) {
-				buildingString = false;
-			}
-		}
-		return atomList;
-	}
-
-	bool isPunctuation (char c) {
-		switch(c) {
-			case '(':
-			case ')':
-			case '{':
-			case '}':
-			case ';':
-			case ',':
-			case ']':
-			case '[':
-			case ':':
-			case '$':
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	bool isWhiteSpace (char c) {
-		switch(c) {
-			case '\t':
-			case '\n':
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	bool isOperator (char c) {
-		switch(c) {
-			case '+':
-			case '=':
-			case '-':
-			case '/':
-			case '*':
-			case '>':
-			case '<':
-			case '!':
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	bool isString (char c) {
-		switch(c) {
-			case '\"':
-			case '\'':
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	// ================================= Interpet Functions ================================= 
+	// ================================= Interpet Functions =========================================================== 
+	// ================================= Interpet Functions =========================================================== 
+	// ================================= Interpet Functions =========================================================== 
+	// ================================= Interpet Functions =========================================================== 
+	// ================================= Interpet Functions =========================================================== 
+	// ================================= Interpet Functions =========================================================== 
 
 	Expression desugar(Expression sugaredExpression) {
 
@@ -854,7 +873,9 @@ public class DScript {
 		return new Result(returnValue, last_result.store);
 	}
 
-	// ================================= Interpret Operator Functions =================================
+	// ================================= Interpret Operator Functions ==================================================
+	// ================================= Interpret Operator Functions ==================================================
+	// ================================= Interpret Operator Functions ==================================================
 	
 	Result interpOperator(
 		String op, 
@@ -1305,7 +1326,9 @@ public class DScript {
 		}
 	}
 
-	// ================================= Interpret triOperator Functions =================================
+	// ================================= Interpret TriOperator Functions ==================================================
+	// ================================= Interpret TriOperator Functions ==================================================
+	// ================================= Interpret TriOperator Functions ==================================================
 
 	Result interpTriOperator(
 		Operator op, 
@@ -1380,7 +1403,9 @@ public class DScript {
 			
 	}
 
-	// ================================= End of Operators Functions =================================
+	// ================================= End of Operators Functions ====================================================
+	// ================================= End of Operators Functions ====================================================
+	// ================================= End of Operators Functions ====================================================
 	Result interpIf(
 		Expression cond, 
 		Expression consq, 
@@ -1773,6 +1798,9 @@ public class DScript {
 // ====================================================================================================================
 // ===================================================== Data Types ===================================================
 // ====================================================================================================================
+// ====================================================================================================================
+// ===================================================== Data Types ===================================================
+// ====================================================================================================================
 
 public class Result {
 	public Value value;
@@ -1887,49 +1915,6 @@ public class Expression {
 	}
 }
 
-public class Operator {
-	public string operatorType;
-
-	public Operator(string t) {
-		operatorType = t;
-	}
-	// Basic Math Operators
-
-	// op-float-plus, type=1
-	// op-float-minus, type=2
-	// op-float-multiply, type=3
-	// op-float-divide, type=4
-	// op-float-exponent, type=5
-	// op-float-modulus, type=6
-
-	// op-list-append, type=7
-	// op-str-append, type=8
-
-	// op-str-eq, type=9
-	// op-float-eq, type=10
-	// op-float-g, type=11
-	// op-float-l, type=12
-	// op-float-geq, type=13
-	// op-float-leq, type=14
-
-	// op-list-index type=15
-	// op-string-index type=16	
-
-	// op-list-sublist type=17
-	// op-string-substring type=18
-
-	// op-int-plus, type=19
-	// op-int-minus, type=20
-	// op-int-multiply, type=21
-	// op-int-divide, type=22
-	// op-int-exponent, type=23
-	// op-int-modulus, type=24
-
-	// op-bool-not
-	// op-bool-and
-	// op-bool-or
-}
-
 public class BuiltInFunctions {
 	// Expression eIndexListList; //type=12
 	// int eIndexListIndex;
@@ -1956,7 +1941,10 @@ public class Atom {
 	public string atomType;
 	public string value;
 
-	public Atom(string at, string v) {
+	public int line;
+	public int character;
+
+	public Atom(string at, string v, line, character) {
 		atomType = at;
 		value = v;
 	}
