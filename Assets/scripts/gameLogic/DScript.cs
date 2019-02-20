@@ -19,24 +19,89 @@ public class DScript {
 		cubeEnv = igListScript.cubeDict;
 	}
 
-	public Value evaluate(string input) {
+	public Value evaluate(
+		string input, 
+		Dictionary<string, Token> tokenEnv, 
+		Dictionary<string, Cube> cubeEnv
+	) 
+	{
 		return interpret(desugar(parse(input)));
 	}
 
-	public Value evaluateSelfToken(string input, Token self) {
-		return interpret(desugar(parse(input)));
+	public Value evaluateSelfToken(
+		string input, 
+		Token self,
+		Dictionary<string, Token> tokenEnv, 
+		Dictionary<string, Cube> cubeEnv
+	) 
+	{
+		tokenEnv.Add("self", self);
+
+		return interpret(
+			desugar(parse(input)), 
+			new Dictionary<string, string>(),
+			new Dictionary<string, Value>(),
+			tokenEnv,
+			cubeEnv
+		);
 	}
 
-	public Value evaluateSelfCube(string input, Cube self) {
-		return interpret(desugar(parse(input)));
+	public Value evaluateSelfCube(
+		string input, 
+		Cube self,
+		Dictionary<string, Token> tokenEnv, 
+		Dictionary<string, Cube> cubeEnv
+	) 
+	{
+		cubeEnv.Add("self", self);
+
+		return interpret(
+			desugar(parse(input)), 
+			new Dictionary<string, string>(),
+			new Dictionary<string, Value>(),
+			tokenEnv,
+			cubeEnv
+		);
 	}
 
-	public Value evaluateSelfTokenTargetToken(string input, Token self, Token target) {
-		return interpret(desugar(parse(input)));
+	public Value evaluateSelfTokenTargetToken(
+		string input, 
+		Token self, 
+		Token target,
+		Dictionary<string, Token> tokenEnv, 
+		Dictionary<string, Cube> cubeEnv
+	) 
+	{
+		tokenEnv.Add("self", self);
+		tokenEnv.Add("target", target);
+
+		return interpret(
+			desugar(parse(input)), 
+			new Dictionary<string, string>(),
+			new Dictionary<string, Value>(),
+			tokenEnv,
+			cubeEnv
+		);
 	}
 
-	public Value evaluateSelfTokenTargetCube(string input, Token self, Cube cube) {
-		return interpret(desugar(parse(input)));
+	public Value evaluateSelfTokenTargetCube(
+		string input, 
+		Token self, 
+		Cube cube,
+		Dictionary<string, Token> tokenEnv, 
+		Dictionary<string, Cube> cubeEnv
+	) 
+	{
+		tokenEnv.Add("self", self);
+		cubeEnv.Add("target", target);
+		
+		return interpret(
+			desugar(parse(input)), 
+			new Dictionary<string, string>(),
+			new Dictionary<string, Value>(),
+			tokenEnv,
+			cubeEnv
+		);
 	}
 
 	// ================================= Tokenizer Functions =====================================================================
