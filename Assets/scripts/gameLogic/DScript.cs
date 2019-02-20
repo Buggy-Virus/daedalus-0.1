@@ -110,6 +110,8 @@ public class DScript {
 							case "<":
 								if (curChar == '=') {
 									curAtom.value += curChar.ToString();
+									atomList.Add(curAtom);
+									buildingAtom = false;
 								} else {
 									atomList.Add(curAtom);
 									buildingAtom = false;
@@ -118,6 +120,8 @@ public class DScript {
 							case "*":
 								if (curChar == '*') {
 									curAtom.value += curChar.ToString();
+									atomList.Add(curAtom);
+									buildingAtom = false;
 								} else {
 									atomList.Add(curAtom);
 									buildingAtom = false;
@@ -126,15 +130,21 @@ public class DScript {
 							case "|":
 								if (curChar == '|') {
 									curAtom.value += curChar.ToString();
+									atomList.Add(curAtom);
+									buildingAtom = false;
 								} else {
-									// Throw Error
+									atomList.Add(new Atom("error", curChar.ToString(), line, character));
+									buildingAtom = false;
 								}
 								break;
 							case "&":
 								if (curChar == '&') {
 									curAtom.value += curChar.ToString();
+									atomList.Add(curAtom);
+									buildingAtom = false;
 								} else {
-									// Throw Error
+									atomList.Add(new Atom("error", curChar.ToString(), line, character));
+									buildingAtom = false;
 								}
 								break;
 							default:
@@ -142,9 +152,6 @@ public class DScript {
 								buildingAtom = false;
 								break;
 						}
-						break;
-					default:
-						// throw error
 						break;
 				}
 			}
@@ -156,42 +163,30 @@ public class DScript {
 						character = 0;
 					}
 				} else if (curChar == '\'') {
-					curAtom = new Atom();
-					curAtom.atomType = "string";
+					curAtom = new Atom("string", "", line, character);
 					buildingAtom = true;
 					buildingString = true;
 					singleQuote = true;
 				} else if (curChar == '\"') {
-					curAtom = new Atom();
-					curAtom.atomType = "string";
+					curAtom = new Atom("string", "", line, character);
 					buildingAtom = true;
 					buildingString = true;
 					singleQuote = false;
 				} else if (isPunctuation(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "punc";
-					curAtom.value = curChar.ToString();
+					curAtom = new Atom("punc", curChar.ToString(), line, character);
 					atomList.Add(curAtom);
 				} else if (isOperator(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "operator";
-					curAtom.value = curChar.ToString();
+					curAtom = new Atom("operator", curChar.ToString(), line, character);
 					buildingAtom = true;
 				} else if (Char.IsDigit(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "number";
-					curAtom.value = curChar.ToString();
+					curAtom = new Atom("number", curChar.ToString(), line, character);
 					buildingAtom = true;
 				} else if (Char.IsLetter(curChar)) {
-					curAtom = new Atom();
-					curAtom.atomType = "identifier";
-					curAtom.value = curChar.ToString();
+					curAtom = new Atom("identifier", curChar.ToString(), line, character);
 					buildingAtom = true;
 				} else {
-					curAtom = new Atom();
-					curAtom.atomType = "error";
+					curAtom = new Atom("error", curChar.ToString(), line, character);
 					atomList.Add(curAtom);
-					break;
 				} 
 			} else if (!buildingAtom && buildingString) {
 				buildingString = false;
@@ -280,7 +275,9 @@ public class DScript {
 		if (bookended && atomEquals(atomList[pos], "punctuation", "{")) {
 			pos += 1;
 		} else if (bookended) {
-			// throw error
+			Expression bookendError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			bookendError.eErrorMessage = "Expected \"{\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(bookendError, pos); // throw error
 		}
 
 		while (
@@ -303,7 +300,9 @@ public class DScript {
 		if (bookended && atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
 		} else if (bookended) {
-			// throw error
+			Expression bookendError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			bookendError.eErrorMessage = "Expected \"(\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(bookendError, pos); // throw error
 		}
 
 		while (pos < atomList.Count) 
@@ -313,30 +312,31 @@ public class DScript {
 				if (curAtom.atomType == "keyword") {
 					switch(curAtom.value) {
 						case "if":
-							return ParseResult ifResult = parseIf(atomList, pos + 1);
+							return parseIf(atomList, pos + 1);
 						case "lambda":
-							return ParseResult lamResult = parseLambda(atomList, pos + 1);
+							return parseLambda(atomList, pos + 1);
 						case "var":
 						case "let":
-							return ParseResult letResult = parseLet(atomList, pos + 1);
+							return parseLet(atomList, pos + 1);
 						case "while":
-							return ParseResult whileResult = parseWhile(atomList, pos + 1);
+							return parseWhile(atomList, pos + 1);
 						case "function":
-							return ParseResult funcResult = parseFunction(atomList, pos + 1);
+							return parseFunction(atomList, pos + 1);
 						default:
-							// throw an error
-							break;
+							Expression keyWordError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+							keyWordError.eErrorMessage = "Unexpected keyword, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+							return new ParseResult(keyWordError, pos); // throw error
 					}
 				} else {
 					ParseResult firstResult = parseSingleHelper(atomList, pos);
 					lastExpression = firstResult.expression;
-					seenExpression - true;
+					seenExpression = true;
 					pos = firstResult.position;
 				}
 			} else {
 				switch(curAtom.atomType) {
 					case "operator":
-						Expression opExression = new Expression("e-op");
+						Expression opExpression = new Expression("e-op");
 						opExpression.eOperatorLeft = lastExpression;
 						switch(curAtom.value) {
 							case "+":
@@ -367,8 +367,9 @@ public class DScript {
 								opExpression.eOperatorOp = ">";
 								break;
 							default:
-								// throw error
-								break;
+								Expression operatorError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+								operatorError.eErrorMessage = "Unexpected operator, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+								return new ParseResult(operatorError, pos); // throw error
 						}
 						pos += 1;
 
@@ -376,46 +377,55 @@ public class DScript {
 						if (atomEquals(atomList[pos], "punctuation", "(")) {
 							secondResult = parseSingle(atomList, pos, true);
 						} else {
-							secondResult = parseSingleHelper(atomList, pos)
+							secondResult = parseSingleHelper(atomList, pos);
 						}
-						opExpression.oPeratorRight = secondResult.expression;
+						opExpression.eOperatorRight = secondResult.expression;
 						lastExpression = opExpression;
 						pos = secondResult.position;
 						break;
 					case "punctuation":
 						switch(curAtom.value) {
 							case "[":
-								ParseResult indexResult = parseIndex(atomList, pos + 1, lastExpression, lastExpression);
+								ParseResult indexResult = parseIndex(atomList, pos + 1, lastExpression);
 								lastExpression = indexResult.expression;
-								pos = indexResult.expression;
+								pos = indexResult.position;
 								break;
 							case ";":
 								if (!bookended) {
 									return new ParseResult(lastExpression, pos);
 								} else {
-									// throw error
+									Expression semicolonError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+									semicolonError.eErrorMessage = "Expected \")\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+									return new ParseResult(semicolonError, pos); // throw error
 								}
-								break;
 							case ")":
 								if (bookended) {
 									return new ParseResult(lastExpression, pos);
 								} else {
-									// throw error
+									Expression paranthesisError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+									paranthesisError.eErrorMessage = "Unexpected character, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+									return new ParseResult(paranthesisError, pos); // throw error
 								}
 							default:
-								// throw error
+								Expression punctuationError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+								punctuationError.eErrorMessage = "Unexpected punctuation, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+								return new ParseResult(punctuationError, pos); // throw error
 						}
 						break;
 					default:
 						if (!bookended) {
 							return new ParseResult(lastExpression, pos - 1);
 						} else {
-							// throw error
+							Expression typeError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+							typeError.eErrorMessage = "Expected operator or punctuation, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+							return new ParseResult(typeError, pos); // throw error
 						}
 				}
 			}
 		}
-		// throw error, completed input without seeing a return expression
+		Expression returnError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+		returnError.eErrorMessage = "No expression returned from parseSingle";
+		return new ParseResult(returnError, pos); // throw error
 	}
 
 	ParseResult parseSingleHelper(List<Atom> atomList, int pos) {
@@ -455,7 +465,9 @@ public class DScript {
 					returnExpression = notResult.expression;
 					pos = notResult.position;
 				} else {
-					// thrower an error
+					Expression operatorError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+					operatorError.eErrorMessage = "Unexpected operator, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+					return new ParseResult(operatorError, pos); // throw error
 				}
 				break;
 			case "punctuation":
@@ -476,19 +488,21 @@ public class DScript {
 						pos = igResult.position;
 						break;
 					default:
-						// throw error
-						break;
+						Expression punctuationError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+						punctuationError.eErrorMessage = "Unexpected punctuation, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+						return new ParseResult(punctuationError, pos); // throw error
 				}
 				break;
 			default:
-				// throw an error
-				break;
+				Expression typeError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+				typeError.eErrorMessage = "Unexpected atomType, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+				return new ParseResult(typeError, pos); // throw error
 		}
 		return new ParseResult(returnExpression, pos);
 	}
 
 	ParseResult parseIndex(List<Atom> atomList, int pos, Expression lastExpression) {
-		ParseResult firstResult = parseSingle(atomList, pos);
+		ParseResult firstResult = parseSingle(atomList, pos, false);
 		pos = firstResult.position + 1;
 
 		if (atomEquals(atomList[pos], "punctuation", ":")) {
@@ -499,14 +513,16 @@ public class DScript {
 			subExpression.eTriOperatorTarget = lastExpression;
 			subExpression.eTriOperatorLeft = firstResult.expression;
 
-			ParseResult secondResult = parseSingle(atomList, pos);
+			ParseResult secondResult = parseSingle(atomList, pos, false);
 			subExpression.eTriOperatorRight = secondResult.expression;
 			pos = secondResult.position + 1;
 
 			if (atomEquals(atomList[pos], "punctuation", "]")) {
 				return new ParseResult(subExpression, pos);
 			} else {
-				// throw error
+				Expression bracketError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+				bracketError.eErrorMessage = "Expected \"]\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+				return new ParseResult(bracketError, pos); // throw error
 			}
 		} else if (atomEquals(atomList[pos], "punctuation", "]")) {
 			Expression indexExpression = new Expression("e-op");
@@ -516,7 +532,9 @@ public class DScript {
 
 			return new ParseResult(indexExpression, pos);
 		} else {
-			// throw error
+			Expression bracketError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			bracketError.eErrorMessage = "Expected \"]\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(bracketError, pos); // throw error
 		}
 	}	
 
@@ -533,7 +551,7 @@ public class DScript {
 				List<string> argumentList = new List<string>();
 				while (!atomEquals(atomList[pos], "punctuation", ")")) {
 					if (atomList[pos].atomType == "identifier") {
-						argumentList.(atomList[pos].value);
+						argumentList.Add(atomList[pos].value);
 						pos += 1;
 
 						if (atomEquals(atomList[pos], "punctuation", ",")) {
@@ -541,23 +559,29 @@ public class DScript {
 						} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 							break;
 						} else {
-							// throw error
+							Expression argumentError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+							argumentError.eErrorMessage = "Expected \",\" or \")\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+							return new ParseResult(argumentError, pos); // throw error
 						}
 					}
 				}
 				funcExpression.eFuncArguments = argumentList;
 				pos += 1;
 
-				ParseResult bodyResult = parseDo(atomList, pos);
+				ParseResult bodyResult = parseDo(atomList, pos, true);
 				funcExpression.eFuncBody = bodyResult.expression;
 				pos = bodyResult.position;
 
 				return new ParseResult(funcExpression, pos);
 			} else {
-				// throw error
+				Expression paranthesisError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+				paranthesisError.eErrorMessage = "Expected \"(\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+				return new ParseResult(paranthesisError, pos); // throw error
 			}
 		} else {
-			// throw error
+			Expression typeError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			typeError.eErrorMessage = "Expected identifier, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(typeError, pos); // throw error
 		}
 	}
 
@@ -569,7 +593,7 @@ public class DScript {
 		ParseResult notResult = parseSingle(atomList, pos, false);
 		notExpression.eOperatorLeft = notResult.expression;
 		notExpression.eOperatorRight = new Expression("e-bool");
-		notExpression.eOperatorOp = new Operator("bool-not");
+		notExpression.eOperatorOp = "!";
 		pos = notResult.position;
 
 		return new ParseResult(notExpression, pos);
@@ -587,7 +611,7 @@ public class DScript {
 		ifExpression.eIfConsq = consqResult.expression;
 		pos = consqResult.position + 1;
 
-		if (atomEquals(atomList[pos], "punctuation", "else")) {
+		if (atomEquals(atomList[pos], "keyword", "else")) {
 			pos += 1;
 
 			ParseResult alterResult = parseDo(atomList, pos, true);
@@ -596,7 +620,9 @@ public class DScript {
 
 			return new ParseResult(ifExpression, pos);
 		} else {
-			// throw error
+			Expression elseError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			elseError.eErrorMessage = "Expected \"else\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(elseError, pos); // throw error
 		}
 	}
 
@@ -617,7 +643,9 @@ public class DScript {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
-						// throw error
+						Expression argumentError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+						argumentError.eErrorMessage = "Expected \",\" or \")\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+						return new ParseResult(argumentError, pos); // throw error
 					}
 				}
 			}
@@ -630,7 +658,9 @@ public class DScript {
 
 			return new ParseResult(lamExpression, pos);
 		} else {
-			// throw error
+			Expression paranthesisError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			paranthesisError.eErrorMessage = "Expected \"(\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(paranthesisError, pos); // throw error
 		}
 	}
 
@@ -650,10 +680,14 @@ public class DScript {
 				
 				return new ParseResult(letExpression, pos);
 			} else {
-				// throw error
+				Expression equalError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+				equalError.eErrorMessage = "Expected \"=\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+				return new ParseResult(equalError, pos); // throw error
 			}
 		} else {
-			// throw error
+			Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			identifierError.eErrorMessage = "Expected identifier, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(identifierError, pos); // throw error
 		}
 	}
 
@@ -687,9 +721,9 @@ public class DScript {
 				setExpression.eSetValue = valueResult.expression;
 				pos = valueResult.position;
 
-				return new ParseResult(igVarExpression, pos);
+				return new ParseResult(setExpression, pos);
 			} else if (atomEquals(atomList[pos], "punctuation", "(")) {
-				pos += 1
+				pos += 1;
 
 				Expression appExpression = new Expression("e-app");
 				appExpression.eAppFunc = identifierName;
@@ -697,7 +731,7 @@ public class DScript {
 				List<Expression> argumentList = new List<Expression>();
 				while (!atomEquals(atomList[pos], "punctuation", ")")) {
 
-					ParseResult argumentResult = parseSingle
+					ParseResult argumentResult = parseSingle(atomList, pos, false);
 					argumentList.Add(argumentResult.expression);
 					pos = argumentResult.position += 1;
 
@@ -706,19 +740,23 @@ public class DScript {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
-						// throw error
+						Expression argumentError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+						argumentError.eErrorMessage = "Expected \",\" or \")\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+						return new ParseResult(argumentError, pos); // throw error
 					}
 				}
-				appExpresion.eAppArguments = argumentList;
+				appExpression.eAppArguments = argumentList;
 
 				return new ParseResult(appExpression, pos);
 			} else {
 				Expression idExpression = new Expression("e-id");
 				idExpression.eId = identifierName;
-				return new ParseResult(idExpression, pos - 1)
+				return new ParseResult(idExpression, pos - 1);
 			}
 		} else {
-			// throw error
+			Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			identifierError.eErrorMessage = "Expected identifier, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(identifierError, pos); // throw error
 		}
 	}
 
@@ -756,13 +794,19 @@ public class DScript {
 						return new ParseResult(igVarExpression, pos - 1);
 					}
 				} else {
-					// throw error
+					Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+					identifierError.eErrorMessage = "Expected identifier, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+					return new ParseResult(identifierError, pos); // throw error
 				}
 			} else {
-				// throw error
+				Expression periodError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+				periodError.eErrorMessage = "Expected \".\", got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+				return new ParseResult(periodError, pos); // throw error
 			}
 		} else {
-			// throw error
+			Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
+			identifierError.eErrorMessage = "Expected identifier, got: (\"" + atomList[pos].atomType + "\",\"" + atomList[pos].value + "\")";
+			return new ParseResult(identifierError, pos); // throw error
 		}
 	}
 
@@ -822,7 +866,7 @@ public class DScript {
 			case "e-set-ig-var": //e-set-ig-variable
 				return interpSetIgVariable(expression.eSetIgName, expression.eSetIgVariable, expression.eSetIgValue, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-error":
-				// error type, just returns error
+				return interpError(expression.eErrorMessage, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-return":
 				// probably also just returns an error
 			default:
@@ -1334,7 +1378,7 @@ public class DScript {
 	// ================================= Interpret TriOperator Functions ==================================================
 
 	Result interpTriOperator(
-		Operator op, 
+		string op, 
 		Expression target, 
 		Expression left, 
 		Expression right, 
@@ -1417,7 +1461,7 @@ public class DScript {
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		Result cond_result = interpret(cond, env, store, ref tokenEnv, ref cubeEnv);
 		if (cond_result.value.valueType == "bool") {
@@ -1432,29 +1476,29 @@ public class DScript {
 	}
 
 	Result interpLam(
-		List<string> params, 
+		List<string> parameters, 
 		Expression body, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		Value returnValue = new Value();
-		returnValue.vFunParams = params;
+		returnValue.vFunParams = parameters;
 		returnValue.vFunBody = body;
 		returnValue.vFunEnviroment = env;
 		return new Result(returnValue, store);
 	}
 
 	Result interpApp(
-		Expression func, 
+		string func, 
 		List<Expression> args, 
 		Dictionary<string, string> env,
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		Result func_result = interpret(func, env, store, ref tokenEnv, ref cubeEnv);
 		if (func_result.value.valueType == "function") {
@@ -1465,7 +1509,7 @@ public class DScript {
 			}
 
 			Dictionary<string, Value> appStore = func_result.store;
-			for (int i; i < args.Count; i++) {
+			for (int i = 0; i < args.Count; i++) {
 				Expression arg = args[i];
 				string param = func_result.value.vFunParams[i];
 				Result arg_result = interpret(arg, env, appStore, ref tokenEnv, ref cubeEnv);
@@ -1486,7 +1530,7 @@ public class DScript {
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		if (env.ContainsKey(name)) {
 			string pointer = env[name];
@@ -1512,7 +1556,7 @@ public class DScript {
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expression in expressionList) {
@@ -1544,7 +1588,7 @@ public class DScript {
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		Result cond_result = interpret(cond, env, store, ref tokenEnv, ref cubeEnv);
 		if (cond_result.value.valueType == "list") {
@@ -1567,7 +1611,7 @@ public class DScript {
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-		) 
+	) 
 	{
 		if (env.ContainsKey(name)) {
 			if (store.ContainsKey(name)) {
@@ -1796,6 +1840,10 @@ public class DScript {
 			return new Result(errorValue, store); //Throw Error	
 		}
 	}
+
+	Result interpError() {
+		
+	}
 }
 
 // ====================================================================================================================
@@ -1822,6 +1870,8 @@ public class Value {
 	public string errorExpected; // type=0
 	public string errorGot;
 	public string errorMessage;
+	public int errorLine;
+	public int errorCharacter;
 
 	public int vInt; // type=1
 	public float vFloat; // type=2
@@ -1849,7 +1899,13 @@ public class Value {
 }
 
 public class Expression {
+
+	public int line;
+	public int character;
+
 	public string expressionType;
+
+	public string eErrorMessage; // type=0
 
 	public int eInt; // type=1
 	public float eFloat; // type=2
@@ -1861,7 +1917,7 @@ public class Expression {
 	public Expression eOperatorLeft;
 	public Expression eOperatorRight;
 
-	public Operator eTriOperatorOp; // type=7
+	public string eTriOperatorOp; // type=7
 	public Expression eTriOperatorTarget;
 	public Expression eTriOperatorLeft;
 	public Expression eTriOperatorRight;
@@ -1870,12 +1926,10 @@ public class Expression {
 	public Expression eIfConsq;
 	public Expression eIfAlter;
 
-	public string eLamParam; // type=9
 	public List<string> eLamParams;
 	public Expression eLamBody;
 
-	public Expression eAppFunc; // type=10
-	public Expression eAppArg;
+	public string eAppFunc; // type=10
 	public List<Expression> eAppArguments;
 
 	public string eSetName; // type=11
@@ -1906,15 +1960,18 @@ public class Expression {
 	public string eForVariable;
 	public Expression eForBody;
 
-	public Expression eNot; //type=103
-
 	public string eFuncId;
-	public string eFuncArgument;
 	public List<string> eFuncArguments;
 	public Expression eFuncBody;
 
 	public Expression(string etype) {
 		expressionType = etype;
+	}
+
+	public Expression(string etype, int l, int c) {
+		expressionType = etype;
+		line = l;
+		character = c;
 	}
 }
 
