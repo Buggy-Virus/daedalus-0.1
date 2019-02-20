@@ -257,9 +257,18 @@ public class DScript {
 	// ================================= Parse Functions =============================================================== 
 	// ================================= Parse Functions =============================================================== 
 
+	// ================================= Parse Utility Functions =======================================================
 	bool atomEquals(Atom atom, string targetType, string targetValue) {
 		return atom.atomType == targetType && atom.value == targetValue;
 	}
+
+	ParseResult parseError(Atom atom, int pos, string message) {
+		Expression error = new Expression("Error", atomList[pos].line, atomList[pos].character);
+		error.eErrorMessage = message + ", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
+		return new ParseResult(error, pos);
+	}
+
+	// ================================= Actual Parser ===============================================================
 
 	Expression parse(string input) {
 		List<Atom> atomList = tokenize(input);
@@ -275,9 +284,7 @@ public class DScript {
 		if (bookended && atomEquals(atomList[pos], "punctuation", "{")) {
 			pos += 1;
 		} else if (bookended) {
-			Expression bookendError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			bookendError.eErrorMessage = "Expected \"{\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(bookendError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected \"{\""); // throw error
 		}
 
 		while (
@@ -300,9 +307,7 @@ public class DScript {
 		if (bookended && atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
 		} else if (bookended) {
-			Expression bookendError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			bookendError.eErrorMessage = "Expected \"(\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(bookendError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
 		}
 
 		while (pos < atomList.Count) 
@@ -323,9 +328,7 @@ public class DScript {
 						case "function":
 							return parseFunction(atomList, pos + 1);
 						default:
-							Expression keyWordError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-							keyWordError.eErrorMessage = "Unexpected keyword, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-							return new ParseResult(keyWordError, pos); // throw error
+							return parseError(atomList[pos], pos, "Undefined keyword"); // throw error
 					}
 				} else {
 					ParseResult firstResult = parseSingleHelper(atomList, pos);
@@ -367,9 +370,7 @@ public class DScript {
 								opExpression.eOperatorOp = ">";
 								break;
 							default:
-								Expression operatorError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-								operatorError.eErrorMessage = "Unexpected operator, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-								return new ParseResult(operatorError, pos); // throw error
+								return parseError(atomList[pos], pos, "Undefined operator"); // throw error
 						}
 						pos += 1;
 
@@ -394,38 +395,28 @@ public class DScript {
 								if (!bookended) {
 									return new ParseResult(lastExpression, pos);
 								} else {
-									Expression semicolonError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-									semicolonError.eErrorMessage = "Expected \")\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-									return new ParseResult(semicolonError, pos); // throw error
+									return parseError(atomList[pos], pos, "Expected \")\""); // throw error
 								}
 							case ")":
 								if (bookended) {
 									return new ParseResult(lastExpression, pos);
 								} else {
-									Expression paranthesisError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-									paranthesisError.eErrorMessage = "Unexpected character, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-									return new ParseResult(paranthesisError, pos); // throw error
+									return parseError(atomList[pos], pos, "Unexpected character"); // throw error
 								}
 							default:
-								Expression punctuationError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-								punctuationError.eErrorMessage = "Unexpected punctuation, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-								return new ParseResult(punctuationError, pos); // throw error
+								return parseError(atomList[pos], pos, "Unexpected punctuation"); // throw error
 						}
 						break;
 					default:
 						if (!bookended) {
 							return new ParseResult(lastExpression, pos - 1);
 						} else {
-							Expression typeError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-							typeError.eErrorMessage = "Expected operator or punctuation, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-							return new ParseResult(typeError, pos); // throw error
+							return parseError(atomList[pos], pos, "Expected operator or punctuation"); // throw error
 						}
 				}
 			}
 		}
-		Expression returnError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-		returnError.eErrorMessage = "No expression returned from parseSingle";
-		return new ParseResult(returnError, pos); // throw error
+		return parseError(atomList[pos], pos, "No expression returned from parseSingle"); // throw error
 	}
 
 	ParseResult parseSingleHelper(List<Atom> atomList, int pos) {
@@ -465,9 +456,7 @@ public class DScript {
 					returnExpression = notResult.expression;
 					pos = notResult.position;
 				} else {
-					Expression operatorError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-					operatorError.eErrorMessage = "Unexpected operator, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-					return new ParseResult(operatorError, pos); // throw error
+					return parseError(atomList[pos], pos, "Unexpected operator"); // throw error
 				}
 				break;
 			case "punctuation":
@@ -488,15 +477,11 @@ public class DScript {
 						pos = igResult.position;
 						break;
 					default:
-						Expression punctuationError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-						punctuationError.eErrorMessage = "Unexpected punctuation, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-						return new ParseResult(punctuationError, pos); // throw error
+						return parseError(atomList[pos], pos, "Unexpected punctuation"); // throw error
 				}
 				break;
 			default:
-				Expression typeError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-				typeError.eErrorMessage = "Unexpected atomType, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-				return new ParseResult(typeError, pos); // throw error
+				return parseError(atomList[pos], pos, "Unexpected atomType"); // throw error
 		}
 		return new ParseResult(returnExpression, pos);
 	}
@@ -520,9 +505,7 @@ public class DScript {
 			if (atomEquals(atomList[pos], "punctuation", "]")) {
 				return new ParseResult(subExpression, pos);
 			} else {
-				Expression bracketError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-				bracketError.eErrorMessage = "Expected \"]\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-				return new ParseResult(bracketError, pos); // throw error
+				return parseError(atomList[pos], pos, "Expected \"]\""); // throw error
 			}
 		} else if (atomEquals(atomList[pos], "punctuation", "]")) {
 			Expression indexExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 2);
@@ -532,9 +515,7 @@ public class DScript {
 
 			return new ParseResult(indexExpression, pos);
 		} else {
-			Expression bracketError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			bracketError.eErrorMessage = "Expected \"]\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(bracketError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected \"]\""); // throw error
 		}
 	}	
 
@@ -559,9 +540,7 @@ public class DScript {
 						} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 							break;
 						} else {
-							Expression argumentError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-							argumentError.eErrorMessage = "Expected \",\" or \")\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-							return new ParseResult(argumentError, pos); // throw error
+							return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 						}
 					}
 				}
@@ -574,14 +553,10 @@ public class DScript {
 
 				return new ParseResult(funcExpression, pos);
 			} else {
-				Expression paranthesisError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-				paranthesisError.eErrorMessage = "Expected \"(\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-				return new ParseResult(paranthesisError, pos); // throw error
+				return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
 			}
 		} else {
-			Expression typeError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			typeError.eErrorMessage = "Expected identifier, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(typeError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
 	}
 
@@ -620,9 +595,7 @@ public class DScript {
 
 			return new ParseResult(ifExpression, pos);
 		} else {
-			Expression elseError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			elseError.eErrorMessage = "Expected \"else\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(elseError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected \"else\""); // throw error
 		}
 	}
 
@@ -643,9 +616,7 @@ public class DScript {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
-						Expression argumentError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-						argumentError.eErrorMessage = "Expected \",\" or \")\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-						return new ParseResult(argumentError, pos); // throw error
+						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 					}
 				}
 			}
@@ -658,9 +629,7 @@ public class DScript {
 
 			return new ParseResult(lamExpression, pos);
 		} else {
-			Expression paranthesisError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			paranthesisError.eErrorMessage = "Expected \"(\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(paranthesisError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
 		}
 	}
 
@@ -680,14 +649,10 @@ public class DScript {
 				
 				return new ParseResult(letExpression, pos);
 			} else {
-				Expression equalError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-				equalError.eErrorMessage = "Expected \"=\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-				return new ParseResult(equalError, pos); // throw error
+				return parseError(atomList[pos], pos, "Expected \"=\""); // throw error
 			}
 		} else {
-			Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			identifierError.eErrorMessage = "Expected identifier, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(identifierError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
 	}
 
@@ -740,9 +705,7 @@ public class DScript {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
-						Expression argumentError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-						argumentError.eErrorMessage = "Expected \",\" or \")\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-						return new ParseResult(argumentError, pos); // throw error
+						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 					}
 				}
 				appExpression.eAppArguments = argumentList;
@@ -754,9 +717,7 @@ public class DScript {
 				return new ParseResult(idExpression, pos - 1);
 			}
 		} else {
-			Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			identifierError.eErrorMessage = "Expected identifier, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(identifierError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
 	}
 
@@ -794,19 +755,13 @@ public class DScript {
 						return new ParseResult(igVarExpression, pos - 1);
 					}
 				} else {
-					Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-					identifierError.eErrorMessage = "Expected identifier, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-					return new ParseResult(identifierError, pos); // throw error
+					return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 				}
 			} else {
-				Expression periodError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-				periodError.eErrorMessage = "Expected \".\", got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-				return new ParseResult(periodError, pos); // throw error
+				return parseError(atomList[pos], pos, "Expected \".\""); // throw error
 			}
 		} else {
-			Expression identifierError = new Expression("Error", atomList[pos].line, atomList[pos].character); // throw error
-			identifierError.eErrorMessage = "Expected identifier, got: (" + atomList[pos].atomType + ",\"" + atomList[pos].value + "\")";
-			return new ParseResult(identifierError, pos); // throw error
+			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
 	}
 
