@@ -269,7 +269,7 @@ public class DScript {
 	}
 
 	ParseResult parseDo(List<Atom> atomList, int pos, bool bookended) {
-		Expression doExpression = new Expression("e-do");
+		Expression doExpression = new Expression("e-do", atomList[pos].line, atomList[pos].character);
 		doExpression.eDo = new List<Expression>();
 
 		if (bookended && atomEquals(atomList[pos], "punctuation", "{")) {
@@ -287,14 +287,14 @@ public class DScript {
 		{
 			ParseResult singleResult = parseSingle(atomList, pos, false);
 			doExpression.eDo.Add(singleResult.expression);
-			pos = singleResult.position;
+			pos = singleResult.position + 1;
 		}
 
 		return new ParseResult(doExpression, pos);
 	}
 
 	ParseResult parseSingle(List<Atom> atomList, int pos, bool bookended) {
-		Expression lastExpression = new Expression("Error");
+		Expression lastExpression;
 		bool seenExpression = false;
 
 		if (bookended && atomEquals(atomList[pos], "punctuation", "(")) {
@@ -336,7 +336,7 @@ public class DScript {
 			} else {
 				switch(curAtom.atomType) {
 					case "operator":
-						Expression opExpression = new Expression("e-op");
+						Expression opExpression = new Expression("e-op", curAtom.line, curAtom.character);
 						opExpression.eOperatorLeft = lastExpression;
 						switch(curAtom.value) {
 							case "+":
@@ -430,27 +430,27 @@ public class DScript {
 
 	ParseResult parseSingleHelper(List<Atom> atomList, int pos) {
 		Atom curAtom = atomList[pos];
-		Expression returnExpression = new Expression("error");
+		Expression returnExpression;
 
 		switch(curAtom.atomType) {
 			case "string":
-				Expression stringExpression = new Expression("e-string");
+				Expression stringExpression = new Expression("e-string", curAtom.line, curAtom.character);
 				stringExpression.eString = curAtom.value; 
 				returnExpression = stringExpression;
 				break;
 			case "number":
 				if (curAtom.value.Contains('.')) {
-					Expression floatExpression = new Expression("e-float");
+					Expression floatExpression = new Expression("e-float", curAtom.line, curAtom.character);
 					floatExpression.eFloat = float.Parse(curAtom.value);
 					returnExpression = floatExpression;
 				} else {
-					Expression intExpression = new Expression("e-int");
+					Expression intExpression = new Expression("e-int", curAtom.line, curAtom.character);
 					intExpression.eInt = Int32.Parse(curAtom.value);
 					returnExpression = intExpression;
 				}
 				break;
 			case "bool":
-				Expression boolExpression = new Expression("e-bool");
+				Expression boolExpression = new Expression("e-bool", curAtom.line, curAtom.character);
 				boolExpression.eBool = bool.Parse(curAtom.value);
 				returnExpression = boolExpression;
 				break;
@@ -508,7 +508,7 @@ public class DScript {
 		if (atomEquals(atomList[pos], "punctuation", ":")) {
 			pos += 1;
 
-			Expression subExpression = new Expression("e-triOp"); 
+			Expression subExpression = new Expression("e-triOp", atomList[pos].line, atomList[pos].character - 2); 
 			subExpression.eTriOperatorOp = "[:]";
 			subExpression.eTriOperatorTarget = lastExpression;
 			subExpression.eTriOperatorLeft = firstResult.expression;
@@ -525,7 +525,7 @@ public class DScript {
 				return new ParseResult(bracketError, pos); // throw error
 			}
 		} else if (atomEquals(atomList[pos], "punctuation", "]")) {
-			Expression indexExpression = new Expression("e-op");
+			Expression indexExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 2);
 			indexExpression.eOperatorOp = "[]";
 			indexExpression.eOperatorLeft = lastExpression;
 			indexExpression.eOperatorRight = firstResult.expression;
@@ -539,9 +539,9 @@ public class DScript {
 	}	
 
 	ParseResult parseFunction(List<Atom> atomList, int pos) {
-		Expression funcExpression = new Expression("e-func");
+		Expression funcExpression = new Expression("e-func", atomList[pos].line, atomList[pos].character - 1);
 
-		if (atomList[pos].atomType == "identifier") {
+		if (atomList[pos].atomType == "identifier", atomList[pos].line, atomList[pos].character) {
 			funcExpression.eFuncId = atomList[pos].value;
 			pos += 1;
 
@@ -588,7 +588,7 @@ public class DScript {
 
 
 	ParseResult parseNot(List<Atom> atomList, int pos) {
-		Expression notExpression = new Expression("e-op");
+		Expression notExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 1);
 
 		ParseResult notResult = parseSingle(atomList, pos, false);
 		notExpression.eOperatorLeft = notResult.expression;
@@ -600,7 +600,7 @@ public class DScript {
 	}
 
 	ParseResult parseIf(List<Atom> atomList, int pos) {
-		Expression ifExpression = new Expression("e-if");
+		Expression ifExpression = new Expression("e-if", atomList[pos].line, atomList[pos].character - 1);
 
 
 		ParseResult condResult = parseSingle(atomList, pos, true);
@@ -627,7 +627,7 @@ public class DScript {
 	}
 
 	ParseResult parseLambda(List<Atom> atomList, int pos) {
-		Expression lamExpression = new Expression("e-lam");
+		Expression lamExpression = new Expression("e-lam", atomList[pos].line, atomList[pos].character - 1);
 
 		if (atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
@@ -665,7 +665,7 @@ public class DScript {
 	}
 
 	ParseResult parseLet(List<Atom> atomList, int pos) {
-		Expression letExpression = new Expression("e-let");
+		Expression letExpression = new Expression("e-let", atomList[pos].line, atomList[pos].character - 1);
 
 		if (atomList[pos].atomType == "identifier") {
 			letExpression.eLetName = atomList[pos].value;
@@ -692,7 +692,7 @@ public class DScript {
 	}
 
 	ParseResult parseWhile(List<Atom> atomList, int pos) {
-		Expression whileExpression = new Expression("e-while");
+		Expression whileExpression = new Expression("e-while", atomList[pos].line, atomList[pos].character - 1);
 
 		ParseResult condResult = parseSingle(atomList, pos, true);
 		whileExpression.eWhileCond = condResult.expression;
@@ -715,7 +715,7 @@ public class DScript {
 			if (atomEquals(atomList[pos], "operator", "=")) { 
 				pos += 1;
 
-				Expression setExpression = new Expression("e-set");
+				Expression setExpression = new Expression("e-set", atomList[pos].line, atomList[pos].character);
 				ParseResult valueResult = parseSingle(atomList, pos, false);
 				setExpression.eSetName = identifierName;
 				setExpression.eSetValue = valueResult.expression;
@@ -725,7 +725,7 @@ public class DScript {
 			} else if (atomEquals(atomList[pos], "punctuation", "(")) {
 				pos += 1;
 
-				Expression appExpression = new Expression("e-app");
+				Expression appExpression = new Expression("e-app", atomList[pos].line, atomList[pos].character - 1);
 				appExpression.eAppFunc = identifierName;
 				
 				List<Expression> argumentList = new List<Expression>();
@@ -749,7 +749,7 @@ public class DScript {
 
 				return new ParseResult(appExpression, pos);
 			} else {
-				Expression idExpression = new Expression("e-id");
+				Expression idExpression = new Expression("e-id", atomList[pos].line, atomList[pos].character - 1);
 				idExpression.eId = identifierName;
 				return new ParseResult(idExpression, pos - 1);
 			}
@@ -778,7 +778,7 @@ public class DScript {
 					if (atomEquals(atomList[pos], "operator", "=")) {
 						pos += 1;
 
-						Expression igVarExpression = new Expression("e-set-ig-var");
+						Expression igVarExpression = new Expression("e-set-ig-var", atomList[pos].line, atomList[pos].character);
 						ParseResult valueResult = parseSingle(atomList, pos, false);
 						igVarExpression.eSetIgName = igName;
 						igVarExpression.eSetIgVariable = igVariable;
@@ -787,7 +787,7 @@ public class DScript {
 
 						return new ParseResult(igVarExpression, pos);
 					} else {
-						Expression igVarExpression = new Expression("e-ig-var");
+						Expression igVarExpression = new Expression("e-ig-var", atomList[pos].line, atomList[pos].character - 1);
 						igVarExpression.eIgName = igName;
 						igVarExpression.eIgVariable = igVariable;
 
