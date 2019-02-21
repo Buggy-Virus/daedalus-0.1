@@ -18,21 +18,85 @@ public class DScript {
 		tokenEnv = igListScript.tokenDict;
 		cubeEnv = igListScript.cubeDict;
 	}
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+
+	List<string> builtInFunctions =  new Dictionary<
+		string, 
+		Func<
+			Expression,
+			Dictionary<string, string>,
+			Dictionary<string, Value>,
+			Dictionary<string, Token>, 
+			Dictionary<string, Cube>,
+			Result
+		>
+	>
+	{
+		"ToString" : ToString,
+		"ToInt" : ToInt,
+		"ToFloat" : ToFloat,
+		"ToBool" : ToBool,
+		"Abs" : Abs,
+		"Max" : Max,
+		"Min" : Min,
+		"Floor" : Floor,
+		"Ceil" : Ceil,
+		"Factorial" : Factorial,
+		"Round" : Round,
+		"Sum" : Sum,
+	}
+
+	Result ToString(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		if (!(inputResult.value.valueType == "bool" || inputResult.value.valueType == "int" || inputResult.value.valueType == "float")) {
+			return resultError(inputResult, store, "Expected string");
+		}
+
+
+	}
+
+	// ================================= Evaluate Functions ======================================================================
+	// ================================= Evaluate Functions ======================================================================
+	// ================================= Evaluate Functions ======================================================================
+	// ================================= Evaluate Functions ======================================================================
+	// ================================= Evaluate Functions ======================================================================
+	// ================================= Evaluate Functions ======================================================================
+	// ================================= Evaluate Functions ======================================================================
 
 	public Value evaluate(
 		string input, 
-		Dictionary<string, Token> tokenEnv, 
-		Dictionary<string, Cube> cubeEnv
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
-		return interpret(desugar(parse(input)));
+		return interpret(
+			desugar(parse(input)), 
+			new Dictionary<string, string>(),
+			new Dictionary<string, Value>(),
+			ref tokenEnv,
+			ref cubeEnv
+		);
 	}
 
 	public Value evaluateSelfToken(
 		string input, 
 		Token self,
-		Dictionary<string, Token> tokenEnv, 
-		Dictionary<string, Cube> cubeEnv
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
 		tokenEnv.Add("self", self);
@@ -41,16 +105,16 @@ public class DScript {
 			desugar(parse(input)), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			tokenEnv,
-			cubeEnv
+			ref tokenEnv,
+			ref cubeEnv
 		);
 	}
 
 	public Value evaluateSelfCube(
 		string input, 
 		Cube self,
-		Dictionary<string, Token> tokenEnv, 
-		Dictionary<string, Cube> cubeEnv
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
 		cubeEnv.Add("self", self);
@@ -59,8 +123,8 @@ public class DScript {
 			desugar(parse(input)), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			tokenEnv,
-			cubeEnv
+			ref tokenEnv,
+			ref cubeEnv
 		);
 	}
 
@@ -68,8 +132,8 @@ public class DScript {
 		string input, 
 		Token self, 
 		Token target,
-		Dictionary<string, Token> tokenEnv, 
-		Dictionary<string, Cube> cubeEnv
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
 		tokenEnv.Add("self", self);
@@ -79,8 +143,8 @@ public class DScript {
 			desugar(parse(input)), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			tokenEnv,
-			cubeEnv
+			ref tokenEnv,
+			ref cubeEnv
 		);
 	}
 
@@ -88,8 +152,8 @@ public class DScript {
 		string input, 
 		Token self, 
 		Cube cube,
-		Dictionary<string, Token> tokenEnv, 
-		Dictionary<string, Cube> cubeEnv
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
 		tokenEnv.Add("self", self);
@@ -99,8 +163,8 @@ public class DScript {
 			desugar(parse(input)), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			tokenEnv,
-			cubeEnv
+			ref tokenEnv,
+			ref cubeEnv
 		);
 	}
 
@@ -146,7 +210,7 @@ public class DScript {
 						}
 						break;
 					case "identifier":
-						if (Char.IsDigit(curChar) || Char.IsLetter(curChar)) {
+						if (Char.IsDigit(curChar) || Char.IsLetter(curChar) || Char == '_') {
 							curAtom.value += curChar.ToString();
 						} else {
 							switch(curAtom.value) {
@@ -627,7 +691,7 @@ public class DScript {
 						}
 					}
 				}
-				funcExpression.eFuncArguments = argumentList;
+				funcExpression.eFuncParams = argumentList;
 				pos += 1;
 
 				ParseResult bodyResult = parseDo(atomList, pos, true);
@@ -754,7 +818,7 @@ public class DScript {
 	}
 
 	ParseResult parseFor(List<Atom> atomList, int pos) {
-		Expression forExpression = new Expression("e-list", atomList[pos].line, atomList[pos].character);
+		Expression forExpression = new Expression("e-for-each", atomList[pos].line, atomList[pos].character);
 
 		if (atomEquals(atomList[pos], "keyword", "each")) {
 			pos += 1;
@@ -819,8 +883,8 @@ public class DScript {
 			} else if (atomEquals(atomList[pos], "punctuation", "(")) {
 				pos += 1;
 
-				Expression appExpression = new Expression("e-app", atomList[pos].line, atomList[pos].character - 1);
-				appExpression.eAppFunc = identifierName;
+				Expression evalExpression = new Expression("e-eval", atomList[pos].line, atomList[pos].character - 1);
+				evalExpression.eEvalId = identifierName;
 				
 				List<Expression> argumentList = new List<Expression>();
 				while (!atomEquals(atomList[pos], "punctuation", ")")) {
@@ -837,9 +901,9 @@ public class DScript {
 						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 					}
 				}
-				appExpression.eAppArguments = argumentList;
+				evalExpression.eEvalArguments = argumentList;
 
-				return new ParseResult(appExpression, pos);
+				return new ParseResult(evalExpression, pos);
 			} else {
 				Expression idExpression = new Expression("e-id", atomList[pos].line, atomList[pos].character - 1);
 				idExpression.eId = identifierName;
@@ -901,9 +965,123 @@ public class DScript {
 	// ================================= Interpet Functions =========================================================== 
 	// ================================= Interpet Functions =========================================================== 
 
-	Expression desugar(Expression sugaredExpression) {
+	// ================================= Desugarer ===========================================================
+	// ================================= Desugarer ===========================================================
+	// ================================= Desugarer ===========================================================
 
+	Expression desugar(Expression expression) {
+		switch(expression.expressionType) {
+			case "e-list": // e-list
+				expression.eList = expression.eList.Select(desugar);
+				return expression;
+			case "e-op": //e-op
+				expression.eOperatorRight = desugar(expression.eOperatorLeft);
+				expression.eOperatorRight = desugar(expression.eOperatorRight);
+				return expression;
+			case "e-triOp": //e-triOp
+				expression.eTriOperatorLeft = desugar(expression.eTriOperatorLeft);
+				expression.eTriOperatorRight = desugar(expression.eTriOperatorRight);
+				expression.eTriOperatorTarget = desugar(expression.eTriOperatorTarget);
+				return expression;
+			case "e-if": //e-if
+				expression.eIfCond = desugar(expression.eIfCond);
+				expression.eIfConsq = desugar(expression.eIfConsq);
+				expression.eIfAlter = desugar(expression.eIfAlter);
+				return expression;
+			case "e-lam": //e-lam
+				expression.eLamBody = desugar(expression.eLamBody);
+				return expression;
+			case "e-app": //e-app
+				expression.eAppArguments = expression.eAppArguments.Select(desugar);
+				expression.eAppFunc = desugar(expression.eAppFunc);
+				return expression;
+			case "e-set": //e-set
+				expression.eSetValue = desugar(expression.eSetValue);
+				return expression;
+			case "e-do": //e-do
+				expression.eDo = expression.eDo.Select(desugar);
+			case "e-while": //e-while
+				expression.eWhileCond = desugar(expression.eWhileCond);
+				expression.eWhileBody = desugar(expression.eWhileBody);
+				return expression;
+			case "e-let": //e-let
+				expression.eLetValue = desugar(expression.eLetValue);
+				return expression;
+			case "e-set-ig-var": //e-set-ig-variable
+				expression.eSetIgValue = desugar(expression.eSetIgValue);
+				return expression;
+			case "e-return":
+				expression.eReturn = desugar(expression.eReturn);
+				return expression;
+			case "e-eval":
+				return desugarEval(expression);
+			case "e-for":
+				return desugarFor(expression);
+			case "e-func":
+				return desugarFunc(expression);
+			default:
+				return expression;
+		}
 	}
+
+	Expression desugarEval(Expression expression) {
+		if builtInFunctions.ContainsKey(expression.eEvalId) {
+			Expression bFuncExpression = new Expression("e-builtin-func", expression.line, expression.character);
+			bFuncExpression.eBuiltinFuncId = expression.eEvalId;
+			bFuncExpression.eBuiltinFuncArguments = expression.eEvalArguments;
+		} else {
+			Expression appExpression = new Expression("e-app", expression.line, expression.character);
+			appExpression.eAppArguments = expression.eEvalArguments;
+
+			Expressioin idExpression = new Expression("e-id", expression.line, expression.character);
+			idExpression.eId = expression.eEvalId;
+
+			appExpression.eAppFunc = idExperssion;
+
+			return appExpression;
+		}	
+	}
+
+	Expression desugarFor(Expression expression) {
+		Expression doExpression = new Expression("e-do", expression.line, expression.character);
+
+		Expression letExpression = new Expression("e-let", expression.line, expression.character);
+		letExpression.eLetName = "[iter variable]";
+
+		Expression zeroExpression = new Expression("e-int", expression.line, expression.character);
+		zeroExpression.eInt = 0;
+
+		letExpression.eLetValue = zeroExpression;
+
+		Expression whileExpression = new Expression("e-while", expression.line, expression.character);
+
+		Expression ltExpression = new Expression("e-op", expression.line, expression.character);
+
+		Expression idExpression = new Expression("e-id", expression.line, expression.character);
+		idExpression.eId = "[iter variable]";
+
+		Expression maxExpression = new Expression("e-int", expression.line, expression.character);
+		maxExpression.eInt = 
+
+		ltExpression
+	}
+
+	Expression desugarFunc(Expression expression) {
+		Expression letExpression = new Expression("e-let", expression.line, expression.character);
+		letExpression.eLetName = expression.eFuncId;
+
+		Expression lamExpression = new Expression("e-lam", expression.efuncBody.line, expression.efuncBody.character);
+		lamExpression.eLamParams = expression.eFuncParams;
+		lamExpression.eLamBody = desugar(expression.eFuncBody);
+
+		letExpression.eLetValue = lamExpression;
+
+		return letExpression;
+	}
+
+	// ================================= Interpreter Proper ===========================================================
+	// ================================= Interpreter Proper ===========================================================
+	// ================================= Interpreter Proper ===========================================================
 
 	Result interpret(
 		Expression expression, 
@@ -940,6 +1118,8 @@ public class DScript {
 				return interpDo(expression, env, store, ref tokenEnv, ref cubeEnv);	
 			case "e-while": //e-while
 				return interpWhile(expression, new Value(), false, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-for-each":
+				return interpForEach(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-let": //e-let
 				return interpretLet(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-id": // e-id
@@ -948,6 +1128,8 @@ public class DScript {
 				return interpIgVariable(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-set-ig-var": //e-set-ig-variable
 				return interpSetIgVariable(expression, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-builtin-func": //e-set-ig-variable
+				return interpBuiltinFunc(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-return":
 				return interpretReturn(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-error":
@@ -1746,11 +1928,32 @@ public class DScript {
 			} else if (useLast) {
 				return new Result(lastValue, cond_result.store);
 			} else {
-				return cond_result;
+				return Result(new Value("null", expression.line, expression.character), cond_result.store);
 			}
 		} else {
 			return resultError(func_result, "Expected bool") //Throw Error
 		}
+	}
+
+	// I really cheat on interp for each, it isn't functional at all, but it's very easy
+	// STUDY
+	// implement built ins, maybe leave this as sugar
+	Result interpForEach(
+		Expression expression, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	)
+	{
+		Dictionary<string, Value> activeStore = store;
+		Value returnValue = Value("null", expression.line, expression.character)
+		foreach (Expression expr in expression.eForIter) {
+			returnResult = interpret(expr, env, activeStore, ref tokenEnv, ref cubeEnv);
+			returnValue = exprResult.value;
+			activeStore = exprResult.store;
+		}
+		return 
 	}
 
 	Result interpId(
@@ -1983,8 +2186,18 @@ public class DScript {
 		Dictionary<string, Value> store, 
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
-	)  {
+	) {
 		return expressionError(expression, store, "Unexpected return expression outside of programming block") //Throw Error
+	}
+
+	Result interpBuiltinFunc(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		return builtInFunctions[expression.eBuiltinFuncId](expression, env, store, tokenEnv, cubeEnv);
 	}
 }
 
@@ -2076,7 +2289,7 @@ public class Expression {
 	public List<string> eLamParams;
 	public Expression eLamBody;
 
-	public string eAppFunc; // type=10
+	public Expression eAppFunc; // type=10
 	public List<Expression> eAppArguments;
 
 	public string eSetName; // type=11
@@ -2099,6 +2312,9 @@ public class Expression {
 	public string eSetIgVariable;
 	public Expression eSetIgValue;
 
+	public string eBuiltinFuncId;
+	public List<Expression> eBuiltinFuncArguments;
+
 	public Expression eReturn;
 
 	//Sugar
@@ -2108,8 +2324,13 @@ public class Expression {
 	public Expression eForBody;
 
 	public string eFuncId;
-	public List<string> eFuncArguments;
+	public List<string> eFuncParams;
 	public Expression eFuncBody;
+
+	public string eEvalId;
+	public List<Expression> eEvalArguments; 
+
+	// constructors
 
 	public Expression(string etype) {
 		expressionType = etype;
@@ -2120,28 +2341,6 @@ public class Expression {
 		line = l;
 		character = c;
 	}
-}
-
-public class BuiltInFunctions {
-	// Expression eIndexListList; //type=12
-	// int eIndexListIndex;
-
-	// Expression eSubstringString; //type=13
-	// Expression eSubstringStart;
-	// Expression eSubstringEnd;
-
-	// Expression eStringIndexOfString; //type=14
-
-	// Other Math Operators
-	// op-absoluteValue, type=9
-	// op-max, type=10
-	// op-min, type=11
-	// op-floor, type=12
-	// op-ceil, type=13
-	// op-factorial, type=14
-	// op-logarithm, type=6
-	// op-round
-	// casting between types
 }
 
 public class Atom {
