@@ -157,10 +157,13 @@ public class DScript {
 								case "var":
 								case "while":
 								case "function":
+								case "for":
+								case "each":
 									curAtom.atomType = "keyword";
 									break;
 								case "true":
 								case "false":
+								case "in":
 									curAtom.atomType = "bool";
 									break;
 							}
@@ -173,6 +176,16 @@ public class DScript {
 							case "=":
 							case ">":
 							case "<":
+								if (curChar == '=') {
+									curAtom.value += curChar.ToString();
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								} else {
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								}
+								break;
+							case "!":
 								if (curChar == '=') {
 									curAtom.value += curChar.ToString();
 									atomList.Add(curAtom);
@@ -392,6 +405,8 @@ public class DScript {
 							return parseWhile(atomList, pos + 1);
 						case "function":
 							return parseFunction(atomList, pos + 1);
+						case "for":
+							return parseFor(atomList, pos + 1);
 						default:
 							return parseError(atomList[pos], pos, "Undefined keyword"); // throw error
 					}
@@ -421,6 +436,9 @@ public class DScript {
 								break;
 							case "==":
 								opExpression.eOperatorOp = "==";
+								break;
+							case "!=":
+								opExpression.eOperatorOp = "!=";
 								break;
 							case ">=":
 								opExpression.eOperatorOp = ">=";
@@ -735,6 +753,52 @@ public class DScript {
 		return new ParseResult(whileExpression, pos);
 	}
 
+	ParseResult parseFor(List<Atom> atomList, int pos) {
+		Expression forExpression = new Expression("e-list", atomList[pos].line, atomList[pos].character);
+
+		if (atomEquals(atomList[pos], "keyword", "each")) {
+			pos += 1;
+
+			if (atomEquals(atomList[pos], "punctuation", "(")) {
+				pos += 1;
+
+				if (atomList[pos].atomType == "identifier") {
+					forExpression.eForVariable = atomList[pos].value;
+					pos += 1;
+
+					if (atomEquals(atomList[pos], "keyword", "in")) {
+						pos += 1;
+
+						ParseResult iterResult = parseSingle(atomList[pos], pos, false);
+						forExpression.eForIter = iterResult.expression;
+						pos = iterResult.position + 1;
+
+						if (atomEquals(atomList[pos], "punctuation", ")")) {
+							pos += 1;
+
+							ParseResult bodyResult = parseDo(atomList, pos, true);
+							forExpression.eForBody = bodyResult;
+							return new ParseResult(forExpression, pos);
+							} else {
+								return parseError(atomList[pos], pos, "Expected \"{\""); // throw error
+							}	
+						} else {
+							return parseError(atomList[pos], pos, "Expected \")\""); // throw error
+						}
+					} else {
+						return parseError(atomList[pos], pos, "Expected \"in\""); // throw error
+					}
+				} else {
+					return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+				}
+			} else {
+				return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
+			}
+		} else {
+			return parseError(atomList[pos], pos, "Expected \"each\""); // throw error
+		}
+	}
+
 	ParseResult parseIdentifier(List<Atom> atomList, int pos) {
 		string identifierName;
 
@@ -1041,6 +1105,8 @@ public class DScript {
 				return interpOpMath(expression, floatModulo, intModulo, env, store, ref tokenEnv, ref cubeEnv);
 			case "==":
 				return interpOpEqual(expression, env, store, ref tokenEnv, ref cubeEnv);
+			case "!=":
+				return interpOpNotEqual(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case ">":
 				return interpOpCompare(expression, floatModulo, intModulo, env, store, ref tokenEnv, ref cubeEnv);
 			case "<":
@@ -1267,6 +1333,63 @@ public class DScript {
 					case("bool"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
 						returnValue.vBool = l_result.value.vBool == r_result.value.vBool;
+						return new Result(returnValue, r_result.store);	
+					default:
+						return resultError(r_result, "Expected bool") //Throw Error	
+				}
+			default:
+				return resultError(l_result, "Expected int, float, string, or bool") //Throw Error
+		}
+	}
+
+	Result interpOpNotEqual(
+		Expression expression
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	)
+	{
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
+		// Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
+		switch(l_result.value.valueType) {
+			case("int"):
+			case("float"):
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				switch(r_result.value.valueType) {
+					case("int"):
+					case("float"):
+						Value returnValue = new Value("bool", expression.line, expression.character);
+						if (left.value.valueType == "float" && right.value.valueType == "float") {
+							returnValue.vBool = l_result.value.vFloat != r_rseult.value.vFloat;
+						} else if (left.value.valueType == "float" && right.value.valueType == "int") {
+							returnValue.vBool = l_result.value.vFloat != (float)r_rseult.value.vInt;
+						} else if (left.value.valueType == "int" && right.value.valueType == "float") {
+							returnValue.vBool = (float)l_result.value.vInt != r_rseult.value.vFloat;
+						} else {
+							returnValue.vBool = l_result.value.vInt != r_rseult.value.vInt;
+						}	
+						return new Result(returnValue, r_result.store);				
+					default:
+						return resultError(r_result, "Expected int or float") //Throw Error	
+				}
+				break;
+			case("string"):
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				switch(r_result.value.valueType) {
+					case("string"):
+						Value returnValue = new Value("bool", expression.line, expression.character);
+						returnValue.vBool = l_result.value.vString != r_result.value.vString;
+						return new Result(returnValue, r_result.store);	
+					default:
+						return resultError(r_result, "Expected string") //Throw Error
+				}
+			case("bool"):
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				switch(r_result.value.valueType) {
+					case("bool"):
+						Value returnValue = new Value("bool", expression.line, expression.character);
+						returnValue.vBool = l_result.value.vBool != r_result.value.vBool;
 						return new Result(returnValue, r_result.store);	
 					default:
 						return resultError(r_result, "Expected bool") //Throw Error	
