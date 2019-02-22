@@ -570,7 +570,7 @@ public class DScript {
 			case "number":
 				if (curAtom.value.Contains('.')) {
 					Expression doubleExpression = new Expression("e-double", curAtom.line, curAtom.character);
-					doubleExpression.edouble = double.Parse(curAtom.value);
+					doubleExpression.eDouble = double.Parse(curAtom.value);
 					returnExpression = doubleExpression;
 				} else {
 					Expression intExpression = new Expression("e-int", curAtom.line, curAtom.character);
@@ -1189,10 +1189,10 @@ public class DScript {
 				errorValue.errorMessage += error.valueType + ",\"" + error.vBool.ToString() + "\")";
 				break;
 			case "list": // e-list
-				errorValue.errorMessage += error.valueType + ",<listObject>)";
+				errorValue.errorMessage += error.valueType + ",<listValueObject>)";
 				break;
 			case "function": //e-op
-				errorValue.errorMessage += error.valueType + ",<functionObject>)";
+				errorValue.errorMessage += error.valueType + ",<functionValueObject>)";
 				break;
 			case "error":
 				errorValue.errorMessage += error.valueType + "," + error.errorMessage + ")";
@@ -1206,30 +1206,74 @@ public class DScript {
 
 	Result expressionError(Expression error, Dictionary<string, Value> store, string message) {
 		Value errorValue = new Value("error", error.line, error.character); 
-		errorValue.errorMessage = "Error at (" + error.line + "," + error.character + "): " + message + ", from: ("
+		errorValue.errorMessage = "Error at (" + error.line + "," + error.character + "): " + message + ", from: (";
 		switch(error.expressionType) {
-			case "int": //e-int
-				errorValue.errorMessage += error.ValueType + ",\"" + error.eInt.ToString() + "\")";
+			case "e-int": //e-int
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eInt.ToString() + "\")";
 				break;
-			case "double": //e-double
-				errorValue.errorMessage += error.ValueType + ",\"" + error.edouble.ToString() + "\")";
+			case "e-double": //e-double
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eDouble.ToString() + "\")";
 				break;
-			case "string": //e-string
-				errorValue.errorMessage += error.ValueType + ",\"" + error.eString + "\")";
+			case "e-string": //e-string
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eString + "\")";
 				break;
-			case "bool": //e-bool
-				errorValue.errorMessage += error.ValueType + ",\"" + error.vBool.ToString() + "\")";
+			case "e-bool": //e-bool
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eBool.ToString() + "\")";
 				break;
-			case "list": // e-list
-				errorValue.errorMessage += error.ValueType + ",<listObject>)";
+			case "e-list": // e-list
+				errorValue.errorMessage += error.expressionType + ",<listExpressionObject>)";
 				break;
-			case "function": //e-op
-				errorValue.errorMessage += error.ValueType + ",<functionObject>)";
+			case "e-op": //e-op
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eOperatorOp + "\")";
 				break;
-			case "error":
-				errorValue.errorMessage += error.ValueType + "," + error.errorMessage + ")";
+			case "e-triOp": //e-triOp
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eTriOperatorOp + "\")";
+				break;
+			case "e-if": //e-if
+				errorValue.errorMessage += error.expressionType + ",<ifExpressionObject>)";
+				break;
+			case "e-lam": //e-lam
+				errorValue.errorMessage += error.expressionType + ",<lambdaExpressionObject>)";
+				break;
+			case "e-app": //e-app
+				errorValue.errorMessage += error.expressionType + ",<appExpressionObject>)";
+				break;
+			case "e-set": //e-set
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eSetName + "\")";
+				break;
+			case "e-do": //e-do
+				errorValue.errorMessage += error.expressionType + ",<doExpressionObject>)";
+				break;
+			case "e-while": //e-while
+				errorValue.errorMessage += error.expressionType + ",<whileExpressionObject>)";
+				break;
+			case "e-for-each":
+				errorValue.errorMessage += error.expressionType + ",<forExpressionObject>)";
+				break;
+			case "e-let": //e-let
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eLetName + "\")";
+				break;
+			case "e-id": // e-id
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eId + "\")";
+				break;
+			case "e-ig-var": //e-ig-variable
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eIgName + "\")";
+				break;
+			case "e-set-ig-var": //e-set-ig-variable
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eSetIgName + "\")";
+				break;
+			case "e-builtin-func": //e-set-ig-variable
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eBuiltinFuncId + "\")";
+				break;
+			case "e-return":
+				errorValue.errorMessage += error.expressionType + ",<returnExpressionObject>)";
+				break;
+			case "e-error":
+				errorValue.errorMessage += error.expressionType + "," + error.eErrorMessage + ")";
+				break;
 			default:
-				errorValue.errorMessage += error.expressionType + ",unknown value type)";
+				errorValue.errorMessage += error.expressionType + ",unknown expression type)";
+				break;
 		}
 		return new Result(errorValue, store); //Throw Error	
 	}
@@ -1244,7 +1288,7 @@ public class DScript {
 
 	Result interpdouble(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value("double", expression.line, expression.character);
-		returnValue.vdouble = expression.edouble;
+		returnValue.vdouble = expression.eDouble;
 		return new Result(returnValue, store);
 	}
 
@@ -2279,7 +2323,7 @@ public class Expression {
 	public string eErrorMessage; // type=0
 
 	public int eInt; // type=1
-	public double edouble; // type=2
+	public double eDouble; // type=2
 	public string eString; // type=3
 	public bool eBool; // type=4
 	public List<Expression> eList; // type=5
