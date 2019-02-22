@@ -29,6 +29,6 @@ public class Cube : MonoBehaviour {
     public Dictionary<string, bool> boolVars = new Dictionary<string, bool>();
     public Dictionary<string, string> stringVars = new Dictionary<string, string>();
     public Dictionary<string, int> intVars = new Dictionary<string, int>();
-    public Dictionary<string, float> floatVars = new Dictionary<string, float>();
+    public Dictionary<string, double> doubleVars = new Dictionary<string, double>();
     
 }
