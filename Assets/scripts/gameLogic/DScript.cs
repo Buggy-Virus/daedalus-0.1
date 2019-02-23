@@ -13,536 +13,33 @@ public class DScript {
     public Dictionary<string, string> builtInEnv;
     public Dictionary<string, Value> builtInStore; 
 
+	Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>();
+
 	void Start(){
-		igListScript = GameObject.Find("GameLogic").GetComponent<IgListScript>();
-		tokenEnv = igListScript.tokenDict;
-		cubeEnv = igListScript.cubeDict;
+		builtInFunctions.Add("ToString", ToString);
+		builtInFunctions.Add("ToInt", ToInt);
+		builtInFunctions.Add("ToDouble", ToDouble);
+		builtInFunctions.Add("ToBool", ToBool);
+		builtInFunctions.Add("Abs", Abs);
+		builtInFunctions.Add("Max", Max);
+		builtInFunctions.Add("Min", Min);
+		builtInFunctions.Add("Floor", Floor);
+		builtInFunctions.Add("Ceil", Ceil);
+		builtInFunctions.Add("Factorial", Factorial);
+		builtInFunctions.Add("Binomial", Binomial);
+		builtInFunctions.Add("Log", Log);
+		builtInFunctions.Add("Logn", Logn);
+		builtInFunctions.Add("Round", Round);
+		builtInFunctions.Add("Sum", Sum);
+		builtInFunctions.Add("Len", Len);
+		builtInFunctions.Add("Range", Range);
+		builtInFunctions.Add("Append", Append);
+		builtInFunctions.Add("Insert", Insert);
+		builtInFunctions.Add("RandInt", RandInt);
+		builtInFunctions.Add("Rand", Rand);
+		builtInFunctions.Add("Contains", Contains);
+		builtInFunctions.Add("IndexOf", IndexOf);
 	}
-	// ================================= Builtin Functions =======================================================================
-	// ================================= Builtin Functions =======================================================================
-	// ================================= Builtin Functions =======================================================================
-
-	Dictionary<string, string> builtInFunctions = new Dictionary<string, string>()
-	{
-		{"ToString", ToString},
-		{"ToInt", ToInt},
-		{"ToDouble", ToDouble},
-		{"ToBool", ToBool},
-		{"Abs", Abs},
-		{"Max", Max},
-		{"Min", Min},
-		{"Floor", Floor},
-		{"Ceil", Ceil},
-		{"Factorial", Factorial},
-		{"Log", Log}
-		{"Round", Round},
-		{"Sum", Sum},
-		{"Len", Len},
-		{"Range", Range},
-		{"Append", Append},
-		{"Insert", Insert}
-	};
-
-	Result ToString(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("string", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "bool":
-				returnValue.vString = inputResult.value.vBool.ToString();
-				break;
-			case "int":
-				returnValue.vString = inputResult.value.vInt.ToString();
-				break;
-			case "double":
-				returnValue.vString = inputResult.value.vInt.ToString();
-				break;
-			default:
-				return resultError(inputResult, "Expected bool, int or double");	
-		}
-		return new Result(returnValue, inputResult.store);
-	}
-
-	Result ToInt(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("int", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "string":
-				int outInt;
-				bool isNumeric = int.TryParse(inputResult.value.vString, out outInt);
-				if (isNumeric) {
-					returnValue.vInt = outInt;
-				} else {
-					return resultError(inputResult, "Unable to convert string to int");
-				}
-				break;
-			case "double":
-				returnValue.vInt = Math.Floor(inputResult.value.vDouble);
-				break;
-			default:
-				return resultError(inputResult, "Expected string or double");	
-		}
-		return new Result(returnValue, inputResult.store);
-	}
-
-	Result ToDouble(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("double", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "string":
-				double outDouble;
-				bool isNumeric = double.TryParse(inputResult.value.vString, out outDouble);
-				if (isNumeric) {
-					returnValue.vDouble = outDouble;
-				} else {
-					return resultError(inputResult, "Unable to convert string to double");
-				}
-				break;
-			case "int":
-				returnValue.vInt = (double)inputResult.value.vInt;
-				break;
-			default:
-				return resultError(inputResult, "Expected string or int");	
-		}
-		return new Result(returnValue, inputResult.store);
-	}
-
-	Result ToDouble(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("bool", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "string":
-				switch(inputResult.value.vString) {
-					case "false":
-					case "False":
-					case "":
-						returnValue.vBool = false;
-						break;
-					case "true":
-					case "True":
-					default:
-						returnValue.vBool = true;
-						break;
-				}
-				break;
-			case "int":
-				if (inputResult.value.vInt == 0) {
-					returnValue.vBool = false;
-				} else {
-					returnValue.vBool = true;
-				}
-				break;
-			case "double":
-				if (inputResult.value.vDouble == 0) {
-					returnValue.vBool = false;
-				} else {
-					returnValue.vBool = true;
-				}
-				break;
-			default:
-				return resultError(inputResult, "Expected string, int or double");	
-		}
-		return new Result(returnValue, inputResult.store);
-	}
-
-	Result Abs(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("double", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "double":
-				returnValue.vDouble = Math.Abs(inputResult.value.vDouble);
-				break;
-			case "int":
-				returnValue.valueType = "int";
-				returnValue.vInt = Math.Abs(inputResult.value.vInt);
-				break;
-			default:
-				return resultError(inputResult, "Expected int or double");	
-		}
-		return new Result(returnValue, inputResult.store);
-	} 
-
-	Result Max(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		if (arguments.Count == 1) {
-			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-			if (firstResult.value.valueType == "list") {
-				return MaxList(firstResult.value.vList, firstResult.store);
-			}
-		}
-
-		string listType = "null";
-		bool first = true;
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		Value maxValue = new Value("null", expression.line, expression.character);
-
-		for each (expr in expression.eBuiltinFuncArguments) {
-			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
-			store = latestResult.store;
-
-			if (first) {
-				first = false;
-				switch(latestResult.value.valueType) {
-					case "int":
-						listType = "int";
-						maxValue.valueType = "int";
-						maxValue.vInt = latestResult.value.vInt;
-						break;
-					case "double":
-						listType = "double";
-						maxValue.valueType = "double";
-						maxValue.vDouble = latestResult.value.vDouble;
-						break;
-					default:
-						return resultError(latestResult, "Expected a set of arguments of all int or double");
-				}
-			} else if (listType == latestResult.value.valueType) {
-				switch(latestResult.value.valueType) {
-					case "int":
-						if (maxValue.vInt < latestResult.value.vInt) {
-							maxValue.vInt = latestResult.value.vInt;
-						}
-						break;
-					case "double":
-						if (maxValue.vDouble < latestResult.value.vDouble) {
-							maxValue.vDouble = latestResult.value.vDouble;
-						}
-						break;
-					default:
-						return resultError(latestResult, "Expected a set of arguments of all int or double");
-				}
-			} else {
-				return resultError(latestResult, "Expected a set of arguments of all int or double");
-			}
-		}
-		return new Result(maxValue, store);
-	}
-
-	Result MaxList(List<Value> valueList, Dictionary<string, Value> store) {
-		string listType = "null"; 
-		bool first = true;
-		Value maxValue = new Value("null");
-
-		for each (val in valueList) {
-			if (first) {
-				first = false;
-				switch(val.valueType) {
-					case "int":
-						listType = "int";
-						maxValue = val;
-						break;
-					case "double":
-						listType = "double";
-						maxValue = val;
-						break;
-					default:
-						return resultError(resultError(new Result(val, store), "Expected a set of arguments of all int or double");
-				}
-			} else if (maxValue.valueType == val.valueType) {
-				switch(val.valueType) {
-					case "int":
-						if (maxValue.vInt < val.vInt) {
-							maxValue = val;
-						}
-						break;
-					case "double":
-						if (maxValue.vDouble < val.vDouble) {
-							maxValue = val;
-						}
-						break;
-					default:
-						return resultError(latestResult, "Expected a set of arguments of all int or double");
-				}
-			} else {
-				return resultError(new Result(val, store), "Expected a set of arguments of all int or double");
-			}
-		}
-		return new Result(val, store);
-	}
-
-	Result Min(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		if (arguments.Count == 1) {
-			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-			if (firstResult.value.valueType == "list") {
-				return MinList(firstResult.value.vList, firstResult.store);
-			}
-		}
-
-		string listType = "null";
-		bool first = true;
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		Value minValue = new Value("null", expression.line, expression.character);
-
-		for each (expr in expression.eBuiltinFuncArguments) {
-			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
-			store = latestResult.store;
-
-			if (first) {
-				first = false;
-				switch(latestResult.value.valueType) {
-					case "int":
-						listType = "int";
-						minValue.valueType = "int";
-						minValue.vInt = latestResult.value.vInt;
-						break;
-					case "double":
-						listType = "double";
-						minValue.valueType = "double";
-						minValue.vDouble = latestResult.value.vDouble;
-						break;
-					default:
-						return resultError(latestResult, "Expected a set of arguments of all int or double");
-				}
-			} else if (listType == latestResult.value.valueType) {
-				switch(latestResult.value.valueType) {
-					case "int":
-						if (minValue.vInt > latestResult.value.vInt) {
-							minValue.vInt = latestResult.value.vInt;
-						}
-						break;
-					case "double":
-						if (minValue.vDouble > latestResult.value.vDouble) {
-							minValue.vDouble = latestResult.value.vDouble;
-						}
-						break;
-					default:
-						return resultError(latestResult, "Expected a set of arguments of all int or double");
-				}
-			} else {
-				return resultError(latestResult, "Expected a set of arguments of all int or double");
-			}
-		}
-		return new Result(minValue, store);
-	}
-
-	Result MaxList(List<Value> valueList, Dictionary<string, Value> store) {
-		string listType = "null"; 
-		bool first = true;
-		Value minValue = new Value("null");
-
-		for each (val in valueList) {
-			if (first) {
-				first = false;
-				switch(val.valueType) {
-					case "int":
-						listType = "int";
-						minValue = val;
-						break;
-					case "double":
-						listType = "double";
-						minValue = val;
-						break;
-					default:
-						return resultError(resultError(new Result(val, store), "Expected a set of arguments of all int or double");
-				}
-			} else if (minValue.valueType == val.valueType) {
-				switch(val.valueType) {
-					case "int":
-						if (minValue.vInt > val.vInt) {
-							minValue = val;
-						}
-						break;
-					case "double":
-						if (minValue.vDouble > val.vDouble) {
-							minValue = val;
-						}
-						break;
-					default:
-						return resultError(latestResult, "Expected a set of arguments of all int or double");
-				}
-			} else {
-				return resultError(new Result(val, store), "Expected a set of arguments of all int or double");
-			}
-		}
-		return new Result(val, store);
-	}
-
-	Result Floor(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("double", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "double":
-				returnValue.vDouble = Math.Floor(inputResult.value.vDouble);
-				break;
-			case "int":
-				returnValue.valueType = "int";
-				returnValue.vInt = Math.Floor(inputResult.value.vInt);
-				break;
-			default:
-				return resultError(inputResult, "Expected int or double");	
-		}
-		return new Result(returnValue, inputResult.store);
-	} 
-
-	Result Ceil(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("double", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "double":
-				returnValue.vDouble = Math.Ceil(inputResult.value.vDouble);
-				break;
-			case "int":
-				returnValue.valueType = "int";
-				returnValue.vInt = Math.Ceil(inputResult.value.vInt);
-				break;
-			default:
-				return resultError(inputResult, "Expected int or double");	
-		}
-		return new Result(returnValue, inputResult.store);
-	}
-
-	Result Factorial(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-
-		Value returnValue = new Value("double", expression.line, expression.character);
-		switch(inputResult.value.valueType) {
-			case "int":
-				if (inputResult.value.vInt >= 1) {
-					Value returnValue = new Value("int", expression.line, expression.character);
-					int returnInt = 1;
-					for (i = 1; i <= inputResult.value.vInt; i++) {
-						returnInt = returnInt * i;
-					}
-					returnValue.vInt = returnInt;
-					return new Result(returnValue, inputResult.store);
-				} else {
-					return resultError(inputResult, "int must be greater than 1");
-				}
-			default:
-				return resultError(inputResult, "Expected int");	
-		}
-	}
-
-	Result Factorial(
-		Expression expression,
-		Dictionary<string, string> env, 
-		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
-	) {
-		List<Expression> arguments = expression.eBuiltinFuncArguments;
-		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
-		} 
-
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
-		if (l_result.value.valueType == "int") {
-			Result r_result = interpret(arguments[0], env, l_result.store, ref tokenEnv, ref cubeEnv);
-			if (r_result.value.valueType == "int") {
-				
-			} else {
-				return resultError(r_result, "Expected int");	
-			}
-		} else {
-			return resultError(l_result, "Expected int");	
-		}
-		return new Result(returnValue, inputResult.store);
-	}	
 
 	// ================================= Evaluate Functions ======================================================================
 	// ================================= Evaluate Functions ======================================================================
@@ -1664,7 +1161,7 @@ public class DScript {
 				errorValue.errorMessage += error.valueType + ",\"" + error.vInt.ToString() + "\")";
 				break;
 			case "double": //e-double
-				errorValue.errorMessage += error.valueType + ",\"" + error.vdouble.ToString() + "\")";
+				errorValue.errorMessage += error.valueType + ",\"" + error.vDouble.ToString() + "\")";
 				break;
 			case "string": //e-string
 				errorValue.errorMessage += error.valueType + ",\"" + error.vString + "\")";
@@ -1772,7 +1269,7 @@ public class DScript {
 
 	Result interpdouble(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value("double", expression.line, expression.character);
-		returnValue.vdouble = expression.eDouble;
+		returnValue.vDouble = expression.eDouble;
 		return new Result(returnValue, store);
 	}
 
@@ -1801,6 +1298,9 @@ public class DScript {
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expr in expression.eList) {
 			last_result = interpret(expr, env, last_result.store, ref tokenEnv, ref cubeEnv);
+			if (last_result.value.valueType == "error") {
+				return resultError(last_result, "Passed error to list"); //Throw Error
+			}
 			returnValue.vList.Add(last_result.value);
 		}
 		return new Result(returnValue, last_result.store);
@@ -1876,11 +1376,11 @@ public class DScript {
 					case("double"):
 						Value returnValue = new Value("double", expression.line, expression.character);
 						if (l_result.value.valueType == "double" && r_result.value.valueType == "double") {
-							returnValue.vdouble = doubleFunc(l_result.value.vdouble, r_result.value.vdouble);
+							returnValue.vDouble = doubleFunc(l_result.value.vDouble, r_result.value.vDouble);
 						} else if (l_result.value.valueType == "double" && r_result.value.valueType == "int") {
-							returnValue.vdouble = doubleFunc(l_result.value.vdouble, (double)r_result.value.vInt);
+							returnValue.vDouble = doubleFunc(l_result.value.vDouble, (double)r_result.value.vInt);
 						} else if (l_result.value.valueType == "int" && r_result.value.valueType == "double") {
-							returnValue.vdouble = doubleFunc((double)l_result.value.vInt, r_result.value.vdouble);
+							returnValue.vDouble = doubleFunc((double)l_result.value.vInt, r_result.value.vDouble);
 						} else {
 							returnValue.valueType = "int";
 							returnValue.vInt = intFunc(l_result.value.vInt, r_result.value.vInt);
@@ -1974,11 +1474,11 @@ public class DScript {
 					case("double"):
 						Value returnValue = new Value("double", expression.line, expression.character);
 						if (l_result.value.valueType == "double" && r_result.value.valueType == "double") {
-							returnValue.vdouble = l_result.value.vdouble + r_result.value.vdouble;
+							returnValue.vDouble = l_result.value.vDouble + r_result.value.vDouble;
 						} else if (l_result.value.valueType == "double" && r_result.value.valueType == "int") {
-							returnValue.vdouble = l_result.value.vdouble + (double)r_result.value.vInt;
+							returnValue.vDouble = l_result.value.vDouble + (double)r_result.value.vInt;
 						} else if (l_result.value.valueType == "int" && r_result.value.valueType == "double") {
-							returnValue.vdouble = (double)l_result.value.vInt + r_result.value.vdouble;
+							returnValue.vDouble = (double)l_result.value.vInt + r_result.value.vDouble;
 						} else {
 							returnValue.valueType = "int";
 							returnValue.vInt = l_result.value.vInt + r_result.value.vInt;
@@ -2032,11 +1532,11 @@ public class DScript {
 					case("double"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
 						if (l_result.value.valueType == "double" && r_result.value.valueType == "double") {
-							returnValue.vBool = l_result.value.vdouble == r_result.value.vdouble;
+							returnValue.vBool = l_result.value.vDouble == r_result.value.vDouble;
 						} else if (l_result.value.valueType == "double" && r_result.value.valueType == "int") {
-							returnValue.vBool = l_result.value.vdouble == (double)r_result.value.vInt;
+							returnValue.vBool = l_result.value.vDouble == (double)r_result.value.vInt;
 						} else if (l_result.value.valueType == "int" && r_result.value.valueType == "double") {
-							returnValue.vBool = (double)l_result.value.vInt == r_result.value.vdouble;
+							returnValue.vBool = (double)l_result.value.vInt == r_result.value.vDouble;
 						} else {
 							returnValue.vBool = l_result.value.vInt == r_result.value.vInt;
 						}	
@@ -2089,11 +1589,11 @@ public class DScript {
 					case("double"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
 						if (l_result.value.valueType == "double" && r_result.value.valueType == "double") {
-							returnValue.vBool = l_result.value.vdouble != r_result.value.vdouble;
+							returnValue.vBool = l_result.value.vDouble != r_result.value.vDouble;
 						} else if (l_result.value.valueType == "double" && r_result.value.valueType == "int") {
-							returnValue.vBool = l_result.value.vdouble != (double)r_result.value.vInt;
+							returnValue.vBool = l_result.value.vDouble != (double)r_result.value.vInt;
 						} else if (l_result.value.valueType == "int" && r_result.value.valueType == "double") {
-							returnValue.vBool = (double)l_result.value.vInt != r_result.value.vdouble;
+							returnValue.vBool = (double)l_result.value.vInt != r_result.value.vDouble;
 						} else {
 							returnValue.vBool = l_result.value.vInt != r_result.value.vInt;
 						}	
@@ -2148,11 +1648,11 @@ public class DScript {
 					case("double"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
 						if (l_result.value.valueType == "double" && r_result.value.valueType == "double") {
-							returnValue.vBool = doubleFunc(l_result.value.vdouble, r_result.value.vdouble);
+							returnValue.vBool = doubleFunc(l_result.value.vDouble, r_result.value.vDouble);
 						} else if (l_result.value.valueType == "double" && r_result.value.valueType == "int") {
-							returnValue.vBool = doubleFunc(l_result.value.vdouble, (double)r_result.value.vInt);
+							returnValue.vBool = doubleFunc(l_result.value.vDouble, (double)r_result.value.vInt);
 						} else if (l_result.value.valueType == "int" && r_result.value.valueType == "double") {
-							returnValue.vBool = doubleFunc((double)l_result.value.vInt, r_result.value.vdouble);
+							returnValue.vBool = doubleFunc((double)l_result.value.vInt, r_result.value.vDouble);
 						} else {
 							returnValue.vBool = intFunc(l_result.value.vInt, r_result.value.vInt);
 						}					
@@ -2248,7 +1748,7 @@ public class DScript {
 				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
-						if (Math.Abs(r_result.value.vdouble) < l_result.value.vString.Length) {
+						if (Math.Abs(r_result.value.vDouble) < l_result.value.vString.Length) {
 							Value returnValue = new Value("string", expression.line, expression.character);
 							returnValue.vString = l_result.value.vString[r_result.value.vInt].ToString();
 							return new Result(returnValue, r_result.store);
@@ -2262,7 +1762,7 @@ public class DScript {
 				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
 				switch(r_result_list.value.valueType) {
 					case("int"):
-						if (Math.Abs(r_result_list.value.vdouble) < l_result.value.vList.Count) {
+						if (Math.Abs(r_result_list.value.vDouble) < l_result.value.vList.Count) {
 							return new Result(l_result.value.vList[r_result_list.value.vInt], r_result_list.store);
 						} else {
 							return resultError(r_result_list, "Index out of range"); //Throw Error	
@@ -2541,7 +2041,7 @@ public class DScript {
 						return new Result(intValue, store);
 					case "double":
 						Value doubleValue = new Value("double", expression.line, expression.character);
-						doubleValue.vdouble = token.doubleVars[variable];
+						doubleValue.vDouble = token.doubleVars[variable];
 						return new Result(doubleValue, store);
 					case "string":
 						Value stringValue = new Value("string", expression.line, expression.character);
@@ -2567,7 +2067,7 @@ public class DScript {
 						return new Result(intValue, store);
 					case "double":
 						Value doubleValue = new Value("double", expression.line, expression.character);
-						doubleValue.vdouble = cube.doubleVars[variable];
+						doubleValue.vDouble = cube.doubleVars[variable];
 						return new Result(doubleValue, store);
 					case "string":
 						Value stringValue = new Value("string", expression.line, expression.character);
@@ -2612,7 +2112,7 @@ public class DScript {
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
-							token.doubleVars[variable] = nv_result.value.vdouble;
+							token.doubleVars[variable] = nv_result.value.vDouble;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected double"); //Throw Error
@@ -2642,7 +2142,7 @@ public class DScript {
 						token.intVars.Add(variable, nv_result.value.vInt);
 						return nv_result;
 					case "double":
-						token.doubleVars.Add(variable, nv_result.value.vdouble);
+						token.doubleVars.Add(variable, nv_result.value.vDouble);
 						return nv_result;
 					case "string":
 						token.stringVars.Add(variable, nv_result.value.vString);
@@ -2668,7 +2168,7 @@ public class DScript {
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
-							cube.doubleVars[variable] = nv_result.value.vdouble;
+							cube.doubleVars[variable] = nv_result.value.vDouble;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected double"); //Throw Error
@@ -2698,7 +2198,7 @@ public class DScript {
 						cube.intVars.Add(variable, nv_result.value.vInt);
 						return nv_result;
 					case "double":
-						cube.doubleVars.Add(variable, nv_result.value.vdouble);
+						cube.doubleVars.Add(variable, nv_result.value.vDouble);
 						return nv_result;
 					case "string":
 						cube.stringVars.Add(variable, nv_result.value.vString);
@@ -2742,10 +2242,1001 @@ public class DScript {
 		ref Dictionary<string, Token> tokenEnv, 
 		ref Dictionary<string, Cube> cubeEnv
 	) {
-		return builtInFunctions[expression.eBuiltinFuncId](expression, env, store, tokenEnv, cubeEnv);
+		return builtInFunctions[expression.eBuiltinFuncId](expression, env, store, ref tokenEnv, ref cubeEnv);
+	}
+
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+	// ================================= Builtin Functions =======================================================================
+
+	Result ToString(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("string", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "bool":
+				returnValue.vString = inputResult.value.vBool.ToString();
+				break;
+			case "int":
+				returnValue.vString = inputResult.value.vInt.ToString();
+				break;
+			case "double":
+				returnValue.vString = inputResult.value.vInt.ToString();
+				break;
+			default:
+				return resultError(inputResult, "Expected bool, int or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result ToInt(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("int", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "string":
+				int outInt;
+				bool isNumeric = int.TryParse(inputResult.value.vString, out outInt);
+				if (isNumeric) {
+					returnValue.vInt = outInt;
+				} else {
+					return resultError(inputResult, "Unable to convert string to int");
+				}
+				break;
+			case "double":
+				returnValue.vInt = (int)Math.Floor(inputResult.value.vDouble);
+				break;
+			default:
+				return resultError(inputResult, "Expected string or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result ToDouble(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "string":
+				double outDouble;
+				bool isNumeric = double.TryParse(inputResult.value.vString, out outDouble);
+				if (isNumeric) {
+					returnValue.vDouble = outDouble;
+				} else {
+					return resultError(inputResult, "Unable to convert string to double");
+				}
+				break;
+			case "int":
+				returnValue.vDouble = (double)inputResult.value.vInt;
+				break;
+			default:
+				return resultError(inputResult, "Expected string or int");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result ToBool(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("bool", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "string":
+				switch(inputResult.value.vString) {
+					case "false":
+					case "False":
+					case "":
+						returnValue.vBool = false;
+						break;
+					case "true":
+					case "True":
+					default:
+						returnValue.vBool = true;
+						break;
+				}
+				break;
+			case "int":
+				if (inputResult.value.vInt == 0) {
+					returnValue.vBool = false;
+				} else {
+					returnValue.vBool = true;
+				}
+				break;
+			case "double":
+				if (inputResult.value.vDouble == 0) {
+					returnValue.vBool = false;
+				} else {
+					returnValue.vBool = true;
+				}
+				break;
+			default:
+				return resultError(inputResult, "Expected string, int or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result Abs(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "double":
+				returnValue.vDouble = Math.Abs(inputResult.value.vDouble);
+				break;
+			case "int":
+				returnValue.valueType = "int";
+				returnValue.vInt = Math.Abs(inputResult.value.vInt);
+				break;
+			default:
+				return resultError(inputResult, "Expected int or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	} 
+
+	Result Max(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+			if (firstResult.value.valueType == "list") {
+				return MaxList(firstResult.value.vList, firstResult.store);
+			}
+		}
+
+		bool first = true;
+		Value maxValue = new Value("null", expression.line, expression.character);
+
+		foreach (Expression expr in expression.eBuiltinFuncArguments) {
+			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			store = latestResult.store;
+
+			if (first) {
+				first = false;
+				switch(latestResult.value.valueType) {
+					case "int":
+					case "double":
+						maxValue = latestResult.value;
+						break;
+					default:
+						return resultError(latestResult, "Expected a set of arguments of int or double");
+				}
+			} else if (maxValue.valueType == latestResult.value.valueType) {
+				switch(latestResult.value.valueType) {
+					case "int":
+						if (latestResult.value.vInt > maxValue.vInt) {
+							maxValue = latestResult.value;
+						}
+						break;
+					case "double":
+						if (latestResult.value.vDouble > maxValue.vDouble) {
+							maxValue = latestResult.value;
+						}
+						break;
+				}
+			} else {
+				switch(latestResult.value.valueType) {
+					case "int":
+						if (latestResult.value.vInt > maxValue.vDouble) {
+							maxValue = latestResult.value;
+						}
+						break;
+					case "double":
+						if (latestResult.value.vDouble > maxValue.vInt) {
+							maxValue = latestResult.value;
+						}
+						break;
+					default:
+						return resultError(latestResult, "Expected a set of arguments of int or double");
+				}
+			}
+		}
+		return new Result(maxValue, store);
+	}
+
+	Result MaxList(List<Value> valueList, Dictionary<string, Value> store) {
+		bool first = true;
+		Value maxValue = new Value("null");
+
+		foreach (Value val in valueList) {
+			if (first) {
+				first = false;
+				switch(val.valueType) {
+					case "int":
+					case "double":
+						maxValue = val;
+						break;
+					default:
+						return resultError(new Result(val, store), "Expected a set of arguments of all int or double");
+				}
+			} else if (maxValue.valueType == val.valueType) {
+				switch(val.valueType) {
+					case "int":
+						if (val.vInt < maxValue.vInt) {
+							maxValue = val;
+						}
+						break;
+					case "double":
+						if (val.vDouble < maxValue.vDouble) {
+							maxValue = val;
+						}
+						break;
+				}
+			} else {
+				switch(val.valueType) {
+					case "int":
+						if (val.vInt < maxValue.vDouble) {
+							maxValue = val;
+						}
+						break;
+					case "double":
+						if (val.vDouble < maxValue.vInt) {
+							maxValue = val;
+						}
+						break;
+					default:
+						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+				}
+			}
+		}
+		return new Result(maxValue, store);
+	}
+
+	Result Min(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+			if (firstResult.value.valueType == "list") {
+				return MinList(firstResult.value.vList, firstResult.store);
+			}
+		}
+
+		bool first = true;
+		Value minValue = new Value("null", expression.line, expression.character);
+
+		foreach (Expression expr in expression.eBuiltinFuncArguments) {
+			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			store = latestResult.store;
+
+			if (first) {
+				first = false;
+				switch(latestResult.value.valueType) {
+					case "int":
+					case "double":
+						minValue = latestResult.value;
+						break;
+					default:
+						return resultError(latestResult, "Expected a set of arguments of int or double");
+				}
+			} else if (minValue.valueType == latestResult.value.valueType) {
+				switch(latestResult.value.valueType) {
+					case "int":
+						if (latestResult.value.vInt < minValue.vInt) {
+							minValue = latestResult.value;
+						}
+						break;
+					case "double":
+						if (latestResult.value.vDouble < minValue.vDouble) {
+							minValue = latestResult.value;
+						}
+						break;
+				}
+			} else {
+				switch(latestResult.value.valueType) {
+					case "int":
+						if (latestResult.value.vInt < minValue.vDouble) {
+							minValue = latestResult.value;
+						}
+						break;
+					case "double":
+						if (latestResult.value.vDouble < minValue.vInt) {
+							minValue = latestResult.value;
+						}
+						break;
+					default:
+						return resultError(latestResult, "Expected a set of arguments of int or double");
+				}
+			}
+		}
+		return new Result(minValue, store);
+	}
+
+	Result MinList(List<Value> valueList, Dictionary<string, Value> store) {
+		bool first = true;
+		Value minValue = new Value("null");
+
+		foreach (Value val in valueList) {
+			if (first) {
+				first = false;
+				switch(val.valueType) {
+					case "int":
+					case "double":
+						minValue = val;
+						break;
+					default:
+						return resultError(new Result(val, store), "Expected a set of arguments of all int or double");
+				}
+			} else if (minValue.valueType == val.valueType) {
+				switch(val.valueType) {
+					case "int":
+						if (val.vInt < minValue.vInt) {
+							minValue = val;
+						}
+						break;
+					case "double":
+						if (val.vDouble < minValue.vDouble) {
+							minValue = val;
+						}
+						break;
+				}
+			} else {
+				switch(val.valueType) {
+					case "int":
+						if (val.vInt < minValue.vDouble) {
+							minValue = val;
+						}
+						break;
+					case "double":
+						if (val.vDouble < minValue.vInt) {
+							minValue = val;
+						}
+						break;
+					default:
+						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+				}
+			}
+		}
+		return new Result(minValue, store);
+	}
+
+	Result Floor(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "double":
+				returnValue.vDouble = Math.Floor(inputResult.value.vDouble);
+				break;
+			case "int":
+				returnValue.valueType = "int";
+				returnValue.vInt = inputResult.value.vInt;
+				break;
+			default:
+				return resultError(inputResult, "Expected int or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	} 
+
+	Result Ceil(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "double":
+				returnValue.vDouble = Math.Ceiling(inputResult.value.vDouble);
+				break;
+			case "int":
+				returnValue.valueType = "int";
+				returnValue.vInt = inputResult.value.vInt;
+				break;
+			default:
+				return resultError(inputResult, "Expected int or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result Round(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "double":
+				returnValue.vDouble = Math.Round(inputResult.value.vDouble);
+				break;
+			case "int":
+				returnValue.valueType = "int";
+				returnValue.vInt = inputResult.value.vInt;
+				break;
+			default:
+				return resultError(inputResult, "Expected int or double");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result Factorial(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		switch(inputResult.value.valueType) {
+			case "int":
+				if (inputResult.value.vInt >= 1) {
+					Value returnValue = new Value("int", expression.line, expression.character);
+					returnValue.vInt = factorialHelper(inputResult.value.vInt);
+					return new Result(returnValue, inputResult.store);
+				} else {
+					return resultError(inputResult, "int must be greater than 1");
+				}
+			default:
+				return resultError(inputResult, "Expected int");	
+		}
+	}
+
+	int factorialHelper(int x) {
+		int result = 1;
+		for (int i = 1; i <= x; i++) {
+			result = result * i;
+		}
+		return result;
+	}
+
+	Result Binomial(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		if (l_result.value.valueType == "int") {
+			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			if (r_result.value.valueType == "int") {
+				Value returnValue = new Value("int", expression.line, expression.character);
+				returnValue.vInt = binomialHelper(l_result.value.vInt, r_result.value.vInt);
+				return new Result(returnValue, r_result.store);
+			} else {
+				return resultError(r_result, "Expected int");	
+			}
+		} else {
+			return resultError(l_result, "Expected int");	
+		}
+	}	
+
+	int binomialHelper(int n, int k) {
+		int numerator = 1;
+		for (int i = k + 1; i <= k; i++) {
+			numerator = numerator * i;
+		}
+		int denominator = factorialHelper(n - k);
+		return numerator / denominator;
+	}
+
+	Result Log(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		switch(l_result.value.valueType) {
+			case "int":
+			case "double":
+				Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+				switch(r_result.value.valueType) {
+					case "int":
+					case "double":
+						Value returnValue = new Value("double", expression.line, expression.character);
+						if (l_result.value.valueType == "int" && r_result.value.valueType == "int") {
+							returnValue.vDouble = Math.Log(l_result.value.vInt, r_result.value.vInt);
+						} else if (l_result.value.valueType == "double" && r_result.value.valueType == "int") {
+							returnValue.vDouble = Math.Log(l_result.value.vDouble, r_result.value.vInt);
+						} else if (l_result.value.valueType == "int" && r_result.value.valueType == "double") {
+							returnValue.vDouble = Math.Log(l_result.value.vInt, r_result.value.vDouble);
+						} else {
+							returnValue.vDouble = Math.Log(l_result.value.vDouble, r_result.value.vDouble);
+						}
+						return new Result(returnValue, r_result.store);
+					default:
+						return resultError(r_result, "Expected int or double");
+				}
+			default:
+				return resultError(l_result, "Expected int or double");
+		}
+	}	
+
+	Result Logn(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "double":
+				returnValue.vDouble = Math.Log(inputResult.value.vDouble);
+				break;
+			case "int":
+				returnValue.vDouble = Math.Log(inputResult.value.vInt);
+				break;
+			default:
+				return resultError(inputResult, "Expected double or int");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result Sum(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+			if (firstResult.value.valueType == "list") {
+				return SumList(firstResult.value.vList, firstResult.store);
+			}
+		}
+
+		bool first = true;
+		Value sumValue = new Value("null", expression.line, expression.character);
+
+		foreach (Expression expr in expression.eBuiltinFuncArguments) {
+			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			store = latestResult.store;
+
+			if (first) {
+				first = false;
+				switch(latestResult.value.valueType) {
+					case "int":
+					case "double":
+						sumValue = latestResult.value;
+						break;
+					default:
+						return resultError(latestResult, "Expected a set of arguments of int or double");
+				}
+			} else if (sumValue.valueType == latestResult.value.valueType) {
+				switch(latestResult.value.valueType) {
+					case "int":
+						sumValue.vInt += latestResult.value.vInt;
+						break;
+					case "double":
+						sumValue.vDouble += latestResult.value.vDouble;
+						break;
+				}
+			} else{
+				switch(latestResult.value.valueType) {
+					case "int":
+						sumValue.vDouble += (double)latestResult.value.vInt;
+						break;
+					case "double":
+						sumValue.valueType = "double";
+						sumValue.vDouble = (double)sumValue.vInt + (double)latestResult.value.vInt;
+						break;
+					default:
+						return resultError(latestResult, "Expected a set of arguments of int or double");
+				}
+			}
+		}
+		return new Result(sumValue, store);
+	}
+
+	Result SumList(List<Value> valueList, Dictionary<string, Value> store) {
+		bool first = true;
+		Value sumValue = new Value("null");
+
+		foreach (Value val in valueList) {
+			if (first) {
+				first = false;
+				switch(val.valueType) {
+					case "int":
+					case "double":
+						sumValue = val;
+						break;
+					default:
+						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+				}
+			} else if (sumValue.valueType == val.valueType) {
+				switch(val.valueType) {
+					case "int":
+						sumValue.vInt += val.vInt;
+						break;
+					case "double":
+						sumValue.vDouble += val.vDouble;
+						break;
+				}
+			} else{
+				switch(val.valueType) {
+					case "int":
+						sumValue.vDouble += (double)val.vInt;
+						break;
+					case "double":
+						sumValue.valueType = "double";
+						sumValue.vDouble = (double)sumValue.vInt + (double)val.vInt;
+						break;
+					default:
+						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+				}
+			}
+		}
+		return new Result(sumValue, store);
+	}
+
+	Result Len(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+
+		Value returnValue = new Value("int", expression.line, expression.character);
+		switch(inputResult.value.valueType) {
+			case "string":
+				returnValue.vInt = inputResult.value.vString.Length;
+				break;
+			case "list":
+				returnValue.vInt = inputResult.value.vList.Count;
+				break;
+			default:
+				return resultError(inputResult, "Expected list or string");	
+		}
+		return new Result(returnValue, inputResult.store);
+	}
+
+	Result Range(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		switch(inputResult.value.valueType) {
+			case "int":
+				Value returnValue = new Value("list", expression.line, expression.character);
+				returnValue.vList = new List<Value>();
+				for (int i = 0; i < inputResult.value.vInt; i++) {
+					Value rangeValue = new Value("int", expression.line, expression.character);
+					rangeValue.vInt = i;
+					returnValue.vList.Add(rangeValue);
+				}
+				return new Result(returnValue, inputResult.store);
+			default:
+				return resultError(inputResult, "Expected int");	
+		}
+	}
+
+	Result Append(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		if (l_result.value.valueType == "list") {
+			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			if (r_result.value.valueType == "error") {
+				return resultError(r_result, "Passed error to list");
+			}
+
+			l_result.value.vList.Add(r_result.value);
+			return new Result(l_result.value, r_result.store);
+		} else {
+			return resultError(l_result, "Expected list");	
+		}
+	}	
+
+	Result Insert(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 3) {
+			return expressionError(expression, store, "Expected 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		if (l_result.value.valueType == "list") {
+			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			if (r_result.value.valueType == "int") {
+				if (r_result.value.vInt < 0 || r_result.value.vInt >= l_result.value.vList.Count) {
+					return resultError(l_result, r_result.value.vInt.ToString() + " out of range of list of size " + l_result.value.vList.Count.ToString());
+				}
+
+				Result t_result = interpret(arguments[2], env, r_result.store, ref tokenEnv, ref cubeEnv);
+				if (t_result.value.valueType == "error") {
+				return resultError(t_result, "Passed error to list");
+				}
+
+				l_result.value.vList.Insert(r_result.value.vInt, t_result.value);
+				return new Result(l_result.value, t_result.store);
+			} else {
+				return resultError(l_result, "Expected int");
+			}
+		} else {
+			return resultError(l_result, "Expected list");	
+		}
+	}
+
+	Result RandInt(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		switch(l_result.value.valueType) {
+			case "int":
+				Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+				switch(r_result.value.valueType) {
+					case "int":
+						if (l_result.value.vInt >= r_result.value.vInt) {
+							return resultError(r_result, "Second argument passed must be greater than first argument passed");	
+						}
+						Value returnValue = new Value("int", expression.line, expression.character);
+						System.Random rnd = new System.Random();
+						returnValue.vInt = rnd.Next(l_result.value.vInt, r_result.value.vInt);
+						return new Result(returnValue, r_result.store);
+					default:
+						return resultError(r_result, "Expected int");
+				}
+			default:
+				return resultError(l_result, "Expected int");
+		}
+	}	
+
+	Result Rand(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 0) {
+			return expressionError(expression, store, "Expected 0 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Value returnValue = new Value("double", expression.line, expression.character);
+		System.Random rnd = new System.Random();
+		returnValue.vDouble = rnd.NextDouble();
+		return new Result(returnValue, store);
+	}	
+
+	Result Contains(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		if (l_result.value.valueType == "list") {
+			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			if (r_result.value.valueType == "error") {
+				return resultError(r_result, "Passed error to list");
+			}
+
+			Value returnValue = new Value("bool", expression.line, expression.character);
+			foreach (Value val in l_result.value.vList) {
+				if (valuesEqual(val, r_result.value)) {
+					returnValue.vBool = true;
+					return new Result(returnValue, r_result.store);	
+				}
+			}
+			returnValue.vBool = false;
+			return new Result(returnValue, r_result.store);			
+		} else {
+			return resultError(l_result, "Expected int");	
+		}
+	}
+	
+	bool valuesEqual(Value left, Value right) {
+		if (left.valueType == right.valueType) {
+			switch(left.valueType) {
+				case "int":
+					return left.vInt == right.vInt;
+				case "double":
+					return left.vDouble == right.vDouble;
+				case "string":
+					return left.vString == right.vString;
+				case "bool":
+					return left.vBool == right.vBool;
+			}
+		}
+		return false;
+	}	
+
+	Result IndexOf(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref Dictionary<string, Token> tokenEnv, 
+		ref Dictionary<string, Cube> cubeEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		if (l_result.value.valueType == "list") {
+			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			if (r_result.value.valueType == "error") {
+				return resultError(r_result, "Passed error to list");
+			}
+
+			Value returnValue = new Value("int", expression.line, expression.character);
+			for (int i = 0; i < l_result.value.vList.Count; i++) {
+				if (valuesEqual(l_result.value.vList[i], r_result.value)) {
+					returnValue.vInt = i;
+					return new Result(returnValue, r_result.store);	
+				}
+			}
+			return resultError(r_result, "List does not contain value");		
+		} else {
+			return resultError(l_result, "Expected int");	
+		}
 	}
 }
 
+// ====================================================================================================================
+// ===================================================== Data Types ===================================================
+// ====================================================================================================================
+// ====================================================================================================================
+// ===================================================== Data Types ===================================================
+// ====================================================================================================================
 // ====================================================================================================================
 // ===================================================== Data Types ===================================================
 // ====================================================================================================================
@@ -2773,7 +3264,7 @@ public class Value {
 	public string errorMessage; //type=0
 
 	public int vInt; // type=1
-	public double vdouble; // type=2
+	public double vDouble; // type=2
 	public string vString; // type=3
 	public bool vBool; // type=4
 
@@ -2917,3 +3408,11 @@ public class ParseResult {
 	public ParseResult() {
 	}
 }
+
+public delegate Result BuiltinFunction(
+	Expression expression,
+	Dictionary<string, string> env, 
+	Dictionary<string, Value> store, 
+	ref Dictionary<string, Token> tokenEnv, 
+	ref Dictionary<string, Cube> cubeEnv
+);
