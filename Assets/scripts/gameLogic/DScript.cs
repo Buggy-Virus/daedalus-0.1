@@ -709,7 +709,7 @@ public class DScript {
 
 		ParseResult notResult = parseSingle(atomList, pos, false);
 		notExpression.eOperatorLeft = notResult.expression;
-		notExpression.eOperatorRight = new Expression("e-bool");
+		notExpression.eOperatorRight = new Expression("e-bool", atomList[pos].line, atomList[pos].character);
 		notExpression.eOperatorOp = "!";
 		pos = notResult.position;
 
@@ -1101,7 +1101,7 @@ public class DScript {
 				return interpId(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-ig-var": //e-ig-variable
 				return interpIgVariable(expression, env, store, ref tokenEnv, ref cubeEnv);
-			case "e-set-ig-var": //e-set-ig-variable
+			case "e-set-ig-var": //e-set-ig-variables
 				return interpSetIgVariable(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-builtin-func": //e-set-ig-variable
 				return interpBuiltinFunc(expression, env, store, ref tokenEnv, ref cubeEnv);
@@ -1110,9 +1110,7 @@ public class DScript {
 			case "e-error":
 				return interpError(expression, env, store, ref tokenEnv, ref cubeEnv);
 			default:
-				Value errorValue = new Value("error"); 
-				errorValue.errorMessage = "Unknown expression type: " + expression.expressionType.ToString();
-				return new Result(errorValue, store); //Throw Error	
+				return expressionError(expression, store, "Unknown expression type");
 		}
 	}
 
@@ -1845,7 +1843,7 @@ public class DScript {
 		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
-		Value returnValue = new Value("function");
+		Value returnValue = new Value("function", expression.line, expression.character);
 		returnValue.vFunParams = expression.eLamParams;
 		returnValue.vFunBody = expression.eLamBody;
 		returnValue.vFunEnviroment = env;
@@ -1958,6 +1956,7 @@ public class DScript {
 		}
 	}
 
+	// This could be syntactic sugar on top of while
 	Result interpForeach(
 		Expression expression, 
 		Dictionary<string, string> env, 
@@ -3340,10 +3339,6 @@ public class Expression {
 
 	// constructors
 
-	public Expression(string etype) {
-		expressionType = etype;
-	}
-
 	public Expression(string etype, int l, int c) {
 		expressionType = etype;
 		line = l;
@@ -3357,11 +3352,6 @@ public class Atom {
 
 	public int line;
 	public int character;
-
-	public Atom(int l, int c) {
-		line = l;
-		character = c;
-	}
 
 	public Atom(string at, string v, int l, int c) {
 		atomType = at;
