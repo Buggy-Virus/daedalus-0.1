@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DScript {
+public class DScript : MonoBehaviour {
 
 	Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>();
 
@@ -385,6 +385,8 @@ public class DScript {
 	}
 
 	ParseResult parseDo(List<Atom> atomList, int pos, bool bookended) {
+		Debug.Log(atomList.Count);
+		Debug.Log(pos);
 		Expression doExpression = new Expression("e-do", atomList[pos].line, atomList[pos].character);
 		doExpression.eDo = new List<Expression>();
 
@@ -1358,7 +1360,6 @@ public class DScript {
 					default:
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
-				break;
 			default:
 				return resultError(l_result, "Expected int or double"); //Throw Error	
 		}
@@ -1456,7 +1457,6 @@ public class DScript {
 					default:
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
-				break;
 			case("string"):
 				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
 				switch(r_result_string.value.valueType) {
@@ -1513,7 +1513,6 @@ public class DScript {
 					default:
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
-				break;
 			case("string"):
 				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
 				switch(r_result_string.value.valueType) {
@@ -1570,7 +1569,6 @@ public class DScript {
 					default:
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
-				break;
 			case("string"):
 				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
 				switch(r_result_string.value.valueType) {
