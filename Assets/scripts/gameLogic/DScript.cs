@@ -813,7 +813,7 @@ public class DScript {
 	}
 
 	ParseResult parseFor(List<Atom> atomList, int pos) {
-		Expression forExpression = new Expression("e-for-each", atomList[pos].line, atomList[pos].character);
+		Expression forExpression = new Expression("e-foreach", atomList[pos].line, atomList[pos].character);
 
 		if (atomEquals(atomList[pos], "keyword", "each")) {
 			pos += 1;
@@ -1006,10 +1006,12 @@ public class DScript {
 			case "e-return":
 				expression.eReturn = desugar(expression.eReturn);
 				return expression;
+			case "e-for":
+				expression.eForIter = desugar(expression.eForIter);
+				expression.eForBody = desugar(expression.eForBody);
+				return expression;
 			case "e-eval":
 				return desugarEval(expression);
-			case "e-for":
-				return desugarFor(expression);
 			case "e-func":
 				return desugarFunc(expression);
 			default:
@@ -1035,30 +1037,6 @@ public class DScript {
 
 			return appExpression;
 		}	
-	}
-
-	Expression desugarFor(Expression expression) {
-		Expression doExpression = new Expression("e-do", expression.line, expression.character);
-
-		Expression letExpression = new Expression("e-let", expression.line, expression.character);
-		letExpression.eLetName = "[iter variable]";
-
-		Expression zeroExpression = new Expression("e-int", expression.line, expression.character);
-		zeroExpression.eInt = 0;
-
-		letExpression.eLetValue = zeroExpression;
-
-		Expression whileExpression = new Expression("e-while", expression.line, expression.character);
-
-		Expression ltExpression = new Expression("e-op", expression.line, expression.character);
-
-		Expression idExpression = new Expression("e-id", expression.line, expression.character);
-		idExpression.eId = "[iter variable]";
-
-		Expression maxExpression = new Expression("e-int", expression.line, expression.character);
-		maxExpression.eInt = 
-
-		ltExpression
 	}
 
 	Expression desugarFunc(Expression expression) {
@@ -1115,8 +1093,8 @@ public class DScript {
 				return interpDo(expression, env, store, ref tokenEnv, ref cubeEnv);	
 			case "e-while": //e-while
 				return interpWhile(expression, new Value(), false, env, store, ref tokenEnv, ref cubeEnv);
-			case "e-for-each":
-				return interpForEach(expression, env, store, ref tokenEnv, ref cubeEnv);
+			case "e-foreach":
+				return interpForeach(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-let": //e-let
 				return interpLet(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-id": // e-id
@@ -1228,7 +1206,7 @@ public class DScript {
 			case "e-while": //e-while
 				errorValue.errorMessage += error.expressionType + ",<whileExpressionObject>)";
 				break;
-			case "e-for-each":
+			case "e-foreach":
 				errorValue.errorMessage += error.expressionType + ",<forExpressionObject>)";
 				break;
 			case "e-let": //e-let
@@ -1980,10 +1958,7 @@ public class DScript {
 		}
 	}
 
-	// I really cheat on interp for each, it isn't functional at all, but it's very easy
-	// STUDY
-	// implement built ins, maybe leave this as sugar
-	Result interpForEach(
+	Result interpForeach(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
@@ -1991,14 +1966,17 @@ public class DScript {
 		ref Dictionary<string, Cube> cubeEnv
 	)
 	{
-		Dictionary<string, Value> activeStore = store;
-		Value returnValue = new Value("null", expression.line, expression.character);
-		foreach (Expression expr in expression.eForIter) {
-			returnResult = interpret(expr, env, activeStore, ref tokenEnv, ref cubeEnv);
-			returnValue = exprResult.value;
-			activeStore = exprResult.store;
+		string loc = System.Guid.NewGuid().ToString();
+		env.Add(expression.eForVariable, loc);
+		Result lastResult = new Result(new Value("null", expression.line, expression.character), store);
+		foreach (Expression expr in expression.eForIter.eList) {
+			Result exprResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			store[loc] = exprResult.value;
+			Result bodyResult = interpret(expression.eForBody, env, store, ref tokenEnv, ref cubeEnv);
+			lastResult = bodyResult;
+			store = bodyResult.store;
 		}
-		return 
+		return lastResult; 
 	}
 
 	Result interpId(
