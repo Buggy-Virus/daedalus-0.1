@@ -6,13 +6,6 @@ using UnityEngine;
 
 public class DScript {
 
-	IgListScript igListScript;
-	public Dictionary<string, Token> tokenEnv;
-    public Dictionary<string, Cube> cubeEnv;
-
-    public Dictionary<string, string> builtInEnv;
-    public Dictionary<string, Value> builtInStore; 
-
 	Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>();
 
 	void Start(){
