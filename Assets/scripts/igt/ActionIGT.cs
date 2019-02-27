@@ -7,13 +7,7 @@ public class Action {
 
 	public List<string> conditions;
 
-	public List<string> effects;
-
-	public List<Check> checks;
-
-	string displaceX;
-	string displaceY;
-	string displaceZ;
+	public List<Effect> effects;
 
 	public int aoe;
 
@@ -36,13 +30,9 @@ public class Raction {
 
 	public List<string> conditions; 
 
-	public List<string> effects;
+	public List<Reffect> reffects;
 
 	public List<Check> checks;
-
-	string DisplaceAway;
-	string DisplaceSide;
-	string DisplaceUp;
 
 	public int aoe;
 
@@ -54,9 +44,6 @@ public class Raction {
 
 	public List<Raction> targetedFollowupRactions;
 	public List<Taction> targetedFollowupTactions;
-
-	public List<Action> followupTargetActions;
-	public List<Raction> followupTargetRactions;
 }
 
 public class Taction {
@@ -69,16 +56,10 @@ public class Taction {
 
 	public List<string> conditions; 
 
-	public List<string> effects;
+	public List<Teffect> teffects;
 
 	public List<Check> checks;
 
-	bool displaceTo; 
-
-	string DisplaceAway;
-	string DisplaceSide;
-	string DisplaceUp;
-
 	public int aoe;
 
 	public List<Raction> aoeRactions;
@@ -89,33 +70,116 @@ public class Taction {
 	
 	public List<Raction> targetedFollowupRactions;
 	public List<Taction> targetedFollowupTactions;
-
-	public List<Action> followupTargetActions;
-	public List<Raction> followupTargetRactions;
 }
 
-// Maybe check isn't necessary at all
-public class Check {
+public class Effect {
 	public Type type;
 
-	public List<string> conditions;
+	public bool instant;
+	public int rounds;
+	public int roundFrequency;
+	public int epoch;
+	public int epochFrequency;
 
-	// Not necessary, can be handled by other actions
-	public List<string> effects;
+	bool addVars;
+	public List<string> selfAddVars;
+	public List<string> selfAddValues;
 
-	public int aoe;
+	bool setVars;
+	public List<string> selfSetVars;
+	public List<string> selfSetValues;
 
-	public List<Raction> aoeRactions;
-	public List<Taction> aoeTactions;
-	// Not necessary
+	bool displace;
+	string displaceX;
+	string displaceY;
+	string displaceZ;
+
+	public List<Action> followupActions;
+	
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
+}
+
+public class Reffect {
+	public Type type;
+
+	public bool instant;
+	public int rounds;
+	public int roundFrequency;
+	public int epoch;
+	public int epochFrequency;
+
+	bool addVars;
+	public List<string> selfAddVars;
+	public List<string> selfAddValues;
+
+	public List<string> targetAddVars;
+	public List<string> targetAddValues;
+
+	bool setVars;
+	public List<string> selfSetVars;
+	public List<string> selfSetValues;
+
+	public List<string> targetSetVars;
+	public List<string> targetSetValues;
+
+	bool displaceGo;
+	bool displaceCome; 
+
+	string targetDisplacePerp;
+	string targetDisplacePara;
+	string targetDisplaceAlt;
+
+	string sefDisplacePerp;
+	string selfDisplacePara;
+	string selfDisplaceAlt;
+
+	public List<Action> followupActions;
 	
 	public List<Action> followupActions;
 	public List<Raction> followupRactions;
-	public List<Taction> followupTactions;
 
 	public List<Raction> targetedFollowupRactions;
 	public List<Taction> targetedFollowupTactions;
+}
 
-	public List<Action> followupTargetActions;
-	public List<Raction> followupTargetRactions;
+public class Teffect {
+	public Type type;
+
+	public bool instant;
+	public int rounds;
+	public int roundFrequency;
+	public int epoch;
+	public int epochFrequency;
+
+	bool addVars;
+	public List<string> selfAddVars;
+	public List<string> selfAddValues;
+
+	public List<string> targetAddVars;
+	public List<string> targetAddValues;
+
+	bool setVars;
+	public List<string> selfSetVars;
+	public List<string> selfSetValues;
+
+	public List<string> targetSetVars;
+	public List<string> targetSetValues;
+
+	bool displaceGo;
+	bool displaceCome; 
+
+	string targetDisplacePerp;
+	string targetDisplacePara;
+	string targetDisplaceAlt;
+
+	string sefDisplacePerp;
+	string selfDisplacePara;
+	string selfDisplaceAlt;
+
+	public List<Action> followupActions;
+	public List<Taction> followupTactions;
+	
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 }
