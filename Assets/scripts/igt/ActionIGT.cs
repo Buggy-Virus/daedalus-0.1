@@ -76,10 +76,15 @@ public class Effect {
 	public Type type;
 
 	public bool instant;
+	public bool perRound;
 	public int rounds;
 	public int roundFrequency;
+	public bool perEpoch;
 	public int epoch;
 	public int epochFrequency;
+
+	public int timeLeft;
+	public int procTime;
 
 	bool addVars;
 	public List<string> selfAddVars;
@@ -104,10 +109,15 @@ public class Reffect {
 	public Type type;
 
 	public bool instant;
+	public bool perRound;
 	public int rounds;
 	public int roundFrequency;
+	public bool perEpoch;
 	public int epoch;
 	public int epochFrequency;
+
+	public int timeLeft;
+	public int procTime;
 
 	bool addVars;
 	public List<string> selfAddVars;
@@ -147,11 +157,16 @@ public class Teffect {
 	public Type type;
 
 	public bool instant;
+	public bool perRound;
 	public int rounds;
 	public int roundFrequency;
+	public bool perEpoch;
 	public int epoch;
 	public int epochFrequency;
 
+	public int timeLeft;
+	public int procTime;
+	
 	bool addVars;
 	public List<string> selfAddVars;
 	public List<string> selfAddValues;
