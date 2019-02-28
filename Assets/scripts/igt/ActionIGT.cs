@@ -93,7 +93,10 @@ public class Effect {
 	bool setVars;
 	public List<string> selfSetVars;
 	public List<string> selfSetValues;
-
+	
+	bool runMisc;
+	public List<string> miscPrograms;
+	
 	bool displace;
 	string displaceX;
 	string displaceY;
@@ -132,6 +135,9 @@ public class Reffect {
 
 	public List<string> targetSetVars;
 	public List<string> targetSetValues;
+	
+	bool runMisc;
+	public List<string> miscPrograms;
 
 	bool displaceGo;
 	bool displaceCome; 
@@ -180,6 +186,9 @@ public class Teffect {
 
 	public List<string> targetSetVars;
 	public List<string> targetSetValues;
+	
+	bool runMisc;
+	public List<string> miscPrograms;
 
 	bool displaceGo;
 	bool displaceCome; 
