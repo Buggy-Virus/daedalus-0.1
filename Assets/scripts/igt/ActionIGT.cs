@@ -80,7 +80,7 @@ public class Effect {
 	public int rounds;
 	public int roundFrequency;
 	public bool perEpoch;
-	public int epoch;
+	public int epochs;
 	public int epochFrequency;
 
 	public int timeLeft;
@@ -113,7 +113,7 @@ public class Reffect {
 	public int rounds;
 	public int roundFrequency;
 	public bool perEpoch;
-	public int epoch;
+	public int epochs;
 	public int epochFrequency;
 
 	public int timeLeft;
@@ -161,7 +161,7 @@ public class Teffect {
 	public int rounds;
 	public int roundFrequency;
 	public bool perEpoch;
-	public int epoch;
+	public int epochs;
 	public int epochFrequency;
 
 	public int timeLeft;
