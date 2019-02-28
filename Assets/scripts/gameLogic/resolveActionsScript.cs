@@ -123,7 +123,19 @@ public class ResolveActionsScript : MonoBehaviour
 	}
 	
 	public void resolveEffect(ref Token self, Effect effect) {
-		
+		if (effect.instant) {
+			procEffect(ref self, effect);
+		}
+
+		if (perRound) {
+			effect.timeLeft = effect.rounds;
+			effect.procTime = effect.roundFrequency;
+		} else if (perEpoch) {
+			effect.timeLeft = effect.epochs;
+			effect.procTime = effect.epochFrequency;
+		}
+
+		self.effects.Add(effect);
 	}
 	
 	public void resolveEffects(ref Token self, List<Effect> effects) {
@@ -152,15 +164,93 @@ public class ResolveActionsScript : MonoBehaviour
 		}
 	}
 
-	public void displaceToken(ref Token token) {
+	public void displaceToken(ref Token token, int x, int y, int z) {
 
 	}
 
-	public void displaceCube(ref Cube cube) {
+	public void displaceCube(ref Cube cube, int x, int y, int z) {
 
 	}
 
 	public void procEffect(ref Token token, Effect effect) {
-		
+		if (effect.addVars) {
+			if (effect.selfAddVars.Count != effect.selfAddValues.Count) {
+				// throw error
+			}
+
+			for (int i = 0; i < effect.selfAddVars.Count; i++) {
+				string variable = effect.selfAddVars[i];
+				string program = effect.selfAddValues[i];
+
+				if (token.variables.ContainsKey(variable)) {
+					switch(token.variables[variable]) {
+						case "int":
+							Value evaluateValue = dScript.evaluate(program);
+							if (evaluateValue.valueType == "int") {
+								token.intVars[variable] += evaluateValue.vInt;
+							} else {
+								// throw error
+							}
+							break;
+						case "double":
+							Value evaluateValue = dScript.evaluate(program);
+							if (evaluateValue.valueType == "double") {
+								token.doubelVars[variable] += evaluateValue.vDouble;
+							} else {
+								// throw error
+							}
+							break;
+						default:
+							// throw error
+							break;
+					}
+				} else {
+					// throw error
+				}
+			}
+		}
+
+		if (effect.setVars) {
+			for (int i = 0; i < effect.selfSetVars.Count; i++) {
+				string variable = effect.selfAddVars[i];
+				string program = effect.selfAddValues[i];
+
+				if (token.variables.ContainsKey(variable)) {
+					switch(token.variables[variable]) {
+						case "int":
+							Value evaluateValue = dScript.evaluate(program, tokenEnv, cubeEnv);
+							if (evaluateValue.valueType == "int") {
+								token.intVars[variable] = evaluateValue.vInt;
+							} else {
+								// throw error
+							}
+							break;
+						case "double":
+							Value evaluateValue = dScript.evaluate(program, tokenEnv, cubeEnv);
+							if (evaluateValue.valueType == "double") {
+								token.doubelVars[variable] = evaluateValue.vDouble;
+							} else {
+								// throw error
+							}
+							break;
+						default:
+							// throw error
+							break;
+					}
+				} else {
+					// throw error
+				}
+			}
+		}
+
+		if (effect.runMisc) {
+			foreach (string program in miscPrograms) {
+				dScript.evaluate(program, tokenEnv, cubeEnv);
+			}
+		}
+
+		resolveActions(ref Token, effect.followupActions);
+		resolveTargetedRactions(ref Token, effect.targetedFollowupRactions);
+		resolveTargetedTactions(ref Token, effect.targetedFollowupTactions);
 	}
 }
