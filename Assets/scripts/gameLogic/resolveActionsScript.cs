@@ -249,6 +249,19 @@ public class ResolveActionsScript : MonoBehaviour
 			}
 		}
 
+		if (effect.displace) {
+			xValue = dScript.evaluate(effect.displaceX, tokenEnv, cubeEnv);
+			yValue = dScript.evaluate(effect.displaceY, tokenEnv, cubeEnv);
+			zValue = dScript.evaluate(effect.displaceZ, tokenEnv, cubeEnv);
+			if (xValue.valueType == "int" && yValue.valueType == "int" && zValue.valueType == "int") {
+				displaceToken(ref self, xValue.vInt, yValue.vInt, zValue.vInt);
+			} else {
+
+			}
+
+
+		}
+
 		resolveActions(ref Token, effect.followupActions);
 		resolveTargetedRactions(ref Token, effect.targetedFollowupRactions);
 		resolveTargetedTactions(ref Token, effect.targetedFollowupTactions);
