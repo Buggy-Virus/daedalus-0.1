@@ -6,14 +6,8 @@ public class Action {
 	Type type;
 
 	public List<string> conditions;
-	public List<bool> conditionMatch;
-
-	public List<string> currencies;
-	public List<int> costs;
 
 	public List<Effect> effects;
-
-	public List<Check> checks;
 
 	public int aoe;
 
@@ -31,23 +25,14 @@ public class Raction {
 
 	public List<Type> targetTypes;
 
-	public List<string> selfConditions;
-	public List<bool> selfConditionMatch;
-
-	public List<string> targetConditions;
-	public List<bool> targetConditionMatch;
-
-	public List<string> currencies;
-	public List<int> costs;
-
 	public int maxRange;
 	public int minRange;
 
-	public List<Effect> selfEffects;
-	public List<Effect> targetEffects;
+	public List<string> conditions; 
+
 	public List<Reffect> reffects;
 
-	public List<Rcheck> rchecks;
+	public List<Check> checks;
 
 	public int aoe;
 
@@ -59,33 +44,21 @@ public class Raction {
 
 	public List<Raction> targetedFollowupRactions;
 	public List<Taction> targetedFollowupTactions;
-
-	public List<Action> followupTargetActions;
-	public List<Raction> followupTargetRactions;
 }
 
 public class Taction {
 	Type type;
 
 	public List<Type> targetTypes;
-
-	public List<string> selfConditions;
-	public List<bool> selfConditionMatch;
-
-	public List<string> targetConditions;
-	public List<bool> targetConditionMatch;
-
-	public List<string> currencies;
-	public List<int> costs;
-
+  
 	public int maxRange;
 	public int minRange;
 
-	public List<Effect> selfEffects;
-	public List<Effect> targetEffects;
+	public List<string> conditions; 
+
 	public List<Teffect> teffects;
 
-	public List<Tcheck> tchecks;
+	public List<Check> checks;
 
 	public int aoe;
 
@@ -99,190 +72,138 @@ public class Taction {
 	public List<Taction> targetedFollowupTactions;
 }
 
-public class Check {
-	public Type type;
-
-	public List<string> vars;
-	public List<float> varMultipliers;
-	public List<string> thresholds;
-	public List<float> thresholdMultipliers;
-
-	public List<Action> successActions;
-	public List<Raction> successRactions;
-	public List<Taction> successTactions;
-
-	public List<Action> failureActions;
-	public List<Raction> failureRactions;
-	public List<Taction> failureTactions;
-}
-
-public class Rcheck {
-	public Type type;
-
-	public List<string> selfVars;
-	public List<float> selfMultipliers;
-	public List<string> targetVars;
-	public List<float> targetMultiplier;
-
-	public List<Action> successActions;
-	public List<Raction> successRactions;
-	public List<Taction> successTactions;
-
-	public List<Raction> targetSuccessRactions;
-	public List<Taction> targetSuccessTactions;
-
-	public List<Action> successTargetActions;
-	public List<Raction> successTargetRactions;
-	public List<Taction> successTargetTactions; 
-
-	public List<Action> failureActions;
-	public List<Raction> failureRactions;
-	public List<Taction> failureTactions;
-
-	public List<Raction> targetFailureRactions;
-	public List<Taction> targetFailureTactions;
-
-	public List<Action> failureTargetActions;
-	public List<Raction> failureTargetRactions;
-	public List<Taction> failureTargetTactions;
-}
-
-public class Tcheck {
-	public Type type;
-
-	public List<string> selfVars;
-	public List<float> selfMultipliers;
-	public List<string> targetVars;
-	public List<float> targetMultipliers;
-
-	public List<Action> successActions;
-	public List<Raction> successRactions;
-	public List<Taction> successTactions;
-
-	public List<Raction> targetSuccessRactions;
-	public List<Taction> targetSuccessTactions;
-
-	public List<Action> successTargetActions;
-	public List<Raction> successTargetRactions;
-	public List<Taction> successTargetTactions; 
-
-	public List<Action> failureActions;
-	public List<Raction> failureRactions;
-	public List<Taction> failureTactions;
-
-	public List<Raction> targetFailureRactions;
-	public List<Taction> targetFailureTactions;
-
-	public List<Action> failureTargetActions;
-	public List<Raction> failureTargetRactions;
-	public List<Taction> failureTargetTactions;
-}
-
 public class Effect {
 	public Type type;
 
-	public int effectType;
-
 	public bool instant;
+	public bool perRound;
 	public int rounds;
 	public int roundFrequency;
-	public int epoch;
+	public bool perEpoch;
+	public int epochs;
 	public int epochFrequency;
 
-	public List<string> calcVars;
-	public List<float> calcMultipliers;
+	public int timeLeft;
+	public int procTime;
 
-	public List<string> buffVars;
-	public List<float> buffMultipliers;
+	bool addVars;
+	public List<string> selfAddVars;
+	public List<string> selfAddValues;
 
-	public List<string> statuses;
+	bool setVars;
+	public List<string> selfSetVars;
+	public List<string> selfSetValues;
+	
+	bool runMisc;
+	public List<string> miscPrograms;
+	
+	bool displace;
+	string displaceX;
+	string displaceY;
+	string displaceZ;
 
-	public bool displace;
-
-	public float direction; 
-	public int xDisplace;
-	public int yDisplace;
-	public int zDisplace;
+	public List<Action> followupActions;
+	
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 }
 
 public class Reffect {
 	public Type type;
 
-	public int effectType;
-	
 	public bool instant;
+	public bool perRound;
 	public int rounds;
 	public int roundFrequency;
-	public int epoch;
+	public bool perEpoch;
+	public int epochs;
 	public int epochFrequency;
 
-	public List<string> selfCalcVars;
-	public List<float> selfCalcMultipliers;
+	public int timeLeft;
+	public int procTime;
 
-	public List<string> targetCalcVars;
-	public List<float> targetCalcMultipliers;
+	bool addVars;
+	public List<string> selfAddVars;
+	public List<string> selfAddValues;
 
-	public List<string> selfBuffVars;
-	public List<float> selfBuffMultipliers;
+	public List<string> targetAddVars;
+	public List<string> targetAddValues;
 
-	public List<string> targetBuffVars;
-	public List<float> targetBuffMultipliers;
+	bool setVars;
+	public List<string> selfSetVars;
+	public List<string> selfSetValues;
 
-	public List<string> selfStatuses;
-	public List<string> targetStatuses;
+	public List<string> targetSetVars;
+	public List<string> targetSetValues;
+	
+	bool runMisc;
+	public List<string> miscPrograms;
 
-	public bool displace;
+	bool displaceGo;
+	bool displaceCome; 
 
-	public bool selfDisplace;
-	public int selfToTargetDisplace;
-	public int selfToTargetYDisplace;
-	public int selfToSelfDispalce;
-	public int selfToSelfYDispalce;
+	string targetDisplacePerp;
+	string targetDisplacePara;
+	string targetDisplaceAlt;
 
-	public bool targetDisplace;
-	public int targetToSelfDisplace;
-	public int targetToTargetDisplace;
-	public int targetToSelfYDisplace;
-	public int targetToTargetYDisplace;
+	string sefDisplacePerp;
+	string selfDisplacePara;
+	string selfDisplaceAlt;
+
+	public List<Action> followupActions;
+	
+	public List<Action> followupActions;
+	public List<Raction> followupRactions;
+
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 }
 
 public class Teffect {
 	public Type type;
 
-	public int effectType;
-	
 	public bool instant;
+	public bool perRound;
 	public int rounds;
 	public int roundFrequency;
-	public int epoch;
+	public bool perEpoch;
+	public int epochs;
 	public int epochFrequency;
 
-	public List<string> selfCalcVars;
-	public List<float> selfCalcMultipliers;
+	public int timeLeft;
+	public int procTime;
+	
+	bool addVars;
+	public List<string> selfAddVars;
+	public List<string> selfAddValues;
 
-	public List<string> targetCalcVars;
-	public List<float> targetCalcMultipliers;
+	public List<string> targetAddVars;
+	public List<string> targetAddValues;
 
-	public List<string> selfBuffVars;
-	public List<float> selfBuffMultipliers;
+	bool setVars;
+	public List<string> selfSetVars;
+	public List<string> selfSetValues;
 
-	public List<string> targetBuffVars;
-	public List<float> targetBuffMultipliers;
+	public List<string> targetSetVars;
+	public List<string> targetSetValues;
+	
+	bool runMisc;
+	public List<string> miscPrograms;
 
-	public List<string> selfStatuses;
-	public List<string> targetStatuses;
+	bool displaceGo;
+	bool displaceCome; 
 
-	public bool displace;
+	string targetDisplacePerp;
+	string targetDisplacePara;
+	string targetDisplaceAlt;
 
-	public bool selfDisplace;
-	public int selfToTargetDisplace;
-	public int selfToTargetYDisplace;
-	public int selfToSelfDispalce;
-	public int selfToSelfYDispalce;
+	string sefDisplacePerp;
+	string selfDisplacePara;
+	string selfDisplaceAlt;
 
-	public bool targetDisplace;
-	public int targetToSelfDisplace;
-	public int targetToTargetDisplace;
-	public int targetToSelfYDisplace;
-	public int targetToTargetYDisplace;
+	public List<Action> followupActions;
+	public List<Taction> followupTactions;
+	
+	public List<Raction> targetedFollowupRactions;
+	public List<Taction> targetedFollowupTactions;
 }
