@@ -45,7 +45,7 @@ public class Raction {
 
 	public List<Effect> selfEffects;
 	public List<Effect> targetEffects;
-	public List<Rffect> reffects;
+	public List<Reffect> reffects;
 
 	public List<Rcheck> rchecks;
 
@@ -83,7 +83,7 @@ public class Taction {
 
 	public List<Effect> selfEffects;
 	public List<Effect> targetEffects;
-	public List<Tffect> teffects;
+	public List<Teffect> teffects;
 
 	public List<Tcheck> tchecks;
 

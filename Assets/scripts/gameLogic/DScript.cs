@@ -378,7 +378,14 @@ public class DScript : MonoBehaviour {
 	// ================================= Actual Parser ===============================================================
 
 	Expression parse(string input) {
+		Debug.Log("parse called");
 		List<Atom> atomList = tokenize(input);
+
+		if (atomList.Count == 0) {
+			Expression errorExpression = new Expression("error", 0, 0);
+			errorExpression.eErrorMessage = "Got empty atomList";
+			return errorExpression;
+		}
 
 		return parseDo(atomList, 0, false).expression;
 		 
@@ -957,6 +964,7 @@ public class DScript : MonoBehaviour {
 	// ================================= Desugarer ===========================================================
 
 	Expression desugar(Expression expression) {
+		Debug.Log("desugar called");
 		switch(expression.expressionType) {
 			case "e-list": // e-list
 				expression.eList = expression.eList.Select(desugar).ToList();
@@ -1061,6 +1069,7 @@ public class DScript : MonoBehaviour {
 		ref Dictionary<string, Cube> cubeEnv
 		) 
 	{
+		Debug.Log("interpret called");
 		switch (expression.expressionType) {
 			case "e-int": //e-int
 				return interpInt(expression, env, store);
