@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\gameLogic\CubePrefabScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\DScript.cs" />
+     <Compile Include="Assets\scripts\gameLogic\DaedScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\dump.cs" />
      <Compile Include="Assets\scripts\gameLogic\GraphicScript.cs" />
      <Compile Include="Assets\scripts\gameLogic\Index.cs" />

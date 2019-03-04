@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DScript {
+public class DaedScript {
 
 	Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>();
 
-	public DScript(){
+	public DaedScript(){
 		builtInFunctions.Add("ToString", ToString);
 		builtInFunctions.Add("ToInt", ToInt);
 		builtInFunctions.Add("ToDouble", ToDouble);

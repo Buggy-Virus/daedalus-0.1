@@ -5,7 +5,7 @@ using UnityEngine;
 public class testDaedScript : MonoBehaviour
 {
     IgListScript igListScript;
-    DScript dScript = new DScript();
+    DaedScript dScript = new DaedScript();
 	public Dictionary<string, Token> tokenEnv;
     public Dictionary<string, Cube> cubeEnv;
 
