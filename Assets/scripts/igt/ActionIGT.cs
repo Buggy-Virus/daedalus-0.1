@@ -32,8 +32,6 @@ public class Raction {
 
 	public List<Reffect> reffects;
 
-	public List<Check> checks;
-
 	public int aoe;
 
 	public List<Raction> aoeRactions;
@@ -57,8 +55,6 @@ public class Taction {
 	public List<string> conditions; 
 
 	public List<Teffect> teffects;
-
-	public List<Check> checks;
 
 	public int aoe;
 
@@ -150,8 +146,6 @@ public class Reffect {
 	string selfDisplacePara;
 	string selfDisplaceAlt;
 
-	public List<Action> followupActions;
-	
 	public List<Action> followupActions;
 	public List<Raction> followupRactions;
 

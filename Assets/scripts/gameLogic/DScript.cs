@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DScript : MonoBehaviour {
+public class DScript {
 
 	Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>();
 
-	void Start(){
+	public DScript(){
 		builtInFunctions.Add("ToString", ToString);
 		builtInFunctions.Add("ToInt", ToInt);
 		builtInFunctions.Add("ToDouble", ToDouble);
@@ -48,8 +48,34 @@ public class DScript : MonoBehaviour {
 		ref Dictionary<string, Cube> cubeEnv
 	) 
 	{
+		List<Atom> atomList = tokenize(input);
+
+		// Debug.Log("===== NEW EVALUATION =====");
+
+		// foreach (Atom atom in atomList) {
+		// 	Debug.Log(atom.atomType + ", " + atom.value);
+		// }		
+		
+		Expression expression = parse(atomList);
+
+		Expression desugar_expression = desugar(expression);
+
+		// Debug.Log(desugar_expression.eDo.Count);
+		// Debug.Log(desugar_expression.eDo[0].eInt);	
+
+		//return new Value();
+
+		// Debug.Log("Expression Info");
+		// Debug.Log("expression Count: " + expression.eDo.Count.ToString());
+		// Debug.Log(expression.eDo[0].expressionType);	
+		// // Debug.Log(expression.eDo[0].eOperatorLeft.eInt);
+		// Debug.Log(expression.eDo[0].eOperatorOp);	
+		// Debug.Log(expression.eDo[0].eErrorMessage);	
+		// // Debug.Log(expression.eDo[0].eOperatorRight.eInt);
+		// Debug.Log("End of Expression Info");
+
 		return interpret(
-			desugar(parse(input)), 
+			desugar_expression, 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref tokenEnv,
@@ -67,7 +93,7 @@ public class DScript : MonoBehaviour {
 		tokenEnv.Add("self", self);
 
 		return interpret(
-			desugar(parse(input)), 
+			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref tokenEnv,
@@ -85,7 +111,7 @@ public class DScript : MonoBehaviour {
 		cubeEnv.Add("self", self);
 
 		return interpret(
-			desugar(parse(input)), 
+			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref tokenEnv,
@@ -105,7 +131,7 @@ public class DScript : MonoBehaviour {
 		tokenEnv.Add("target", target);
 
 		return interpret(
-			desugar(parse(input)), 
+			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref tokenEnv,
@@ -125,7 +151,7 @@ public class DScript : MonoBehaviour {
 		cubeEnv.Add("target", target);
 		
 		return interpret(
-			desugar(parse(input)), 
+			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref tokenEnv,
@@ -142,6 +168,7 @@ public class DScript : MonoBehaviour {
 	// ================================= Tokenizer Functions =====================================================================
 
 	List<Atom> tokenize(string input) {
+		// Debug.Log("tokenize called");
 		List<Atom> atomList = new List<Atom>();
 
 		bool buildingAtom = false;
@@ -207,8 +234,6 @@ public class DScript : MonoBehaviour {
 							case "<":
 								if (curChar == '=') {
 									curAtom.value += curChar.ToString();
-									atomList.Add(curAtom);
-									buildingAtom = false;
 								} else {
 									atomList.Add(curAtom);
 									buildingAtom = false;
@@ -217,8 +242,6 @@ public class DScript : MonoBehaviour {
 							case "!":
 								if (curChar == '=') {
 									curAtom.value += curChar.ToString();
-									atomList.Add(curAtom);
-									buildingAtom = false;
 								} else {
 									atomList.Add(curAtom);
 									buildingAtom = false;
@@ -227,8 +250,6 @@ public class DScript : MonoBehaviour {
 							case "*":
 								if (curChar == '*') {
 									curAtom.value += curChar.ToString();
-									atomList.Add(curAtom);
-									buildingAtom = false;
 								} else {
 									atomList.Add(curAtom);
 									buildingAtom = false;
@@ -237,20 +258,16 @@ public class DScript : MonoBehaviour {
 							case "|":
 								if (curChar == '|') {
 									curAtom.value += curChar.ToString();
-									atomList.Add(curAtom);
-									buildingAtom = false;
 								} else {
-									atomList.Add(new Atom("error", curChar.ToString(), line, character));
+									atomList.Add(new Atom("error", "expected \"|\", got \"" + curChar.ToString() + "\"", line, character));
 									buildingAtom = false;
 								}
 								break;
 							case "&":
 								if (curChar == '&') {
 									curAtom.value += curChar.ToString();
-									atomList.Add(curAtom);
-									buildingAtom = false;
 								} else {
-									atomList.Add(new Atom("error", curChar.ToString(), line, character));
+									atomList.Add(new Atom("error", "expected \"&\", got \"" + curChar.ToString() + "\"", line, character));
 									buildingAtom = false;
 								}
 								break;
@@ -280,7 +297,7 @@ public class DScript : MonoBehaviour {
 					buildingString = true;
 					singleQuote = false;
 				} else if (isPunctuation(curChar)) {
-					curAtom = new Atom("punc", curChar.ToString(), line, character);
+					curAtom = new Atom("punctuation", curChar.ToString(), line, character);
 					atomList.Add(curAtom);
 				} else if (isOperator(curChar)) {
 					curAtom = new Atom("operator", curChar.ToString(), line, character);
@@ -292,7 +309,7 @@ public class DScript : MonoBehaviour {
 					curAtom = new Atom("identifier", curChar.ToString(), line, character);
 					buildingAtom = true;
 				} else {
-					curAtom = new Atom("error", curChar.ToString(), line, character);
+					curAtom = new Atom("error", "\"" + curChar.ToString() + "\"", line, character);
 					atomList.Add(curAtom);
 				} 
 			} else if (!buildingAtom && buildingString) {
@@ -325,6 +342,7 @@ public class DScript : MonoBehaviour {
 		switch(c) {
 			case '\t':
 			case '\n':
+			case ' ':
 				return true;
 			default:
 				return false;
@@ -341,6 +359,9 @@ public class DScript : MonoBehaviour {
 			case '>':
 			case '<':
 			case '!':
+			case '%':
+			case '|':
+			case '&':
 				return true;
 			default:
 				return false;
@@ -370,16 +391,15 @@ public class DScript : MonoBehaviour {
 	}
 
 	ParseResult parseError(Atom atom, int pos, string message) {
-		Expression error = new Expression("Error", atom.line, atom.character);
-		error.eErrorMessage = message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
+		Expression error = new Expression("error", atom.line, atom.character);
+		error.eErrorMessage = "ParseError:" + message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
 		return new ParseResult(error, pos);
 	}
 
 	// ================================= Actual Parser ===============================================================
 
-	Expression parse(string input) {
-		Debug.Log("parse called");
-		List<Atom> atomList = tokenize(input);
+	Expression parse(List<Atom> atomList) {
+		// Debug.Log("parse called");
 
 		if (atomList.Count == 0) {
 			Expression errorExpression = new Expression("error", 0, 0);
@@ -392,8 +412,6 @@ public class DScript : MonoBehaviour {
 	}
 
 	ParseResult parseDo(List<Atom> atomList, int pos, bool bookended) {
-		Debug.Log(atomList.Count);
-		Debug.Log(pos);
 		Expression doExpression = new Expression("e-do", atomList[pos].line, atomList[pos].character);
 		doExpression.eDo = new List<Expression>();
 
@@ -417,6 +435,7 @@ public class DScript : MonoBehaviour {
 	}
 
 	ParseResult parseSingle(List<Atom> atomList, int pos, bool bookended) {
+		// Debug.Log("parseSingle");
 		Expression lastExpression = new Expression("error", atomList[pos].line, atomList[pos].character);
 		bool seenExpression = false;
 
@@ -448,12 +467,16 @@ public class DScript : MonoBehaviour {
 						default:
 							return parseError(atomList[pos], pos, "Undefined keyword"); // throw error
 					}
+				} else if (curAtom.atomType == "error") {
+					return parseError(atomList[pos], pos, "AtomError"); // throw error
 				} else {
 					ParseResult firstResult = parseSingleHelper(atomList, pos);
 					lastExpression = firstResult.expression;
 					seenExpression = true;
-					pos = firstResult.position;
+					pos = firstResult.position + 1;
 				}
+			} else if (atomEquals(atomList[pos], "punctuation", ";")) {
+				return new ParseResult(lastExpression, pos);
 			} else {
 				switch(curAtom.atomType) {
 					case "operator":
@@ -462,6 +485,9 @@ public class DScript : MonoBehaviour {
 						switch(curAtom.value) {
 							case "+":
 								opExpression.eOperatorOp = "+";
+								break;
+							case "-":
+								opExpression.eOperatorOp = "-";
 								break;
 							case "**":
 								opExpression.eOperatorOp = "**";
@@ -490,6 +516,15 @@ public class DScript : MonoBehaviour {
 							case ">":
 								opExpression.eOperatorOp = ">";
 								break;
+							case "%":
+								opExpression.eOperatorOp = "%";
+								break;
+							case "&&":
+								opExpression.eOperatorOp = "&&";
+								break;
+							case "||":
+								opExpression.eOperatorOp = "||";
+								break;
 							default:
 								return parseError(atomList[pos], pos, "Undefined operator"); // throw error
 						}
@@ -503,17 +538,19 @@ public class DScript : MonoBehaviour {
 						}
 						opExpression.eOperatorRight = secondResult.expression;
 						lastExpression = opExpression;
-						pos = secondResult.position;
+						pos = secondResult.position + 1;
+						// Debug.Log("Second Result Position: " + pos.ToString());
 						break;
 					case "punctuation":
 						switch(curAtom.value) {
 							case "[":
 								ParseResult indexResult = parseIndex(atomList, pos + 1, lastExpression);
 								lastExpression = indexResult.expression;
-								pos = indexResult.position;
+								pos = indexResult.position + 1;
 								break;
 							case ";":
 								if (!bookended) {
+									// Debug.Log("out of parseSingle through ;");
 									return new ParseResult(lastExpression, pos);
 								} else {
 									return parseError(atomList[pos], pos, "Expected \")\""); // throw error
@@ -522,14 +559,22 @@ public class DScript : MonoBehaviour {
 								if (bookended) {
 									return new ParseResult(lastExpression, pos);
 								} else {
-									return parseError(atomList[pos], pos, "Unexpected character"); // throw error
+									return new ParseResult(lastExpression, pos - 1);
 								}
 							default:
-								return parseError(atomList[pos], pos, "Unexpected punctuation"); // throw error
+								if (!bookended) {
+									// Debug.Log("out of parseSingle through punc");
+									return new ParseResult(lastExpression, pos - 1);
+								} else {
+									return parseError(atomList[pos], pos, "Expected operator or punctuation"); // throw error
+								}
 						}
 						break;
+					case "error":
+						return parseError(atomList[pos], pos, "AtomError"); // throw error
 					default:
 						if (!bookended) {
+							// Debug.Log("out of parseSingle through default");
 							return new ParseResult(lastExpression, pos - 1);
 						} else {
 							return parseError(atomList[pos], pos, "Expected operator or punctuation"); // throw error
@@ -537,7 +582,10 @@ public class DScript : MonoBehaviour {
 				}
 			}
 		}
-		return parseError(atomList[pos], pos, "No expression returned from parseSingle"); // throw error
+		if (seenExpression && atomEquals(atomList[pos - 1], "punctuation", ";")) {
+			return new ParseResult(lastExpression, pos - 1);
+		}
+		return parseError(atomList[pos - 1], pos, "No expression returned from parseSingle"); // throw error
 	}
 
 	ParseResult parseSingleHelper(List<Atom> atomList, int pos) {
@@ -642,23 +690,26 @@ public class DScript : MonoBehaviour {
 
 	ParseResult parseList(List<Atom> atomList, int pos) {
 		Expression listExpression = new Expression("e-list", atomList[pos].line, atomList[pos].character - 1);
+		listExpression.eList = new List<Expression>();
 
-		List<Expression> expressionList = new List<Expression>();
-		while (!atomEquals(atomList[pos], "punctuation", ")")) {
+		while (!atomEquals(atomList[pos], "punctuation", "]")) {
 
 			ParseResult argumentResult = parseSingle(atomList, pos, false);
-			expressionList.Add(argumentResult.expression);
+			listExpression.eList.Add(argumentResult.expression);
 			pos = argumentResult.position += 1;
 
 			if (atomEquals(atomList[pos], "punctuation", ",")) {
 				pos += 1;
-			} else if (atomEquals(atomList[pos], "punctuation", ")")) {
+			} else if (atomEquals(atomList[pos], "punctuation", "]")) {
 				break;
 			} else {
-				return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+				return parseError(atomList[pos], pos, "Expected \",\" or \"]\""); // throw error
+			}
+
+			if (pos == atomList.Count) {
+				return parseError(atomList[pos], pos, "Expected \",\" or \"]\""); // throw error
 			}
 		}
-		listExpression.eList = expressionList;
 
 		return new ParseResult(listExpression, pos);
 	}
@@ -673,10 +724,10 @@ public class DScript : MonoBehaviour {
 			if (atomEquals(atomList[pos], "punctuation", "(")) {
 				pos += 1;
 
-				List<string> argumentList = new List<string>();
+				funcExpression.eFuncParams = new List<string>();
 				while (!atomEquals(atomList[pos], "punctuation", ")")) {
 					if (atomList[pos].atomType == "identifier") {
-						argumentList.Add(atomList[pos].value);
+						funcExpression.eFuncParams.Add(atomList[pos].value);
 						pos += 1;
 
 						if (atomEquals(atomList[pos], "punctuation", ",")) {
@@ -686,9 +737,12 @@ public class DScript : MonoBehaviour {
 						} else {
 							return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 						}
+
+						if (pos == atomList.Count) {
+							return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+						}
 					}
 				}
-				funcExpression.eFuncParams = argumentList;
 				pos += 1;
 
 				ParseResult bodyResult = parseDo(atomList, pos, true);
@@ -703,8 +757,6 @@ public class DScript : MonoBehaviour {
 			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
 	}
-
-
 
 	ParseResult parseNot(List<Atom> atomList, int pos) {
 		Expression notExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 1);
@@ -760,6 +812,10 @@ public class DScript : MonoBehaviour {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
+						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+					}
+
+					if (pos == atomList.Count) {
 						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 					}
 				}
@@ -894,6 +950,10 @@ public class DScript : MonoBehaviour {
 					} else {
 						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
 					}
+
+					if (pos == atomList.Count) {
+						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+					}
 				}
 				evalExpression.eEvalArguments = argumentList;
 
@@ -964,13 +1024,13 @@ public class DScript : MonoBehaviour {
 	// ================================= Desugarer ===========================================================
 
 	Expression desugar(Expression expression) {
-		Debug.Log("desugar called");
+		// Debug.Log("desugar called");
 		switch(expression.expressionType) {
 			case "e-list": // e-list
 				expression.eList = expression.eList.Select(desugar).ToList();
 				return expression;
 			case "e-op": //e-op
-				expression.eOperatorRight = desugar(expression.eOperatorLeft);
+				expression.eOperatorLeft = desugar(expression.eOperatorLeft);
 				expression.eOperatorRight = desugar(expression.eOperatorRight);
 				return expression;
 			case "e-triOp": //e-triOp
@@ -1069,7 +1129,7 @@ public class DScript : MonoBehaviour {
 		ref Dictionary<string, Cube> cubeEnv
 		) 
 	{
-		Debug.Log("interpret called");
+		// Debug.Log("interpret called");
 		switch (expression.expressionType) {
 			case "e-int": //e-int
 				return interpInt(expression, env, store);
@@ -1111,10 +1171,10 @@ public class DScript : MonoBehaviour {
 				return interpBuiltinFunc(expression, env, store, ref tokenEnv, ref cubeEnv);
 			case "e-return":
 				return interpReturn(expression, env, store, ref tokenEnv, ref cubeEnv);
-			case "e-error":
+			case "error":
 				return interpError(expression, env, store, ref tokenEnv, ref cubeEnv);
 			default:
-				return expressionError(expression, store, "Unknown expression type");
+				return expressionError(expression, store, "Unknown expression type: " + expression.expressionType);
 		}
 	}
 
@@ -1443,7 +1503,6 @@ public class DScript : MonoBehaviour {
 	)
 	{
 		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
-		// Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
 		switch(l_result.value.valueType) {
 			case("int"):
 			case("double"):
@@ -1479,12 +1538,12 @@ public class DScript : MonoBehaviour {
 			case("list"):
 				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
 				switch(r_result_list.value.valueType) {
-					case("vList"):
+					case("list"):
 						Value returnValue = new Value("list", expression.line, expression.character);
 						returnValue.vList = l_result.value.vList.Concat(r_result_list.value.vList).ToList();
 						return new Result(returnValue, r_result_list.store);
 					default:
-						return resultError(r_result_list, "list"); //Throw Error	
+						return resultError(r_result_list, "Expected list"); //Throw Error	
 				}
 			default:
 				return resultError(l_result, "Expected int, double, string, or list"); //Throw Error	
@@ -1925,6 +1984,9 @@ public class DScript : MonoBehaviour {
 				return interpret(expr.eReturn, env, last_result.store, ref tokenEnv, ref cubeEnv);
 			} else {
 				last_result = interpret(expr, env, last_result.store, ref tokenEnv, ref cubeEnv);
+				if (last_result.value.valueType == "error") {
+					return last_result;
+				}
 			}
 			
 		}

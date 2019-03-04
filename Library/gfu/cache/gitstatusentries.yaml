@@ -13,60 +13,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 5
-  lastUpdatedAtString: 2019-02-24T02:20:41.199-05:00
-  initializedAtString: 2019-02-24T02:20:41.124-05:00
+  lastUpdatedAtString: 2019-03-03T22:32:00.860-05:00
+  initializedAtString: 2019-03-03T19:53:07.779-05:00
   entries:
-  - path: Assembly-CSharp.csproj
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assembly-CSharp.csproj
-    projectPath: Assembly-CSharp.csproj
-    originalPath: 
-    status: 3
-    staged: 0
-  - path: Assets\gameAssets.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\gameAssets.meta
-    projectPath: Assets\gameAssets.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\Plugins.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\Plugins.meta
-    projectPath: Assets\Plugins.meta
-    originalPath: 
-    status: 3
-    staged: 0
-  - path: Assets\Scenes.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\Scenes.meta
-    projectPath: Assets\Scenes.meta
-    originalPath: 
-    status: 3
-    staged: 0
   - path: Assets\Scenes\SampleScene.unity
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\Scenes\SampleScene.unity
     projectPath: Assets\Scenes\SampleScene.unity
     originalPath: 
     status: 3
     staged: 0
-  - path: Assets\scripts\AssetScript.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\AssetScript.cs
-    projectPath: Assets\scripts\AssetScript.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\AssetScript.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\AssetScript.cs.meta
-    projectPath: Assets\scripts\AssetScript.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
   - path: Assets\scripts\gameLogic\DScript.cs
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\DScript.cs
     projectPath: Assets\scripts\gameLogic\DScript.cs
-    originalPath: 
-    status: 3
-    staged: 0
-  - path: Assets\scripts\gameLogic\MapScript.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\MapScript.cs
-    projectPath: Assets\scripts\gameLogic\MapScript.cs
     originalPath: 
     status: 3
     staged: 0
@@ -80,169 +38,13 @@ MonoBehaviour:
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\testDaedScript.cs
     projectPath: Assets\scripts\gameLogic\testDaedScript.cs
     originalPath: 
-    status: 1
-    staged: 0
-  - path: Assets\scripts\gameLogic\testDaedScript.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\gameLogic\testDaedScript.cs.meta
-    projectPath: Assets\scripts\gameLogic\testDaedScript.cs.meta
-    originalPath: 
-    status: 1
+    status: 3
     staged: 0
   - path: Assets\scripts\igt\ActionIGT.cs
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\igt\ActionIGT.cs
     projectPath: Assets\scripts\igt\ActionIGT.cs
     originalPath: 
     status: 3
-    staged: 0
-  - path: Assets\scripts\readme.txt
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\readme.txt
-    projectPath: Assets\scripts\readme.txt
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\readme.txt.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\readme.txt.meta
-    projectPath: Assets\scripts\readme.txt.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\StuffScript.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\StuffScript.cs
-    projectPath: Assets\scripts\StuffScript.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\StuffScript.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\StuffScript.cs.meta
-    projectPath: Assets\scripts\StuffScript.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\thingScripts.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\thingScripts.meta
-    projectPath: Assets\scripts\thingScripts.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\thingScripts\Thing.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\thingScripts\Thing.cs
-    projectPath: Assets\scripts\thingScripts\Thing.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\thingScripts\Thing.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\thingScripts\Thing.cs.meta
-    projectPath: Assets\scripts\thingScripts\Thing.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\thingScripts\ThingDT.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\thingScripts\ThingDT.cs
-    projectPath: Assets\scripts\thingScripts\ThingDT.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\thingScripts\ThingDT.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\thingScripts\ThingDT.cs.meta
-    projectPath: Assets\scripts\thingScripts\ThingDT.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts.meta
-    projectPath: Assets\scripts\tileScripts.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts\GameTile.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts\GameTile.cs
-    projectPath: Assets\scripts\tileScripts\GameTile.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts\GameTile.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts\GameTile.cs.meta
-    projectPath: Assets\scripts\tileScripts\GameTile.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts\moveTile.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts\moveTile.cs
-    projectPath: Assets\scripts\tileScripts\moveTile.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts\moveTile.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts\moveTile.cs.meta
-    projectPath: Assets\scripts\tileScripts\moveTile.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts\TileDT.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts\TileDT.cs
-    projectPath: Assets\scripts\tileScripts\TileDT.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tileScripts\TileDT.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tileScripts\TileDT.cs.meta
-    projectPath: Assets\scripts\tileScripts\TileDT.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts.meta
-    projectPath: Assets\scripts\tokenScripts.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\GraphicTokenScript.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\GraphicTokenScript.cs
-    projectPath: Assets\scripts\tokenScripts\GraphicTokenScript.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\GraphicTokenScript.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\GraphicTokenScript.cs.meta
-    projectPath: Assets\scripts\tokenScripts\GraphicTokenScript.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\SelectToken.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\SelectToken.cs
-    projectPath: Assets\scripts\tokenScripts\SelectToken.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\SelectToken.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\SelectToken.cs.meta
-    projectPath: Assets\scripts\tokenScripts\SelectToken.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\Token.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\Token.cs
-    projectPath: Assets\scripts\tokenScripts\Token.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\Token.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\Token.cs.meta
-    projectPath: Assets\scripts\tokenScripts\Token.cs.meta
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\TokenDT.cs
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\TokenDT.cs
-    projectPath: Assets\scripts\tokenScripts\TokenDT.cs
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Assets\scripts\tokenScripts\TokenDT.cs.meta
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Assets\scripts\tokenScripts\TokenDT.cs.meta
-    projectPath: Assets\scripts\tokenScripts\TokenDT.cs.meta
-    originalPath: 
-    status: 5
     staged: 0
   - path: Library\assetDatabase3
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\assetDatabase3
@@ -253,18 +55,6 @@ MonoBehaviour:
   - path: Library\CurrentLayout.dwlt
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\CurrentLayout.dwlt
     projectPath: Library\CurrentLayout.dwlt
-    originalPath: 
-    status: 3
-    staged: 0
-  - path: Library\expandedItems
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\expandedItems
-    projectPath: Library\expandedItems
-    originalPath: 
-    status: 3
-    staged: 0
-  - path: Library\gfu\cache\branches.yaml
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\gfu\cache\branches.yaml
-    projectPath: Library\gfu\cache\branches.yaml
     originalPath: 
     status: 3
     staged: 0
@@ -292,203 +82,11 @@ MonoBehaviour:
     originalPath: 
     status: 3
     staged: 0
-  - path: Library\metadata\06\06efab969c3f500488f0b17024663d91
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\06\06efab969c3f500488f0b17024663d91
-    projectPath: Library\metadata\06\06efab969c3f500488f0b17024663d91
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\06\06efab969c3f500488f0b17024663d91.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\06\06efab969c3f500488f0b17024663d91.info
-    projectPath: Library\metadata\06\06efab969c3f500488f0b17024663d91.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\24\24c639e2e9fa51c41b358cbfc7b6da91
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\24\24c639e2e9fa51c41b358cbfc7b6da91
-    projectPath: Library\metadata\24\24c639e2e9fa51c41b358cbfc7b6da91
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\24\24c639e2e9fa51c41b358cbfc7b6da91.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\24\24c639e2e9fa51c41b358cbfc7b6da91.info
-    projectPath: Library\metadata\24\24c639e2e9fa51c41b358cbfc7b6da91.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\2b\2baf9a9697fdc5f41b37cd8055a18de8
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\2b\2baf9a9697fdc5f41b37cd8055a18de8
-    projectPath: Library\metadata\2b\2baf9a9697fdc5f41b37cd8055a18de8
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\2b\2baf9a9697fdc5f41b37cd8055a18de8.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\2b\2baf9a9697fdc5f41b37cd8055a18de8.info
-    projectPath: Library\metadata\2b\2baf9a9697fdc5f41b37cd8055a18de8.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\3b\3bbc7aa0865d6354e8c3da9b8e425922
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3b\3bbc7aa0865d6354e8c3da9b8e425922
-    projectPath: Library\metadata\3b\3bbc7aa0865d6354e8c3da9b8e425922
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\3b\3bbc7aa0865d6354e8c3da9b8e425922.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3b\3bbc7aa0865d6354e8c3da9b8e425922.info
-    projectPath: Library\metadata\3b\3bbc7aa0865d6354e8c3da9b8e425922.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\3c\3c7e2bd549ebc8f469ba58241916b8aa
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c7e2bd549ebc8f469ba58241916b8aa
-    projectPath: Library\metadata\3c\3c7e2bd549ebc8f469ba58241916b8aa
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\3c\3c7e2bd549ebc8f469ba58241916b8aa.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\3c\3c7e2bd549ebc8f469ba58241916b8aa.info
-    projectPath: Library\metadata\3c\3c7e2bd549ebc8f469ba58241916b8aa.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\49\492e3ea0cccbe6343a0b857fd2f6843c
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\49\492e3ea0cccbe6343a0b857fd2f6843c
-    projectPath: Library\metadata\49\492e3ea0cccbe6343a0b857fd2f6843c
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\49\492e3ea0cccbe6343a0b857fd2f6843c.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\49\492e3ea0cccbe6343a0b857fd2f6843c.info
-    projectPath: Library\metadata\49\492e3ea0cccbe6343a0b857fd2f6843c.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\56\56f08c48a66effa4dbc95c55fd875c0c
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\56\56f08c48a66effa4dbc95c55fd875c0c
-    projectPath: Library\metadata\56\56f08c48a66effa4dbc95c55fd875c0c
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\56\56f08c48a66effa4dbc95c55fd875c0c.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\56\56f08c48a66effa4dbc95c55fd875c0c.info
-    projectPath: Library\metadata\56\56f08c48a66effa4dbc95c55fd875c0c.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\58\581e1214fa961ea4382928b76dabf2f9
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\58\581e1214fa961ea4382928b76dabf2f9
-    projectPath: Library\metadata\58\581e1214fa961ea4382928b76dabf2f9
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\58\581e1214fa961ea4382928b76dabf2f9.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\58\581e1214fa961ea4382928b76dabf2f9.info
-    projectPath: Library\metadata\58\581e1214fa961ea4382928b76dabf2f9.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
-    projectPath: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2.info
-    projectPath: Library\metadata\5d\5da59041198d31f43a77d9a6b04b8fd2.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
-    projectPath: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\65\6562d3d129d981f4ba7297fac6bec235.info
-    projectPath: Library\metadata\65\6562d3d129d981f4ba7297fac6bec235.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
-    projectPath: Library\metadata\75\75ee1f609b423f34ab1b2bcd354b59b6
+  - path: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
+    projectPath: Library\metadata\d7\d7a72fa6e59b880409121c0154230c26
     originalPath: 
     status: 3
-    staged: 0
-  - path: Library\metadata\98\981b5d960ff037c4690b0565d018fa0e
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\98\981b5d960ff037c4690b0565d018fa0e
-    projectPath: Library\metadata\98\981b5d960ff037c4690b0565d018fa0e
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\98\981b5d960ff037c4690b0565d018fa0e.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\98\981b5d960ff037c4690b0565d018fa0e.info
-    projectPath: Library\metadata\98\981b5d960ff037c4690b0565d018fa0e.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\ad\adf5ad65f57060d44bfbb06518ebdf8c
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\ad\adf5ad65f57060d44bfbb06518ebdf8c
-    projectPath: Library\metadata\ad\adf5ad65f57060d44bfbb06518ebdf8c
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\ad\adf5ad65f57060d44bfbb06518ebdf8c.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\ad\adf5ad65f57060d44bfbb06518ebdf8c.info
-    projectPath: Library\metadata\ad\adf5ad65f57060d44bfbb06518ebdf8c.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\be\be28ef65588e59e488c601833ed0b113
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be28ef65588e59e488c601833ed0b113
-    projectPath: Library\metadata\be\be28ef65588e59e488c601833ed0b113
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\be\be28ef65588e59e488c601833ed0b113.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be28ef65588e59e488c601833ed0b113.info
-    projectPath: Library\metadata\be\be28ef65588e59e488c601833ed0b113.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
-    projectPath: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a.info
-    projectPath: Library\metadata\be\be8ccc38013085644b9cbcbf34bba64a.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\c7\c7d930bad35266b4484e5be2f874bda2
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\c7\c7d930bad35266b4484e5be2f874bda2
-    projectPath: Library\metadata\c7\c7d930bad35266b4484e5be2f874bda2
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\c7\c7d930bad35266b4484e5be2f874bda2.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\c7\c7d930bad35266b4484e5be2f874bda2.info
-    projectPath: Library\metadata\c7\c7d930bad35266b4484e5be2f874bda2.info
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\e5\e5f20d5607229f742bb18e18bab84f6f
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e5\e5f20d5607229f742bb18e18bab84f6f
-    projectPath: Library\metadata\e5\e5f20d5607229f742bb18e18bab84f6f
-    originalPath: 
-    status: 5
-    staged: 0
-  - path: Library\metadata\e5\e5f20d5607229f742bb18e18bab84f6f.info
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\metadata\e5\e5f20d5607229f742bb18e18bab84f6f.info
-    projectPath: Library\metadata\e5\e5f20d5607229f742bb18e18bab84f6f.info
-    originalPath: 
-    status: 5
     staged: 0
   - path: Library\shadercompiler-UnityShaderCompiler.exe0.log
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\shadercompiler-UnityShaderCompiler.exe0.log
@@ -502,27 +100,399 @@ MonoBehaviour:
     originalPath: 
     status: 3
     staged: 0
-  - path: obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
-    projectPath: obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+  - path: Library\StateCache\SceneView\3e62a3-mainStage.json
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Library\StateCache\SceneView\3e62a3-mainStage.json
+    projectPath: Library\StateCache\SceneView\3e62a3-mainStage.json
     originalPath: 
     status: 3
     staged: 0
-  - path: obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
-    projectPath: obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+  - path: Temp\__Backupscenes\0.backup
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\__Backupscenes\0.backup
+    projectPath: Temp\__Backupscenes\0.backup
     originalPath: 
     status: 3
-    staged: 0
-  - path: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
-    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
-    projectPath: Temp\ProcessJobs\1f068db059d5cf0261a3b566803bc6c6.bakert
-    originalPath: 
-    status: 1
     staged: 0
   - path: Temp\UnityLockfile
     fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityLockfile
     projectPath: Temp\UnityLockfile
+    originalPath: 
+    status: 3
+    staged: 0
+  - path: Temp\UnityTempFile-0afdf194510864041aa889eb4c27586c
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-0afdf194510864041aa889eb4c27586c
+    projectPath: Temp\UnityTempFile-0afdf194510864041aa889eb4c27586c
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-0cc64d38b1bfff54697236c10a329138
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-0cc64d38b1bfff54697236c10a329138
+    projectPath: Temp\UnityTempFile-0cc64d38b1bfff54697236c10a329138
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-0e6bb294d535b994faa4d52248c8835a
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-0e6bb294d535b994faa4d52248c8835a
+    projectPath: Temp\UnityTempFile-0e6bb294d535b994faa4d52248c8835a
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-196ce03ae247a2a43a51848f95c1e3c2
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-196ce03ae247a2a43a51848f95c1e3c2
+    projectPath: Temp\UnityTempFile-196ce03ae247a2a43a51848f95c1e3c2
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-1d002f790d0429a4cafd36f0b024031c
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-1d002f790d0429a4cafd36f0b024031c
+    projectPath: Temp\UnityTempFile-1d002f790d0429a4cafd36f0b024031c
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-1dab08346d3f0254292ebf4ccd387495
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-1dab08346d3f0254292ebf4ccd387495
+    projectPath: Temp\UnityTempFile-1dab08346d3f0254292ebf4ccd387495
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-23fffd704f45e2f45a36f93a1810d995
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-23fffd704f45e2f45a36f93a1810d995
+    projectPath: Temp\UnityTempFile-23fffd704f45e2f45a36f93a1810d995
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-25ced9e96c9a81f4685a38bff4501a75
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-25ced9e96c9a81f4685a38bff4501a75
+    projectPath: Temp\UnityTempFile-25ced9e96c9a81f4685a38bff4501a75
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-31a7fc1bbf3e7e94391a1c9adb3686c9
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-31a7fc1bbf3e7e94391a1c9adb3686c9
+    projectPath: Temp\UnityTempFile-31a7fc1bbf3e7e94391a1c9adb3686c9
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-33c117bf661089f469fb4de1648e224b
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-33c117bf661089f469fb4de1648e224b
+    projectPath: Temp\UnityTempFile-33c117bf661089f469fb4de1648e224b
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-345e770548fb6a84fa8875dc381efc9d
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-345e770548fb6a84fa8875dc381efc9d
+    projectPath: Temp\UnityTempFile-345e770548fb6a84fa8875dc381efc9d
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-42f44877b8499a74196bea489650c3ea
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-42f44877b8499a74196bea489650c3ea
+    projectPath: Temp\UnityTempFile-42f44877b8499a74196bea489650c3ea
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-4471613e5b08e944abb2200881cbfd2d
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-4471613e5b08e944abb2200881cbfd2d
+    projectPath: Temp\UnityTempFile-4471613e5b08e944abb2200881cbfd2d
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-58e963316b3416a46add8fb418fc22c0
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-58e963316b3416a46add8fb418fc22c0
+    projectPath: Temp\UnityTempFile-58e963316b3416a46add8fb418fc22c0
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-5b5b96ae2cc265c459d0e5359558f5ae
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-5b5b96ae2cc265c459d0e5359558f5ae
+    projectPath: Temp\UnityTempFile-5b5b96ae2cc265c459d0e5359558f5ae
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-5cc66d5c7c0d5d141a7e0440a29c9116
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-5cc66d5c7c0d5d141a7e0440a29c9116
+    projectPath: Temp\UnityTempFile-5cc66d5c7c0d5d141a7e0440a29c9116
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-60cb3d23281fadf448da98f06998885b
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-60cb3d23281fadf448da98f06998885b
+    projectPath: Temp\UnityTempFile-60cb3d23281fadf448da98f06998885b
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-62c5c4609d279434985910b8113d2288
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-62c5c4609d279434985910b8113d2288
+    projectPath: Temp\UnityTempFile-62c5c4609d279434985910b8113d2288
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-632046d92906b8d4b8a1080a8ca1dd4c
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-632046d92906b8d4b8a1080a8ca1dd4c
+    projectPath: Temp\UnityTempFile-632046d92906b8d4b8a1080a8ca1dd4c
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-6c8e6d981a1852449aba672efb3874f1
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-6c8e6d981a1852449aba672efb3874f1
+    projectPath: Temp\UnityTempFile-6c8e6d981a1852449aba672efb3874f1
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-70c81e8f070ba144abb8301e4630313c
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-70c81e8f070ba144abb8301e4630313c
+    projectPath: Temp\UnityTempFile-70c81e8f070ba144abb8301e4630313c
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-75fabe0b9fcfad74d85d1e2806de0a4d
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-75fabe0b9fcfad74d85d1e2806de0a4d
+    projectPath: Temp\UnityTempFile-75fabe0b9fcfad74d85d1e2806de0a4d
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-78194ae878cd32c4a861b4a65c734275
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-78194ae878cd32c4a861b4a65c734275
+    projectPath: Temp\UnityTempFile-78194ae878cd32c4a861b4a65c734275
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-7c7760dc7bdd51a449233796274d5b32
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-7c7760dc7bdd51a449233796274d5b32
+    projectPath: Temp\UnityTempFile-7c7760dc7bdd51a449233796274d5b32
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-7d0ea64bb30ddd14e8b0c430471f30e1
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-7d0ea64bb30ddd14e8b0c430471f30e1
+    projectPath: Temp\UnityTempFile-7d0ea64bb30ddd14e8b0c430471f30e1
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-8e877c44c9af64f428e9893da7751fc8
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-8e877c44c9af64f428e9893da7751fc8
+    projectPath: Temp\UnityTempFile-8e877c44c9af64f428e9893da7751fc8
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-916aed8cd73b34249a6841b9f9be2fea
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-916aed8cd73b34249a6841b9f9be2fea
+    projectPath: Temp\UnityTempFile-916aed8cd73b34249a6841b9f9be2fea
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-9773bc2aefe2e4349b98d44873a73b58
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9773bc2aefe2e4349b98d44873a73b58
+    projectPath: Temp\UnityTempFile-9773bc2aefe2e4349b98d44873a73b58
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-9ccdf53af4f10c949b8b2c9fb74265e5
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9ccdf53af4f10c949b8b2c9fb74265e5
+    projectPath: Temp\UnityTempFile-9ccdf53af4f10c949b8b2c9fb74265e5
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-9f79dca5c6d7af148af99e6389043256
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-9f79dca5c6d7af148af99e6389043256
+    projectPath: Temp\UnityTempFile-9f79dca5c6d7af148af99e6389043256
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-a13e80e2ee326914c948c35ffbb97dc0
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a13e80e2ee326914c948c35ffbb97dc0
+    projectPath: Temp\UnityTempFile-a13e80e2ee326914c948c35ffbb97dc0
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-a44cc75f2e820ba48ae5375afa144a37
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a44cc75f2e820ba48ae5375afa144a37
+    projectPath: Temp\UnityTempFile-a44cc75f2e820ba48ae5375afa144a37
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-a5fc0023ac520b64e853504b27bac33f
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a5fc0023ac520b64e853504b27bac33f
+    projectPath: Temp\UnityTempFile-a5fc0023ac520b64e853504b27bac33f
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-a6032c59a91f3f7418733a108ffcf791
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a6032c59a91f3f7418733a108ffcf791
+    projectPath: Temp\UnityTempFile-a6032c59a91f3f7418733a108ffcf791
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-a8504e3ce9b638e4da1cede558ac54b9
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a8504e3ce9b638e4da1cede558ac54b9
+    projectPath: Temp\UnityTempFile-a8504e3ce9b638e4da1cede558ac54b9
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-a932a8e3e7612d042868ce495d6b7ea7
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-a932a8e3e7612d042868ce495d6b7ea7
+    projectPath: Temp\UnityTempFile-a932a8e3e7612d042868ce495d6b7ea7
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-ae803153c07e3d345b243c0931d2e36a
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-ae803153c07e3d345b243c0931d2e36a
+    projectPath: Temp\UnityTempFile-ae803153c07e3d345b243c0931d2e36a
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-af0dd0a11f1da3a4cbf63b8d6875edc9
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-af0dd0a11f1da3a4cbf63b8d6875edc9
+    projectPath: Temp\UnityTempFile-af0dd0a11f1da3a4cbf63b8d6875edc9
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-b1460c6663838f54c9682a6126d5de6f
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b1460c6663838f54c9682a6126d5de6f
+    projectPath: Temp\UnityTempFile-b1460c6663838f54c9682a6126d5de6f
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-b489333c2617e124f94cc758d3e6270d
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b489333c2617e124f94cc758d3e6270d
+    projectPath: Temp\UnityTempFile-b489333c2617e124f94cc758d3e6270d
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-b5ce7bfba6b8ee245b6dfd5cc742ab73
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b5ce7bfba6b8ee245b6dfd5cc742ab73
+    projectPath: Temp\UnityTempFile-b5ce7bfba6b8ee245b6dfd5cc742ab73
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-b7bebe8eb0dfbdb41b78f820645ad721
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b7bebe8eb0dfbdb41b78f820645ad721
+    projectPath: Temp\UnityTempFile-b7bebe8eb0dfbdb41b78f820645ad721
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-b83480e96cf56834db2a310fd83f0619
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-b83480e96cf56834db2a310fd83f0619
+    projectPath: Temp\UnityTempFile-b83480e96cf56834db2a310fd83f0619
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-bb1aab5db1130a343a9f4b15c3026cc3
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-bb1aab5db1130a343a9f4b15c3026cc3
+    projectPath: Temp\UnityTempFile-bb1aab5db1130a343a9f4b15c3026cc3
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-c28768b50ba1227468ead4469ce98019
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-c28768b50ba1227468ead4469ce98019
+    projectPath: Temp\UnityTempFile-c28768b50ba1227468ead4469ce98019
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-cd714e732c6796e4d85581c5d39a92e3
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-cd714e732c6796e4d85581c5d39a92e3
+    projectPath: Temp\UnityTempFile-cd714e732c6796e4d85581c5d39a92e3
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-ce67a2b10772bfd4e9fc37b30625efeb
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-ce67a2b10772bfd4e9fc37b30625efeb
+    projectPath: Temp\UnityTempFile-ce67a2b10772bfd4e9fc37b30625efeb
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-d156981ee5044d74e947bf23f4b00ce4
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-d156981ee5044d74e947bf23f4b00ce4
+    projectPath: Temp\UnityTempFile-d156981ee5044d74e947bf23f4b00ce4
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-d1cf5b3cc9b49054c91b2b5f4a72f62d
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-d1cf5b3cc9b49054c91b2b5f4a72f62d
+    projectPath: Temp\UnityTempFile-d1cf5b3cc9b49054c91b2b5f4a72f62d
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-d28b5ff9e50cce04ba6d656a5824a38f
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-d28b5ff9e50cce04ba6d656a5824a38f
+    projectPath: Temp\UnityTempFile-d28b5ff9e50cce04ba6d656a5824a38f
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-d3e132e8128c9f1409ebb26118ac0ed4
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-d3e132e8128c9f1409ebb26118ac0ed4
+    projectPath: Temp\UnityTempFile-d3e132e8128c9f1409ebb26118ac0ed4
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-d5d7a1d88345a0e4d915dddd92625b64
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-d5d7a1d88345a0e4d915dddd92625b64
+    projectPath: Temp\UnityTempFile-d5d7a1d88345a0e4d915dddd92625b64
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f03519c59c021cf468fb6fe4ea19a930
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f03519c59c021cf468fb6fe4ea19a930
+    projectPath: Temp\UnityTempFile-f03519c59c021cf468fb6fe4ea19a930
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f05a21f9876ec2248a47644c34345ffb
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f05a21f9876ec2248a47644c34345ffb
+    projectPath: Temp\UnityTempFile-f05a21f9876ec2248a47644c34345ffb
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f25e6df88dc65e744b4fa979a6e30e0e
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f25e6df88dc65e744b4fa979a6e30e0e
+    projectPath: Temp\UnityTempFile-f25e6df88dc65e744b4fa979a6e30e0e
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f4685a01a3fcfb2428a526b23f56d9da
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f4685a01a3fcfb2428a526b23f56d9da
+    projectPath: Temp\UnityTempFile-f4685a01a3fcfb2428a526b23f56d9da
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f63c5c9a88a68c246babecc3406c0cdf
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f63c5c9a88a68c246babecc3406c0cdf
+    projectPath: Temp\UnityTempFile-f63c5c9a88a68c246babecc3406c0cdf
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f7a6dde862c50e440886b502e8e855ff
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f7a6dde862c50e440886b502e8e855ff
+    projectPath: Temp\UnityTempFile-f7a6dde862c50e440886b502e8e855ff
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-f7fef64718d1da04881335b26a620899
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-f7fef64718d1da04881335b26a620899
+    projectPath: Temp\UnityTempFile-f7fef64718d1da04881335b26a620899
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-fb5751400af27be40a3dfe566a30b1c3
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-fb5751400af27be40a3dfe566a30b1c3
+    projectPath: Temp\UnityTempFile-fb5751400af27be40a3dfe566a30b1c3
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-fb7e6c6f9fd67574c8eecb0df8e45221
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-fb7e6c6f9fd67574c8eecb0df8e45221
+    projectPath: Temp\UnityTempFile-fb7e6c6f9fd67574c8eecb0df8e45221
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-fd667016f488d474aba57f72c4410571
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-fd667016f488d474aba57f72c4410571
+    projectPath: Temp\UnityTempFile-fd667016f488d474aba57f72c4410571
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityTempFile-ffcb2e110b5a67947902d7cb4e79c32f
+    fullPath: C:\Users\ohare\Documents\Daedalus 0.1\Temp\UnityTempFile-ffcb2e110b5a67947902d7cb4e79c32f
+    projectPath: Temp\UnityTempFile-ffcb2e110b5a67947902d7cb4e79c32f
     originalPath: 
     status: 1
     staged: 0
