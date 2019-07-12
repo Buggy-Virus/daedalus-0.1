@@ -6,33 +6,31 @@ using UnityEngine;
 
 public class DaedScript {
 
-	Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>();
-
-	public DaedScript(){
-		builtInFunctions.Add("ToString", ToString);
-		builtInFunctions.Add("ToInt", ToInt);
-		builtInFunctions.Add("ToDouble", ToDouble);
-		builtInFunctions.Add("ToBool", ToBool);
-		builtInFunctions.Add("Abs", Abs);
-		builtInFunctions.Add("Max", Max);
-		builtInFunctions.Add("Min", Min);
-		builtInFunctions.Add("Floor", Floor);
-		builtInFunctions.Add("Ceil", Ceil);
-		builtInFunctions.Add("Factorial", Factorial);
-		builtInFunctions.Add("Binomial", Binomial);
-		builtInFunctions.Add("Log", Log);
-		builtInFunctions.Add("Logn", Logn);
-		builtInFunctions.Add("Round", Round);
-		builtInFunctions.Add("Sum", Sum);
-		builtInFunctions.Add("Len", Len);
-		builtInFunctions.Add("Range", Range);
-		builtInFunctions.Add("Append", Append);
-		builtInFunctions.Add("Insert", Insert);
-		builtInFunctions.Add("RandInt", RandInt);
-		builtInFunctions.Add("Rand", Rand);
-		builtInFunctions.Add("Contains", Contains);
-		builtInFunctions.Add("IndexOf", IndexOf);
-	}
+	static Dictionary<string, BuiltinFunction> builtInFunctions = new Dictionary<string, BuiltinFunction>() {
+		{"ToString", ToString},
+		{"ToInt", ToInt},
+		{"ToDouble", ToDouble},
+		{"ToBool", ToBool},
+		{"Abs", Abs},
+		{"Max", Max},
+		{"Min", Min},
+		{"Floor", Floor},
+		{"Ceil", Ceil},
+		{"Factorial", Factorial},
+		{"Binomial", Binomial},
+		{"Log", Log},
+		{"Logn", Logn},
+		{"Round", Round},
+		{"Sum", Sum},
+		{"Len", Len},
+		{"Range", Range},
+		{"Append", Append},
+		{"Insert", Insert},
+		{"RandInt", RandInt},
+		{"Rand", Rand},
+		{"Contains", Contains},
+		{"IndexOf", IndexOf}
+	};
 
 	// ================================= Evaluate Functions ======================================================================
 	// ================================= Evaluate Functions ======================================================================
@@ -42,10 +40,9 @@ public class DaedScript {
 	// ================================= Evaluate Functions ======================================================================
 	// ================================= Evaluate Functions ======================================================================
 
-	public Value evaluate(
+	public static Value evaluate(
 		string input, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		List<Atom> atomList = tokenize(input);
@@ -78,84 +75,75 @@ public class DaedScript {
 			desugar_expression, 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			ref tokenEnv,
-			ref cubeEnv
+			ref gameEnv
 		).value;
 	}
 
-	public Value evaluateSelfToken(
+	public static Value evaluateSelfToken(
 		string input, 
-		Token self,
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref Token self,
+		ref GameEnv gameEnv
 	) 
 	{
-		tokenEnv.Add("self", self);
+		gameEnv.tokenDict.Add("self", self);
 
 		return interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			ref tokenEnv,
-			ref cubeEnv
+			ref gameEnv
 		).value;
 	}
 
-	public Value evaluateSelfCube(
+	public static Value evaluateSelfCube(
 		string input, 
-		Cube self,
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref Cube self,
+		ref GameEnv gameEnv
 	) 
 	{
-		cubeEnv.Add("self", self);
+		gameEnv.cubeDict.Add("self", self);
 
 		return interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			ref tokenEnv,
-			ref cubeEnv
+			ref gameEnv
 		).value;
 	}
 
-	public Value evaluateSelfTokenTargetToken(
+	public static Value evaluateSelfTokenTargetToken(
 		string input, 
-		Token self, 
-		Token target,
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref Token self, 
+		ref Token target,
+		ref GameEnv gameEnv
 	) 
 	{
-		tokenEnv.Add("self", self);
-		tokenEnv.Add("target", target);
+		gameEnv.tokenDict.Add("self", self);
+		gameEnv.tokenDict.Add("target", target);
 
 		return interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			ref tokenEnv,
-			ref cubeEnv
+			ref gameEnv
 		).value;
 	}
 
-	public Value evaluateSelfTokenTargetCube(
+	public static Value evaluateSelfTokenTargetCube(
 		string input, 
-		Token self, 
-		Cube target,
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref Token self, 
+		ref Cube target,
+		ref GameEnv gameEnv
 	) 
 	{
-		tokenEnv.Add("self", self);
-		cubeEnv.Add("target", target);
+		gameEnv.tokenDict.Add("self", self);
+		gameEnv.cubeDict.Add("target", target);
 		
 		return interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
-			ref tokenEnv,
-			ref cubeEnv
+			ref gameEnv
 		).value;
 	}
 
@@ -167,7 +155,7 @@ public class DaedScript {
 	// ================================= Tokenizer Functions =====================================================================
 	// ================================= Tokenizer Functions =====================================================================
 
-	List<Atom> tokenize(string input) {
+	static List<Atom> tokenize(string input) {
 		// Debug.Log("tokenize called");
 		List<Atom> atomList = new List<Atom>();
 
@@ -320,7 +308,7 @@ public class DaedScript {
 		return atomList;
 	}
 
-	bool isPunctuation (char c) {
+	static bool isPunctuation (char c) {
 		switch(c) {
 			case '(':
 			case ')':
@@ -338,7 +326,7 @@ public class DaedScript {
 		}
 	}
 
-	bool isWhiteSpace (char c) {
+	static bool isWhiteSpace (char c) {
 		switch(c) {
 			case '\t':
 			case '\n':
@@ -349,7 +337,7 @@ public class DaedScript {
 		}
 	}
 
-	bool isOperator (char c) {
+	static bool isOperator (char c) {
 		switch(c) {
 			case '+':
 			case '=':
@@ -368,7 +356,7 @@ public class DaedScript {
 		}
 	}
 
-	bool isString (char c) {
+	static bool isString (char c) {
 		switch(c) {
 			case '\"':
 			case '\'':
@@ -386,11 +374,11 @@ public class DaedScript {
 	// ================================= Parse Functions =============================================================== 
 
 	// ================================= Parse Utility Functions =======================================================
-	bool atomEquals(Atom atom, string targetType, string targetValue) {
+	static bool atomEquals(Atom atom, string targetType, string targetValue) {
 		return atom.atomType == targetType && atom.value == targetValue;
 	}
 
-	ParseResult parseError(Atom atom, int pos, string message) {
+	static ParseResult parseError(Atom atom, int pos, string message) {
 		Expression error = new Expression("error", atom.line, atom.character);
 		error.eErrorMessage = "ParseError:" + message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
 		return new ParseResult(error, pos);
@@ -398,7 +386,7 @@ public class DaedScript {
 
 	// ================================= Actual Parser ===============================================================
 
-	Expression parse(List<Atom> atomList) {
+	static Expression parse(List<Atom> atomList) {
 		// Debug.Log("parse called");
 
 		if (atomList.Count == 0) {
@@ -411,7 +399,7 @@ public class DaedScript {
 		 
 	}
 
-	ParseResult parseDo(List<Atom> atomList, int pos, bool bookended) {
+	static ParseResult parseDo(List<Atom> atomList, int pos, bool bookended) {
 		Expression doExpression = new Expression("e-do", atomList[pos].line, atomList[pos].character);
 		doExpression.eDo = new List<Expression>();
 
@@ -434,7 +422,7 @@ public class DaedScript {
 		return new ParseResult(doExpression, pos);
 	}
 
-	ParseResult parseSingle(List<Atom> atomList, int pos, bool bookended) {
+	static ParseResult parseSingle(List<Atom> atomList, int pos, bool bookended) {
 		// Debug.Log("parseSingle");
 		Expression lastExpression = new Expression("error", atomList[pos].line, atomList[pos].character);
 		bool seenExpression = false;
@@ -588,7 +576,7 @@ public class DaedScript {
 		return parseError(atomList[pos - 1], pos, "No expression returned from parseSingle"); // throw error
 	}
 
-	ParseResult parseSingleHelper(List<Atom> atomList, int pos) {
+	static ParseResult parseSingleHelper(List<Atom> atomList, int pos) {
 		Atom curAtom = atomList[pos];
 		Expression returnExpression;
 
@@ -655,7 +643,7 @@ public class DaedScript {
 		return new ParseResult(returnExpression, pos);
 	}
 
-	ParseResult parseIndex(List<Atom> atomList, int pos, Expression lastExpression) {
+	static ParseResult parseIndex(List<Atom> atomList, int pos, Expression lastExpression) {
 		ParseResult firstResult = parseSingle(atomList, pos, false);
 		pos = firstResult.position + 1;
 
@@ -688,7 +676,7 @@ public class DaedScript {
 		}
 	}	
 
-	ParseResult parseList(List<Atom> atomList, int pos) {
+	static ParseResult parseList(List<Atom> atomList, int pos) {
 		Expression listExpression = new Expression("e-list", atomList[pos].line, atomList[pos].character - 1);
 		listExpression.eList = new List<Expression>();
 
@@ -714,7 +702,7 @@ public class DaedScript {
 		return new ParseResult(listExpression, pos);
 	}
 
-	ParseResult parseFunction(List<Atom> atomList, int pos) {
+	static ParseResult parseFunction(List<Atom> atomList, int pos) {
 		Expression funcExpression = new Expression("e-func", atomList[pos].line, atomList[pos].character - 1);
 
 		if (atomList[pos].atomType == "identifier") {
@@ -758,7 +746,7 @@ public class DaedScript {
 		}
 	}
 
-	ParseResult parseNot(List<Atom> atomList, int pos) {
+	static ParseResult parseNot(List<Atom> atomList, int pos) {
 		Expression notExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 1);
 
 		ParseResult notResult = parseSingle(atomList, pos, false);
@@ -770,7 +758,7 @@ public class DaedScript {
 		return new ParseResult(notExpression, pos);
 	}
 
-	ParseResult parseIf(List<Atom> atomList, int pos) {
+	static ParseResult parseIf(List<Atom> atomList, int pos) {
 		Expression ifExpression = new Expression("e-if", atomList[pos].line, atomList[pos].character - 1);
 
 
@@ -795,7 +783,7 @@ public class DaedScript {
 		}
 	}
 
-	ParseResult parseLambda(List<Atom> atomList, int pos) {
+	static ParseResult parseLambda(List<Atom> atomList, int pos) {
 		Expression lamExpression = new Expression("e-lam", atomList[pos].line, atomList[pos].character - 1);
 
 		if (atomEquals(atomList[pos], "punctuation", "(")) {
@@ -833,7 +821,7 @@ public class DaedScript {
 		}
 	}
 
-	ParseResult parseLet(List<Atom> atomList, int pos) {
+	static ParseResult parseLet(List<Atom> atomList, int pos) {
 		Expression letExpression = new Expression("e-let", atomList[pos].line, atomList[pos].character - 1);
 
 		if (atomList[pos].atomType == "identifier") {
@@ -856,7 +844,7 @@ public class DaedScript {
 		}
 	}
 
-	ParseResult parseWhile(List<Atom> atomList, int pos) {
+	static ParseResult parseWhile(List<Atom> atomList, int pos) {
 		Expression whileExpression = new Expression("e-while", atomList[pos].line, atomList[pos].character - 1);
 
 		ParseResult condResult = parseSingle(atomList, pos, true);
@@ -870,7 +858,7 @@ public class DaedScript {
 		return new ParseResult(whileExpression, pos);
 	}
 
-	ParseResult parseFor(List<Atom> atomList, int pos) {
+	static ParseResult parseFor(List<Atom> atomList, int pos) {
 		Expression forExpression = new Expression("e-foreach", atomList[pos].line, atomList[pos].character);
 
 		if (atomEquals(atomList[pos], "keyword", "each")) {
@@ -913,7 +901,7 @@ public class DaedScript {
 		}
 	}
 
-	ParseResult parseIdentifier(List<Atom> atomList, int pos) {
+	static ParseResult parseIdentifier(List<Atom> atomList, int pos) {
 		string identifierName;
 
 		if (atomList[pos].atomType == "identifier") {
@@ -968,7 +956,7 @@ public class DaedScript {
 		}
 	}
 
-	ParseResult parseIg(List<Atom> atomList, int pos) {
+	static ParseResult parseIg(List<Atom> atomList, int pos) {
 		string igName;
 		string igVariable;
 
@@ -1023,7 +1011,7 @@ public class DaedScript {
 	// ================================= Desugarer ===========================================================
 	// ================================= Desugarer ===========================================================
 
-	Expression desugar(Expression expression) {
+	static Expression desugar(Expression expression) {
 		// Debug.Log("desugar called");
 		switch(expression.expressionType) {
 			case "e-list": // e-list
@@ -1082,7 +1070,7 @@ public class DaedScript {
 		}
 	}
 
-	Expression desugarEval(Expression expression) {
+	static Expression desugarEval(Expression expression) {
 		if (builtInFunctions.ContainsKey(expression.eEvalId)) {
 			Expression bFuncExpression = new Expression("e-builtin-func", expression.line, expression.character);
 			bFuncExpression.eBuiltinFuncId = expression.eEvalId;
@@ -1102,7 +1090,7 @@ public class DaedScript {
 		}	
 	}
 
-	Expression desugarFunc(Expression expression) {
+	static Expression desugarFunc(Expression expression) {
 		Expression letExpression = new Expression("e-let", expression.line, expression.character);
 		letExpression.eLetName = expression.eFuncId;
 
@@ -1121,12 +1109,11 @@ public class DaedScript {
 	// ================================= Interpreter Proper ===========================================================
 	// ================================= Interpreter Proper ===========================================================
 
-	Result interpret(
+	static Result interpret(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store,
-		ref Dictionary<string, Token> tokenEnv,
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 		) 
 	{
 		// Debug.Log("interpret called");
@@ -1140,39 +1127,39 @@ public class DaedScript {
 			case "e-bool": //e-bool
 				return interpBool(expression, env, store);
 			case "e-list": // e-list
-				return interpList(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpList(expression, env, store, ref gameEnv);
 			case "e-op": //e-op
-				return interpOperator(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOperator(expression, env, store, ref gameEnv);
 			case "e-triOp": //e-triOp
-				return interpTriOperator(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpTriOperator(expression, env, store, ref gameEnv);
 			case "e-if": //e-if
-				return interpIf(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpIf(expression, env, store, ref gameEnv);
 			case "e-lam": //e-lam
-				return interpLam(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpLam(expression, env, store, ref gameEnv);
 			case "e-app": //e-app
-				return interpApp(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpApp(expression, env, store, ref gameEnv);
 			case "e-set": //e-set
-				return interpSet(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpSet(expression, env, store, ref gameEnv);
 			case "e-do": //e-do
-				return interpDo(expression, env, store, ref tokenEnv, ref cubeEnv);	
+				return interpDo(expression, env, store, ref gameEnv);	
 			case "e-while": //e-while
-				return interpWhile(expression, new Value(), false, env, store, ref tokenEnv, ref cubeEnv);
+				return interpWhile(expression, new Value(), false, env, store, ref gameEnv);
 			case "e-foreach":
-				return interpForeach(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpForeach(expression, env, store, ref gameEnv);
 			case "e-let": //e-let
-				return interpLet(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpLet(expression, env, store, ref gameEnv);
 			case "e-id": // e-id
-				return interpId(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpId(expression, env, store, ref gameEnv);
 			case "e-ig-var": //e-ig-variable
-				return interpIgVariable(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpIgVariable(expression, env, store, ref gameEnv);
 			case "e-set-ig-var": //e-set-ig-variables
-				return interpSetIgVariable(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpSetIgVariable(expression, env, store, ref gameEnv);
 			case "e-builtin-func": //e-set-ig-variable
-				return interpBuiltinFunc(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpBuiltinFunc(expression, env, store, ref gameEnv);
 			case "e-return":
-				return interpReturn(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpReturn(expression, env, store, ref gameEnv);
 			case "error":
-				return interpError(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpError(expression, env, store, ref gameEnv);
 			default:
 				return expressionError(expression, store, "Unknown expression type: " + expression.expressionType);
 		}
@@ -1180,19 +1167,18 @@ public class DaedScript {
 
 	// ================================= Interpret Error Functions ==================================
 
-	Result interpError(
+	static Result interpError(
 		Expression error,  
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		Value errorValue = new Value("error", error.line, error.character); 
 		errorValue.errorMessage = "Error at (" + error.line + "," + error.character + "): " + error.eErrorMessage;
 		return new Result(errorValue, store); //Throw Error	
 	}
 
-	Result resultError(Result errorResult, string message) {
+	static Result resultError(Result errorResult, string message) {
 		Value error = errorResult.value;
 		Value errorValue = new Value("error", error.line, error.character); 
 		errorValue.errorMessage = "Error at (" + error.line + "," + error.character + "): " + message + ", from: (";
@@ -1225,7 +1211,7 @@ public class DaedScript {
 		return new Result(errorValue, errorResult.store); //Throw Error	
 	}
 
-	Result expressionError(Expression error, Dictionary<string, Value> store, string message) {
+	static Result expressionError(Expression error, Dictionary<string, Value> store, string message) {
 		Value errorValue = new Value("error", error.line, error.character); 
 		errorValue.errorMessage = "Error at (" + error.line + "," + error.character + "): " + message + ", from: (";
 		switch(error.expressionType) {
@@ -1301,43 +1287,42 @@ public class DaedScript {
 
 	// ================================= Interpret Values Functions =================================
 
-	Result interpInt(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	static Result interpInt(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value("int", expression.line, expression.character);
 		returnValue.vInt = expression.eInt;
 		return new Result(returnValue, store);
 	}
 
-	Result interpdouble(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	static Result interpdouble(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value("double", expression.line, expression.character);
 		returnValue.vDouble = expression.eDouble;
 		return new Result(returnValue, store);
 	}
 
-	Result interpString(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	static Result interpString(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value("string", expression.line, expression.character);
 		returnValue.vString = expression.eString;
 		return new Result(returnValue, store);
 	}
 
-	Result interpBool(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
+	static Result interpBool(Expression expression, Dictionary<string, string> env, Dictionary<string, Value> store) {
 		Value returnValue = new Value("bool", expression.line, expression.character);
 		returnValue.vBool = expression.eBool;
 		return new Result(returnValue, store);
 	}
 
-	Result interpList(
+	static Result interpList(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 		) 
 	{
 		Value returnValue = new Value("list", expression.line, expression.character);
 		returnValue.vList = new List<Value>();
 		Result last_result = new Result(new Value(), store);
 		foreach (Expression expr in expression.eList) {
-			last_result = interpret(expr, env, last_result.store, ref tokenEnv, ref cubeEnv);
+			last_result = interpret(expr, env, last_result.store, ref gameEnv);
 			if (last_result.value.valueType == "error") {
 				return resultError(last_result, "Passed error to list"); //Throw Error
 			}
@@ -1350,67 +1335,65 @@ public class DaedScript {
 	// ================================= Interpret Operator Functions ==================================================
 	// ================================= Interpret Operator Functions ==================================================
 	
-	Result interpOperator(
+	static Result interpOperator(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 		) 
 	{
 		switch (expression.eOperatorOp) {
 			case "+":
-				return interpOpPlus(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpPlus(expression, env, store, ref gameEnv);
 			case "-":
-				return interpOpMath(expression, doubleSubtract, intSubtract, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpMath(expression, doubleSubtract, intSubtract, env, store, ref gameEnv);
 			case "*":
-				return interpOpMath(expression, doubleMultiply, intMultiply, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpMath(expression, doubleMultiply, intMultiply, env, store, ref gameEnv);
 			case "/":
-				return interpOpMath(expression, doubleDivide, intDivide, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpMath(expression, doubleDivide, intDivide, env, store, ref gameEnv);
 			case "**":
-				return interpOpMath(expression, doubleExponent, intExponent, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpMath(expression, doubleExponent, intExponent, env, store, ref gameEnv);
 			case "%":
-				return interpOpMath(expression, doubleModulo, intModulo, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpMath(expression, doubleModulo, intModulo, env, store, ref gameEnv);
 			case "==":
-				return interpOpEqual(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpEqual(expression, env, store, ref gameEnv);
 			case "!=":
-				return interpOpNotEqual(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpNotEqual(expression, env, store, ref gameEnv);
 			case ">":
-				return interpOpCompare(expression, doubleGT, intGT, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpCompare(expression, doubleGT, intGT, env, store, ref gameEnv);
 			case "<":
-				return interpOpCompare(expression, doubleLT, intLT, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpCompare(expression, doubleLT, intLT, env, store, ref gameEnv);
 			case ">=":
-				return interpOpCompare(expression, doubleGEQ, intGEQ, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpCompare(expression, doubleGEQ, intGEQ, env, store, ref gameEnv);
 			case "<=":
-				return interpOpCompare(expression, doubleLEQ, intLEQ, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpCompare(expression, doubleLEQ, intLEQ, env, store, ref gameEnv);
 			case "&&":
-				return interpOpLogic(expression, boolAnd, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpLogic(expression, boolAnd, env, store, ref gameEnv);
 			case "||":
-				return interpOpLogic(expression, boolOr, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpLogic(expression, boolOr, env, store, ref gameEnv);
 			case "!":
-				return interpOpLogic(expression, boolNot, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpLogic(expression, boolNot, env, store, ref gameEnv);
 			case "[]": // Index
-				return interpOpIndex(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpIndex(expression, env, store, ref gameEnv);
 			default:
 				return expressionError(expression, store, "Unknown operator"); //Throw Error	
 		}
 	}
 
-	Result interpOpMath(
+	static Result interpOpMath(
 		Expression expression,
 		Func<double, double, double> doubleFunc,
 		Func<int, int, int> intFunc,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case("int"):
 			case("double"):
-				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
 					case("double"):
@@ -1434,23 +1417,23 @@ public class DaedScript {
 		}
 	}
 
-	double doubleSubtract(double left, double right) {
+	static double doubleSubtract(double left, double right) {
 		return left - right;
 	}
 
-	int intSubtract(int left, int right) {
+	static int intSubtract(int left, int right) {
 		return left - right;
 	}
 
-	double doubleMultiply(double left, double right) {
+	static double doubleMultiply(double left, double right) {
 		return left * right;
 	}
 
-	int intMultiply(int left, int right) {
+	static int intMultiply(int left, int right) {
 		return left * right;
 	}
 
-	double doubleDivide(double left, double right) {
+	static double doubleDivide(double left, double right) {
 		if (right == 0) {
 			if (left > 0) {
 				return double.PositiveInfinity;
@@ -1464,7 +1447,7 @@ public class DaedScript {
 		}
 	}
 
-	int intDivide(int left, int right) {
+	static int intDivide(int left, int right) {
 		if (right == 0) {
 			if (left > 0) {
 				return int.MaxValue;
@@ -1478,35 +1461,34 @@ public class DaedScript {
 		}
 	}
 
-	double doubleExponent(double left, double right) {
+	static double doubleExponent(double left, double right) {
 		return Math.Pow(left, right);
 	}
 
-	int intExponent(int left, int right) {
+	static int intExponent(int left, int right) {
 		return (int)Math.Round(Math.Pow(left, right));
 	}
 
-	double doubleModulo(double left, double right) {
+	static double doubleModulo(double left, double right) {
 		return left % right;
 	}
 
-	int intModulo(int left, int right) {
+	static int intModulo(int left, int right) {
 		return left % right;
 	}
 
-	Result interpOpPlus(
+	static Result interpOpPlus(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case("int"):
 			case("double"):
-				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
 					case("double"):
@@ -1526,7 +1508,7 @@ public class DaedScript {
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
 			case("string"):
-				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_string.value.valueType) {
 					case("string"):
 						Value returnValue = new Value("string", expression.line, expression.character);
@@ -1536,7 +1518,7 @@ public class DaedScript {
 						return resultError(r_result_string, "Expected string"); //Throw Error
 				}
 			case("list"):
-				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_list.value.valueType) {
 					case("list"):
 						Value returnValue = new Value("list", expression.line, expression.character);
@@ -1550,20 +1532,19 @@ public class DaedScript {
 		}
 	}
 
-	Result interpOpEqual(
+	static Result interpOpEqual(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
-		// Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
+		// Result r_result = interpret(right, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case("int"):
 			case("double"):
-				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
 					case("double"):
@@ -1582,7 +1563,7 @@ public class DaedScript {
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
 			case("string"):
-				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_string.value.valueType) {
 					case("string"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
@@ -1592,7 +1573,7 @@ public class DaedScript {
 						return resultError(r_result_string, "Expected string"); //Throw Error
 				}
 			case("bool"):
-				Result r_result_bool = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_bool = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_bool.value.valueType) {
 					case("bool"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
@@ -1606,20 +1587,19 @@ public class DaedScript {
 		}
 	}
 
-	Result interpOpNotEqual(
+	static Result interpOpNotEqual(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
-		// Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
+		// Result r_result = interpret(right, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case("int"):
 			case("double"):
-				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
 					case("double"):
@@ -1638,7 +1618,7 @@ public class DaedScript {
 						return resultError(r_result, "Expected int or double"); //Throw Error	
 				}
 			case("string"):
-				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_string.value.valueType) {
 					case("string"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
@@ -1648,7 +1628,7 @@ public class DaedScript {
 						return resultError(r_result_string, "Expected string"); //Throw Error
 				}
 			case("bool"):
-				Result r_result_bool = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_bool = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_bool.value.valueType) {
 					case("bool"):
 						Value returnValue = new Value("bool", expression.line, expression.character);
@@ -1662,22 +1642,21 @@ public class DaedScript {
 		}
 	}
 
-	Result interpOpCompare(
+	static Result interpOpCompare(
 		Expression expression,
 		Func<double, double, bool> doubleFunc,
 		Func<int, int, bool> intFunc,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
-		// Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
+		// Result r_result = interpret(right, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case("int"):
 			case("double"):
-				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
 					case("double"):
@@ -1700,50 +1679,49 @@ public class DaedScript {
 		}
 	}
 
-	bool doubleGT(double left, double right){
+	static bool doubleGT(double left, double right){
 		return left > right;
 	}
 
-	bool intGT(int left, int right){
+	static bool intGT(int left, int right){
 		return left > right;
 	}
 
-	bool doubleLT(double left, double right){
+	static bool doubleLT(double left, double right){
 		return left < right;
 	}
 
-	bool intLT(int left, int right){
+	static bool intLT(int left, int right){
 		return left < right;
 	}
 
-	bool doubleGEQ(double left, double right){
+	static bool doubleGEQ(double left, double right){
 		return left >= right;
 	}
 
-	bool intGEQ(int left, int right){
+	static bool intGEQ(int left, int right){
 		return left >= right;
 	}
 
-	bool doubleLEQ(double left, double right){
+	static bool doubleLEQ(double left, double right){
 		return left <= right;
 	}
 
-	bool intLEQ(int left, int right){
+	static bool intLEQ(int left, int right){
 		return left <= right;
 	}
 
-	Result interpOpLogic(
+	static Result interpOpLogic(
 		Expression expression,
 		Func<bool, bool, bool> boolFunc,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 		) 
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
 		if (l_result.value.valueType == "bool") {
-			Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+			Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "bool") {
 				Value returnValue = new Value("bool", expression.line, expression.character);
 				returnValue.vBool = boolFunc(l_result.value.vBool, r_result.value.vBool);
@@ -1756,31 +1734,30 @@ public class DaedScript {
 		}
 	}
 
-	bool boolNot(bool left, bool right) {
+	static bool boolNot(bool left, bool right) {
 		return !left;
 	}
 
-	bool boolAnd(bool left, bool right) {
+	static bool boolAnd(bool left, bool right) {
 		return left && right;
 	}
 
-	bool boolOr(bool left, bool right) {
+	static bool boolOr(bool left, bool right) {
 		return left || right;
 	}
 
-	Result interpOpIndex(
+	static Result interpOpIndex(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
-		Result l_result = interpret(expression.eOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
-		// Result r_result = interpret(right, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(expression.eOperatorLeft, env, store, ref gameEnv);
+		// Result r_result = interpret(right, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case("string"):
-				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
 						if (Math.Abs(r_result.value.vDouble) < l_result.value.vString.Length) {
@@ -1794,7 +1771,7 @@ public class DaedScript {
 						return resultError(r_result, "Expected int"); //Throw Error
 				}
 			case("list"):
-				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_list.value.valueType) {
 					case("int"):
 						if (Math.Abs(r_result_list.value.vDouble) < l_result.value.vList.Count) {
@@ -1814,38 +1791,36 @@ public class DaedScript {
 	// ================================= Interpret TriOperator Functions ==================================================
 	// ================================= Interpret TriOperator Functions ==================================================
 
-	Result interpTriOperator(
+	static Result interpTriOperator(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 		) 
 	{
 		switch (expression.eTriOperatorOp) {
 			case("[:]"):
-				return interpOpSub(expression, env, store, ref tokenEnv, ref cubeEnv);
+				return interpOpSub(expression, env, store, ref gameEnv);
 			default:
 				return expressionError(expression, store, "Unknown operator"); //Throw Error	
 
 		}
 	}
 
-	Result interpOpSub(
+	static Result interpOpSub(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 		)
 	{
-		Result l_result =  interpret(expression.eTriOperatorLeft, env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result =  interpret(expression.eTriOperatorLeft, env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case "int":
-				Result r_result =  interpret(expression.eTriOperatorRight, env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result =  interpret(expression.eTriOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case "int":
-							Result t_result = interpret(expression.eTriOperatorTarget, env, r_result.store, ref tokenEnv, ref cubeEnv);
+							Result t_result = interpret(expression.eTriOperatorTarget, env, r_result.store, ref gameEnv);
 							switch(t_result.value.valueType) {
 								case "string":
 									Value returnValue = new Value("string", expression.line, expression.character);
@@ -1874,32 +1849,30 @@ public class DaedScript {
 	// ================================= End of Operators Functions ====================================================
 	// ================================= End of Operators Functions ====================================================
 	// ================================= End of Operators Functions ====================================================
-	Result interpIf(
+	static Result interpIf(
 		Expression expression, 
 		Dictionary<string, string> env,
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
-		Result cond_result = interpret(expression.eIfCond, env, store, ref tokenEnv, ref cubeEnv);
+		Result cond_result = interpret(expression.eIfCond, env, store, ref gameEnv);
 		if (cond_result.value.valueType == "bool") {
 			if (cond_result.value.vBool) {
-				return interpret(expression.eIfConsq, env, cond_result.store, ref tokenEnv, ref cubeEnv);
+				return interpret(expression.eIfConsq, env, cond_result.store, ref gameEnv);
 			} else {
-				return interpret(expression.eIfAlter, env, cond_result.store, ref tokenEnv, ref cubeEnv);
+				return interpret(expression.eIfAlter, env, cond_result.store, ref gameEnv);
 			}
 		} else {
 			return resultError(cond_result, "Expected bool"); //Throw Error
 		}
 	}
 
-	Result interpLam(
+	static Result interpLam(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		Value returnValue = new Value("function", expression.line, expression.character);
@@ -1909,15 +1882,14 @@ public class DaedScript {
 		return new Result(returnValue, store);
 	}
 
-	Result interpApp(
+	static Result interpApp(
 		Expression expression,
 		Dictionary<string, string> env,
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
-		Result func_result = interpret(expression.eAppFunc, env, store, ref tokenEnv, ref cubeEnv);
+		Result func_result = interpret(expression.eAppFunc, env, store, ref gameEnv);
 		if (func_result.value.valueType == "function") {
 			if (expression.eAppArguments.Count != func_result.value.vFunParams.Count) {
 				return expressionError(expression, store, expression.eAppFunc + " expects " + func_result.value.vFunParams.Count.ToString() + " arguments, got " + func_result.value.vFunParams.Count.ToString()); //Throw Error		
@@ -1927,30 +1899,29 @@ public class DaedScript {
 			for (int i = 0; i < expression.eAppArguments.Count; i++) {
 				Expression arg = expression.eAppArguments[i];
 				string param = func_result.value.vFunParams[i];
-				Result arg_result = interpret(arg, env, appStore, ref tokenEnv, ref cubeEnv);
+				Result arg_result = interpret(arg, env, appStore, ref gameEnv);
 				string loc = System.Guid.NewGuid().ToString();
 				func_result.value.vFunEnviroment.Add(param, loc);
 				appStore.Add(loc, arg_result.value);
 			}
-			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, appStore, ref tokenEnv, ref cubeEnv); 
+			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, appStore, ref gameEnv); 
 		} else {
 			return resultError(func_result, "Expected function"); //Throw Error
 		}
 	}
 
-	Result interpSet(
+	static Result interpSet(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		string name = expression.eSetName;
 		if (env.ContainsKey(name)) {
 			string pointer = env[name];
 			if (store.ContainsKey(pointer)) {
-				Result newValue_result = interpret(expression.eSetValue, env, store, ref tokenEnv, ref cubeEnv);
+				Result newValue_result = interpret(expression.eSetValue, env, store, ref gameEnv);
 				newValue_result.store[pointer] = newValue_result.value;
 				return new Result(newValue_result.value, newValue_result.store);
 			} else {
@@ -1961,12 +1932,11 @@ public class DaedScript {
 		}
 	}
 
-	Result interpDo(
+	static Result interpDo(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		Result last_result = new Result(new Value(), store);
@@ -1975,15 +1945,15 @@ public class DaedScript {
 			// The change to the env is only relevent across other Do expressions
 			// In the same Do statement
 			if (expr.expressionType == "e-let") {
-				Result define_result = interpret(expr.eLetValue, env, last_result.store, ref tokenEnv, ref cubeEnv);
+				Result define_result = interpret(expr.eLetValue, env, last_result.store, ref gameEnv);
 				string loc = System.Guid.NewGuid().ToString();
 				env.Add(expr.eLetName, loc);
 				define_result.store.Add(loc, define_result.value);
 				last_result = define_result;
 			} else if (expr.expressionType == "e-return") {
-				return interpret(expr.eReturn, env, last_result.store, ref tokenEnv, ref cubeEnv);
+				return interpret(expr.eReturn, env, last_result.store, ref gameEnv);
 			} else {
-				last_result = interpret(expr, env, last_result.store, ref tokenEnv, ref cubeEnv);
+				last_result = interpret(expr, env, last_result.store, ref gameEnv);
 				if (last_result.value.valueType == "error") {
 					return last_result;
 				}
@@ -1993,21 +1963,20 @@ public class DaedScript {
 		return last_result;
 	}
 
-	Result interpWhile(
+	static Result interpWhile(
 		Expression expression, 
 		Value lastValue, 
 		bool useLast, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
-		Result cond_result = interpret(expression.eWhileCond, env, store, ref tokenEnv, ref cubeEnv);
+		Result cond_result = interpret(expression.eWhileCond, env, store, ref gameEnv);
 		if (cond_result.value.valueType == "bool") {
 			if (cond_result.value.vBool) {
-				Result body_result = interpret(expression.eWhileBody, env, cond_result.store, ref tokenEnv, ref cubeEnv);
-				return interpWhile(expression, body_result.value, true, env, body_result.store, ref tokenEnv, ref cubeEnv);
+				Result body_result = interpret(expression.eWhileBody, env, cond_result.store, ref gameEnv);
+				return interpWhile(expression, body_result.value, true, env, body_result.store, ref gameEnv);
 			} else if (useLast) {
 				return new Result(lastValue, cond_result.store);
 			} else {
@@ -2019,33 +1988,31 @@ public class DaedScript {
 	}
 
 	// This could be syntactic sugar on top of while
-	Result interpForeach(
+	static Result interpForeach(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	)
 	{
 		string loc = System.Guid.NewGuid().ToString();
 		env.Add(expression.eForVariable, loc);
 		Result lastResult = new Result(new Value("null", expression.line, expression.character), store);
 		foreach (Expression expr in expression.eForIter.eList) {
-			Result exprResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			Result exprResult = interpret(expr, env, store, ref gameEnv);
 			store[loc] = exprResult.value;
-			Result bodyResult = interpret(expression.eForBody, env, store, ref tokenEnv, ref cubeEnv);
+			Result bodyResult = interpret(expression.eForBody, env, store, ref gameEnv);
 			lastResult = bodyResult;
 			store = bodyResult.store;
 		}
 		return lastResult; 
 	}
 
-	Result interpId(
+	static Result interpId(
 		Expression expression, 
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		string name = expression.eId;
@@ -2060,18 +2027,17 @@ public class DaedScript {
 		}
 	}
 
-	Result interpIgVariable(
+	static Result interpIgVariable(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		string name = expression.eIgName;
 		string variable = expression.eIgVariable;
-		if (tokenEnv.ContainsKey(name)) {
-			Token token = tokenEnv[name];
+		if (gameEnv.tokenDict.ContainsKey(name)) {
+			Token token = gameEnv.tokenDict[name];
 			if (token.variables.ContainsKey(variable)) {
 				switch(token.variables[variable]) {
 					case "int":
@@ -2096,8 +2062,8 @@ public class DaedScript {
 			} else {
 				return expressionError(expression, store, "ig \"" + name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
-		} else if (cubeEnv.ContainsKey(name)) {
-			Cube cube = cubeEnv[name];
+		} else if (gameEnv.cubeDict.ContainsKey(name)) {
+			Cube cube = gameEnv.cubeDict[name];
 			if (cube.variables.ContainsKey(variable)) {
 				switch(cube.variables[variable]) {
 					case "int":
@@ -2127,19 +2093,18 @@ public class DaedScript {
 		}
 	}
 
-	Result interpSetIgVariable(
+	static Result interpSetIgVariable(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) 
 	{
 		string name = expression.eSetIgName;
 		string variable = expression.eSetIgVariable;
-		if (tokenEnv.ContainsKey(name)) {
-			Token token = tokenEnv[name];
-			Result nv_result = interpret(expression.eSetIgValue, env, store, ref tokenEnv, ref cubeEnv);
+		if (gameEnv.tokenDict.ContainsKey(name)) {
+			Token token = gameEnv.tokenDict[name];
+			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			if (token.variables.ContainsKey(variable)) {
 				switch(token.variables[variable]) {
 					case "int":
@@ -2193,9 +2158,9 @@ public class DaedScript {
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
 				}
 			}
-		} else if (cubeEnv.ContainsKey(name)) {
-			Cube cube = cubeEnv[name];
-			Result nv_result = interpret(expression.eSetIgValue, env, store, ref tokenEnv, ref cubeEnv);
+		} else if (gameEnv.cubeDict.ContainsKey(name)) {
+			Cube cube = gameEnv.cubeDict[name];
+			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			if (cube.variables.ContainsKey(variable)) {
 				switch(cube.variables[variable]) {
 					case "int":
@@ -2254,34 +2219,31 @@ public class DaedScript {
 		}
 	}
 
-	Result interpLet(
+	static Result interpLet(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		return expressionError(expression, store, "Unexpected let expression outside of programming block"); //Throw Error
 	}
 
-	Result interpReturn(
+	static Result interpReturn(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		return expressionError(expression, store, "Unexpected return expression outside of programming block"); //Throw Error
 	}
 
-	Result interpBuiltinFunc(
+	static Result interpBuiltinFunc(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
-		return builtInFunctions[expression.eBuiltinFuncId](expression, env, store, ref tokenEnv, ref cubeEnv);
+		return builtInFunctions[expression.eBuiltinFuncId](expression, env, store, ref gameEnv);
 	}
 
 	// ================================= Builtin Functions =======================================================================
@@ -2291,19 +2253,18 @@ public class DaedScript {
 	// ================================= Builtin Functions =======================================================================
 	// ================================= Builtin Functions =======================================================================
 
-	Result ToString(
+	static Result ToString(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("string", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2322,19 +2283,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result ToInt(
+	static Result ToInt(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("int", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2356,19 +2316,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result ToDouble(
+	static Result ToDouble(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("double", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2390,19 +2349,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result ToBool(
+	static Result ToBool(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("bool", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2440,19 +2398,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result Abs(
+	static Result Abs(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("double", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2469,16 +2426,15 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	} 
 
-	Result Max(
+	static Result Max(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count == 1) {
-			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+			Result firstResult = interpret(arguments[0], env, store, ref gameEnv);
 			if (firstResult.value.valueType == "list") {
 				return MaxList(firstResult.value.vList, firstResult.store);
 			}
@@ -2488,7 +2444,7 @@ public class DaedScript {
 		Value maxValue = new Value("null", expression.line, expression.character);
 
 		foreach (Expression expr in expression.eBuiltinFuncArguments) {
-			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			Result latestResult = interpret(expr, env, store, ref gameEnv);
 			store = latestResult.store;
 
 			if (first) {
@@ -2534,7 +2490,7 @@ public class DaedScript {
 		return new Result(maxValue, store);
 	}
 
-	Result MaxList(List<Value> valueList, Dictionary<string, Value> store) {
+	static Result MaxList(List<Value> valueList, Dictionary<string, Value> store) {
 		bool first = true;
 		Value maxValue = new Value("null");
 
@@ -2582,16 +2538,15 @@ public class DaedScript {
 		return new Result(maxValue, store);
 	}
 
-	Result Min(
+	static Result Min(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count == 1) {
-			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+			Result firstResult = interpret(arguments[0], env, store, ref gameEnv);
 			if (firstResult.value.valueType == "list") {
 				return MinList(firstResult.value.vList, firstResult.store);
 			}
@@ -2601,7 +2556,7 @@ public class DaedScript {
 		Value minValue = new Value("null", expression.line, expression.character);
 
 		foreach (Expression expr in expression.eBuiltinFuncArguments) {
-			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			Result latestResult = interpret(expr, env, store, ref gameEnv);
 			store = latestResult.store;
 
 			if (first) {
@@ -2647,7 +2602,7 @@ public class DaedScript {
 		return new Result(minValue, store);
 	}
 
-	Result MinList(List<Value> valueList, Dictionary<string, Value> store) {
+	static Result MinList(List<Value> valueList, Dictionary<string, Value> store) {
 		bool first = true;
 		Value minValue = new Value("null");
 
@@ -2695,19 +2650,18 @@ public class DaedScript {
 		return new Result(minValue, store);
 	}
 
-	Result Floor(
+	static Result Floor(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("double", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2724,19 +2678,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	} 
 
-	Result Ceil(
+	static Result Ceil(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("double", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2753,19 +2706,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result Round(
+	static Result Round(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("double", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2782,19 +2734,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result Factorial(
+	static Result Factorial(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		switch(inputResult.value.valueType) {
 			case "int":
@@ -2810,7 +2761,7 @@ public class DaedScript {
 		}
 	}
 
-	int factorialHelper(int x) {
+	static int factorialHelper(int x) {
 		int result = 1;
 		for (int i = 1; i <= x; i++) {
 			result = result * i;
@@ -2818,21 +2769,20 @@ public class DaedScript {
 		return result;
 	}
 
-	Result Binomial(
+	static Result Binomial(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
 			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "int") {
-			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "int") {
 				Value returnValue = new Value("int", expression.line, expression.character);
 				returnValue.vInt = binomialHelper(l_result.value.vInt, r_result.value.vInt);
@@ -2845,7 +2795,7 @@ public class DaedScript {
 		}
 	}	
 
-	int binomialHelper(int n, int k) {
+	static int binomialHelper(int n, int k) {
 		int numerator = 1;
 		for (int i = k + 1; i <= k; i++) {
 			numerator = numerator * i;
@@ -2854,23 +2804,22 @@ public class DaedScript {
 		return numerator / denominator;
 	}
 
-	Result Log(
+	static Result Log(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
 			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case "int":
 			case "double":
-				Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case "int":
 					case "double":
@@ -2893,19 +2842,18 @@ public class DaedScript {
 		}
 	}	
 
-	Result Logn(
+	static Result Logn(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("double", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -2921,16 +2869,15 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result Sum(
+	static Result Sum(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count == 1) {
-			Result firstResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+			Result firstResult = interpret(arguments[0], env, store, ref gameEnv);
 			if (firstResult.value.valueType == "list") {
 				return SumList(firstResult.value.vList, firstResult.store);
 			}
@@ -2940,7 +2887,7 @@ public class DaedScript {
 		Value sumValue = new Value("null", expression.line, expression.character);
 
 		foreach (Expression expr in expression.eBuiltinFuncArguments) {
-			Result latestResult = interpret(expr, env, store, ref tokenEnv, ref cubeEnv);
+			Result latestResult = interpret(expr, env, store, ref gameEnv);
 			store = latestResult.store;
 
 			if (first) {
@@ -2979,7 +2926,7 @@ public class DaedScript {
 		return new Result(sumValue, store);
 	}
 
-	Result SumList(List<Value> valueList, Dictionary<string, Value> store) {
+	static Result SumList(List<Value> valueList, Dictionary<string, Value> store) {
 		bool first = true;
 		Value sumValue = new Value("null");
 
@@ -3020,19 +2967,18 @@ public class DaedScript {
 		return new Result(sumValue, store);
 	}
 
-	Result Len(
+	static Result Len(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 
 		Value returnValue = new Value("int", expression.line, expression.character);
 		switch(inputResult.value.valueType) {
@@ -3048,19 +2994,18 @@ public class DaedScript {
 		return new Result(returnValue, inputResult.store);
 	}
 
-	Result Range(
+	static Result Range(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
 			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result inputResult = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
 		switch(inputResult.value.valueType) {
 			case "int":
 				Value returnValue = new Value("list", expression.line, expression.character);
@@ -3076,21 +3021,20 @@ public class DaedScript {
 		}
 	}
 
-	Result Append(
+	static Result Append(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
 			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "list") {
-			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "error") {
 				return resultError(r_result, "Passed error to list");
 			}
@@ -3102,27 +3046,26 @@ public class DaedScript {
 		}
 	}	
 
-	Result Insert(
+	static Result Insert(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 3) {
 			return expressionError(expression, store, "Expected 3 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "list") {
-			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "int") {
 				if (r_result.value.vInt < 0 || r_result.value.vInt >= l_result.value.vList.Count) {
 					return resultError(l_result, r_result.value.vInt.ToString() + " out of range of list of size " + l_result.value.vList.Count.ToString());
 				}
 
-				Result t_result = interpret(arguments[2], env, r_result.store, ref tokenEnv, ref cubeEnv);
+				Result t_result = interpret(arguments[2], env, r_result.store, ref gameEnv);
 				if (t_result.value.valueType == "error") {
 				return resultError(t_result, "Passed error to list");
 				}
@@ -3137,22 +3080,21 @@ public class DaedScript {
 		}
 	}
 
-	Result RandInt(
+	static Result RandInt(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
 			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		switch(l_result.value.valueType) {
 			case "int":
-				Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+				Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case "int":
 						if (l_result.value.vInt >= r_result.value.vInt) {
@@ -3170,12 +3112,11 @@ public class DaedScript {
 		}
 	}	
 
-	Result Rand(
+	static Result Rand(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 0) {
@@ -3188,21 +3129,20 @@ public class DaedScript {
 		return new Result(returnValue, store);
 	}	
 
-	Result Contains(
+	static Result Contains(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
 			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "list") {
-			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "error") {
 				return resultError(r_result, "Passed error to list");
 			}
@@ -3221,7 +3161,7 @@ public class DaedScript {
 		}
 	}
 	
-	bool valuesEqual(Value left, Value right) {
+	static bool valuesEqual(Value left, Value right) {
 		if (left.valueType == right.valueType) {
 			switch(left.valueType) {
 				case "int":
@@ -3237,21 +3177,20 @@ public class DaedScript {
 		return false;
 	}	
 
-	Result IndexOf(
+	static Result IndexOf(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
-		ref Dictionary<string, Token> tokenEnv, 
-		ref Dictionary<string, Cube> cubeEnv
+		ref GameEnv gameEnv
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
 			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
-		Result l_result = interpret(arguments[0], env, store, ref tokenEnv, ref cubeEnv);
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "list") {
-			Result r_result = interpret(arguments[1], env, l_result.store, ref tokenEnv, ref cubeEnv);
+			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "error") {
 				return resultError(r_result, "Passed error to list");
 			}
@@ -3443,6 +3382,5 @@ public delegate Result BuiltinFunction(
 	Expression expression,
 	Dictionary<string, string> env, 
 	Dictionary<string, Value> store, 
-	ref Dictionary<string, Token> tokenEnv, 
-	ref Dictionary<string, Cube> cubeEnv
+	ref GameEnv gameEnv
 );

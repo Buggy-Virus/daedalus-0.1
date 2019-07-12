@@ -10,8 +10,7 @@ public class IgListScript : MonoBehaviour
 
 	TypeTreeScript typeTreeScript;
 
-    public Dictionary<string, Token> tokenDict = new Dictionary<string, Token>();
-    public Dictionary<string, Cube> cubeDict = new Dictionary<string, Cube>();
+    public GameEnv gameEnv;
 
 	public Dictionary<string, object[]> cubeParameters = new Dictionary<string, object[]>();
 	public Dictionary<string, object[]> tokenParameters = new Dictionary<string, object[]>();
@@ -20,6 +19,8 @@ public class IgListScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameEnv = new GameEnv();
+
         cubesObject = GameObject.Find("Cubes");
         tokensObject = GameObject.Find("Tokens");
 
