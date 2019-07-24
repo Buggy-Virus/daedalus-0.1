@@ -222,7 +222,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 246738978}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6f6c54d940a12641bf0284a6e8a835d, type: 3}
+  m_Script: {fileID: 11500000, guid: 89cb4e554a270f94fa6192e100179559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &246738981
@@ -239,7 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testCubePrefab: {fileID: 1443257276442714, guid: f196b931ab7225d49bb5c3ccb33c96e3,
     type: 3}
-  testTokenPrefab: {fileID: 0}
+  testTokenPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
+    type: 3}
 --- !u!4 &246738982
 Transform:
   m_ObjectHideFlags: 0
@@ -252,7 +253,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &246738984
 MonoBehaviour:
@@ -266,7 +267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c172fe9899dfb454bab0e1107da129b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  evaluate: 0
 --- !u!1 &282840810
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +377,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1313949935
 GameObject:
@@ -408,8 +408,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ee1f609b423f34ab1b2bcd354b59b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeX: 4
-  sizeZ: 4
+  sizeX: 5
+  sizeZ: 5
   sizeY: 4
   cubeSize: 1
   layerPrefab: {fileID: 1929592427595182, guid: 625710a108791b742868b14c5aded7da,
@@ -492,7 +492,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1449179818
 GameObject:
@@ -522,107 +522,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1502079586
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224634264233266678, guid: a22808023c5567b44aa2553544588a43,
-        type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a22808023c5567b44aa2553544588a43, type: 3}
 --- !u!1 &1826583474
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,14 +567,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733d0e6b938e7a246a82cf7dc14dfa71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CUBE_MODE: 0
+  TOKEN_MODE: 1
+  SELECT_MODE: 2
+  MOVE_MODE: 3
   activeLayerObject: {fileID: 0}
   dragPrefab: {fileID: 1477668792116364, guid: 13d1af1fa5e8aaf4cb01ebfd4f39babb, type: 3}
-  cursorTint: {r: 0, g: 0.7830189, b: 0.027808037, a: 0.49803922}
-  cursorClickHighlight: {r: 0.8773585, g: 0.86854476, b: 0, a: 0.49803922}
+  cursorTint: {r: 0, g: 0, b: 0, a: 0}
+  cursorClickHighlight: {r: 0, g: 0, b: 0, a: 0}
   selectedToken: {fileID: 0}
   selectedObject: {fileID: 0}
   activeLayer: 0
   controlMode: 0
   deleteMode: 0
-  cubeType: 
+  cubeType: testCube
   tokenType: testToken

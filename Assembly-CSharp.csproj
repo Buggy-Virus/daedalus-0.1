@@ -53,30 +53,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\gameLogic\DaedScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\GameEnv.cs" />
-     <Compile Include="Assets\scripts\gameLogic\GraphicScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\Index.cs" />
-     <Compile Include="Assets\scripts\gameLogic\LayerScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\MapScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\MouseControls.cs" />
-     <Compile Include="Assets\scripts\gameLogic\resolveActionsScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\SelectScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\testDaedScript.cs" />
-     <Compile Include="Assets\scripts\gameLogic\Type.cs" />
-     <Compile Include="Assets\scripts\gameLogic\Utils.cs" />
-     <Compile Include="Assets\scripts\ig\CubeListScript.cs" />
-     <Compile Include="Assets\scripts\ig\IgListScript.cs" />
-     <Compile Include="Assets\scripts\ig\TokenListScript.cs" />
-     <Compile Include="Assets\scripts\ig\TypeTreeScript.cs" />
-     <Compile Include="Assets\scripts\igt\Actions.cs" />
-     <Compile Include="Assets\scripts\igt\Character.cs" />
-     <Compile Include="Assets\scripts\igt\Cube.cs" />
-     <Compile Include="Assets\scripts\igt\GameCoord.cs" />
-     <Compile Include="Assets\scripts\igt\Tile.cs" />
-     <Compile Include="Assets\scripts\igt\Token.cs" />
-     <Compile Include="Assets\scripts\prefabs\CubePrefabScript.cs" />
-     <Compile Include="Assets\scripts\prefabs\TokenPrefabScript.cs" />
+     <Compile Include="Assets\controls\MouseControls.cs" />
+     <Compile Include="Assets\cube\Cube.cs" />
+     <Compile Include="Assets\cube\CubeScript.cs" />
+     <Compile Include="Assets\DaedScript\DaedScript.cs" />
+     <Compile Include="Assets\DaedScript\testDaedScript.cs" />
+     <Compile Include="Assets\gameLogic\GameEnv.cs" />
+     <Compile Include="Assets\gameLogic\GraphicScript.cs" />
+     <Compile Include="Assets\gameLogic\resolveActionsScript.cs" />
+     <Compile Include="Assets\gameLogic\Type.cs" />
+     <Compile Include="Assets\ig\CubeListScript.cs" />
+     <Compile Include="Assets\ig\GameEnvScript.cs" />
+     <Compile Include="Assets\ig\TokenListScript.cs" />
+     <Compile Include="Assets\ig\TypeTreeScript.cs" />
+     <Compile Include="Assets\igt\Actions.cs" />
+     <Compile Include="Assets\igt\Character.cs" />
+     <Compile Include="Assets\igt\Event.cs" />
+     <Compile Include="Assets\igt\GameCoord.cs" />
+     <Compile Include="Assets\igt\Popup.cs" />
+     <Compile Include="Assets\igt\Tile.cs" />
+     <Compile Include="Assets\igt\Transition.cs" />
+     <Compile Include="Assets\map\LayerScript.cs" />
+     <Compile Include="Assets\map\MapScript.cs" />
+     <Compile Include="Assets\token\Token.cs" />
+     <Compile Include="Assets\token\TokenScript.cs" />
+     <Compile Include="Assets\utils\Index.cs" />
+     <Compile Include="Assets\utils\Utils.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/ohare/Documents/Daedalus 0.1/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
