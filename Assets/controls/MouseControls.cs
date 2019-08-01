@@ -14,7 +14,6 @@ public class MouseControls : MonoBehaviour {
     GameObject tokensObject;
 
     MapScript mapScript;
-    GraphicScript graphicScript;
     GameEnvScript gameEnvScript;
 
     public GameObject activeLayerObject;
@@ -37,7 +36,7 @@ public class MouseControls : MonoBehaviour {
     public Color cursorClickHighlight;
     Color normalColor;
 
-    public Token selectedToken;
+    public GameObject selectedToken;
     public GameObject selectedObject;
 
     public int activeLayer = 0;
@@ -64,7 +63,6 @@ public class MouseControls : MonoBehaviour {
         tokensObject = GameObject.Find("Tokens");
 
         mapScript = GameObject.Find("Map").GetComponent<MapScript>();
-        graphicScript = GameObject.Find("GameLogic").GetComponent<GraphicScript>();
         gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
 
         updateActiveLayer();
@@ -128,7 +126,7 @@ public class MouseControls : MonoBehaviour {
             Debug.Log("Cube mode");
             destroyCursor();
             Debug.Log((string)cubeType);
-            addCursor(curPosition, graphicScript.cubePrefabs[cubeType], "cursorCube");
+            addCursor(curPosition, gameEnvScript.cubePrefabs[cubeType], "cursorCube");
             lastControlMode = controlMode;
             lastCubeType = cubeType;
         }
@@ -240,8 +238,8 @@ public class MouseControls : MonoBehaviour {
 
         gameCoord.cube = newCube;
 
-        Debug.Log(graphicScript.cubePrefabs[cubeType]);
-        GameObject graphicCube = Instantiate(graphicScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
+        Debug.Log(gameEnvScript.cubePrefabs[cubeType]);
+        GameObject graphicCube = Instantiate(gameEnvScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
 
         newCube.graphicObject = graphicCube;
         graphicCube.GetComponent<CubeScript>().cube = newCube;
@@ -260,7 +258,7 @@ public class MouseControls : MonoBehaviour {
         if (lastControlMode != TOKEN_MODE || lastTokenType != tokenType) {
             Debug.Log("token mode");
             destroyCursor();
-            addCursor(curPosition, graphicScript.tokenPrefabs[tokenType], "cursorToken");
+            addCursor(curPosition, gameEnvScript.tokenPrefabs[tokenType], "cursorToken");
             lastControlMode = controlMode;
             lastTokenType = tokenType;
         }
@@ -271,7 +269,7 @@ public class MouseControls : MonoBehaviour {
 	        }
 
 	        if (Input.GetMouseButtonUp(0)) {
-	            placeToken(curPosition, curIndex, tokenType);
+	            // placeToken(curPosition, curIndex, tokenType);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
@@ -280,20 +278,20 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void placeToken(Vector3 curPosition, Index curIndex, string tokenType) {
-    	Debug.Log("Placed Token");
-    	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
+    // void placeToken(Vector3 curPosition, Index curIndex, string tokenType) {
+    // 	Debug.Log("Placed Token");
+    // 	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
 
-    	Token newToken = gameEnvScript.createToken(gameEnvScript.tokenParameters[tokenType]);
-    	newToken.index = new Index(curIndex);
-    	gameCoord.tokens.Add(newToken);
+    // 	Token newToken = gameEnvScript.createToken(gameEnvScript.tokenParameters[tokenType]);
+    // 	newToken.index = new Index(curIndex);
+    // 	gameCoord.tokens.Add(newToken);
 
-    	GameObject graphicToken = Instantiate(graphicScript.tokenPrefabs[tokenType], curPosition, Quaternion.identity, tokensObject.transform);
-    	newToken.graphicObject = graphicToken;
-        graphicToken.name = newToken.uniqueIdentifier;
-    	TokenScript graphicTokenScript = graphicToken.GetComponent<TokenScript>();
-        graphicTokenScript.token = newToken;
-    }
+    // 	GameObject graphicToken = Instantiate(gameEnvScript.tokenPrefabs[tokenType], curPosition, Quaternion.identity, tokensObject.transform);
+    // 	newToken.graphicObject = graphicToken;
+    //     graphicToken.name = newToken.identifier;
+    // 	TokenScript graphicTokenScript = graphicToken.GetComponent<TokenScript>();
+    //     graphicTokenScript.token = newToken;
+    // }
 
     void destroyCursor () {
         try {

@@ -190,9 +190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 246738982}
-  - component: {fileID: 246738981}
   - component: {fileID: 246738980}
-  - component: {fileID: 246738979}
   - component: {fileID: 246738984}
   m_Layer: 0
   m_Name: GameLogic
@@ -201,18 +199,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &246738979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246738978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e80c39bd3f0094b43ab237579de35a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &246738980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,18 +209,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89cb4e554a270f94fa6192e100179559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &246738981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246738978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd15e40b0b0fbcf4d9858811e248d46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   testCubePrefab: {fileID: 1443257276442714, guid: f196b931ab7225d49bb5c3ccb33c96e3,
@@ -570,7 +544,6 @@ MonoBehaviour:
   CUBE_MODE: 0
   TOKEN_MODE: 1
   SELECT_MODE: 2
-  MOVE_MODE: 3
   activeLayerObject: {fileID: 0}
   dragPrefab: {fileID: 1477668792116364, guid: 13d1af1fa5e8aaf4cb01ebfd4f39babb, type: 3}
   cursorTint: {r: 0, g: 0, b: 0, a: 0}

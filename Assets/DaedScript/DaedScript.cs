@@ -81,7 +81,7 @@ public class DaedScript {
 
 	public static Value evaluateSelfToken(
 		string input, 
-		ref Token self,
+		ref GameObject self,
 		ref GameEnv gameEnv
 	) 
 	{
@@ -113,8 +113,8 @@ public class DaedScript {
 
 	public static Value evaluateSelfTokenTargetToken(
 		string input, 
-		ref Token self, 
-		ref Token target,
+		ref GameObject self, 
+		ref GameObject target,
 		ref GameEnv gameEnv
 	) 
 	{
@@ -131,7 +131,7 @@ public class DaedScript {
 
 	public static Value evaluateSelfTokenTargetCube(
 		string input, 
-		ref Token self, 
+		ref GameObject self, 
 		ref Cube target,
 		ref GameEnv gameEnv
 	) 
@@ -974,7 +974,7 @@ public class DaedScript {
 					if (atomEquals(atomList[pos], "operator", "=")) {
 						pos += 1;
 
-						Expression igVarExpression = new Expression("e-set-ig-var", atomList[pos].line, atomList[pos].character);
+						Expression igVarExpression = new Expression("e-set-var", atomList[pos].line, atomList[pos].character);
 						ParseResult valueResult = parseSingle(atomList, pos, false);
 						igVarExpression.eSetIgName = igName;
 						igVarExpression.eSetIgVariable = igVariable;
@@ -983,7 +983,7 @@ public class DaedScript {
 
 						return new ParseResult(igVarExpression, pos);
 					} else {
-						Expression igVarExpression = new Expression("e-ig-var", atomList[pos].line, atomList[pos].character - 1);
+						Expression igVarExpression = new Expression("e-get-var", atomList[pos].line, atomList[pos].character - 1);
 						igVarExpression.eIgName = igName;
 						igVarExpression.eIgVariable = igVariable;
 
@@ -1051,7 +1051,7 @@ public class DaedScript {
 			case "e-let": //e-let
 				expression.eLetValue = desugar(expression.eLetValue);
 				return expression;
-			case "e-set-ig-var": //e-set-ig-variable
+			case "e-set-var": //e-set-variable
 				expression.eSetIgValue = desugar(expression.eSetIgValue);
 				return expression;
 			case "e-return":
@@ -1150,11 +1150,11 @@ public class DaedScript {
 				return interpLet(expression, env, store, ref gameEnv);
 			case "e-id": // e-id
 				return interpId(expression, env, store, ref gameEnv);
-			case "e-ig-var": //e-ig-variable
-				return interpIgVariable(expression, env, store, ref gameEnv);
-			case "e-set-ig-var": //e-set-ig-variables
-				return interpSetIgVariable(expression, env, store, ref gameEnv);
-			case "e-builtin-func": //e-set-ig-variable
+			case "e-get-var": //e-get-variable
+				return interpGetGameVar(expression, env, store, ref gameEnv);
+			case "e-set-var": //e-set-variables
+				return interpSetGameVar(expression, env, store, ref gameEnv);
+			case "e-builtin-func": //e-set-variable
 				return interpBuiltinFunc(expression, env, store, ref gameEnv);
 			case "e-return":
 				return interpReturn(expression, env, store, ref gameEnv);
@@ -1263,13 +1263,13 @@ public class DaedScript {
 			case "e-id": // e-id
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eId + "\")";
 				break;
-			case "e-ig-var": //e-ig-variable
+			case "e-get-var": //e-get-variable
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eIgName + "\")";
 				break;
-			case "e-set-ig-var": //e-set-ig-variable
+			case "e-set-var": //e-set-variable
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eSetIgName + "\")";
 				break;
-			case "e-builtin-func": //e-set-ig-variable
+			case "e-builtin-func": //e-set-variable
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eBuiltinFuncId + "\")";
 				break;
 			case "e-return":
@@ -2027,7 +2027,7 @@ public class DaedScript {
 		}
 	}
 
-	static Result interpIgVariable(
+	static Result interpGetGameVar(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
@@ -2037,24 +2037,26 @@ public class DaedScript {
 		string name = expression.eIgName;
 		string variable = expression.eIgVariable;
 		if (gameEnv.tokenDict.ContainsKey(name)) {
-			Token token = gameEnv.tokenDict[name];
-			if (token.variables.ContainsKey(variable)) {
-				switch(token.variables[variable]) {
+			GameObject token = gameEnv.tokenDict[name];
+			TokenScript tokenScript = token.GetComponent<TokenScript>();
+			if (tokenScript.variables.ContainsKey(variable)) {
+				GameVar gameVar = tokenScript.variables[variable];
+				switch(gameVar.type) {
 					case "int":
 						Value intValue = new Value("int", expression.line, expression.character);
-						intValue.vInt = token.intVars[variable];
+						intValue.vInt = gameVar.intValue;
 						return new Result(intValue, store);
 					case "double":
 						Value doubleValue = new Value("double", expression.line, expression.character);
-						doubleValue.vDouble = token.doubleVars[variable];
+						doubleValue.vDouble = gameVar.doubleValue;
 						return new Result(doubleValue, store);
 					case "string":
 						Value stringValue = new Value("string", expression.line, expression.character);
-						stringValue.vString= token.stringVars[variable];
+						stringValue.vString= gameVar.stringValue;
 						return new Result(stringValue, store);
 					case "bool":
 						Value boolValue = new Value("bool", expression.line, expression.character);
-						boolValue.vBool = token.boolVars[variable];
+						boolValue.vBool = gameVar.boolValue;
 						return new Result(boolValue, store);
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + name + "." + variable + "\""); //Throw Error
@@ -2093,7 +2095,7 @@ public class DaedScript {
 		}
 	}
 
-	static Result interpSetIgVariable(
+	static Result interpSetGameVar(
 		Expression expression,
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
@@ -2103,34 +2105,36 @@ public class DaedScript {
 		string name = expression.eSetIgName;
 		string variable = expression.eSetIgVariable;
 		if (gameEnv.tokenDict.ContainsKey(name)) {
-			Token token = gameEnv.tokenDict[name];
+			GameObject token = gameEnv.tokenDict[name];
+			TokenScript tokenScript = token.GetComponent<TokenScript>();
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
-			if (token.variables.ContainsKey(variable)) {
-				switch(token.variables[variable]) {
+			if (tokenScript.variables.ContainsKey(variable)) {
+				GameVar gameVar = tokenScript.variables[variable];
+				switch(gameVar.type) {
 					case "int":
 						if (nv_result.value.valueType == "int") {
-							token.intVars[variable] = nv_result.value.vInt;
+							gameVar.intValue = nv_result.value.vInt;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected int"); //Throw Error
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
-							token.doubleVars[variable] = nv_result.value.vDouble;
+							gameVar.doubleValue = nv_result.value.vDouble;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected double"); //Throw Error
 						}
 					case "string":
 						if (nv_result.value.valueType == "string") {
-							token.stringVars[variable] = nv_result.value.vString;
+							gameVar.stringValue = nv_result.value.vString;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected string"); //Throw Error
 						}
 					case "bool":
 						if (nv_result.value.valueType == "bool") {
-							token.boolVars[variable] = nv_result.value.vBool;
+							gameVar.boolValue = nv_result.value.vBool;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected bool"); //Throw Error
@@ -2143,16 +2147,10 @@ public class DaedScript {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-						token.intVars.Add(variable, nv_result.value.vInt);
-						return nv_result;
 					case "double":
-						token.doubleVars.Add(variable, nv_result.value.vDouble);
-						return nv_result;
 					case "string":
-						token.stringVars.Add(variable, nv_result.value.vString);
-						return nv_result;
 					case "bool":
-						token.boolVars.Add(variable, nv_result.value.vBool);
+						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error

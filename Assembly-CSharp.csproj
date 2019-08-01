@@ -58,14 +58,9 @@
      <Compile Include="Assets\cube\CubeScript.cs" />
      <Compile Include="Assets\DaedScript\DaedScript.cs" />
      <Compile Include="Assets\DaedScript\testDaedScript.cs" />
-     <Compile Include="Assets\gameLogic\GameEnv.cs" />
-     <Compile Include="Assets\gameLogic\GraphicScript.cs" />
-     <Compile Include="Assets\gameLogic\resolveActionsScript.cs" />
-     <Compile Include="Assets\gameLogic\Type.cs" />
-     <Compile Include="Assets\ig\CubeListScript.cs" />
+     <Compile Include="Assets\GameLogic\GameEnv.cs" />
+     <Compile Include="Assets\GameLogic\resolveActionsScript.cs" />
      <Compile Include="Assets\ig\GameEnvScript.cs" />
-     <Compile Include="Assets\ig\TokenListScript.cs" />
-     <Compile Include="Assets\ig\TypeTreeScript.cs" />
      <Compile Include="Assets\igt\Actions.cs" />
      <Compile Include="Assets\igt\Character.cs" />
      <Compile Include="Assets\igt\Event.cs" />
@@ -75,9 +70,15 @@
      <Compile Include="Assets\igt\Transition.cs" />
      <Compile Include="Assets\map\LayerScript.cs" />
      <Compile Include="Assets\map\MapScript.cs" />
-     <Compile Include="Assets\token\Token.cs" />
+     <Compile Include="Assets\scrip.cs" />
+     <Compile Include="Assets\token\GameVar.cs" />
+     <Compile Include="Assets\token\GraphicTokenScript.cs" />
      <Compile Include="Assets\token\TokenScript.cs" />
+     <Compile Include="Assets\token\TokenTemplate.cs" />
+     <Compile Include="Assets\token\TokenTemplateVariable.cs" />
+     <Compile Include="Assets\utils\GameUtils.cs" />
      <Compile Include="Assets\utils\Index.cs" />
+     <Compile Include="Assets\utils\Type.cs" />
      <Compile Include="Assets\utils\Utils.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/ohare/Documents/Daedalus 0.1/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

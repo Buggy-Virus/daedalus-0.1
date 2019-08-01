@@ -11,7 +11,7 @@ public class GameCoord : MonoBehaviour {
 	public Cube cube;
 	public Cube upCube;
 	public Cube downCube;
-	public List<Token> tokens;
+	public List<GameObject> tokens;
 	public List<Character> characters;
 	public Tile downTile;
 	public Tile upTile;

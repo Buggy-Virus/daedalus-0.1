@@ -5,7 +5,7 @@ using UnityEngine;
 public class testDaeDaedScript : MonoBehaviour
 {
     GameEnvScript gameEnvScript;
-	public Dictionary<string, Token> tokenEnv;
+	public Dictionary<string, GameObject> tokenEnv;
     public Dictionary<string, Cube> cubeEnv;
 
     public Dictionary<string, string> builtInEnv;

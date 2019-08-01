@@ -7,14 +7,13 @@ public class GameEnv
 {
     public int inGameTime;
 
-    public TypeTreeScript typeTreeScript;
-    public Dictionary<string, Token> tokenDict;
+    public Dictionary<string, GameObject> tokenDict;
     public Dictionary<string, Cube> cubeDict;
 
     public GameCoord[,,] gameBoard;
 
     public GameEnv(){
-        tokenDict = new Dictionary<string, Token>();
+        tokenDict = new Dictionary<string, GameObject>();
         cubeDict = new Dictionary<string, Cube>();
     }
 }

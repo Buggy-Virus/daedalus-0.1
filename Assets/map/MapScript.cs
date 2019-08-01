@@ -29,7 +29,7 @@ public class MapScript : MonoBehaviour {
                     gameBoard[x, y, z].x = x;
                     gameBoard[x, y, z].y = y;
                     gameBoard[x, y, z].z = z;
-                    gameBoard[x, y, z].tokens = new List<Token>();
+                    gameBoard[x, y, z].tokens = new List<GameObject>();
                     gameBoard[x, y, z].characters = new List<Character>();
                 }
             }

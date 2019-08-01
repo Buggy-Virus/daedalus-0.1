@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class GameEnvScript : MonoBehaviour
 {
+    public GameObject testCubePrefab;
+	public GameObject testTokenPrefab;
+
     GameObject cubesObject;
     GameObject tokensObject;
 
-	TypeTreeScript typeTreeScript;
-
     public GameEnv gameEnv;
     int lastGameTime;
+
+    Dictionary<string, Type> typeDict;
 
     public List<Event> gameTimeEvents;
     public List<Event> realTimeEvents;
@@ -20,14 +23,22 @@ public class GameEnvScript : MonoBehaviour
 	public Dictionary<string, object[]> tokenParameters = new Dictionary<string, object[]>();
     public Dictionary<string, object[]> relationalActionParameters = new Dictionary<string, object[]>();
 
+    public Dictionary<string, GameObject> cubePrefabs = new Dictionary<string, GameObject>();
+	public Dictionary<string, GameObject> tokenPrefabs = new Dictionary<string, GameObject>();
+
     void Start()
     {
+        typeDict = new Dictionary<string, Type>();
+        typeDict.Add("testCube", new Type("cube"));
+        typeDict.Add("testToken", new Type("token"));
+
+        cubePrefabs.Add("testCube", testCubePrefab);
+    	tokenPrefabs.Add("testToken", testTokenPrefab);
+
         gameEnv = new GameEnv();
 
         cubesObject = GameObject.Find("Cubes");
         tokensObject = GameObject.Find("Tokens");
-
-    	typeTreeScript = GameObject.Find("GameLogic").GetComponent<TypeTreeScript>();
 
         cubeParameters.Add("testCube", new object[] {"testCube", "testCube", "cube", new List<string>(), new List<float>(), 1, 100});
         tokenParameters.Add("testToken", new object[] {"testToken", "testToken", "token", new List<string>(), new List<float>(), "Tester Token", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
@@ -50,40 +61,40 @@ public class GameEnvScript : MonoBehaviour
         // }
     }
 
-    public Token createToken(object[] tokenParams) {
-        Token newToken = tokensObject.AddComponent<Token>();
+    // public Token createToken(object[] tokenParams) {
+    //     Token newToken = tokensObject.AddComponent<Token>();
 
-        newToken.identifier = (string)tokenParams[0];
-        newToken.uniqueIdentifier = newToken.identifier + "_" + System.Guid.NewGuid().ToString();
+    //     newToken.identifier = (string)tokenParams[0];
+    //     newToken.uniqueIdentifier = newToken.identifier + "_" + System.Guid.NewGuid().ToString();
 
-        newToken.graphicAsset = (string)tokenParams[1];
+    //     newToken.graphicAsset = (string)tokenParams[1];
 
-        newToken.type = typeTreeScript.typeDict[(string)tokenParams[2]];
-        List<string> mt = (List<string>)tokenParams[3];
-        for  (int i = 0; i < mt.Count; i++) {
-                newToken.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
-        }
-        newToken.materialTypesDistribution = (List<float>)tokenParams[4];
+    //     newToken.type = typeDict[(string)tokenParams[2]];
+    //     List<string> mt = (List<string>)tokenParams[3];
+    //     for  (int i = 0; i < mt.Count; i++) {
+    //             newToken.materialTypes.Add(typeDict[mt[i]]);
+    //     }
+    //     newToken.materialTypesDistribution = (List<float>)tokenParams[4];
 
-        newToken.width = (int)tokenParams[6];
-        newToken.length = (int)tokenParams[7];
-        newToken.height = (int)tokenParams[8];
+    //     newToken.width = (int)tokenParams[6];
+    //     newToken.length = (int)tokenParams[7];
+    //     newToken.height = (int)tokenParams[8];
 
-        newToken.boolVars.Add("cheapDiagMove", false);
+    //     newToken.boolVars.Add("cheapDiagMove", false);
 
-        newToken.intVars.Add("hitScore", (int)tokenParams[9]);
-        newToken.intVars.Add("hitPoints", (int)tokenParams[9]);
-        newToken.intVars.Add("moveScore", (int)tokenParams[10]);
-        newToken.intVars.Add("movePoints", (int)tokenParams[10]);
-        newToken.intVars.Add("strength", (int)tokenParams[11]);
-        newToken.intVars.Add("dexterity", (int)tokenParams[12]);
-        newToken.intVars.Add("endurance", (int)tokenParams[13]);
-        newToken.intVars.Add("constitution", (int)tokenParams[14]);
-        newToken.intVars.Add("wisdom", (int)tokenParams[15]);
-        newToken.intVars.Add("intelligence", (int)tokenParams[16]);
+    //     newToken.intVars.Add("hitScore", (int)tokenParams[9]);
+    //     newToken.intVars.Add("hitPoints", (int)tokenParams[9]);
+    //     newToken.intVars.Add("moveScore", (int)tokenParams[10]);
+    //     newToken.intVars.Add("movePoints", (int)tokenParams[10]);
+    //     newToken.intVars.Add("strength", (int)tokenParams[11]);
+    //     newToken.intVars.Add("dexterity", (int)tokenParams[12]);
+    //     newToken.intVars.Add("endurance", (int)tokenParams[13]);
+    //     newToken.intVars.Add("constitution", (int)tokenParams[14]);
+    //     newToken.intVars.Add("wisdom", (int)tokenParams[15]);
+    //     newToken.intVars.Add("intelligence", (int)tokenParams[16]);
 
-        return newToken;
-    }
+    //     return newToken;
+    // }
 
     public Cube createCube(object[] cubeParams) {   
         Cube newCube = cubesObject.AddComponent<Cube>();
@@ -93,10 +104,10 @@ public class GameEnvScript : MonoBehaviour
 
         newCube.graphicAsset = (string)cubeParams[1];
 
-        newCube.type = typeTreeScript.typeDict[(string)cubeParams[2]];
+        newCube.type = typeDict[(string)cubeParams[2]];
         List<string> mt = (List<string>)cubeParams[3];
         for  (int i = 0; i < mt.Count; i++) {
-                newCube.materialTypes.Add(typeTreeScript.typeDict[mt[i]]);
+                newCube.materialTypes.Add(typeDict[mt[i]]);
         }
         newCube.materialTypesDistribution = (List<float>)cubeParams[4];
 
