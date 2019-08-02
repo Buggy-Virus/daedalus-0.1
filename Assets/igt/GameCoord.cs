@@ -8,9 +8,9 @@ public class GameCoord : MonoBehaviour {
 	public int y;
 	public int z;
 
-	public Cube cube;
-	public Cube upCube;
-	public Cube downCube;
+	public GameObject cube;
+	public GameObject upCube;
+	public GameObject downCube;
 	public List<GameObject> tokens;
 	public List<Character> characters;
 	public Tile downTile;

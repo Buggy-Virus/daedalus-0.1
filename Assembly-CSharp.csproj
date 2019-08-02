@@ -54,8 +54,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\controls\MouseControls.cs" />
-     <Compile Include="Assets\cube\Cube.cs" />
      <Compile Include="Assets\cube\CubeScript.cs" />
+     <Compile Include="Assets\cube\CubeTemplate.cs" />
+     <Compile Include="Assets\cube\GraphicCubeScript.cs" />
      <Compile Include="Assets\DaedScript\DaedScript.cs" />
      <Compile Include="Assets\DaedScript\testDaedScript.cs" />
      <Compile Include="Assets\GameLogic\GameEnv.cs" />
@@ -75,9 +76,9 @@
      <Compile Include="Assets\token\GraphicTokenScript.cs" />
      <Compile Include="Assets\token\TokenScript.cs" />
      <Compile Include="Assets\token\TokenTemplate.cs" />
-     <Compile Include="Assets\token\TokenTemplateVariable.cs" />
      <Compile Include="Assets\utils\GameUtils.cs" />
      <Compile Include="Assets\utils\Index.cs" />
+     <Compile Include="Assets\utils\TemplateVariable.cs" />
      <Compile Include="Assets\utils\Type.cs" />
      <Compile Include="Assets\utils\Utils.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">

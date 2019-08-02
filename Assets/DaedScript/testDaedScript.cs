@@ -6,7 +6,7 @@ public class testDaeDaedScript : MonoBehaviour
 {
     GameEnvScript gameEnvScript;
 	public Dictionary<string, GameObject> tokenEnv;
-    public Dictionary<string, Cube> cubeEnv;
+    public Dictionary<string, GameObject> cubeEnv;
 
     public Dictionary<string, string> builtInEnv;
     public Dictionary<string, Value> builtInStore; 

@@ -37,8 +37,8 @@ public class GameEnvScript : MonoBehaviour
 
         gameEnv = new GameEnv();
 
-        cubesObject = GameObject.Find("Cubes");
-        tokensObject = GameObject.Find("Tokens");
+        gameEnv.cubesObject = GameObject.Find("Cubes");
+        gameEnv.tokensObject = GameObject.Find("Tokens");
 
         cubeParameters.Add("testCube", new object[] {"testCube", "testCube", "cube", new List<string>(), new List<float>(), 1, 100});
         tokenParameters.Add("testToken", new object[] {"testToken", "testToken", "token", new List<string>(), new List<float>(), "Tester Token", 1, 1, 1, 10, 100, 10, 10, 10, 10, 10, 10});
@@ -96,26 +96,26 @@ public class GameEnvScript : MonoBehaviour
     //     return newToken;
     // }
 
-    public Cube createCube(object[] cubeParams) {   
-        Cube newCube = cubesObject.AddComponent<Cube>();
+    // public Cube createCube(object[] cubeParams) {   
+    //     Cube newCube = cubesObject.AddComponent<Cube>();
 
-        newCube.identifier = (string)cubeParams[0];
-        newCube.uniqueIdentifier = newCube.identifier + "_" + System.Guid.NewGuid().ToString();
+    //     newCube.identifier = (string)cubeParams[0];
+    //     newCube.uniqueIdentifier = newCube.identifier + "_" + System.Guid.NewGuid().ToString();
 
-        newCube.graphicAsset = (string)cubeParams[1];
+    //     newCube.graphicAsset = (string)cubeParams[1];
 
-        newCube.type = typeDict[(string)cubeParams[2]];
-        List<string> mt = (List<string>)cubeParams[3];
-        for  (int i = 0; i < mt.Count; i++) {
-                newCube.materialTypes.Add(typeDict[mt[i]]);
-        }
-        newCube.materialTypesDistribution = (List<float>)cubeParams[4];
+    //     newCube.type = typeDict[(string)cubeParams[2]];
+    //     List<string> mt = (List<string>)cubeParams[3];
+    //     for  (int i = 0; i < mt.Count; i++) {
+    //             newCube.materialTypes.Add(typeDict[mt[i]]);
+    //     }
+    //     newCube.materialTypesDistribution = (List<float>)cubeParams[4];
 
-        newCube.intVars.Add("state", (int)cubeParams[5]);
-        newCube.intVars.Add("hitScore", (int)cubeParams[6]);
-        newCube.intVars.Add("hitPoints", (int)cubeParams[6]);
+    //     newCube.intVars.Add("state", (int)cubeParams[5]);
+    //     newCube.intVars.Add("hitScore", (int)cubeParams[6]);
+    //     newCube.intVars.Add("hitPoints", (int)cubeParams[6]);
 
-        return newCube;
-    }
+    //     return newCube;
+    // }
     
 }

@@ -97,7 +97,7 @@ public class DaedScript {
 
 	public static Value evaluateSelfCube(
 		string input, 
-		ref Cube self,
+		ref GameObject self,
 		ref GameEnv gameEnv
 	) 
 	{
@@ -132,7 +132,7 @@ public class DaedScript {
 	public static Value evaluateSelfTokenTargetCube(
 		string input, 
 		ref GameObject self, 
-		ref Cube target,
+		ref GameObject target,
 		ref GameEnv gameEnv
 	) 
 	{
@@ -2065,24 +2065,26 @@ public class DaedScript {
 				return expressionError(expression, store, "ig \"" + name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
 		} else if (gameEnv.cubeDict.ContainsKey(name)) {
-			Cube cube = gameEnv.cubeDict[name];
-			if (cube.variables.ContainsKey(variable)) {
-				switch(cube.variables[variable]) {
+			GameObject cube = gameEnv.cubeDict[name];
+			CubeScript cubeScript = cube.GetComponent<CubeScript>();
+			if (cubeScript.variables.ContainsKey(variable)) {
+				GameVar gameVar = cubeScript.variables[variable];
+				switch(gameVar.type) {
 					case "int":
 						Value intValue = new Value("int", expression.line, expression.character);
-						intValue.vInt = cube.intVars[variable];
+						intValue.vInt = gameVar.intValue;
 						return new Result(intValue, store);
 					case "double":
 						Value doubleValue = new Value("double", expression.line, expression.character);
-						doubleValue.vDouble = cube.doubleVars[variable];
+						doubleValue.vDouble = gameVar.doubleValue;
 						return new Result(doubleValue, store);
 					case "string":
 						Value stringValue = new Value("string", expression.line, expression.character);
-						stringValue.vString= cube.stringVars[variable];
+						stringValue.vString= gameVar.stringValue;
 						return new Result(stringValue, store);
 					case "bool":
 						Value boolValue = new Value("bool", expression.line, expression.character);
-						boolValue.vBool = cube.boolVars[variable];
+						boolValue.vBool = gameVar.boolValue;
 						return new Result(boolValue, store);
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + name + "." + variable + "\""); //Throw Error
@@ -2157,34 +2159,36 @@ public class DaedScript {
 				}
 			}
 		} else if (gameEnv.cubeDict.ContainsKey(name)) {
-			Cube cube = gameEnv.cubeDict[name];
+			GameObject cube = gameEnv.cubeDict[name];
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
-			if (cube.variables.ContainsKey(variable)) {
-				switch(cube.variables[variable]) {
+			CubeScript cubeScript = cube.GetComponent<CubeScript>();
+			if (cubeScript.variables.ContainsKey(variable)) {
+				GameVar gameVar = cubeScript.variables[variable];
+				switch(gameVar.type) {
 					case "int":
 						if (nv_result.value.valueType == "int") {
-							cube.intVars[variable] = nv_result.value.vInt;
+							gameVar.intValue = nv_result.value.vInt;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected int"); //Throw Error
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
-							cube.doubleVars[variable] = nv_result.value.vDouble;
+							gameVar.doubleValue = nv_result.value.vDouble;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected double"); //Throw Error
 						}
 					case "string":
 						if (nv_result.value.valueType == "string") {
-							cube.stringVars[variable] = nv_result.value.vString;
+							gameVar.stringValue = nv_result.value.vString;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected string"); //Throw Error
 						}
 					case "bool":
 						if (nv_result.value.valueType == "bool") {
-							cube.boolVars[variable] = nv_result.value.vBool;
+							gameVar.boolValue = nv_result.value.vBool;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected bool"); //Throw Error
@@ -2197,16 +2201,10 @@ public class DaedScript {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-						cube.intVars.Add(variable, nv_result.value.vInt);
-						return nv_result;
 					case "double":
-						cube.doubleVars.Add(variable, nv_result.value.vDouble);
-						return nv_result;
 					case "string":
-						cube.stringVars.Add(variable, nv_result.value.vString);
-						return nv_result;
 					case "bool":
-						cube.boolVars.Add(variable, nv_result.value.vBool);
+						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error

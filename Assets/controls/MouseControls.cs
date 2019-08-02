@@ -10,6 +10,8 @@ public class MouseControls : MonoBehaviour {
     public int TOKEN_MODE = 1;
     public int SELECT_MODE = 2;
 
+    GameEnv gameEnv;
+
 	GameObject cubesObject;
     GameObject tokensObject;
 
@@ -64,6 +66,7 @@ public class MouseControls : MonoBehaviour {
 
         mapScript = GameObject.Find("Map").GetComponent<MapScript>();
         gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
+        gameEnv = gameEnvScript.gameEnv;
 
         updateActiveLayer();
     }
@@ -158,13 +161,14 @@ public class MouseControls : MonoBehaviour {
 	                for (int x = (int) Mathf.Min(mouseDownPosition.x, curPosition.x); x <= (int) Mathf.Max(mouseDownPosition.x, curPosition.x); x++) {
 	                    for (int z = (int)Mathf.Min(mouseDownPosition.z, curPosition.z); z <= (int)Mathf.Max(mouseDownPosition.z, curPosition.z); z++) {
 	                        iterIndex = new Index(x, y, z);
-	                        placeCube(new Vector3(x, curPosition.y, z), iterIndex, cubeType);
+                            // GameUtils.createAndPlaceCube(gameEnvScript.cubeParameters[cubeType], ref gameEnv, iterIndex);
+	                        // placeCube(new Vector3(x, curPosition.y, z), iterIndex, cubeType);
 	                    }
 	                }
 	                Destroy(dragObject);
 	            } else if (Utils.indexEqual(mouseDownIndex, curIndex)) {
 	            	Debug.Log("Placing Cube");
-	                placeCube(curPosition, curIndex, cubeType);
+	                // placeCube(curPosition, curIndex, cubeType);
 	            }
 	            
 	            mouseDown = false;
@@ -222,34 +226,34 @@ public class MouseControls : MonoBehaviour {
 
     }
 
-    void placeCube(Vector3 curPosition, Index curIndex, string cubeType) {
-        GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
+    // void placeCube(Vector3 curPosition, Index curIndex, string cubeType) {
+    //     GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
 
-        Debug.Log(gameCoord.cube);
+    //     Debug.Log(gameCoord.cube);
 
-        if (gameCoord.cube != null) {
-            Destroy(gameCoord.cube.graphicObject);
-            Destroy(gameCoord.cube);
-        }
-        Debug.Log(cubeType);
-        Debug.Log(gameEnvScript.cubeParameters[cubeType]);
-        Cube newCube = gameEnvScript.createCube(gameEnvScript.cubeParameters[cubeType]);
-        newCube.index = new Index(curIndex);
+    //     if (gameCoord.cube != null) {
+    //         Destroy(gameCoord.cube.graphicObject);
+    //         Destroy(gameCoord.cube);
+    //     }
+    //     Debug.Log(cubeType);
+    //     Debug.Log(gameEnvScript.cubeParameters[cubeType]);
+    //     Cube newCube = gameEnvScript.createCube(gameEnvScript.cubeParameters[cubeType]);
+    //     newCube.index = new Index(curIndex);
 
-        gameCoord.cube = newCube;
+    //     gameCoord.cube = newCube;
 
-        Debug.Log(gameEnvScript.cubePrefabs[cubeType]);
-        GameObject graphicCube = Instantiate(gameEnvScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
+    //     Debug.Log(gameEnvScript.cubePrefabs[cubeType]);
+    //     GameObject graphicCube = Instantiate(gameEnvScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
 
-        newCube.graphicObject = graphicCube;
-        graphicCube.GetComponent<CubeScript>().cube = newCube;
-        graphicCube.name = newCube.uniqueIdentifier;
-    }
+    //     newCube.graphicObject = graphicCube;
+    //     graphicCube.GetComponent<CubeScript>().cube = newCube;
+    //     graphicCube.name = newCube.uniqueIdentifier;
+    // }
 
     void deleteCube(Index curIndex) {
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
     	if (gameCoord.cube != null) {
-            Destroy(gameCoord.cube.graphicObject);
+            Destroy(gameCoord.cube);
         }
     	gameCoord.cube = null;
     }

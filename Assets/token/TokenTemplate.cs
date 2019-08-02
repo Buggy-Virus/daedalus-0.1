@@ -21,7 +21,7 @@ public class TokenTemplate {
     public List<Raction> availableRactions;
     public List<Taction> availableTactions;
 
-    public Dictionary<string, TokenTemplateVariable> initVariableList;
+    public Dictionary<string, TemplateVariable> initVariableList;
 
     public TokenTemplate(
         GameObject go,
@@ -37,7 +37,7 @@ public class TokenTemplate {
         List<Action> aa,
         List<Raction> ar,
         List<Taction> at,
-        Dictionary<string, TokenTemplateVariable> ivl
+        Dictionary<string, TemplateVariable> ivl
     ) {
         graphicObjectPrefab = go;
         identifier = id;
