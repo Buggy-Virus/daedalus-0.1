@@ -93,6 +93,7 @@ public class GameUtils {
 
     static public void createGraphicToken(ref GameObject token, Index pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
+        tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
 
         tokenScript.gameEnv.gameBoard[pos.x, pos.y, pos.z].tokens.Add(token);
@@ -106,6 +107,7 @@ public class GameUtils {
 
     static public void createGraphicToken(ref GameObject token, Vector3 pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
+        tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
 
         Index index = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
@@ -117,6 +119,22 @@ public class GameUtils {
         GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, placePos, Quaternion.identity, token.transform);
         tokenScript.graphicObject = graphicToken;
         tokenScript.index = index;
+    }
+
+    static public void deleteGraphicToken(ref GameObject token) {
+        CubeScript tokenScript = token.GetComponent<CubeScript>();
+        Index index = tokenScript.index;
+        tokenScript.gameEnv.gameBoard[index.x, index.y, index.z].tokens.Remove(token);
+        GameObject.Destroy(token.transform.GetChild(0));
+        tokenScript.onMap = false;
+    }
+
+    static public void deleteToken(ref GameObject token) {
+        CubeScript tokenScript = token.GetComponent<CubeScript>();
+        if (tokenScript.onMap) {
+            deleteGraphicCube(ref token);
+        }
+        GameObject.Destroy(token);
     }
 
     // ========================================================================================================================== Cube Stuff
@@ -197,6 +215,7 @@ public class GameUtils {
 
     static public void createGraphicCube(ref GameObject cube, Index pos) {
         CubeScript cubeScript = cube.GetComponent<CubeScript>();
+        cubeScript.onMap = true;
         float cubeSize = cubeScript.gameEnv.cubeSize;
 
         cubeScript.gameEnv.gameBoard[pos.x, pos.y, pos.z].cube = cube;
@@ -210,17 +229,34 @@ public class GameUtils {
 
     static public void createGraphicCube(ref GameObject cube, Vector3 pos) {
         CubeScript cubeScript = cube.GetComponent<CubeScript>();
+        cubeScript.onMap = true;
         float cubeSize = cubeScript.gameEnv.cubeSize;
 
         Index index = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
 
-        cubeScript.gameEnv.gameBoard[index.x, index.y, index.z].tokens.Add(cube);
+        cubeScript.gameEnv.gameBoard[index.x, index.y, index.z].cube = cube;
 
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
 
         GameObject graphicToken = GameObject.Instantiate(cubeScript.graphicObjectPrefab, placePos, Quaternion.identity, cube.transform);
         cubeScript.graphicObject = graphicToken;
         cubeScript.index = index;
+    }
+
+    static public void deleteGraphicCube(ref GameObject cube) {
+        CubeScript cubeScript = cube.GetComponent<CubeScript>();
+        Index index = cubeScript.index;
+        cubeScript.gameEnv.gameBoard[index.x, index.y, index.z].cube = null;
+        GameObject.Destroy(cube.transform.GetChild(0));
+        cubeScript.onMap = false;
+    }
+
+    static public void deleteCube(ref GameObject cube) {
+        CubeScript cubeScript = cube.GetComponent<CubeScript>();
+        if (cubeScript.onMap) {
+            deleteGraphicCube(ref cube);
+        }
+        GameObject.Destroy(cube);
     }
 
     // ========================================================================================================================== Testing Functions

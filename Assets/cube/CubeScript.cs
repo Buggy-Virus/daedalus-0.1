@@ -9,6 +9,7 @@ public class CubeScript : MonoBehaviour {
 	public string graphicAsset;
     public GameObject graphicObjectPrefab;
     public GameObject graphicObject;
+    public bool onMap = false;
 
     public Index index;
 

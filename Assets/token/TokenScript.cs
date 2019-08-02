@@ -12,6 +12,8 @@ public class TokenScript : MonoBehaviour {
     public GameObject graphicObjectPrefab;
     public GameObject graphicObject;
     public GameObject tokenPrefab;
+    public bool onMap = false;
+
     public string alias;
 
     public Index index;
