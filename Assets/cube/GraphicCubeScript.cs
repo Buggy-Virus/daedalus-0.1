@@ -7,9 +7,13 @@ public class GraphicCubeScript : MonoBehaviour
     // ================================================ CONFIGUREABLE VARIABLES
     public float moveSpeed = 10f;
 
+    // ================================================ PUBLIC ATTRIBUTES
+	public GameObject cube;
+    public CubeScript cubeScript;
+
     // ================================================ GLOBAL VARIABLES
     // movement variables
-    Vector3 goingTo;
+    public Vector3 goingTo;
 
     // ================================================ Movement
     public void moveTo(Vector3 endPos) {

@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class GameEnvScript : MonoBehaviour
 {
-
-    GameObject cubesObject;
-    GameObject tokensObject;
-
     public GameEnv gameEnv;
     int lastGameTime;
 
@@ -16,8 +12,6 @@ public class GameEnvScript : MonoBehaviour
 
     public List<Event> gameTimeEvents;
     public List<Event> realTimeEvents;
-
-    public Dictionary<string, object[]> relationalActionParameters = new Dictionary<string, object[]>();
 
     public GameObject goblinPrefab;
     public GameObject adventurerPrefab;
@@ -35,6 +29,7 @@ public class GameEnvScript : MonoBehaviour
         gameEnv.tokensObject = GameObject.Find("Tokens");
         gameEnv.mapScript = GameObject.Find("Map").GetComponent<MapScript>();
 
+        AddActions();
         AddTokenTemplates();
         addCubeTemplates();
     }
@@ -56,6 +51,23 @@ public class GameEnvScript : MonoBehaviour
         // }
     }
 
+    public void AddActions() {
+        Action nullAction = new Action(
+            "Null Action",
+            new Type("action"),
+            new List<string> {"true"},
+            new List<Effect>(),
+            0,
+            new List<Raction>(),
+            new List<Taction>(),
+            new List<Action>(),
+            new List<Raction>(),
+            new List<Taction>()
+        );
+
+        gameEnv.actionDict.Add(nullAction.name, nullAction);
+    }
+
     public void AddTokenTemplates() {
         TokenTemplate goblin = new TokenTemplate(
             goblinPrefab,
@@ -68,7 +80,7 @@ public class GameEnvScript : MonoBehaviour
             1,
             1,
             new List<Effect>(),
-            new List<Action>(),
+            new List<Action> {gameEnv.actionDict["Null Action"]},
             new List<Raction>(),
             new List<Taction>(),
             new Dictionary<string, TemplateVariable> {
@@ -93,7 +105,7 @@ public class GameEnvScript : MonoBehaviour
             1,
             2,
             new List<Effect>(),
-            new List<Action>(),
+            new List<Action> {gameEnv.actionDict["Null Action"]},
             new List<Raction>(),
             new List<Taction>(),
             new Dictionary<string, TemplateVariable> {
@@ -118,7 +130,7 @@ public class GameEnvScript : MonoBehaviour
             new Type("stone"),
             new List<Type>(),
             new List<float>(),
-            new TemplateVariable("transparency", 0.0), 
+            new TemplateVariable(0.0), 
             new List<Effect>(),
             new Dictionary<string, TemplateVariable> {
                 { "Passable", new TemplateVariable(true) }, 

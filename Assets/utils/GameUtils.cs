@@ -24,7 +24,7 @@ public class GameUtils {
             case "doubleList":
                 return new GameVar(var.doubleList[random.Next(var.doubleList.Count)]);
             case "intRange":
-                return new GameVar(var.doubleList[random.Next(var.doubleList.Count)]);
+                return new GameVar(random.Next(var.intMin, var.intMax));
             case "doubleRange":
                 return new GameVar(var.doubleMin + (var.doubleMax - var.doubleMin) * random.NextDouble());
             case "boolProbablity":
@@ -37,21 +37,21 @@ public class GameUtils {
                     return new GameVar("Expected string, got: " + result.valueType);
                 }
             case "intCalculation":
-                result = DaedScript.evaluate(var.stringCalculation, ref gameEnv);
+                result = DaedScript.evaluate(var.intCalculation, ref gameEnv);
                 if (result.valueType == "int") {
                     return new GameVar(result.vInt);
                 } else {
                     return new GameVar("Expected int, got: " + result.valueType);
                 }
             case "doubleCalculation":
-                result = DaedScript.evaluate(var.stringCalculation, ref gameEnv);
+                result = DaedScript.evaluate(var.doubleCalculation, ref gameEnv);
                 if (result.valueType == "double") {
                     return new GameVar(result.vString);
                 } else {
                     return new GameVar("Expected double, got: " + result.valueType);
                 }
             case "boolCalculation":
-                result = DaedScript.evaluate(var.stringCalculation, ref gameEnv);
+                result = DaedScript.evaluate(var.boolCalculation, ref gameEnv);
                 if (result.valueType == "bool") {
                     return new GameVar(result.vString);
                 } else {
@@ -98,31 +98,48 @@ public class GameUtils {
             tokenScript.effects[effect.givenName] = effect;
         }
 
-        tokenScript.availableActions = template.availableActions;
-        tokenScript.availableRactions = template.availableRactions;
-        tokenScript.availableTactions = template.availableTactions;
+        tokenScript.availableActions = new Dictionary<string, Action>();
+        tokenScript.availableRactions = new Dictionary<string, Raction>();
+        tokenScript.availableTactions = new Dictionary<string, Taction>();
+        foreach (Action action in template.availableActions) {
+            tokenScript.availableActions.Add(action.name, action);
+        }
+        foreach (Raction raction in template.availableRactions) {
+            tokenScript.availableRactions.Add(raction.name, raction);
+        }
+        foreach (Taction taction in template.availableTactions) {
+            tokenScript.availableTactions.Add(taction.name, taction);
+        }
 
         foreach (KeyValuePair<string, TemplateVariable> var in template.initVariableList) {
             tokenScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
         }
+
+        GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, token.transform);
+        tokenScript.graphicObject = graphicToken;
+        graphicToken.GetComponent<GraphicTokenScript>().token = token;
+        graphicToken.GetComponent<GraphicTokenScript>().tokenScript = tokenScript;
+        graphicToken.SetActive(false);
+
         return token;
     }
 
-    static public void createGraphicToken(ref GameObject token, Index pos) {
+    static public void placeGraphicToken(ref GameObject token, Index pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
 
         tokenScript.gameEnv.mapScript.gameBoard[pos.x, pos.y, pos.z].tokens.Add(token);
+        tokenScript.index = pos;
 
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
 
-        GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, placePos, Quaternion.identity, token.transform);
-        tokenScript.graphicObject = graphicToken;
-        tokenScript.index = pos;
+        tokenScript.graphicObject.SetActive(true);
+        tokenScript.graphicObject.transform.position = placePos;  
+        tokenScript.graphicObject.GetComponent<GraphicTokenScript>().goingTo = placePos;     
     }
 
-    static public void createGraphicToken(ref GameObject token, Vector3 pos) {
+    static public void placeGraphicToken(ref GameObject token, Vector3 pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
@@ -130,19 +147,20 @@ public class GameUtils {
         Index index = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
 
         tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Add(token);
+        tokenScript.index = index;
 
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
 
-        GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, placePos, Quaternion.identity, token.transform);
-        tokenScript.graphicObject = graphicToken;
-        tokenScript.index = index;
+        tokenScript.graphicObject.SetActive(true);
+        tokenScript.graphicObject.transform.position = placePos; 
+        tokenScript.graphicObject.GetComponent<GraphicTokenScript>().goingTo = placePos;   
     }
 
     static public void deleteGraphicToken(ref GameObject token) {
         CubeScript tokenScript = token.GetComponent<CubeScript>();
         Index index = tokenScript.index;
         tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(token);
-        GameObject.Destroy(token.transform.GetChild(0));
+        tokenScript.graphicObject.SetActive(false);
         tokenScript.onMap = false;
     }
 
@@ -191,24 +209,31 @@ public class GameUtils {
         foreach (KeyValuePair<string, TemplateVariable> var in template.initVariableList) {
             cubeScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
         }
+
+        GameObject graphicCube = GameObject.Instantiate(cubeScript.graphicObjectPrefab, cube.transform);
+        cubeScript.graphicObject = graphicCube;
+        graphicCube.GetComponent<GraphicCubeScript>().cube = cube;
+        graphicCube.GetComponent<GraphicCubeScript>().cubeScript = cubeScript;
+        graphicCube.SetActive(false);
+
         return cube;
     }
 
-    static public void createGraphicCube(ref GameObject cube, Index pos) {
+    static public void placeGraphicCube(ref GameObject cube, Index pos) {
         CubeScript cubeScript = cube.GetComponent<CubeScript>();
         cubeScript.onMap = true;
         float cubeSize = cubeScript.gameEnv.cubeSize;
 
         cubeScript.gameEnv.mapScript.gameBoard[pos.x, pos.y, pos.z].cube = cube;
+        cubeScript.index = pos;
 
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
-
-        GameObject graphicToken = GameObject.Instantiate(cubeScript.graphicObjectPrefab, placePos, Quaternion.identity, cube.transform);
-        cubeScript.graphicObject = graphicToken;
-        cubeScript.index = pos;
+        cubeScript.graphicObject.SetActive(true);
+        cubeScript.graphicObject.transform.position = placePos;
+        cubeScript.graphicObject.GetComponent<GraphicCubeScript>().goingTo = placePos;
     }
 
-    static public void createGraphicCube(ref GameObject cube, Vector3 pos) {
+    static public void placeGraphicCube(ref GameObject cube, Vector3 pos) {
         CubeScript cubeScript = cube.GetComponent<CubeScript>();
         cubeScript.onMap = true;
         float cubeSize = cubeScript.gameEnv.cubeSize;
@@ -216,19 +241,19 @@ public class GameUtils {
         Index index = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
 
         cubeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].cube = cube;
+        cubeScript.index = index;
 
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
-
-        GameObject graphicToken = GameObject.Instantiate(cubeScript.graphicObjectPrefab, placePos, Quaternion.identity, cube.transform);
-        cubeScript.graphicObject = graphicToken;
-        cubeScript.index = index;
+        cubeScript.graphicObject.SetActive(true);
+        cubeScript.graphicObject.transform.position = placePos;
+        cubeScript.graphicObject.GetComponent<GraphicCubeScript>().goingTo = placePos;
     }
 
     static public void deleteGraphicCube(ref GameObject cube) {
         CubeScript cubeScript = cube.GetComponent<CubeScript>();
         Index index = cubeScript.index;
         cubeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].cube = null;
-        GameObject.Destroy(cube.transform.GetChild(0));
+        cubeScript.graphicObject.SetActive(false);
         cubeScript.onMap = false;
     }
 
@@ -243,11 +268,11 @@ public class GameUtils {
     // ========================================================================================================================== Testing Functions
     static public void createAndPlaceToken(GameObject tokenPrefab, TokenTemplate template, ref GameEnv gameEnv, Index pos) {
         GameObject token = quickCreateToken(tokenPrefab, template, ref gameEnv);
-        createGraphicToken(ref token, pos);
+        placeGraphicToken(ref token, pos);
     }
 
     static public void createAndPlaceCube(GameObject cubePrefab, CubeTemplate template, ref GameEnv gameEnv, Index pos) {
         GameObject cube = quickCreateCube(cubePrefab, template, ref gameEnv);
-        createGraphicCube(ref cube, pos);
+        placeGraphicCube(ref cube, pos);
     }
 }

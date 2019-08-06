@@ -267,7 +267,7 @@ public class MouseControls : MonoBehaviour {
 	        }
 
 	        if (Input.GetMouseButtonUp(0)) {
-	            GameUtils.createAndPlaceCube(tokenPrefab, gameEnv.cubeTemplates[tokenType], ref gameEnv, curIndex);
+	            GameUtils.createAndPlaceToken(tokenPrefab, gameEnv.tokenTemplates[tokenType], ref gameEnv, curIndex);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {

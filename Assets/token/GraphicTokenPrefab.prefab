@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 4748567740079772014}
   - component: {fileID: 3162852258854029721}
   m_Layer: 0
-  m_Name: TokenPrefab
+  m_Name: GraphicTokenPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,14 +143,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionsButtonPrefab: {fileID: 1400434103368138, guid: 820426675c23d404b9370c91d6c30f3f,
     type: 3}
-  num_buttons: 3
-  button_radius: 65
+  moveSpeed: 10
+  button_radius: 0
   button_start: 0.5
   button_interval: 0.25
   token: {fileID: 0}
+  tokenScript: {fileID: 0}
   canvas_transfrom: {fileID: 0}
   graphicObject_transform: {fileID: 0}
   graphicObject_collider: {fileID: 0}
+  goingTo: {x: 0, y: 0, z: 0}
 --- !u!1001 &3560180517692462514
 PrefabInstance:
   m_ObjectHideFlags: 0

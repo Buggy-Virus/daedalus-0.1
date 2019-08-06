@@ -24,7 +24,9 @@ public class ResolveActionsScript : MonoBehaviour
         if (resolveConditions(self, action.conditions))
         {
             resolveEffects(ref self, action.effects);
-            resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_ractions, action.aoe_tactions);
+            if (action.aoe != 0) {
+                resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_ractions, action.aoe_tactions);
+            }
 
             resolveActions(ref self, action.followup_actions);
             // resolveTargetedRactions(ref self, action.targetedFollowupRactions);
@@ -45,7 +47,9 @@ public class ResolveActionsScript : MonoBehaviour
         if (resolveRconditions(self, target, raction.conditions))
         {
             resolveReffects(ref self, ref target, raction.reffects);
-            resolveAoe(ref self, target.GetComponent<TokenScript>().index, raction.aoe, raction.aoe_ractions, raction.aoe_tactions);
+            if (raction.aoe != 0) {
+                resolveAoe(ref self, target.GetComponent<TokenScript>().index, raction.aoe, raction.aoe_ractions, raction.aoe_tactions);
+            }
 
             resolveActions(ref self, raction.followup_actions);
             resolveRactions(ref self, ref target, raction.followup_ractions);
@@ -71,7 +75,9 @@ public class ResolveActionsScript : MonoBehaviour
         if (resolveTconditions(self, target, taction.conditions))
         {
             resolveTeffects(ref self, ref target, taction.teffects);
-            resolveAoe(ref self, target.GetComponent<CubeScript>().index, taction.aoe, taction.aoe_ractions, taction.aoe_tactions);
+            if (taction.aoe != 0) {
+                resolveAoe(ref self, target.GetComponent<CubeScript>().index, taction.aoe, taction.aoe_ractions, taction.aoe_tactions);
+            }
 
             resolveActions(ref self, taction.followup_actions);
             resolveTactions(ref self, ref target, taction.followup_tactions);

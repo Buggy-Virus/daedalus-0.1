@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Action {
-	Type type;
+	public string name;	
+	public Type type;
 
 	public List<string> conditions;
 
@@ -18,9 +19,34 @@ public class Action {
 	
 	public List<Raction> targeted_followup_ractions;
 	public List<Taction> targeted_followup_tactions;
+
+	public Action(
+		string n,
+		Type t,
+		List<string> c,
+		List<Effect> e,
+		int a,
+		List<Raction> a_r,
+		List<Taction> a_t,
+		List<Action> f_a,
+		List<Raction> t_f_r,
+		List<Taction> t_f_t
+	) {
+		name = n;
+		type = t;
+		conditions = c;
+		effects = e;
+		aoe = a;
+		aoe_ractions = a_r;
+		aoe_tactions = a_t;
+		followup_actions = f_a;
+		targeted_followup_ractions = t_f_r;
+		targeted_followup_tactions = t_f_t;
+	}
 }
 
 public class Raction {
+	public string name;	
 	public Type type;
 
 	public List<Type> targetTypes;
@@ -48,7 +74,8 @@ public class Raction {
 }
 
 public class Taction {
-	Type type;
+	public string name;	
+	public Type type;
 
 	public List<Type> targetTypes;
   

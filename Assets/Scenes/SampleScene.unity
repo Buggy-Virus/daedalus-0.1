@@ -211,10 +211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89cb4e554a270f94fa6192e100179559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testCubePrefab: {fileID: 1443257276442714, guid: f196b931ab7225d49bb5c3ccb33c96e3,
-    type: 3}
-  testTokenPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
-    type: 3}
   goblinPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
     type: 3}
   adventurerPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
@@ -322,13 +318,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282840810}
-  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -2, y: 5, z: -2}
+  m_LocalRotation: {x: 0.23941277, y: 0.3723109, z: -0.09833023, w: 0.8912897}
+  m_LocalPosition: {x: -2.36, y: 3.78, z: -2.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 29.999, y: 45.396004, z: 0.19800001}
 --- !u!1 &750708881
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,8 +555,8 @@ MonoBehaviour:
   activeLayer: 0
   controlMode: 0
   deleteMode: 0
-  cubeType: testCube
-  tokenType: testToken
+  cubeType: stone
+  tokenType: goblin
   tokenPrefab: {fileID: 4017560335620846353, guid: 2700dede2fb7d234f9ef1006bd073e24,
     type: 3}
   cubePrefab: {fileID: 6620400664257333476, guid: b2a914a86ea111848953755b4085a369,

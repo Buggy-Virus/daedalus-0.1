@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GraphicTokenScript : MonoBehaviour
 {
@@ -8,9 +9,8 @@ public class GraphicTokenScript : MonoBehaviour
     public GameObject actionsButtonPrefab;
 
     // ================================================ CONFIGUREABLE VARIABLES
-    public int num_buttons = 3;
     public float moveSpeed = 10f;
-    public float button_radius = 500;
+    public float button_radius = 65;
     public float button_start = 0.5F;
     public float button_interval = 0.25F;
 
@@ -29,12 +29,16 @@ public class GraphicTokenScript : MonoBehaviour
     bool clicked;
 
     // button variables
-    List<GameObject> buttonList;
+    int num_buttons = 4;
+    GameObject moveButton;
+    GameObject basicButton;
+    GameObject advancedButton;
+    GameObject miscButton;
     bool buttonsActive;
     bool buttonsActive_lf;
 
     // movement variables
-    Vector3 goingTo;
+    public Vector3 goingTo;
 
     // ================================================ CONTROLS
     void selectToken(bool hit, RaycastHit hitInfo) {
@@ -84,28 +88,56 @@ public class GraphicTokenScript : MonoBehaviour
     // ================================================ BUTTONS
     void createButtons() {
         Vector3 graphicObject_ui_position = Camera.main.WorldToScreenPoint(graphicObject_transform.position);
-        buttonList = new List<GameObject>();
+        List<GameObject> buttonList = new List<GameObject>();
         for (int i = 0; i < num_buttons; i++) {
             float button_radians = button_start + i * button_interval;
             Vector3 button_pos = Utils.polarToCartesian(button_radius, button_radians);
             button_pos.x = graphicObject_ui_position.x - button_pos.x;
             button_pos.y = graphicObject_ui_position.y + button_pos.y;
-            GameObject newButton = Instantiate(actionsButtonPrefab, button_pos, Quaternion.identity, canvas_transfrom);
+            GameObject newButton = Instantiate(actionsButtonPrefab, graphicObject_ui_position, Quaternion.identity, canvas_transfrom);
+            newButton.GetComponent<RectTransform>().anchoredPosition = graphicObject_ui_position;
+            newButton.SetActive(false);
             buttonList.Add(newButton);
         }
+
+        moveButton = buttonList[0];
+        moveButton.name = "MoveButton";
+        basicButton = buttonList[1];
+        basicButton.name = "BasicButton";
+        advancedButton = buttonList[2];
+        advancedButton.name = "advancedButton";
+        miscButton = buttonList[3];
+        miscButton.name = "miscButton";
+
+        basicButton.GetComponent<Button>().onClick.AddListener(basicButtonOnClick);
     }
 
-    void destroyButtons() {
+    void basicButtonOnClick() {
+        Debug.Log("Clicked Basic Button");
+        Debug.Log("Printing token name:" + token.name);
+    }
 
+    void showButtons() {
+        moveButton.SetActive(true);
+        basicButton.SetActive(true);
+        advancedButton.SetActive(true);
+        miscButton.SetActive(true);
+    }
+
+    void hideButtons() {
+        moveButton.SetActive(false);
+        basicButton.SetActive(false);
+        advancedButton.SetActive(false);
+        miscButton.SetActive(false);
     }
 
     void buttons() {
         if (buttonsActive && !buttonsActive_lf) {
-            Debug.Log("Creating Buttons");
-            createButtons();
+            Debug.Log("Showing Buttons");
+            showButtons();
         } else if (!buttonsActive && buttonsActive_lf) {
-            Debug.Log("Destroying Buttons");
-            destroyButtons();
+            Debug.Log("Hiding Buttons");
+            hideButtons();
         }
         buttonsActive_lf = buttonsActive;
     }
@@ -128,6 +160,7 @@ public class GraphicTokenScript : MonoBehaviour
         graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
         canvas_transfrom = gameObject.transform.GetChild(1);
         clicked = false; 
+        createButtons();
     }
 
     void Update() {
