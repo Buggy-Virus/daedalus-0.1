@@ -196,7 +196,7 @@ public class ResolveActionsScript : MonoBehaviour
             {
                 Index cur_index = new Index(i, j, z);
 				if (Utils.distance(center, cur_index) <= radius) {
-					GameCoord gameCoord = gameEnv.gameBoard[cur_index.x, cur_index.y, cur_index.z];
+					GameCoord gameCoord = gameEnv.mapScript.gameBoard[cur_index.x, cur_index.y, cur_index.z];
 					nearbyTokens.AddRange(gameCoord.tokens);
 				}
             }
@@ -221,7 +221,7 @@ public class ResolveActionsScript : MonoBehaviour
             {
                 Index cur_index = new Index(i, j, z);
 				if (Utils.distance(center, cur_index) <= radius) {
-					GameCoord gameCoord = gameEnv.gameBoard[cur_index.x, cur_index.y, cur_index.z];
+					GameCoord gameCoord = gameEnv.mapScript.gameBoard[cur_index.x, cur_index.y, cur_index.z];
 					nearbyCubes.Add(gameCoord.cube);
 				}
             }

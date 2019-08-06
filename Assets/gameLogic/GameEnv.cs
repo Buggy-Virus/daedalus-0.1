@@ -9,16 +9,21 @@ public class GameEnv
 
     public float cubeSize;
 
+    public MapScript mapScript;
+
     public GameObject tokensObject;
     public GameObject cubesObject;
 
     public Dictionary<string, GameObject> tokenDict;
     public Dictionary<string, GameObject> cubeDict;
 
-    public GameCoord[,,] gameBoard;
+    public Dictionary<string, TokenTemplate> tokenTemplates;
+    public Dictionary<string, CubeTemplate> cubeTemplates;
 
     public GameEnv(){
         tokenDict = new Dictionary<string, GameObject>();
         cubeDict = new Dictionary<string, GameObject>();
+        tokenTemplates = new Dictionary<string, TokenTemplate>();
+        cubeTemplates = new Dictionary<string, CubeTemplate>();
     }
 }

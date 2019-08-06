@@ -14,17 +14,17 @@ public class Utils {
         int dist_y = Math.Abs(point_a.y - point_b.y);
         int dist_z = Math.Abs(point_a.z - point_b.z);
 
-        int max_xy = Math.Max(dist_x, dist_y);
-        int min_xy = Math.Min(dist_x, dist_y);
-        int dist_xy;
-        if (min_xy % 2 == 0) {
-            dist_xy = max_xy - min_xy + 3 * (min_xy / 2);
+        int max_xz = Math.Max(dist_x, dist_z);
+        int min_xz = Math.Min(dist_x, dist_z);
+        int dist_xz;
+        if (min_xz % 2 == 0) {
+            dist_xz = max_xz - min_xz + 3 * (min_xz / 2);
         } else {
-            dist_xy = max_xy - min_xy + 3 * ((min_xy - 1) / 2) + 1;
+            dist_xz = max_xz - min_xz + 3 * ((min_xz - 1) / 2) + 1;
         }
         
-        int max_xyz = Math.Max(dist_z, dist_xy);
-        int min_xyz = Math.Min(dist_z, dist_xy);
+        int max_xyz = Math.Max(dist_y, dist_xz);
+        int min_xyz = Math.Min(dist_y, dist_xz);
         int dist;
         if (min_xyz % 2 == 0) {
             dist = max_xyz - min_xyz + 3 * (min_xyz / 2);
@@ -38,7 +38,6 @@ public class Utils {
     static public int distance_xy(Index point_a, Index point_b) {
         int dist_x = Math.Abs(point_a.x - point_b.x);
         int dist_y = Math.Abs(point_a.y - point_b.y);
-        int dist_z = Math.Abs(point_a.z - point_b.z);
 
         int max_xy = Math.Max(dist_x, dist_y);
         int min_xy = Math.Min(dist_x, dist_y);
@@ -46,6 +45,19 @@ public class Utils {
             return max_xy - min_xy + 3 * (min_xy / 2);
         } else {
             return max_xy - min_xy + 3 * ((min_xy - 1) / 2) + 1;
+        }
+    }
+
+    static public int distance_xz(Index point_a, Index point_b) {
+        int dist_x = Math.Abs(point_a.x - point_b.x);
+        int dist_z = Math.Abs(point_a.z - point_b.z);
+
+        int max_xz = Math.Max(dist_x, dist_z);
+        int min_xz = Math.Min(dist_x, dist_z);
+        if (min_xz % 2 == 0) {
+            return max_xz - min_xz + 3 * (min_xz / 2);
+        } else {
+            return max_xz - min_xz + 3 * ((min_xz - 1) / 2) + 1;
         }
     }
 
@@ -87,17 +99,17 @@ public class Utils {
         return line;
     }
 
-    static public Dictionary<int, Index> line_xy(Index point_a, Index point_b, int length) {
+    static public Dictionary<int, Index> line_xz(Index point_a, Index point_b, int length) {
         int dist_x = Math.Abs(point_a.x - point_b.x);
-        int dist_y = Math.Abs(point_a.y - point_b.y);
-        int dist_max = Math.Max(dist_x, dist_y);
+        int dist_z = Math.Abs(point_a.z - point_b.z);
+        int dist_max = Math.Max(dist_x, dist_z);
 
         Dictionary<int, Index> line = new Dictionary<int, Index>();
         double stepFrequency_x = dist_x / dist_max;
-        double stepFrequency_y = dist_y / dist_max;
+        double stepFrequency_z = dist_z / dist_max;
         for (int i = -length; i <= length; i++) {
             int pos_x;
-            int pos_y;
+            int pos_z;
             if (point_a.x <= point_b.x) {
                 pos_x = point_a.x + (int)(i * stepFrequency_x);
             } else {
@@ -105,32 +117,32 @@ public class Utils {
             }
             
             if (point_a.y <= point_b.y) {
-                pos_y = point_a.y + (int)(i * stepFrequency_y);
+                pos_z = point_a.y + (int)(i * stepFrequency_z);
             } else {
-                pos_y = point_a.y - (int)(i * stepFrequency_y);
+                pos_z = point_a.y - (int)(i * stepFrequency_z);
             }
-            Index index_i = new Index(pos_x, pos_y, point_a.z);
+            Index index_i = new Index(pos_x, point_a.y, pos_z);
             int dist_i = distance_xy(point_a, index_i);
             line.Add(dist_i, index_i);
         }
         return line;
     }
 
-    static public Dictionary<int, Index> linePerp_xy(Index point_a, Index point_b, int length) {
+    static public Dictionary<int, Index> linePerp_xz(Index point_a, Index point_b, int length) {
         int dist_x = Math.Abs(point_a.x - point_b.x);
-        int dist_y = Math.Abs(point_a.y - point_b.y);
-        int dist_max = Math.Max(dist_x, dist_y);
+        int dist_z = Math.Abs(point_a.z - point_b.z);
+        int dist_max = Math.Max(dist_x, dist_z);
 
         Dictionary<int, Index> line = new Dictionary<int, Index>();
         double stepFrequency_x = dist_x / dist_max;
-        double stepFrequency_y = dist_y / dist_max;
+        double stepFrequency_z = dist_z / dist_max;
         for (int i = -length; i <= length; i++) {
             int pos_x;
-            int pos_y;
+            int pos_z;
             if (point_a.x <= point_b.x) {
-                pos_y = point_a.y - (int)(i * stepFrequency_y);
+                pos_z = point_a.y - (int)(i * stepFrequency_z);
             } else {
-                pos_y = point_a.y + (int)(i * stepFrequency_y);
+                pos_z = point_a.y + (int)(i * stepFrequency_z);
             }
             
             if (point_a.y <= point_b.y) {
@@ -138,7 +150,7 @@ public class Utils {
             } else {
                 pos_x = point_a.x - (int)(i * stepFrequency_x);
             }
-            Index index_i = new Index(pos_x, pos_y, point_a.z);
+            Index index_i = new Index(pos_x, point_a.y, pos_z);
             int dist_i = distance_xy(point_a, index_i);
             line.Add(dist_i, index_i);
         }

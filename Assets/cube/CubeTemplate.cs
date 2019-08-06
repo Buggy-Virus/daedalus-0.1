@@ -10,9 +10,7 @@ public class CubeTemplate {
     public List<Type> materialTypes;
     public List<float> materialTypesDistribution;
 
-    public int width;
-    public int length;
-    public int height;
+    public TemplateVariable transparency;
 
     public List<Effect> effects;
 
@@ -24,9 +22,7 @@ public class CubeTemplate {
         Type t,
         List<Type> mt,
         List<float> mtd,
-        int w,
-        int l,
-        int h,
+        TemplateVariable tr,
         List<Effect> e,
         Dictionary<string, TemplateVariable> ivl
     ) {
@@ -35,9 +31,7 @@ public class CubeTemplate {
         type = t;
         materialTypes = mt;
         materialTypesDistribution = mtd;
-        width = w;
-        length = l;
-        height = h;
+        transparency = tr;
         effects = e;
         initVariableList = ivl;
     }

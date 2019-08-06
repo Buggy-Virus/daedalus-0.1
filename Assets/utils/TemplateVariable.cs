@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TemplateVariable {
-    public string variableName;
 	public string type;
     public string stringConstant;
     public bool boolConstant;
@@ -17,66 +16,80 @@ public class TemplateVariable {
     public double doubleMin;
     public double doubleMax;
     public double boolProbability;
+    public string stringCalculation;
+    public string boolCalculation;
+    public string intCalculation;
+    public string doubleCalculation;
 
-    TemplateVariable(string n, string x) {
-        variableName = n;
+    public TemplateVariable(string x) {
         type = "stringConstant";
         stringConstant = x;
     }
 
-    TemplateVariable(string n, bool x) {
-        variableName = n;
+    public TemplateVariable(bool x) {
         type = "boolConstant";
         boolConstant = x;
     }
 
-    TemplateVariable(string n, int x) {
-        variableName = n;
+    public TemplateVariable(int x) {
         type = "intConstant";
         intConstant = x;
     }
 
-    TemplateVariable(string n, double x) {
-        variableName = n;
+    public TemplateVariable(double x) {
         type = "doubleConstant";
         doubleConstant = x; 
     }
 
-    TemplateVariable(string n, List<string> x) {
-        variableName = n;
+    public TemplateVariable(List<string> x) {
         type = "stringList";
         stringList = x;
     }
 
-    TemplateVariable(string n, List<int> x) {
-        variableName = n;
+    public TemplateVariable(List<int> x) {
         type = "intList";
         intList = x;
     }
 
-    TemplateVariable(string n, List<double> x) {
-        variableName = n;
+    public TemplateVariable(List<double> x) {
         type = "doubleList";
         doubleList = x;
     }
 
-    TemplateVariable(string n, int x, int y) {
-        variableName = n;
+    public TemplateVariable(int x, int y) {
         type = "intRange";
         intMin = x;
         intMax = y;
     }
 
-    TemplateVariable(string n, double x, double y) {
-        variableName = n;
+    public TemplateVariable(double x, double y) {
         type = "doubleRange";
         doubleMin = x;
         doubleMax = y;
     }
 
-    TemplateVariable(string n, double x, bool y) {
-        variableName = n;
+    public TemplateVariable(double x, bool y) {
         type = "boolProbablity";
         boolProbability = x; 
     }
+
+    public TemplateVariable(string x, string y) {
+        type = "stringCalculation";
+        stringCalculation = x; 
+    }
+
+    public TemplateVariable(string x, bool y) {
+        type = "boolCalculation";
+        boolCalculation = x; 
+    }
+
+    public TemplateVariable(string x, int y) {
+        type = "intCalculation";
+        intCalculation = x; 
+    }
+
+    public TemplateVariable(string x, double y) {
+        type = "doubleCalculation";
+        doubleCalculation = x; 
+    }    
 }

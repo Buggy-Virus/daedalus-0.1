@@ -87,12 +87,16 @@ public class DaedScript {
 	{
 		gameEnv.tokenDict.Add("self", self);
 
-		return interpret(
+		Value value = interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref gameEnv
 		).value;
+
+		gameEnv.tokenDict.Remove("self");
+
+		return value;
 	}
 
 	public static Value evaluateSelfCube(
@@ -103,12 +107,16 @@ public class DaedScript {
 	{
 		gameEnv.cubeDict.Add("self", self);
 
-		return interpret(
+		Value value = interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref gameEnv
 		).value;
+
+		gameEnv.cubeDict.Remove("self");
+
+		return value;
 	}
 
 	public static Value evaluateSelfTokenTargetToken(
@@ -121,12 +129,17 @@ public class DaedScript {
 		gameEnv.tokenDict.Add("self", self);
 		gameEnv.tokenDict.Add("target", target);
 
-		return interpret(
+		Value value = interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref gameEnv
 		).value;
+
+		gameEnv.tokenDict.Remove("self");
+		gameEnv.tokenDict.Remove("target");
+
+		return value;
 	}
 
 	public static Value evaluateSelfTokenTargetCube(
@@ -139,12 +152,17 @@ public class DaedScript {
 		gameEnv.tokenDict.Add("self", self);
 		gameEnv.cubeDict.Add("target", target);
 		
-		return interpret(
+		Value value = interpret(
 			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref gameEnv
 		).value;
+
+		gameEnv.tokenDict.Remove("self");
+		gameEnv.cubeDict.Remove("target");
+
+		return value;
 	}
 
 	// ================================= Tokenizer Functions =====================================================================

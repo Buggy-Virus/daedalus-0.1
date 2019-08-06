@@ -5,7 +5,7 @@ using UnityEngine;
 public class TokenTemplate {
     public GameObject graphicObjectPrefab;
     public string identifier;
-    public List<string> aliasList;
+    public TemplateVariable aliasList;
 
     public Type type;
     public List<Type> materialTypes;
@@ -26,7 +26,7 @@ public class TokenTemplate {
     public TokenTemplate(
         GameObject go,
         string id,
-        List<string> al,
+        TemplateVariable al,
         Type t,
         List<Type> mt,
         List<float> mtd,

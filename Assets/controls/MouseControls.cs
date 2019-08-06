@@ -49,21 +49,16 @@ public class MouseControls : MonoBehaviour {
 
     public bool deleteMode = false;
 
-    public string cubeType = "testCube";
-    string lastCubeType = "testCube";
+    public string cubeType = "stone";
+    string lastCubeType = "stone";
 
-    public string tokenType = "testToken";
-    string lastTokenType = "testToken";
+    public string tokenType = "goblin";
+    string lastTokenType = "goblin";
 
-    bool usedDiagnolMove;
+    public GameObject tokenPrefab;
+    public GameObject cubePrefab;
 
     void Start() {
-    	cubeType = "testCube";
-    	tokenType = "testToken";
-    	Debug.Log(cubeType);
-    	cubesObject = GameObject.Find("Cubes");
-        tokensObject = GameObject.Find("Tokens");
-
         mapScript = GameObject.Find("Map").GetComponent<MapScript>();
         gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
         gameEnv = gameEnvScript.gameEnv;
@@ -129,7 +124,7 @@ public class MouseControls : MonoBehaviour {
             Debug.Log("Cube mode");
             destroyCursor();
             Debug.Log((string)cubeType);
-            addCursor(curPosition, gameEnvScript.cubePrefabs[cubeType], "cursorCube");
+            addCursor(curPosition, gameEnvScript.gameEnv.cubeTemplates[cubeType].graphicObjectPrefab, "cursorCube");
             lastControlMode = controlMode;
             lastCubeType = cubeType;
         }
@@ -161,14 +156,13 @@ public class MouseControls : MonoBehaviour {
 	                for (int x = (int) Mathf.Min(mouseDownPosition.x, curPosition.x); x <= (int) Mathf.Max(mouseDownPosition.x, curPosition.x); x++) {
 	                    for (int z = (int)Mathf.Min(mouseDownPosition.z, curPosition.z); z <= (int)Mathf.Max(mouseDownPosition.z, curPosition.z); z++) {
 	                        iterIndex = new Index(x, y, z);
-                            // GameUtils.createAndPlaceCube(gameEnvScript.cubeParameters[cubeType], ref gameEnv, iterIndex);
-	                        // placeCube(new Vector3(x, curPosition.y, z), iterIndex, cubeType);
+                            GameUtils.createAndPlaceCube(cubePrefab, gameEnv.cubeTemplates[cubeType], ref gameEnv, iterIndex);
 	                    }
 	                }
 	                Destroy(dragObject);
 	            } else if (Utils.indexEqual(mouseDownIndex, curIndex)) {
 	            	Debug.Log("Placing Cube");
-	                // placeCube(curPosition, curIndex, cubeType);
+                    GameUtils.createAndPlaceCube(cubePrefab, gameEnv.cubeTemplates[cubeType], ref gameEnv, curIndex);
 	            }
 	            
 	            mouseDown = false;
@@ -262,7 +256,7 @@ public class MouseControls : MonoBehaviour {
         if (lastControlMode != TOKEN_MODE || lastTokenType != tokenType) {
             Debug.Log("token mode");
             destroyCursor();
-            addCursor(curPosition, gameEnvScript.tokenPrefabs[tokenType], "cursorToken");
+            addCursor(curPosition, gameEnvScript.gameEnv.tokenTemplates[tokenType].graphicObjectPrefab, "cursorToken");
             lastControlMode = controlMode;
             lastTokenType = tokenType;
         }
@@ -273,7 +267,7 @@ public class MouseControls : MonoBehaviour {
 	        }
 
 	        if (Input.GetMouseButtonUp(0)) {
-	            // placeToken(curPosition, curIndex, tokenType);
+	            GameUtils.createAndPlaceCube(tokenPrefab, gameEnv.cubeTemplates[tokenType], ref gameEnv, curIndex);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {

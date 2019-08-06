@@ -26,9 +26,9 @@ public class CubeScript : MonoBehaviour {
     public Dictionary<string, GameVar> variables = new Dictionary<string, GameVar>();
 
     public void moveTo(Index endIndex) {
-        gameEnv.gameBoard[index.x, index.y, index.z].tokens.Remove(gameObject);
+        gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(gameObject);
         index = endIndex;
-        gameEnv.gameBoard[index.x, index.y, index.z].tokens.Add(gameObject);
+        gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Add(gameObject);
         transform.GetComponentInChildren<GraphicCubeScript>().moveTo(new Vector3(endIndex.x, endIndex.y, endIndex.z));
     }
     

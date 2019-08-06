@@ -8,6 +8,7 @@ public class GameVar {
     public bool boolValue;
     public int intValue;
     public double doubleValue;
+    public string error;
 
     public GameVar() {}
 
@@ -29,5 +30,10 @@ public class GameVar {
     public GameVar(double x) {
         type = "double";
         doubleValue = x;
+    }
+
+    public GameVar(string x, bool y) {
+        type = "error";
+        error = x;
     }
 }

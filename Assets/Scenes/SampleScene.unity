@@ -215,6 +215,12 @@ MonoBehaviour:
     type: 3}
   testTokenPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
     type: 3}
+  goblinPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
+    type: 3}
+  adventurerPrefab: {fileID: 5588081685877835001, guid: c1c4defe1eae5fe4aa58f8a632775e65,
+    type: 3}
+  stonePrefab: {fileID: 1443257276442714, guid: f196b931ab7225d49bb5c3ccb33c96e3,
+    type: 3}
 --- !u!4 &246738982
 Transform:
   m_ObjectHideFlags: 0
@@ -555,3 +561,7 @@ MonoBehaviour:
   deleteMode: 0
   cubeType: testCube
   tokenType: testToken
+  tokenPrefab: {fileID: 4017560335620846353, guid: 2700dede2fb7d234f9ef1006bd073e24,
+    type: 3}
+  cubePrefab: {fileID: 6620400664257333476, guid: b2a914a86ea111848953755b4085a369,
+    type: 3}
