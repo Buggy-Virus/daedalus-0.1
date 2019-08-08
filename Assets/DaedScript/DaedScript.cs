@@ -2167,10 +2167,16 @@ public class DaedScript {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-					case "double":
-					case "string":
-					case "bool":
 						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
+						return nv_result;
+					case "double":
+						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vDouble));
+						return nv_result;
+					case "string":
+						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vString));
+						return nv_result;
+					case "bool":
+						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vBool));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
@@ -2219,10 +2225,16 @@ public class DaedScript {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-					case "double":
-					case "string":
-					case "bool":
 						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
+						return nv_result;
+					case "double":
+						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vDouble));
+						return nv_result;
+					case "string":
+						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vString));
+						return nv_result;
+					case "bool":
+						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vBool));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error

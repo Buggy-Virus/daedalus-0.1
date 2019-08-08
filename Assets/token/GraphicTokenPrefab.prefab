@@ -144,7 +144,7 @@ MonoBehaviour:
   actionsButtonPrefab: {fileID: 1400434103368138, guid: 820426675c23d404b9370c91d6c30f3f,
     type: 3}
   moveSpeed: 10
-  button_radius: 0
+  button_radius: 65
   button_start: 0.5
   button_interval: 0.25
   token: {fileID: 0}

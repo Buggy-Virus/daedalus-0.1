@@ -87,26 +87,20 @@ public class GraphicTokenScript : MonoBehaviour
 
     // ================================================ BUTTONS
     void createButtons() {
-        Vector3 graphicObject_ui_position = Camera.main.WorldToScreenPoint(graphicObject_transform.position);
         List<GameObject> buttonList = new List<GameObject>();
         for (int i = 0; i < num_buttons; i++) {
-            float button_radians = button_start + i * button_interval;
-            Vector3 button_pos = Utils.polarToCartesian(button_radius, button_radians);
-            button_pos.x = graphicObject_ui_position.x - button_pos.x;
-            button_pos.y = graphicObject_ui_position.y + button_pos.y;
-            GameObject newButton = Instantiate(actionsButtonPrefab, graphicObject_ui_position, Quaternion.identity, canvas_transfrom);
-            newButton.GetComponent<RectTransform>().anchoredPosition = graphicObject_ui_position;
+            GameObject newButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
             newButton.SetActive(false);
             buttonList.Add(newButton);
         }
 
-        moveButton = buttonList[0];
+        moveButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
         moveButton.name = "MoveButton";
-        basicButton = buttonList[1];
+        basicButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
         basicButton.name = "BasicButton";
-        advancedButton = buttonList[2];
+        advancedButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
         advancedButton.name = "advancedButton";
-        miscButton = buttonList[3];
+        miscButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
         miscButton.name = "miscButton";
 
         basicButton.GetComponent<Button>().onClick.AddListener(basicButtonOnClick);
@@ -117,7 +111,21 @@ public class GraphicTokenScript : MonoBehaviour
         Debug.Log("Printing token name:" + token.name);
     }
 
+    void placeButton(GameObject button, Vector3 tokenPosition, int Incremement) {
+        float button_radians = button_start + Incremement * button_interval;
+        Vector3 button_pos = Utils.polarToCartesian(button_radius, button_radians);
+        button_pos.x = tokenPosition.x - button_pos.x;
+        button_pos.y = tokenPosition.y + button_pos.y;
+        button.transform.position = button_pos;
+    }
+
     void showButtons() {
+        Vector3 graphicObject_ui_position = Camera.main.WorldToScreenPoint(graphicObject_transform.position);
+        placeButton(moveButton, graphicObject_ui_position, 0);
+        placeButton(basicButton, graphicObject_ui_position, 1);
+        placeButton(advancedButton, graphicObject_ui_position, 2);
+        placeButton(miscButton, graphicObject_ui_position, 3);
+
         moveButton.SetActive(true);
         basicButton.SetActive(true);
         advancedButton.SetActive(true);
