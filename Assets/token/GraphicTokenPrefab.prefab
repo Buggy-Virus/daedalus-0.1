@@ -143,6 +143,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionsButtonPrefab: {fileID: 1400434103368138, guid: 820426675c23d404b9370c91d6c30f3f,
     type: 3}
+  actionMenuPrefab: {fileID: 2508494432840256472, guid: 549174223ad9fa947a1170113ac156be,
+    type: 3}
+  actionMenuButtonPrefab: {fileID: 8430872489970413681, guid: 68ee5d32682a49945b2030cf89e4c5ad,
+    type: 3}
   moveSpeed: 10
   button_radius: 65
   button_start: 0.5

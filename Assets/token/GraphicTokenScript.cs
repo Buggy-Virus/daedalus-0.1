@@ -7,6 +7,8 @@ public class GraphicTokenScript : MonoBehaviour
 {
     // ================================================ PREFABS
     public GameObject actionsButtonPrefab;
+    public GameObject actionMenuPrefab;
+    public GameObject actionMenuButtonPrefab;
 
     // ================================================ CONFIGUREABLE VARIABLES
     public float moveSpeed = 10f;
@@ -106,11 +108,6 @@ public class GraphicTokenScript : MonoBehaviour
         basicButton.GetComponent<Button>().onClick.AddListener(basicButtonOnClick);
     }
 
-    void basicButtonOnClick() {
-        Debug.Log("Clicked Basic Button");
-        Debug.Log("Printing token name:" + token.name);
-    }
-
     void placeButton(GameObject button, Vector3 tokenPosition, int Incremement) {
         float button_radians = button_start + Incremement * button_interval;
         Vector3 button_pos = Utils.polarToCartesian(button_radius, button_radians);
@@ -148,6 +145,43 @@ public class GraphicTokenScript : MonoBehaviour
             hideButtons();
         }
         buttonsActive_lf = buttonsActive;
+    }
+
+    // ================================================ Button Controls
+
+    void basicButtonOnClick() {
+        Debug.Log("Clicked Basic Button");
+        Debug.Log("Printing token name:" + token.name);
+
+        createActionMenu();
+    }
+
+    void createActionMenu() {
+        GameObject actionMenu = Instantiate(actionMenuPrefab, canvas_transfrom);
+        Transform actionMenuContent = actionMenu.transform.Find("Viewport").Find("Content");
+        Debug.Log(actionMenuContent);
+        foreach(KeyValuePair<string, Action> action in tokenScript.availableActions) {
+            Debug.Log("Here");
+            GameObject actionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
+            actionButton.name = action.Key;
+            Button actionButtonButton = actionButton.GetComponent<Button>();
+            actionButtonButton.GetComponentInChildren<Text>().text = action.Key;
+            actionButtonButton.onClick.AddListener(delegate{ResolveActionsScript.resolveAction(ref token, action.Value, ref tokenScript.gameEnv);});
+        }
+        foreach(KeyValuePair<string, Raction> raction in tokenScript.availableRactions) {
+            GameObject ractionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
+            ractionButton.name = raction.Key;
+            ractionButton.GetComponent<Button>().GetComponentInChildren<Text>().text = raction.Key;
+        }
+        foreach(KeyValuePair<string, Taction> taction in tokenScript.availableTactions) {
+            GameObject tactionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
+            tactionButton.name = taction.Key;
+            tactionButton.GetComponent<Button>().GetComponentInChildren<Text>().text = taction.Key;
+        }
+    }
+
+    void destroyActionMenu() {
+
     }
 
     // ================================================ Movement

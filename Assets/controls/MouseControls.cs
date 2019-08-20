@@ -220,30 +220,6 @@ public class MouseControls : MonoBehaviour {
 
     }
 
-    // void placeCube(Vector3 curPosition, Index curIndex, string cubeType) {
-    //     GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
-
-    //     Debug.Log(gameCoord.cube);
-
-    //     if (gameCoord.cube != null) {
-    //         Destroy(gameCoord.cube.graphicObject);
-    //         Destroy(gameCoord.cube);
-    //     }
-    //     Debug.Log(cubeType);
-    //     Debug.Log(gameEnvScript.cubeParameters[cubeType]);
-    //     Cube newCube = gameEnvScript.createCube(gameEnvScript.cubeParameters[cubeType]);
-    //     newCube.index = new Index(curIndex);
-
-    //     gameCoord.cube = newCube;
-
-    //     Debug.Log(gameEnvScript.cubePrefabs[cubeType]);
-    //     GameObject graphicCube = Instantiate(gameEnvScript.cubePrefabs[cubeType], curPosition, Quaternion.identity, cubesObject.transform);
-
-    //     newCube.graphicObject = graphicCube;
-    //     graphicCube.GetComponent<CubeScript>().cube = newCube;
-    //     graphicCube.name = newCube.uniqueIdentifier;
-    // }
-
     void deleteCube(Index curIndex) {
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
     	if (gameCoord.cube != null) {
@@ -275,21 +251,6 @@ public class MouseControls : MonoBehaviour {
 	        }
         }
     }
-
-    // void placeToken(Vector3 curPosition, Index curIndex, string tokenType) {
-    // 	Debug.Log("Placed Token");
-    // 	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
-
-    // 	Token newToken = gameEnvScript.createToken(gameEnvScript.tokenParameters[tokenType]);
-    // 	newToken.index = new Index(curIndex);
-    // 	gameCoord.tokens.Add(newToken);
-
-    // 	GameObject graphicToken = Instantiate(gameEnvScript.tokenPrefabs[tokenType], curPosition, Quaternion.identity, tokensObject.transform);
-    // 	newToken.graphicObject = graphicToken;
-    //     graphicToken.name = newToken.identifier;
-    // 	TokenScript graphicTokenScript = graphicToken.GetComponent<TokenScript>();
-    //     graphicTokenScript.token = newToken;
-    // }
 
     void destroyCursor () {
         try {

@@ -19,78 +19,78 @@ public class ResolveActionsScript : MonoBehaviour
         gameEnv = gameEnvScript.gameEnv;
     }
 
-    public void resolveAction(ref GameObject self, Action action)
+    static public void resolveAction(ref GameObject self, Action action, ref GameEnv gameEnv)
     {
-        if (resolveConditions(self, action.conditions))
+        if (resolveConditions(self, action.conditions, gameEnv))
         {
-            resolveEffects(ref self, action.effects);
+            resolveEffects(ref self, action.effects, ref gameEnv);
             if (action.aoe != 0) {
-                resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_ractions, action.aoe_tactions);
+                resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_ractions, action.aoe_tactions, ref gameEnv);
             }
 
-            resolveActions(ref self, action.followup_actions);
+            resolveActions(ref self, action.followup_actions, ref gameEnv);
             // resolveTargetedRactions(ref self, action.targetedFollowupRactions);
             // resolveTargetedTactions(ref self, action.targetedFollowupTactions);
         }
     }
 
-    public void resolveActions(ref GameObject self, List<Action> actions)
+    static public void resolveActions(ref GameObject self, List<Action> actions, ref GameEnv gameEnv)
     {
         foreach (Action action in actions)
         {
-            resolveAction(ref self, action);
+            resolveAction(ref self, action, ref gameEnv);
         }
     }
 
-    public void resolveRaction(ref GameObject self, ref GameObject target, Raction raction)
+    static public void resolveRaction(ref GameObject self, ref GameObject target, Raction raction, ref GameEnv gameEnv)
     {
-        if (resolveRconditions(self, target, raction.conditions))
+        if (resolveRconditions(self, target, raction.conditions, gameEnv))
         {
-            resolveReffects(ref self, ref target, raction.reffects);
+            resolveReffects(ref self, ref target, raction.reffects, ref gameEnv);
             if (raction.aoe != 0) {
-                resolveAoe(ref self, target.GetComponent<TokenScript>().index, raction.aoe, raction.aoe_ractions, raction.aoe_tactions);
+                resolveAoe(ref self, target.GetComponent<TokenScript>().index, raction.aoe, raction.aoe_ractions, raction.aoe_tactions, ref gameEnv);
             }
 
-            resolveActions(ref self, raction.followup_actions);
-            resolveRactions(ref self, ref target, raction.followup_ractions);
+            resolveActions(ref self, raction.followup_actions, ref gameEnv);
+            resolveRactions(ref self, ref target, raction.followup_ractions, ref gameEnv);
             // resolveTargetedRactions(ref self, raction.targetedFollowupRactions);
             // resolveTargetedTactions(ref self, raction.targetedFollowupTactions);
 
-            resolveActions(ref target, raction.followup_target_actions);
+            resolveActions(ref target, raction.followup_target_actions, ref gameEnv);
             // resolveTargetedRactions(ref target, raction.targetedFollowupTargetRactions);
             // resolveTargetedTactions(ref target, raction.targetedFollowupTargetTactions);
         }
     }
 
-    public void resolveRactions(ref GameObject self, ref GameObject target, List<Raction> ractions)
+    static public void resolveRactions(ref GameObject self, ref GameObject target, List<Raction> ractions, ref GameEnv gameEnv)
     {
         foreach (Raction raction in ractions)
         {
-            resolveRaction(ref self, ref target, raction);
+            resolveRaction(ref self, ref target, raction, ref gameEnv);
         }
     }
 
-    public void resolveTaction(ref GameObject self, ref GameObject target, Taction taction)
+    static public void resolveTaction(ref GameObject self, ref GameObject target, Taction taction, ref GameEnv gameEnv)
     {
-        if (resolveTconditions(self, target, taction.conditions))
+        if (resolveTconditions(self, target, taction.conditions, gameEnv))
         {
-            resolveTeffects(ref self, ref target, taction.teffects);
+            resolveTeffects(ref self, ref target, taction.teffects, ref gameEnv);
             if (taction.aoe != 0) {
-                resolveAoe(ref self, target.GetComponent<CubeScript>().index, taction.aoe, taction.aoe_ractions, taction.aoe_tactions);
+                resolveAoe(ref self, target.GetComponent<CubeScript>().index, taction.aoe, taction.aoe_ractions, taction.aoe_tactions, ref gameEnv);
             }
 
-            resolveActions(ref self, taction.followup_actions);
-            resolveTactions(ref self, ref target, taction.followup_tactions);
+            resolveActions(ref self, taction.followup_actions, ref gameEnv);
+            resolveTactions(ref self, ref target, taction.followup_tactions, ref gameEnv);
             // resolveTargetedRactions(ref self, taction.targetedFollowupRactions);
             // resolveTargetedTactions(ref self, taction.targetedFollowupTactions);
         }
     }
 
-    public void resolveTactions(ref GameObject self, ref GameObject target, List<Taction> tactions)
+    static public void resolveTactions(ref GameObject self, ref GameObject target, List<Taction> tactions, ref GameEnv gameEnv)
     {
         foreach (Taction taction in tactions)
         {
-            resolveTaction(ref self, ref target, taction);
+            resolveTaction(ref self, ref target, taction, ref gameEnv);
         }
     }
 
@@ -114,7 +114,7 @@ public class ResolveActionsScript : MonoBehaviour
     // 	}
     // }
 
-    public bool resolveConditions(GameObject self, List<string> conditions)
+    static public bool resolveConditions(GameObject self, List<string> conditions, GameEnv gameEnv)
     {
         foreach (string condition in conditions)
         {
@@ -132,7 +132,7 @@ public class ResolveActionsScript : MonoBehaviour
         return true;
     }
 
-    public bool resolveRconditions(GameObject self, GameObject target, List<string> conditions)
+    static public bool resolveRconditions(GameObject self, GameObject target, List<string> conditions, GameEnv gameEnv)
     {
         foreach (string condition in conditions)
         {
@@ -150,7 +150,7 @@ public class ResolveActionsScript : MonoBehaviour
         return true;
     }
 
-    public bool resolveTconditions(GameObject self, GameObject target, List<string> conditions)
+    static public bool resolveTconditions(GameObject self, GameObject target, List<string> conditions, GameEnv gameEnv)
     {
         foreach (string condition in conditions)
         {
@@ -168,25 +168,25 @@ public class ResolveActionsScript : MonoBehaviour
         return true;
     }
 
-    public void resolveAoe(ref GameObject self, Index index, int radius, List<Raction> ractions, List<Taction> tactions)
+    static public void resolveAoe(ref GameObject self, Index index, int radius, List<Raction> ractions, List<Taction> tactions, ref GameEnv gameEnv)
     {
         List<GameObject> nearbyTokens = detectTokens(self.GetComponent<TokenScript>().index, radius, gameEnv);
         nearbyTokens.Remove(self);
         foreach (GameObject nearbyToken in nearbyTokens)
         {
             GameObject nearbyTokenRef = nearbyToken;
-            resolveRactions(ref self, ref nearbyTokenRef, ractions);
+            resolveRactions(ref self, ref nearbyTokenRef, ractions, ref gameEnv);
         }
 
         List<GameObject> nearbyCubes = detectCubes(self.GetComponent<TokenScript>().index, radius, gameEnv);
         foreach (GameObject nearbyCube in nearbyCubes)
         {
             GameObject nearbyCubeRef = nearbyCube;
-            resolveTactions(ref self, ref nearbyCubeRef, tactions);
+            resolveTactions(ref self, ref nearbyCubeRef, tactions, ref gameEnv);
         }
     }
 
-    public List<GameObject> detectTokens(Index center, int radius, GameEnv gameEnv)
+    static public List<GameObject> detectTokens(Index center, int radius, GameEnv gameEnv)
     {
         List<GameObject> nearbyTokens = new List<GameObject>();
         int z = center.z;
@@ -211,7 +211,7 @@ public class ResolveActionsScript : MonoBehaviour
         return nearbyTokens;
     }
 
-    public List<GameObject> detectCubes(Index center, int radius, GameEnv gameEnv)
+    static public List<GameObject> detectCubes(Index center, int radius, GameEnv gameEnv)
     {
         List<GameObject> nearbyCubes = new List<GameObject>();
         int z = center.z;
@@ -236,11 +236,11 @@ public class ResolveActionsScript : MonoBehaviour
         return nearbyCubes;
     }
 
-    public void resolveEffect(ref GameObject self, Effect effect)
+    static public void resolveEffect(ref GameObject self, Effect effect, ref GameEnv gameEnv)
     {
         if (effect.instant)
         {
-            procEffect(ref self, effect);
+            procEffect(ref self, effect, ref gameEnv);
         }
         else
         {
@@ -257,19 +257,19 @@ public class ResolveActionsScript : MonoBehaviour
         }
     }
 
-    public void resolveEffects(ref GameObject self, List<Effect> effects)
+    static public void resolveEffects(ref GameObject self, List<Effect> effects, ref GameEnv gameEnv)
     {
         foreach (Effect effect in effects)
         {
-            resolveEffect(ref self, effect);
+            resolveEffect(ref self, effect, ref gameEnv);
         }
     }
 
-    public void resolveReffect(ref GameObject self, ref GameObject target, Reffect reffect)
+    static public void resolveReffect(ref GameObject self, ref GameObject target, Reffect reffect, ref GameEnv gameEnv)
     {
 		if (reffect.instant)
         {
-            procReffect(ref self, ref target, reffect);
+            procReffect(ref self, ref target, reffect, ref gameEnv);
         }
         else
         {
@@ -286,19 +286,19 @@ public class ResolveActionsScript : MonoBehaviour
         }
     }
 
-    public void resolveReffects(ref GameObject self, ref GameObject target, List<Reffect> reffects)
+    static public void resolveReffects(ref GameObject self, ref GameObject target, List<Reffect> reffects, ref GameEnv gameEnv)
     {
         foreach (Reffect reffect in reffects)
         {
-            resolveReffect(ref self, ref target, reffect);
+            resolveReffect(ref self, ref target, reffect, ref gameEnv);
         }
     }
 
-    public void resolveTeffect(ref GameObject self, ref GameObject target, Teffect teffect)
+    static public void resolveTeffect(ref GameObject self, ref GameObject target, Teffect teffect, ref GameEnv gameEnv)
     {
 		if (teffect.instant)
         {
-            procTeffect(ref self, ref target, teffect);
+            procTeffect(ref self, ref target, teffect, ref gameEnv);
         }
         else
         {
@@ -315,15 +315,15 @@ public class ResolveActionsScript : MonoBehaviour
         }
     }
 
-    public void resolveTeffects(ref GameObject self, ref GameObject target, List<Teffect> teffects)
+    static public void resolveTeffects(ref GameObject self, ref GameObject target, List<Teffect> teffects, ref GameEnv gameEnv)
     {
         foreach (Teffect teffect in teffects)
         {
-            resolveTeffect(ref self, ref target, teffect);
+            resolveTeffect(ref self, ref target, teffect, ref gameEnv);
         }
     }
 
-    public void procEffect(ref GameObject self, Effect effect)
+    static public void procEffect(ref GameObject self, Effect effect, ref GameEnv gameEnv)
     {
         TokenScript selfScript = self.GetComponent<TokenScript>();
 
@@ -351,7 +351,7 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            resolveActions(ref self, effect.followup_actions);
+            resolveActions(ref self, effect.followup_actions, ref gameEnv);
             // resolveTargetedRactions(ref GameObject, effect.targetedFollowupRactions);
             // resolveTargetedTactions(ref GameObject, effect.targetedFollowupTactions);
         }
@@ -371,7 +371,7 @@ public class ResolveActionsScript : MonoBehaviour
         }
     }
 
-	public void procReffect(ref GameObject self, ref GameObject target, Reffect reffect)
+	static public void procReffect(ref GameObject self, ref GameObject target, Reffect reffect, ref GameEnv gameEnv)
     {
         TokenScript selfScript = self.GetComponent<TokenScript>();
         TokenScript targetScript = target.GetComponent<TokenScript>();
@@ -507,10 +507,10 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            resolveActions(ref self, reffect.followup_actions);
-            resolveActions(ref target, reffect.target_followup_actions);
+            resolveActions(ref self, reffect.followup_actions, ref gameEnv);
+            resolveActions(ref target, reffect.target_followup_actions, ref gameEnv);
 
-            resolveRactions(ref self, ref target, reffect.followup_ractions);
+            resolveRactions(ref self, ref target, reffect.followup_ractions, ref gameEnv);
             
             // resolveTargetedRactions(ref GameObject, effect.targetedFollowupRactions);
             // resolveTargetedTactions(ref GameObject, effect.targetedFollowupTactions);
@@ -531,7 +531,7 @@ public class ResolveActionsScript : MonoBehaviour
         }
     }
 
-	public void procTeffect(ref GameObject self, ref GameObject target, Teffect teffect)
+	static public void procTeffect(ref GameObject self, ref GameObject target, Teffect teffect, ref GameEnv gameEnv)
     {
         TokenScript selfScript = self.GetComponent<TokenScript>();
         CubeScript targetScript = target.GetComponent<CubeScript>();
@@ -667,8 +667,8 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            resolveActions(ref self, teffect.followup_actions);
-            resolveTactions(ref self, ref target, teffect.followup_Tactions);
+            resolveActions(ref self, teffect.followup_actions, ref gameEnv);
+            resolveTactions(ref self, ref target, teffect.followup_Tactions, ref gameEnv);
             // resolveTargetedRactions(ref GameObject, effect.targetedFollowupRactions);
             // resolveTargetedTactions(ref GameObject, effect.targetedFollowupTactions);
         }
