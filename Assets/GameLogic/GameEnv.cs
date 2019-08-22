@@ -18,12 +18,7 @@ public class GameEnv
     public Dictionary<string, GameObject> cubeDict;
 
     public Dictionary<string, Action> actionDict;
-    public Dictionary<string, Raction> ractionDict;
-    public Dictionary<string, Taction> tactionDict;
-
     public Dictionary<string, Effect> effectDict;
-    public Dictionary<string, Reffect> reffectDict;
-    public Dictionary<string, Teffect> teffectDict;
 
     public Dictionary<string, TokenTemplate> tokenTemplates;
     public Dictionary<string, CubeTemplate> cubeTemplates;
@@ -34,10 +29,6 @@ public class GameEnv
         tokenTemplates = new Dictionary<string, TokenTemplate>();
         cubeTemplates = new Dictionary<string, CubeTemplate>();
         actionDict = new Dictionary<string, Action>();
-        ractionDict = new Dictionary<string, Raction>();
-        tactionDict = new Dictionary<string, Taction>();
         effectDict = new Dictionary<string, Effect>();
-        reffectDict = new Dictionary<string, Reffect>();
-        teffectDict = new Dictionary<string, Teffect>();
     }
 }

@@ -98,19 +98,11 @@ public class GameUtils {
             tokenScript.effects[effect.givenName] = effect;
         }
 
-        tokenScript.availableActions = new Dictionary<string, Action>();
-        tokenScript.availableRactions = new Dictionary<string, Raction>();
-        tokenScript.availableTactions = new Dictionary<string, Taction>();
+        tokenScript.actions = new Dictionary<string, Action>();
         foreach (Action action in template.availableActions) {
-            tokenScript.availableActions.Add(action.name, action);
+            tokenScript.actions.Add(action.name, action);
         }
-        foreach (Raction raction in template.availableRactions) {
-            tokenScript.availableRactions.Add(raction.name, raction);
-        }
-        foreach (Taction taction in template.availableTactions) {
-            tokenScript.availableTactions.Add(taction.name, taction);
-        }
-
+        
         foreach (KeyValuePair<string, TemplateVariable> var in template.initVariableList) {
             tokenScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
         }

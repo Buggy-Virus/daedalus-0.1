@@ -20,8 +20,6 @@ public class CubeScript : MonoBehaviour {
 	public float transparency;
 
 	public Dictionary<string, Effect> effects;
-    public Dictionary<string, Reffect> reffects;
-    public Dictionary<string, Teffect> teffects;
 
     public Dictionary<string, GameVar> variables = new Dictionary<string, GameVar>();
 

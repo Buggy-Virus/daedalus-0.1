@@ -160,23 +160,13 @@ public class GraphicTokenScript : MonoBehaviour
         GameObject actionMenu = Instantiate(actionMenuPrefab, canvas_transfrom);
         Transform actionMenuContent = actionMenu.transform.Find("Viewport").Find("Content");
         Debug.Log(actionMenuContent);
-        foreach(KeyValuePair<string, Action> action in tokenScript.availableActions) {
+        foreach(KeyValuePair<string, Action> action in tokenScript.actions) {
             Debug.Log("Here");
             GameObject actionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
             actionButton.name = action.Key;
             Button actionButtonButton = actionButton.GetComponent<Button>();
             actionButtonButton.GetComponentInChildren<Text>().text = action.Key;
-            actionButtonButton.onClick.AddListener(delegate{ResolveActionsScript.resolveAction(ref token, action.Value, ref tokenScript.gameEnv);});
-        }
-        foreach(KeyValuePair<string, Raction> raction in tokenScript.availableRactions) {
-            GameObject ractionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
-            ractionButton.name = raction.Key;
-            ractionButton.GetComponent<Button>().GetComponentInChildren<Text>().text = raction.Key;
-        }
-        foreach(KeyValuePair<string, Taction> taction in tokenScript.availableTactions) {
-            GameObject tactionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
-            tactionButton.name = taction.Key;
-            tactionButton.GetComponent<Button>().GetComponentInChildren<Text>().text = taction.Key;
+            actionButtonButton.onClick.AddListener(delegate{ResolveActionsScript.callAction(ref token, action.Value, ref tokenScript.gameEnv);});
         }
     }
 

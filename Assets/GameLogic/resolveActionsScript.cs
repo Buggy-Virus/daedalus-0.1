@@ -5,18 +5,12 @@ using UnityEngine;
 
 public class ResolveActionsScript : MonoBehaviour
 {
-    System.Random _random = new System.Random();
-    GameEnvScript gameEnvScript;
-    GameEnv gameEnv;
+    static public void callAction(ref GameObject self, Action action, ref GameEnv gameEnv) {
+        if (!action.relational && !action.targeted) {
+            resolveAction(ref self, action, ref gameEnv);
+        } else {
 
-    public Dictionary<string, GameObject> tokenEnv;
-    public Dictionary<string, GameObject> cubeEnv;
-
-    void Start()
-    {
-        gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
-
-        gameEnv = gameEnvScript.gameEnv;
+        }
     }
 
     static public void resolveAction(ref GameObject self, Action action, ref GameEnv gameEnv)
@@ -25,12 +19,34 @@ public class ResolveActionsScript : MonoBehaviour
         {
             resolveEffects(ref self, action.effects, ref gameEnv);
             if (action.aoe != 0) {
-                resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_ractions, action.aoe_tactions, ref gameEnv);
+                resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
             }
 
             resolveActions(ref self, action.followup_actions, ref gameEnv);
-            // resolveTargetedRactions(ref self, action.targetedFollowupRactions);
-            // resolveTargetedTactions(ref self, action.targetedFollowupTactions);
+        }
+    }
+
+    static public void resolveRelationalAction(ref GameObject self, ref GameObject target, Action action, ref GameEnv gameEnv) {
+        if (resolveRelationalConditions(self, target, action.conditions, gameEnv))
+        {
+            resolveRelationalEffects(ref self, ref target, action.effects, ref gameEnv);
+            if (action.aoe != 0) {
+                resolveAoe(ref self, target.GetComponent<TokenScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
+            }
+
+            resolveRelationalActions(ref self, ref target, action.followup_actions, ref gameEnv);
+        }
+    }
+
+    static public void resolveTargetedAction(ref GameObject self, ref GameObject target, Action action, ref GameEnv gameEnv) {
+        if (resolveTargetedConditions(self, target, action.conditions, gameEnv))
+        {
+            resolveTargetedEffects(ref self, ref target, action.effects, ref gameEnv);
+            if (action.aoe != 0) {
+                resolveAoe(ref self, target.GetComponent<CubeScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
+            }
+
+            resolveRelationalActions(ref self, ref target, action.followup_actions, ref gameEnv);
         }
     }
 
@@ -38,81 +54,39 @@ public class ResolveActionsScript : MonoBehaviour
     {
         foreach (Action action in actions)
         {
-            resolveAction(ref self, action, ref gameEnv);
-        }
-    }
-
-    static public void resolveRaction(ref GameObject self, ref GameObject target, Raction raction, ref GameEnv gameEnv)
-    {
-        if (resolveRconditions(self, target, raction.conditions, gameEnv))
-        {
-            resolveReffects(ref self, ref target, raction.reffects, ref gameEnv);
-            if (raction.aoe != 0) {
-                resolveAoe(ref self, target.GetComponent<TokenScript>().index, raction.aoe, raction.aoe_ractions, raction.aoe_tactions, ref gameEnv);
+            if (!action.relational && !action.targeted) {
+                resolveAction(ref self, action, ref gameEnv);
+            } else {
+                // Print Error
             }
-
-            resolveActions(ref self, raction.followup_actions, ref gameEnv);
-            resolveRactions(ref self, ref target, raction.followup_ractions, ref gameEnv);
-            // resolveTargetedRactions(ref self, raction.targetedFollowupRactions);
-            // resolveTargetedTactions(ref self, raction.targetedFollowupTactions);
-
-            resolveActions(ref target, raction.followup_target_actions, ref gameEnv);
-            // resolveTargetedRactions(ref target, raction.targetedFollowupTargetRactions);
-            // resolveTargetedTactions(ref target, raction.targetedFollowupTargetTactions);
         }
     }
 
-    static public void resolveRactions(ref GameObject self, ref GameObject target, List<Raction> ractions, ref GameEnv gameEnv)
-    {
-        foreach (Raction raction in ractions)
+    static public void resolveRelationalActions(ref GameObject self, ref GameObject target, List<Action> actions, ref GameEnv gameEnv) {
+        foreach (Action action in actions)
         {
-            resolveRaction(ref self, ref target, raction, ref gameEnv);
-        }
-    }
-
-    static public void resolveTaction(ref GameObject self, ref GameObject target, Taction taction, ref GameEnv gameEnv)
-    {
-        if (resolveTconditions(self, target, taction.conditions, gameEnv))
-        {
-            resolveTeffects(ref self, ref target, taction.teffects, ref gameEnv);
-            if (taction.aoe != 0) {
-                resolveAoe(ref self, target.GetComponent<CubeScript>().index, taction.aoe, taction.aoe_ractions, taction.aoe_tactions, ref gameEnv);
+            if (!action.relational && !action.targeted) {
+                resolveAction(ref self, action, ref gameEnv);
+            } else if (action.relational) {
+                resolveRelationalAction(ref self, ref target, action, ref gameEnv);
+            } else {
+                // Print Error
             }
-
-            resolveActions(ref self, taction.followup_actions, ref gameEnv);
-            resolveTactions(ref self, ref target, taction.followup_tactions, ref gameEnv);
-            // resolveTargetedRactions(ref self, taction.targetedFollowupRactions);
-            // resolveTargetedTactions(ref self, taction.targetedFollowupTactions);
-        }
+        } 
     }
 
-    static public void resolveTactions(ref GameObject self, ref GameObject target, List<Taction> tactions, ref GameEnv gameEnv)
-    {
-        foreach (Taction taction in tactions)
+    static public void resolveTargetedActions(ref GameObject self, ref GameObject target, List<Action> actions, ref GameEnv gameEnv) {
+        foreach (Action action in actions)
         {
-            resolveTaction(ref self, ref target, taction, ref gameEnv);
-        }
+            if (!action.relational && !action.targeted) {
+                resolveAction(ref self, action, ref gameEnv);
+            } else if (action.relational) {
+                resolveTargetedAction(ref self, ref target, action, ref gameEnv);
+            } else {
+                // Print Error
+            }
+        } 
     }
-
-    // public void resolveTargetedRaction(ref GameObject self, Raction raction) {
-
-    // }
-
-    // public void resolveTargetedRactions(ref GameObject self, List<Raction> ractions) {
-    // 	foreach (Raction raction in ractions) {
-    // 		resolveTargetedRaction(ref self, raction);
-    // 	}
-    // }
-
-    // public void resolveTargetedTaction(ref GameObject self, Taction taction) {
-
-    // }
-
-    // public void resolveTargetedTactions(ref GameObject self, List<Taction> tactions) {
-    // 	foreach (Taction taction in tactions) {
-    // 		resolveTargetedTaction(ref self, taction);
-    // 	}
-    // }
 
     static public bool resolveConditions(GameObject self, List<string> conditions, GameEnv gameEnv)
     {
@@ -132,7 +106,7 @@ public class ResolveActionsScript : MonoBehaviour
         return true;
     }
 
-    static public bool resolveRconditions(GameObject self, GameObject target, List<string> conditions, GameEnv gameEnv)
+    static public bool resolveRelationalConditions(GameObject self, GameObject target, List<string> conditions, GameEnv gameEnv)
     {
         foreach (string condition in conditions)
         {
@@ -150,7 +124,7 @@ public class ResolveActionsScript : MonoBehaviour
         return true;
     }
 
-    static public bool resolveTconditions(GameObject self, GameObject target, List<string> conditions, GameEnv gameEnv)
+    static public bool resolveTargetedConditions(GameObject self, GameObject target, List<string> conditions, GameEnv gameEnv)
     {
         foreach (string condition in conditions)
         {
@@ -168,21 +142,21 @@ public class ResolveActionsScript : MonoBehaviour
         return true;
     }
 
-    static public void resolveAoe(ref GameObject self, Index index, int radius, List<Raction> ractions, List<Taction> tactions, ref GameEnv gameEnv)
+    static public void resolveAoe(ref GameObject self, Index index, int radius, List<Action> relationalActions, List<Action> targetedActions, ref GameEnv gameEnv)
     {
         List<GameObject> nearbyTokens = detectTokens(self.GetComponent<TokenScript>().index, radius, gameEnv);
         nearbyTokens.Remove(self);
         foreach (GameObject nearbyToken in nearbyTokens)
         {
             GameObject nearbyTokenRef = nearbyToken;
-            resolveRactions(ref self, ref nearbyTokenRef, ractions, ref gameEnv);
+            resolveRelationalActions(ref self, ref nearbyTokenRef, relationalActions, ref gameEnv);
         }
 
         List<GameObject> nearbyCubes = detectCubes(self.GetComponent<TokenScript>().index, radius, gameEnv);
         foreach (GameObject nearbyCube in nearbyCubes)
         {
             GameObject nearbyCubeRef = nearbyCube;
-            resolveTactions(ref self, ref nearbyCubeRef, tactions, ref gameEnv);
+            resolveTargetedActions(ref self, ref nearbyCubeRef, targetedActions, ref gameEnv);
         }
     }
 
@@ -261,65 +235,85 @@ public class ResolveActionsScript : MonoBehaviour
     {
         foreach (Effect effect in effects)
         {
-            resolveEffect(ref self, effect, ref gameEnv);
+            if (!effect.relational && !effect.targeted) {
+                resolveEffect(ref self, effect, ref gameEnv);
+            } else {
+                // print error
+            }
         }
     }
 
-    static public void resolveReffect(ref GameObject self, ref GameObject target, Reffect reffect, ref GameEnv gameEnv)
+    static public void resolveRelationalEffects(ref GameObject self, ref GameObject target, List<Effect> effects, ref GameEnv gameEnv)
     {
-		if (reffect.instant)
+        foreach (Effect effect in effects)
         {
-            procReffect(ref self, ref target, reffect, ref gameEnv);
+            if (!effect.relational && !effect.targeted) {
+                resolveEffect(ref self, effect, ref gameEnv);
+            } else if (effect.relational) {
+                resolveRelationalEffect(ref self, ref target, effect, ref gameEnv);
+            } else {
+                // print error
+            }
+        }
+    }
+
+    static public void resolveTargetedEffects(ref GameObject self, ref GameObject target, List<Effect> effects, ref GameEnv gameEnv)
+    {
+        foreach (Effect effect in effects)
+        {
+            if (!effect.relational && !effect.targeted) {
+                resolveEffect(ref self, effect, ref gameEnv);
+            } else if (effect.targeted) {
+                resolveTargetedEffect(ref self, ref target, effect, ref gameEnv);
+            } else {
+                // print error
+            }
+        }
+    }
+
+    static public void resolveRelationalEffect(ref GameObject self, ref GameObject target, Effect effect, ref GameEnv gameEnv)
+    {
+		if (effect.instant)
+        {
+            procRelationalEffect(ref self, ref target, effect, ref gameEnv);
         }
         else
         {
-            reffect.timeLeft = reffect.frequency;
-            if (reffect.stacks)
+            effect.relative = self;
+            effect.timeLeft = effect.frequency;
+            if (effect.stacks)
             {
-                reffect.givenName = reffect.name  + "_" + System.Guid.NewGuid();
+                effect.givenName = effect.name  + "_" + System.Guid.NewGuid();
             }
             else
             {
-                reffect.givenName = reffect.name;
+                effect.givenName = effect.name;
             }
-            target.GetComponent<TokenScript>().reffects[reffect.givenName] = reffect;
+            target.GetComponent<TokenScript>().effects[effect.givenName] = effect;
         }
     }
 
-    static public void resolveReffects(ref GameObject self, ref GameObject target, List<Reffect> reffects, ref GameEnv gameEnv)
-    {
-        foreach (Reffect reffect in reffects)
-        {
-            resolveReffect(ref self, ref target, reffect, ref gameEnv);
-        }
-    }
+    
 
-    static public void resolveTeffect(ref GameObject self, ref GameObject target, Teffect teffect, ref GameEnv gameEnv)
+    static public void resolveTargetedEffect(ref GameObject self, ref GameObject target, Effect effect, ref GameEnv gameEnv)
     {
-		if (teffect.instant)
+		if (effect.instant)
         {
-            procTeffect(ref self, ref target, teffect, ref gameEnv);
+            procTargetedEffect(ref self, ref target, effect, ref gameEnv);
         }
         else
         {
-            teffect.timeLeft = teffect.frequency;
-            if (teffect.stacks)
+            effect.relative = self;
+            effect.timeLeft = effect.frequency;
+            if (effect.stacks)
             {
-                teffect.givenName = teffect.name  + "_" + System.Guid.NewGuid();
+                effect.givenName = effect.name  + "_" + System.Guid.NewGuid();
             }
             else
             {
-                teffect.givenName = teffect.name;
+                effect.givenName = effect.name;
             }
-            target.GetComponent<CubeScript>().teffects[teffect.givenName] = teffect;
-        }
-    }
-
-    static public void resolveTeffects(ref GameObject self, ref GameObject target, List<Teffect> teffects, ref GameEnv gameEnv)
-    {
-        foreach (Teffect teffect in teffects)
-        {
-            resolveTeffect(ref self, ref target, teffect, ref gameEnv);
+            target.GetComponent<CubeScript>().effects[effect.givenName] = effect;
         }
     }
 
@@ -371,19 +365,19 @@ public class ResolveActionsScript : MonoBehaviour
         }
     }
 
-	static public void procReffect(ref GameObject self, ref GameObject target, Reffect reffect, ref GameEnv gameEnv)
+	static public void procRelationalEffect(ref GameObject self, ref GameObject target, Effect effect, ref GameEnv gameEnv)
     {
         TokenScript selfScript = self.GetComponent<TokenScript>();
         TokenScript targetScript = target.GetComponent<TokenScript>();
 
-        Value conditionValue = DaedScript.evaluateSelfTokenTargetToken(reffect.condition, ref self, ref target, ref gameEnv);
+        Value conditionValue = DaedScript.evaluateSelfTokenTargetToken(effect.condition, ref self, ref target, ref gameEnv);
         if (conditionValue.valueType == "bool" && conditionValue.vBool)
         {
-            DaedScript.evaluateSelfTokenTargetToken(reffect.script, ref self, ref target, ref gameEnv);
+            DaedScript.evaluateSelfTokenTargetToken(effect.script, ref self, ref target, ref gameEnv);
 
-            if (reffect.self_displace_para != null)
+            if (effect.self_displace_para != null)
             {
-                Value self_para_value = DaedScript.evaluateSelfTokenTargetToken(reffect.self_displace_para, ref self, ref target, ref gameEnv);
+                Value self_para_value = DaedScript.evaluateSelfTokenTargetToken(effect.self_displace_para, ref self, ref target, ref gameEnv);
                 if (self_para_value.valueType == "int") 
                 {
                     int para_dist = self_para_value.vInt;
@@ -405,9 +399,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (reffect.self_displace_perp != null)
+            if (effect.self_displace_perp != null)
             {
-                Value self_perp_value = DaedScript.evaluateSelfTokenTargetToken(reffect.self_displace_perp, ref self, ref target, ref gameEnv);
+                Value self_perp_value = DaedScript.evaluateSelfTokenTargetToken(effect.self_displace_perp, ref self, ref target, ref gameEnv);
                 if (self_perp_value.valueType == "int") 
                 {
                     int perp_dist = self_perp_value.vInt;
@@ -429,9 +423,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (reffect.self_displace_alt != null)
+            if (effect.self_displace_alt != null)
             {
-                Value self_alt_value = DaedScript.evaluateSelfTokenTargetToken(reffect.self_displace_alt, ref self, ref target, ref gameEnv);
+                Value self_alt_value = DaedScript.evaluateSelfTokenTargetToken(effect.self_displace_alt, ref self, ref target, ref gameEnv);
                 if (self_alt_value.valueType == "int") 
                 {
                     Index endIndex = new Index(selfScript.index);
@@ -444,9 +438,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
             
-            if (reffect.target_displace_para != null)
+            if (effect.target_displace_para != null)
             {
-                Value target_para_value = DaedScript.evaluateSelfTokenTargetToken(reffect.target_displace_para, ref self, ref target, ref gameEnv);
+                Value target_para_value = DaedScript.evaluateSelfTokenTargetToken(effect.target_displace_para, ref self, ref target, ref gameEnv);
                 if (target_para_value.valueType == "int") 
                 {
                     int para_dist = target_para_value.vInt;
@@ -468,9 +462,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (reffect.target_displace_perp != null)
+            if (effect.target_displace_perp != null)
             {
-                Value target_perp_value = DaedScript.evaluateSelfTokenTargetToken(reffect.target_displace_perp, ref self, ref target, ref gameEnv);
+                Value target_perp_value = DaedScript.evaluateSelfTokenTargetToken(effect.target_displace_perp, ref self, ref target, ref gameEnv);
                 if (target_perp_value.valueType == "int") 
                 {
                     int perp_dist = target_perp_value.vInt;
@@ -492,9 +486,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (reffect.target_displace_alt != null)
+            if (effect.target_displace_alt != null)
             {
-                Value self_alt_value = DaedScript.evaluateSelfTokenTargetToken(reffect.target_displace_alt, ref self, ref target, ref gameEnv);
+                Value self_alt_value = DaedScript.evaluateSelfTokenTargetToken(effect.target_displace_alt, ref self, ref target, ref gameEnv);
                 if (self_alt_value.valueType == "int") 
                 {
                     Index endIndex = new Index(targetScript.index);
@@ -507,43 +501,38 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            resolveActions(ref self, reffect.followup_actions, ref gameEnv);
-            resolveActions(ref target, reffect.target_followup_actions, ref gameEnv);
-
-            resolveRactions(ref self, ref target, reffect.followup_ractions, ref gameEnv);
-            
-            // resolveTargetedRactions(ref GameObject, effect.targetedFollowupRactions);
-            // resolveTargetedTactions(ref GameObject, effect.targetedFollowupTactions);
+            resolveRelationalActions(ref self, ref target, effect.followup_actions, ref gameEnv);
+            resolveRelationalActions(ref target, ref self, effect.target_followup_actions, ref gameEnv);
         }
         else if (conditionValue.valueType != "bool")
         {
             // print an error
         }
 
-        Value endValue = DaedScript.evaluateSelfTokenTargetToken(reffect.endCondition, ref self, ref target, ref gameEnv);
-        if (endValue.valueType == "bool" && endValue.vBool)
-        {
-            target.GetComponent<TokenScript>().reffects.Remove(reffect.givenName);
-        }
-        else if (endValue.valueType != "bool")
-        {
-            // print an error
+        if (!effect.instant) {
+            Value endValue = DaedScript.evaluateSelfTokenTargetToken(effect.endCondition, ref self, ref target, ref gameEnv);
+            if (endValue.valueType == "bool" && endValue.vBool) {
+                target.GetComponent<TokenScript>().effects.Remove(effect.givenName);
+            }
+            else if (endValue.valueType != "bool") {
+                // print an error
+            }
         }
     }
 
-	static public void procTeffect(ref GameObject self, ref GameObject target, Teffect teffect, ref GameEnv gameEnv)
+	static public void procTargetedEffect(ref GameObject self, ref GameObject target, Effect effect, ref GameEnv gameEnv)
     {
         TokenScript selfScript = self.GetComponent<TokenScript>();
         CubeScript targetScript = target.GetComponent<CubeScript>();
 
-        Value conditionValue = DaedScript.evaluateSelfToken(teffect.condition, ref self, ref gameEnv);
+        Value conditionValue = DaedScript.evaluateSelfToken(effect.condition, ref self, ref gameEnv);
         if (conditionValue.valueType == "bool" && conditionValue.vBool)
         {
-            DaedScript.evaluateSelfToken(teffect.script, ref self, ref gameEnv);
+            DaedScript.evaluateSelfToken(effect.script, ref self, ref gameEnv);
 
-            if (teffect.self_displace_para != null)
+            if (effect.self_displace_para != null)
             {
-                Value self_para_value = DaedScript.evaluateSelfTokenTargetCube(teffect.self_displace_para, ref self, ref target, ref gameEnv);
+                Value self_para_value = DaedScript.evaluateSelfTokenTargetCube(effect.self_displace_para, ref self, ref target, ref gameEnv);
                 if (self_para_value.valueType == "int") 
                 {
                     int para_dist = self_para_value.vInt;
@@ -565,9 +554,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (teffect.self_displace_perp != null)
+            if (effect.self_displace_perp != null)
             {
-                Value self_perp_value = DaedScript.evaluateSelfTokenTargetCube(teffect.self_displace_perp, ref self, ref target, ref gameEnv);
+                Value self_perp_value = DaedScript.evaluateSelfTokenTargetCube(effect.self_displace_perp, ref self, ref target, ref gameEnv);
                 if (self_perp_value.valueType == "int") 
                 {
                     int perp_dist = self_perp_value.vInt;
@@ -589,9 +578,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (teffect.self_displace_alt != null)
+            if (effect.self_displace_alt != null)
             {
-                Value self_alt_value = DaedScript.evaluateSelfTokenTargetCube(teffect.self_displace_alt, ref self, ref target, ref gameEnv);
+                Value self_alt_value = DaedScript.evaluateSelfTokenTargetCube(effect.self_displace_alt, ref self, ref target, ref gameEnv);
                 if (self_alt_value.valueType == "int") 
                 {
                     Index endIndex = new Index(selfScript.index);
@@ -604,9 +593,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
             
-            if (teffect.target_displace_para != null)
+            if (effect.target_displace_para != null)
             {
-                Value target_para_value = DaedScript.evaluateSelfTokenTargetCube(teffect.target_displace_para, ref self, ref target, ref gameEnv);
+                Value target_para_value = DaedScript.evaluateSelfTokenTargetCube(effect.target_displace_para, ref self, ref target, ref gameEnv);
                 if (target_para_value.valueType == "int") 
                 {
                     int para_dist = target_para_value.vInt;
@@ -628,9 +617,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (teffect.target_displace_perp != null)
+            if (effect.target_displace_perp != null)
             {
-                Value target_perp_value = DaedScript.evaluateSelfTokenTargetCube(teffect.target_displace_perp, ref self, ref target, ref gameEnv);
+                Value target_perp_value = DaedScript.evaluateSelfTokenTargetCube(effect.target_displace_perp, ref self, ref target, ref gameEnv);
                 if (target_perp_value.valueType == "int") 
                 {
                     int perp_dist = target_perp_value.vInt;
@@ -652,9 +641,9 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            if (teffect.self_displace_alt != null)
+            if (effect.self_displace_alt != null)
             {
-                Value self_alt_value = DaedScript.evaluateSelfTokenTargetCube(teffect.self_displace_alt, ref self, ref target, ref gameEnv);
+                Value self_alt_value = DaedScript.evaluateSelfTokenTargetCube(effect.self_displace_alt, ref self, ref target, ref gameEnv);
                 if (self_alt_value.valueType == "int") 
                 {
                     Index endIndex = new Index(targetScript.index);
@@ -667,24 +656,24 @@ public class ResolveActionsScript : MonoBehaviour
                 }
             }
 
-            resolveActions(ref self, teffect.followup_actions, ref gameEnv);
-            resolveTactions(ref self, ref target, teffect.followup_Tactions, ref gameEnv);
-            // resolveTargetedRactions(ref GameObject, effect.targetedFollowupRactions);
-            // resolveTargetedTactions(ref GameObject, effect.targetedFollowupTactions);
+            resolveTargetedActions(ref self, ref target, effect.followup_actions, ref gameEnv);
+            resolveTargetedActions(ref target, ref self, effect.target_followup_actions, ref gameEnv);
         }
         else if (conditionValue.valueType != "bool")
         {
             // print an error
         }
 
-        Value endValue = DaedScript.evaluateSelfTokenTargetCube(teffect.endCondition, ref self, ref target, ref gameEnv);
-        if (endValue.valueType == "bool" && endValue.vBool)
-        {
-            targetScript.teffects.Remove(teffect.givenName);
-        }
-        else if (endValue.valueType != "bool")
-        {
-            // print an error
+        if (!effect.instant) {
+            Value endValue = DaedScript.evaluateSelfTokenTargetCube(effect.endCondition, ref self, ref target, ref gameEnv);
+            if (endValue.valueType == "bool" && endValue.vBool)
+            {
+                targetScript.effects.Remove(effect.givenName);
+            }
+            else if (endValue.valueType != "bool")
+            {
+                // print an error
+            }
         }
     }
 }

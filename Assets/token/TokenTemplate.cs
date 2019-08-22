@@ -18,8 +18,6 @@ public class TokenTemplate {
     public List<Effect> effects;
 
     public List<Action> availableActions;
-    public List<Raction> availableRactions;
-    public List<Taction> availableTactions;
 
     public Dictionary<string, TemplateVariable> initVariableList;
 
@@ -35,8 +33,6 @@ public class TokenTemplate {
         int h,
         List<Effect> e,
         List<Action> aa,
-        List<Raction> ar,
-        List<Taction> at,
         Dictionary<string, TemplateVariable> ivl
     ) {
         graphicObjectPrefab = go;
@@ -50,8 +46,6 @@ public class TokenTemplate {
         height = h;
         effects = e;
         availableActions = aa;
-        availableRactions = ar;
-        availableTactions = at;
         initVariableList = ivl;
     }
 }

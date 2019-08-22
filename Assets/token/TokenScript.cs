@@ -26,13 +26,9 @@ public class TokenScript : MonoBehaviour {
     public int length;
     public int height;
 
-    public Dictionary<string, Action> availableActions;
-    public Dictionary<string, Raction> availableRactions;
-    public Dictionary<string, Taction> availableTactions;
+    public Dictionary<string, Action> actions;
 
     public Dictionary<string, Effect> effects = new Dictionary<string, Effect>();
-    public Dictionary<string, Reffect> reffects = new Dictionary<string, Reffect>();
-    public Dictionary<string, Teffect> teffects = new Dictionary<string, Teffect>();
 
     public Dictionary<string, GameVar> variables = new Dictionary<string, GameVar>();
 

@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class Action {
 	public string name;	
-	public Type type;
+	public bool relational;
+	public bool targeted;
+
+	public int maxRange;
+	public int minRange;
+
+	public List<string> show_conditions;
+	public List<string> available_conditions;
+	public List<string> call_conditions;
 
 	public List<string> conditions;
 
@@ -12,98 +20,109 @@ public class Action {
 
 	public int aoe;
 
-	public List<Raction> aoe_ractions;
-	public List<Taction> aoe_tactions;
+	public List<Action> aoe_relational_actions;
+	public List<Action> aoe_targeted_actions;
 
 	public List<Action> followup_actions;
+	public List<Action> target_followup_actions;
 	
-	public List<Raction> targeted_followup_ractions;
-	public List<Taction> targeted_followup_tactions;
+	public List<Action> targeted_followup_actions;
+	public List<Action> target_targeted_followup_actions;
 
 	public Action(
 		string n,
-		Type t,
+		List<string> s_c,
+		List<string> a_c,
 		List<string> c,
 		List<Effect> e,
 		int a,
-		List<Raction> a_r,
-		List<Taction> a_t,
+		List<Action> a_r_a,
+		List<Action> a_t_a,
 		List<Action> f_a,
-		List<Raction> t_f_r,
-		List<Taction> t_f_t
+		List<Action> t_f_a
 	) {
 		name = n;
-		type = t;
+		show_conditions = s_c;
+		available_conditions = a_c;
 		conditions = c;
 		effects = e;
 		aoe = a;
-		aoe_ractions = a_r;
-		aoe_tactions = a_t;
+		aoe_relational_actions = a_r_a;
+		aoe_targeted_actions = a_t_a;
 		followup_actions = f_a;
-		targeted_followup_ractions = t_f_r;
-		targeted_followup_tactions = t_f_t;
+		targeted_followup_actions = t_f_a;
 	}
-}
 
-public class Raction {
-	public string name;	
-	public Type type;
+	public Action( // relational
+		string n,
+		List<string> s_c,
+		List<string> a_c,
+		List<string> c_c,
+		List<string> c,
+		List<Effect> e,
+		int a,
+		List<Action> a_r_a,
+		List<Action> a_t_a,
+		List<Action> f_a,
+		List<Action> t_f_a,
+		List<Action> tt_f_a,
+		List<Action> tt_t_f_a
+	) {
+		relational = false;
+		targeted = false;
+		name = n;
+		show_conditions = s_c;
+		available_conditions = a_c;
+		call_conditions = c_c;
+		conditions = c;
+		effects = e;
+		aoe = a;
+		aoe_relational_actions = a_r_a;
+		aoe_targeted_actions = a_t_a;
+		followup_actions = f_a;
+		target_targeted_followup_actions = t_f_a;
+		target_followup_actions = tt_f_a;
+		target_targeted_followup_actions = tt_t_f_a;
+	}
 
-	public List<Type> targetTypes;
-
-	public int maxRange;
-	public int minRange;
-
-	public List<string> conditions; 
-
-	public List<Reffect> reffects;
-
-	public int aoe;
-
-	public List<Raction> aoe_ractions;
-	public List<Taction> aoe_tactions;
-	
-	public List<Action> followup_actions;
-	public List<Raction> followup_ractions;
-	public List<Raction> targeted_followup_ractions;
-	public List<Taction> targeted_followup_tactions;
-
-	public List<Action> followup_target_actions;
-	public List<Raction> targeted_followup_target_ractions;
-	public List<Taction> targeted_followup_target_tactions;
-}
-
-public class Taction {
-	public string name;	
-	public Type type;
-
-	public List<Type> targetTypes;
-  
-	public int maxRange;
-	public int minRange;
-
-	public List<string> conditions; 
-
-	public List<Teffect> teffects;
-
-	public int aoe;
-
-	public List<Raction> aoe_ractions;
-	public List<Taction> aoe_tactions;
-
-	public List<Action> followup_actions;
-	public List<Taction> followup_tactions;
-	
-	public List<Raction> targeted_followup_ractions;
-	public List<Taction> targeted_followup_tactions;
+	public Action( // targeted
+		string n,
+		List<string> s_c,
+		List<string> a_c,
+		List<string> c_c,
+		List<string> c,
+		List<Effect> e,
+		int a,
+		List<Action> a_r_a,
+		List<Action> a_t_a,
+		List<Action> f_a,
+		List<Action> t_f_a
+	) {
+		relational = false;
+		targeted = false;
+		name = n;
+		show_conditions = s_c;
+		available_conditions = a_c;
+		call_conditions = c_c;
+		conditions = c;
+		effects = e;
+		aoe = a;
+		aoe_relational_actions = a_r_a;
+		aoe_targeted_actions = a_t_a;
+		followup_actions = f_a;
+		target_targeted_followup_actions = t_f_a;
+	}
 }
 
 public class Effect {
 	public string name;
 	public string givenName;
-	public Type type;
-	
+	public GameObject relative;
+
+	public bool relational;
+	public bool targeted;	
 	public bool stacks;
+
 
 	public bool instant;
 	public string condition;
@@ -118,70 +137,139 @@ public class Effect {
 	public string displace_y;
 	public string displace_z;
 
-	public List<Action> followup_actions;
-	
-	public List<Raction> targeted_followup_ractions;
-	public List<Taction> targeted_followup_tactions;
-}
-
-public class Reffect {
-	public string name;
-	public string givenName;
-	public Type type;
-
-	public bool stacks;
-
-	public bool instant;
-	public string condition;
-	public string endCondition;
-	public int frequency;
-	public int timeLeft;
-
-	public string script;
-
+	public bool target_displace;
 	public string target_displace_perp;
 	public string target_displace_para;
 	public string target_displace_alt;
 
+	public bool self_displace;
 	public string self_displace_perp;
 	public string self_displace_para;
 	public string self_displace_alt;
 
 	public List<Action> followup_actions;
-	public List<Raction> followup_ractions;
-
 	public List<Action> target_followup_actions;
-
-	public List<Raction> targeted_followup_ractions;
-	public List<Taction> targeted_followup_tactions;
-}
-
-public class Teffect {
-	public string name;
-	public string givenName;
-	public Type type;
-
-	public bool stacks;
-
-	public bool instant;
-	public string condition;
-	public string endCondition;
-	public int frequency;
-	public int timeLeft;
 	
-	public string script;
+	public List<Action> targeted_followup_actions;
+	public List<Action> target_targeted_followup_actions;
 
-	public string target_displace_perp;
-	public string target_displace_para;
-	public string target_displace_alt;
+	public Effect(
+		string n,
+		string c,
+		bool i,
+		string e_c,
+		int f,
+		string s,
+		bool d,
+		string d_x,
+		string d_y,
+		string d_z,
+		List<Action> f_a,
+		List<Action> t_f_a
+	) {
+		name = n;
+		condition = c;
+		instant = i;
+		if (!i) {
+			endCondition = e_c;
+			frequency = f;
+		}
+		script = s;
+		displace = d;
+		if (d) {
+			displace_x = d_x;
+			displace_y = d_y;
+			displace_z = d_z;
+		}
+		followup_actions = f_a;
+		targeted_followup_actions = t_f_a;
+	}
 
-	public string self_displace_perp;
-	public string self_displace_para;
-	public string self_displace_alt;
+	public Effect( // relational
+		string n,
+		string c,
+		bool i,
+		string e_c,
+		int f,
+		string s,
+		bool s_d,
+		string s_d_perp,
+		string s_d_para,
+		string s_d_alt,
+		bool t_d,
+		string t_d_perp,
+		string t_d_para,
+		string t_d_alt,
+		List<Action> f_a,
+		List<Action> t_f_a,
+		List<Action> tt_f_a,
+		List<Action> tt_t_f_a
+	) {
+		name = n;
+		condition = c;
+		instant = i;
+		if (!i) {
+			endCondition = e_c;
+			frequency = f;
+		}
+		script = s;
+		self_displace = s_d;
+		if (s_d) {
+			self_displace_para = s_d_para;
+			self_displace_perp = s_d_perp;
+			self_displace_alt = s_d_alt;
+		}
+		target_displace = t_d;
+		if (t_d) {
+			target_displace_para = t_d_para;
+			target_displace_perp = t_d_perp;
+			target_displace_alt = t_d_alt;
+		}
+		followup_actions = f_a;
+		targeted_followup_actions = t_f_a;
+		target_followup_actions = tt_f_a;
+		target_targeted_followup_actions = tt_t_f_a;
+	}
 
-	public List<Action> followup_actions;
-	public List<Taction> followup_Tactions;
-	
-	public List<Raction> targeted_followup_ractions;
-	public List<Taction> targeted_followup_tactions;
+	public Effect( // targeted
+		string n,
+		string c,
+		bool i,
+		string e_c,
+		int f,
+		string s,
+		bool s_d,
+		string s_d_perp,
+		string s_d_para,
+		string s_d_alt,
+		bool t_d,
+		string t_d_perp,
+		string t_d_para,
+		string t_d_alt,
+		List<Action> f_a,
+		List<Action> t_f_a
+	) {
+		name = n;
+		condition = c;
+		instant = i;
+		if (!i) {
+			endCondition = e_c;
+			frequency = f;
+		}
+		script = s;
+		self_displace = s_d;
+		if (s_d) {
+			self_displace_para = s_d_para;
+			self_displace_perp = s_d_perp;
+			self_displace_alt = s_d_alt;
+		}
+		target_displace = t_d;
+		if (t_d) {
+			target_displace_para = t_d_para;
+			target_displace_perp = t_d_perp;
+			target_displace_alt = t_d_alt;
+		}
+		followup_actions = f_a;
+		targeted_followup_actions = t_f_a;
+	}
 }

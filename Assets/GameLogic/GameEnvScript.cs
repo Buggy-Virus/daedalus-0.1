@@ -54,15 +54,15 @@ public class GameEnvScript : MonoBehaviour
     public void AddActions() {
         Action nullAction = new Action(
             "Null Action",
-            new Type("action"),
-            new List<string> {"true"},
+            new List<string>(),
+            new List<string>(),
+            new List<string>(),
             new List<Effect>(),
             0,
-            new List<Raction>(),
-            new List<Taction>(),
             new List<Action>(),
-            new List<Raction>(),
-            new List<Taction>()
+            new List<Action>(),
+            new List<Action>(),
+            new List<Action>()
         );
 
         gameEnv.actionDict.Add(nullAction.name, nullAction);
@@ -81,8 +81,6 @@ public class GameEnvScript : MonoBehaviour
             1,
             new List<Effect>(),
             new List<Action> {gameEnv.actionDict["Null Action"]},
-            new List<Raction>(),
-            new List<Taction>(),
             new Dictionary<string, TemplateVariable> {
                 { "Hit Points", new TemplateVariable(4, 10) }, 
                 { "Strength", new TemplateVariable(6, 10) },
@@ -106,8 +104,6 @@ public class GameEnvScript : MonoBehaviour
             2,
             new List<Effect>(),
             new List<Action> {gameEnv.actionDict["Null Action"]},
-            new List<Raction>(),
-            new List<Taction>(),
             new Dictionary<string, TemplateVariable> {
                 { "Hit Points", new TemplateVariable(8, 16) }, 
                 { "Strength", new TemplateVariable(10, 14) },
