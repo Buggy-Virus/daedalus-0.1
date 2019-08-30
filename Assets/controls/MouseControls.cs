@@ -6,73 +6,68 @@ using UnityEngine;
 
 public class MouseControls : MonoBehaviour {
 
-    public int CUBE_MODE = 0;
-    public int TOKEN_MODE = 1;
-    public int SELECT_MODE = 2;
-
-    GameEnv gameEnv;
-
-	GameObject cubesObject;
-    GameObject tokensObject;
-
-    MapScript mapScript;
-    GameEnvScript gameEnvScript;
-
-    public GameObject activeLayerObject;
-    Collider activeLayerCollider;
-
-    public Index mouseDownIndex;
-    public Index mouseUpIndex;
-    Vector3 mouseDownPosition = new Vector3(0, 0, 0);
-    bool mouseDown;
-
-    GameObject cursorObject;
-    MeshRenderer cursorObjectRenderer;
-    bool activeCursor = false;
-
-    public GameObject dragPrefab;
-    GameObject dragObject;
-    bool activeDrag;
-
-    public Color cursorTint;
-    public Color cursorClickHighlight;
-    Color normalColor;
-
-    public GameObject selectedToken;
-    public GameObject selectedObject;
-
+    // ======================================================================= Configurable Variables
+    public bool editor = true;
+    public int editorMode = 0;
     public int activeLayer = 0;
-    int lastActiveLayer = -1;
-
-    public int controlMode = 0;
-    int lastControlMode = -1;
-
     public bool deleteMode = false;
-
     public string cubeType = "stone";
-    string lastCubeType = "stone";
-
     public string tokenType = "goblin";
-    string lastTokenType = "goblin";
 
+    // ======================================================================= Prefabs
+    public GameObject dragPrefab;
     public GameObject tokenPrefab;
     public GameObject cubePrefab;
 
-    void Start() {
-        mapScript = GameObject.Find("Map").GetComponent<MapScript>();
-        gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
-        gameEnv = gameEnvScript.gameEnv;
+    // ======================================================================= Public Variables
+    // Used for play controls
+    public GameObject selectedToken;
+    public GameObject selectedObject;
+    public bool waitingForPlayerInput = false;
 
-        updateActiveLayer();
-    }
+    // ======================================================================= Fetched References
+    MapScript mapScript;
+    GameEnvScript gameEnvScript;
+    GameEnv gameEnv;
 
-    // Update is called once per frame
-    void Update() {
-        updateActiveLayer();
+    // ======================================================================= Global Variables
+    // Used for editor controls
+    public int CUBE_MODE = 0;
+    public int TOKEN_MODE = 1;
 
+    // ================================== mouse state
+    bool mouseDown;
+    Vector3 mouseDownPosition = new Vector3(0, 0, 0);
+    public Index mouseDownIndex;
+    public Index mouseUpIndex;
+    
+    // ================================== cursor stuff
+    bool activeCursor = false;
+    public Color cursorTint;
+    public Color cursorClickHighlight;
+    Color normalColor;
+    GameObject cursorObject;
+    MeshRenderer cursorObjectRenderer;
+    
+    bool activeDrag;
+    GameObject dragObject;    
+
+    // ================================== Active Layer
+    public GameObject activeLayerObject;
+    Collider activeLayerCollider;
+
+    // ================================== Frame update Checkers
+    bool lastEditor = true;
+    int lastActiveLayer = -1;
+    int lastEditorMode = -1;
+    string lastCubeType = "stone";
+    string lastTokenType = "goblin";
+
+    // ======================================================================= Editor Mode
+    void editorControls() {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;     
-        
+        RaycastHit hitInfo;
+
         if (activeLayerCollider.Raycast(ray, out hitInfo, Mathf.Infinity)) {
 
             int x = Mathf.FloorToInt(hitInfo.point.x / mapScript.cubeSize);
@@ -86,15 +81,12 @@ public class MouseControls : MonoBehaviour {
             currentCoord.y = y * mapScript.cubeSize;
             currentCoord.z = z * mapScript.cubeSize;
 
-            switch (controlMode) {
+            switch (editorMode) {
                 case 0:
                     cubeMode(currentCoord, currentIndex);
                     break;
                 case 1:
                     tokenMode(currentCoord, currentIndex);
-                    break;
-                case 2:
-                    selectMode();
                     break;
             }
 
@@ -119,13 +111,31 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
+    // ================================== Cursor Handling Functions
+    void destroyCursor() {
+        try {
+            Destroy(cursorObject);
+        } catch { 
+            Debug.Log("Error Destroying Cursor");
+        }
+    }
+
+    void addCursor (Vector3 curPosition, GameObject curCursorObject, string cursorName) {
+        cursorObject = Instantiate(curCursorObject, curPosition, Quaternion.identity, gameObject.transform);
+        cursorObjectRenderer = cursorObject.transform.GetChild(0).GetComponent<MeshRenderer>();
+        cursorObjectRenderer.material.color = cursorTint;
+        cursorObject.name = cursorName;
+        activeCursor = true;
+    }
+
+    // ================================== Cube Mode
     void cubeMode(Vector3 curPosition, Index curIndex) {
-        if (lastControlMode != CUBE_MODE || lastCubeType != cubeType) {
+        if (lastEditorMode != CUBE_MODE || lastCubeType != cubeType) {
             Debug.Log("Cube mode");
             destroyCursor();
             Debug.Log((string)cubeType);
             addCursor(curPosition, gameEnvScript.gameEnv.cubeTemplates[cubeType].graphicObjectPrefab, "cursorCube");
-            lastControlMode = controlMode;
+            lastEditorMode = editorMode;
             lastCubeType = cubeType;
         }
 
@@ -228,12 +238,13 @@ public class MouseControls : MonoBehaviour {
     	gameCoord.cube = null;
     }
 
+    // ================================== Token Mode
     void tokenMode(Vector3 curPosition, Index curIndex) {
-        if (lastControlMode != TOKEN_MODE || lastTokenType != tokenType) {
+        if (lastEditorMode != TOKEN_MODE || lastTokenType != tokenType) {
             Debug.Log("token mode");
             destroyCursor();
             addCursor(curPosition, gameEnvScript.gameEnv.tokenTemplates[tokenType].graphicObjectPrefab, "cursorToken");
-            lastControlMode = controlMode;
+            lastEditorMode = editorMode;
             lastTokenType = tokenType;
         }
 
@@ -252,33 +263,35 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void destroyCursor () {
-        try {
-            Destroy(cursorObject);
-        } catch { }
-    }
-
-    void addCursor (Vector3 curPosition, GameObject curCursorObject, string cursorName) {
-        cursorObject = Instantiate(curCursorObject, curPosition, Quaternion.identity, gameObject.transform);
-        cursorObjectRenderer = cursorObject.transform.GetChild(0).GetComponent<MeshRenderer>();
-        cursorObjectRenderer.material.color = cursorTint;
-        cursorObject.name = cursorName;
-        activeCursor = true;
-    }
-
-    void cursorlessControlMode () {
-        try {
-            Destroy(cursorObject);
-        } catch { }
-        activeCursor = false;
-        lastControlMode = controlMode;
-    }
-
-    void selectMode() {
-        if (lastControlMode != SELECT_MODE) {
+    // ======================================================================= Play Mode
+    void playControls() {
+        if (lastEditor) {
             Debug.Log("select mode");
-            cursorlessControlMode();
+            destroyCursor();
         }
+    }
+
+    // ======================================================================= Basic Run
+    void runControls() {
+        updateActiveLayer();
+        if (editor) {
+            editorControls();
+        } else {
+            playControls();
+        }
+        lastEditor = editor;
+    }
+
+    // ======================================================================= START/UPDATE
+    void Start() {
+        mapScript = GameObject.Find("Map").GetComponent<MapScript>();
+        gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
+        gameEnv = gameEnvScript.gameEnv;
+    }    
+
+    void Update() {
+        updateActiveLayer();
+        runControls();
     }
 }
 

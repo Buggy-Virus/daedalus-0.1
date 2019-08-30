@@ -72,7 +72,7 @@ public class GraphicTokenScript : MonoBehaviour
     }
 
     void controls() {
-        if (controlScript.controlMode == controlScript.SELECT_MODE) {
+        if (!controlScript.editor) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
