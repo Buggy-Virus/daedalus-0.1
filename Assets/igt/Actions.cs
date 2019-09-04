@@ -5,6 +5,7 @@ using UnityEngine;
 public class Action {
 	public string name;	
 	public bool relational;
+	public bool selfTargetable;
 	public bool targeted;
 
 	public int maxRange;

@@ -28,7 +28,7 @@ public class GraphicTokenScript : MonoBehaviour
 
     // ================================================ GLOBAL VARIABLES
     // selection variables
-    bool clicked;
+    bool mouseDown;
 
     // button variables
     int num_buttons = 4;
@@ -42,18 +42,18 @@ public class GraphicTokenScript : MonoBehaviour
     // movement variables
     public Vector3 goingTo;
 
-    // ================================================ CONTROLS
+    // ================================================ SELECTION CONTROLS
     void selectToken(bool hit, RaycastHit hitInfo) {
         if (hit && controlScript.selectedObject != gameObject) {
             if (Input.GetMouseButtonDown(0)) {
-                clicked = true;
+                mouseDown = true;
             }
 
-            if (Input.GetMouseButtonUp(0) && clicked) {
+            if (Input.GetMouseButtonUp(0) && mouseDown) {
                 controlScript.selectedObject = gameObject;
                 controlScript.selectedToken = token;
                 Debug.Log(controlScript.selectedObject.transform.name);
-                clicked = false;
+                mouseDown = false;
                 buttonsActive = false;
             }
         }
@@ -62,17 +62,17 @@ public class GraphicTokenScript : MonoBehaviour
     void showButtons(bool hit, RaycastHit hitInfo) {
         if (controlScript.selectedObject == gameObject && hit && !buttonsActive) {
             if (Input.GetMouseButtonDown(0)) {
-                clicked = true;
+                mouseDown = true;
             }
 
-            if (Input.GetMouseButtonUp(0) && clicked) {
+            if (Input.GetMouseButtonUp(0) && mouseDown) {
                 buttonsActive = true;
             }
         }
     }
 
-    void controls() {
-        if (!controlScript.editor) {
+    void selecectionControls() {
+        if (!controlScript.editor && controlScript.playMode == 0 ) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
@@ -82,7 +82,7 @@ public class GraphicTokenScript : MonoBehaviour
             showButtons(hit, hitInfo);
 
             if (Input.GetMouseButtonUp(0)) {
-                clicked = false;
+                mouseDown = false;
             }
         }
     }
@@ -166,12 +166,55 @@ public class GraphicTokenScript : MonoBehaviour
             actionButton.name = action.Key;
             Button actionButtonButton = actionButton.GetComponent<Button>();
             actionButtonButton.GetComponentInChildren<Text>().text = action.Key;
-            actionButtonButton.onClick.AddListener(delegate{ResolveActionsScript.callAction(ref token, action.Value, ref tokenScript.gameEnv);});
+            actionButtonButton.onClick.AddListener(delegate{callAction(action.Value, ref tokenScript.gameEnv);});
         }
     }
 
     void destroyActionMenu() {
 
+    }
+
+    // ================================================ Call Actions
+
+    public void callAction(Action action, ref GameEnv gameEnv) {
+        if (!action.relational && !action.targeted) {
+            ResolveActionsScript.resolveAction(ref token, action, ref gameEnv);
+        } else if (action.relational) {
+            controlScript.playMode = 1;
+            controlScript.waitingAction = action;
+            controlScript.waitingInputRelational = true;
+        } else {
+            controlScript.playMode = 1;
+            controlScript.waitingAction = action;
+            controlScript.waitingInputTargeted = true;
+        }
+    }
+
+    public void callRelationalAction(bool hit, RaycastHit hitInfo) {
+        if (hit && (controlScript.selectedObject != token || controlScript.waitingAction.selfTargetable)) {
+            if (Input.GetMouseButtonDown(0)) {
+                mouseDown = true;
+            }
+
+            if (Input.GetMouseButtonUp(0) && mouseDown) {
+                ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedToken, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
+                controlScript.gotGoodInput();
+            }
+        }
+    }
+
+    void inputControls() {
+        if (!controlScript.editor && controlScript.playMode == 1 && controlScript.waitingInputRelational) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+            bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
+
+            callRelationalAction(hit, hitInfo);
+
+            if (Input.GetMouseButtonUp(0)) {
+                mouseDown = false;
+            }
+        }
     }
 
     // ================================================ Movement
@@ -191,13 +234,14 @@ public class GraphicTokenScript : MonoBehaviour
         graphicObject_transform = gameObject.transform.GetChild(0);
         graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
         canvas_transfrom = gameObject.transform.GetChild(1);
-        clicked = false; 
+        mouseDown = false; 
         createButtons();
     }
 
     void Update() {
-        controls();
+        selecectionControls();
         buttons();
         move();
+        inputControls();
     }
 }

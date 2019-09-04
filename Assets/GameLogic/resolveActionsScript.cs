@@ -5,14 +5,6 @@ using UnityEngine;
 
 public class ResolveActionsScript : MonoBehaviour
 {
-    static public void callAction(ref GameObject self, Action action, ref GameEnv gameEnv) {
-        if (!action.relational && !action.targeted) {
-            resolveAction(ref self, action, ref gameEnv);
-        } else {
-
-        }
-    }
-
     static public void resolveAction(ref GameObject self, Action action, ref GameEnv gameEnv)
     {
         if (resolveConditions(self, action.conditions, gameEnv))

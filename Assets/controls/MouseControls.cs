@@ -9,6 +9,7 @@ public class MouseControls : MonoBehaviour {
     // ======================================================================= Configurable Variables
     public bool editor = true;
     public int editorMode = 0;
+    public int playMode = 0;
     public int activeLayer = 0;
     public bool deleteMode = false;
     public string cubeType = "stone";
@@ -21,9 +22,13 @@ public class MouseControls : MonoBehaviour {
 
     // ======================================================================= Public Variables
     // Used for play controls
+    public int SELECT_MODE = 0;
+    public int INPUT_MODE = 1;
     public GameObject selectedToken;
     public GameObject selectedObject;
-    public bool waitingForPlayerInput = false;
+    public Action waitingAction;
+    public bool waitingInputRelational = false;
+    public bool waitingInputTargeted = false;
 
     // ======================================================================= Fetched References
     MapScript mapScript;
@@ -60,6 +65,7 @@ public class MouseControls : MonoBehaviour {
     bool lastEditor = true;
     int lastActiveLayer = -1;
     int lastEditorMode = -1;
+    int lastPlayMode = -1;
     string lastCubeType = "stone";
     string lastTokenType = "goblin";
 
@@ -268,7 +274,39 @@ public class MouseControls : MonoBehaviour {
         if (lastEditor) {
             Debug.Log("select mode");
             destroyCursor();
+
+            waitingAction = null;
+            waitingInputRelational = false;
+            waitingInputTargeted = false;
         }
+
+        if (playMode == 0 && lastPlayMode != 0) {
+            waitingAction = null;
+            waitingInputRelational = false;
+            waitingInputTargeted = false;
+        }
+
+        if (playMode != lastPlayMode) {
+            lastPlayMode = playMode;
+        }
+    }
+
+    public void gotGoodInput() {
+        waitingAction = null;
+        waitingInputRelational = false;
+        waitingInputTargeted = false;
+        playMode = 0;
+    }
+
+    public void gotBadInput() {
+        Debug.Log("Not a valid input");
+    }
+
+    public void cancelInput() {
+        waitingAction = null;
+        waitingInputRelational = false;
+        waitingInputTargeted = false;
+        playMode = 0;
     }
 
     // ======================================================================= Basic Run
