@@ -25,6 +25,7 @@ public class TokenScript : MonoBehaviour {
     public int width;
     public int length;
     public int height;
+    public bool occupies;
 
     public Dictionary<string, Action> actions;
 

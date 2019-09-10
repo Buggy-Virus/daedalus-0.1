@@ -10,7 +10,6 @@ public class GraphicCubeScript : MonoBehaviour
     // ================================================ PUBLIC ATTRIBUTES
 	public GameObject cube;
     public CubeScript cubeScript;
-    public Transform canvas_transfrom;
     public Transform graphicObject_transform;
     public Collider graphicObject_collider;
 
@@ -69,7 +68,6 @@ public class GraphicCubeScript : MonoBehaviour
         controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
         graphicObject_transform = gameObject.transform.GetChild(0);
         graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
-        canvas_transfrom = gameObject.transform.GetChild(1);
     }
 
     void Update()

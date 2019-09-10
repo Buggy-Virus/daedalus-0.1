@@ -29,7 +29,18 @@ public class DaedScript {
 		{"RandInt", RandInt},
 		{"Rand", Rand},
 		{"Contains", Contains},
-		{"IndexOf", IndexOf}
+		{"IndexOf", IndexOf},
+		{"Distance", Distance},
+		{"IgPosition", IgPosition},
+		{"IgsAtPosition", IgsAtPosition},
+		{"IsPositionOccupied", IsPositionOccupied},
+		{"IgOccupies", IgOccupies},
+		{"IgDimension", IgDimensions},
+		{"IgHeight", IgHeight},
+		{"IgLength", IgLength},
+		{"IgWidth", IgWidth},
+		{"TokensAtPosition", TokensAtPosition},
+		{"GeometryAtPosition", GeometryAtPosition}
 	};
 
 	// ================================= Evaluate Functions ======================================================================
@@ -338,6 +349,7 @@ public class DaedScript {
 			case '[':
 			case ':':
 			case '$':
+			case '.':
 				return true;
 			default:
 				return false;
@@ -561,6 +573,11 @@ public class DaedScript {
 								} else {
 									return parseError(atomList[pos], pos, "Expected \")\""); // throw error
 								}
+							case ".":
+								ParseResult igVarResult = parseIgVar(atomList, pos + 1, lastExpression);
+								lastExpression = igVarResult.expression;
+								pos = igVarResult.position + 1;
+								break;
 							case ")":
 								if (bookended) {
 									return new ParseResult(lastExpression, pos);
@@ -975,43 +992,37 @@ public class DaedScript {
 	}
 
 	static ParseResult parseIg(List<Atom> atomList, int pos) {
-		string igName;
-		string igVariable;
-
 		if (atomList[pos].atomType == "identifier") {
-			igName = atomList[pos].value;
+			Expression igExpression = new Expression("e-ig", atomList[pos].line, atomList[pos].character - 1);
+			igExpression.eIgName = atomList[pos].value;
+			return new ParseResult(igExpression, pos - 1);
+		} else {
+			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+		}
+	}
+
+	static ParseResult parseIgVar(List<Atom> atomList, int pos, Expression lastExpression) {
+		if (atomList[pos].atomType == "identifier") {
+			string igVariable = atomList[pos].value;
 			pos += 1;
 
-			if (atomEquals(atomList[pos], "punctuation", ".")) {
+			if (atomEquals(atomList[pos], "operator", "=")) {
 				pos += 1;
 
-				if (atomList[pos].atomType == "identifier") {
-					igVariable = atomList[pos].value;
-					pos += 1;
+				Expression igVarExpression = new Expression("e-set-var", atomList[pos].line, atomList[pos].character);
+				ParseResult valueResult = parseSingle(atomList, pos, false);
+				igVarExpression.eSetIg = lastExpression;
+				igVarExpression.eSetIgVariable = igVariable;
+				igVarExpression.eSetIgValue = valueResult.expression;
+				pos = valueResult.position;
 
-					if (atomEquals(atomList[pos], "operator", "=")) {
-						pos += 1;
-
-						Expression igVarExpression = new Expression("e-set-var", atomList[pos].line, atomList[pos].character);
-						ParseResult valueResult = parseSingle(atomList, pos, false);
-						igVarExpression.eSetIgName = igName;
-						igVarExpression.eSetIgVariable = igVariable;
-						igVarExpression.eSetIgValue = valueResult.expression;
-						pos = valueResult.position;
-
-						return new ParseResult(igVarExpression, pos);
-					} else {
-						Expression igVarExpression = new Expression("e-get-var", atomList[pos].line, atomList[pos].character - 1);
-						igVarExpression.eIgName = igName;
-						igVarExpression.eIgVariable = igVariable;
-
-						return new ParseResult(igVarExpression, pos - 1);
-					}
-				} else {
-					return parseError(atomList[pos], pos, "Expected identifier"); // throw error
-				}
+				return new ParseResult(igVarExpression, pos);
 			} else {
-				return parseError(atomList[pos], pos, "Expected \".\""); // throw error
+				Expression igVarExpression = new Expression("e-get-var", atomList[pos].line, atomList[pos].character - 1);
+				igVarExpression.eGetIg = lastExpression;
+				igVarExpression.eIgVariable = igVariable;
+
+				return new ParseResult(igVarExpression, pos - 1);
 			}
 		} else {
 			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
@@ -1168,6 +1179,8 @@ public class DaedScript {
 				return interpLet(expression, env, store, ref gameEnv);
 			case "e-id": // e-id
 				return interpId(expression, env, store, ref gameEnv);
+			case "e-ig": // e-ig
+				return interpIg(expression, env, store, ref gameEnv);
 			case "e-get-var": //e-get-variable
 				return interpGetGameVar(expression, env, store, ref gameEnv);
 			case "e-set-var": //e-set-variables
@@ -1282,10 +1295,13 @@ public class DaedScript {
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eId + "\")";
 				break;
 			case "e-get-var": //e-get-variable
-				errorValue.errorMessage += error.expressionType + ",\"" + error.eIgName + "\")";
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eGetIg + "\")";
 				break;
 			case "e-set-var": //e-set-variable
-				errorValue.errorMessage += error.expressionType + ",\"" + error.eSetIgName + "\")";
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eSetIg + "\")";
+				break;
+			case "e-ig": //e-ig
+				errorValue.errorMessage += error.expressionType + ",\"" + error.eIgName + "\")";
 				break;
 			case "e-builtin-func": //e-set-variable
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eBuiltinFuncId + "\")";
@@ -2045,6 +2061,27 @@ public class DaedScript {
 		}
 	}
 
+	static Result interpIg(
+		Expression expression, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		string name = expression.eIgName;
+		Value igValue = new Value("ig", expression.line, expression.character);
+		if (gameEnv.tokenDict.ContainsKey(name)) {
+			igValue.vIg = gameEnv.tokenDict[name];
+			igValue.vIgType = "token";
+			return new Result(igValue, store);
+		} else if (gameEnv.cubeDict.ContainsKey(name)) {
+			igValue.vIg = gameEnv.cubeDict[name];
+			igValue.vIgType = "geometry";
+			return new Result(igValue, store);
+		} else {
+			return expressionError(expression, store, "No Ig of name \"" + name); //Throw Error
+		}
+	}
+
 	static Result interpGetGameVar(
 		Expression expression,
 		Dictionary<string, string> env, 
@@ -2052,10 +2089,10 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
-		string name = expression.eIgName;
+		Result ig_result = interpret(expression.eGetIg, env, store, ref gameEnv);
 		string variable = expression.eIgVariable;
-		if (gameEnv.tokenDict.ContainsKey(name)) {
-			GameObject token = gameEnv.tokenDict[name];
+		if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "token") {
+			GameObject token = ig_result.value.vIg;
 			TokenScript tokenScript = token.GetComponent<TokenScript>();
 			if (tokenScript.variables.ContainsKey(variable)) {
 				GameVar gameVar = tokenScript.variables[variable];
@@ -2077,13 +2114,13 @@ public class DaedScript {
 						boolValue.vBool = gameVar.boolValue;
 						return new Result(boolValue, store);
 					default:
-						return expressionError(expression, store, "Unknown type from \"" + name + "." + variable + "\""); //Throw Error
+						return expressionError(expression, store, "Unknown type from \"" + token.name + "." + variable + "\""); //Throw Error
 				}
 			} else {
-				return expressionError(expression, store, "ig \"" + name + "\" has no variable \"" + variable + "\""); //Throw Error
+				return expressionError(expression, store, "ig \"" + token.name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
-		} else if (gameEnv.cubeDict.ContainsKey(name)) {
-			GameObject cube = gameEnv.cubeDict[name];
+		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "geometry") {
+			GameObject cube = ig_result.value.vIg;
 			CubeScript cubeScript = cube.GetComponent<CubeScript>();
 			if (cubeScript.variables.ContainsKey(variable)) {
 				GameVar gameVar = cubeScript.variables[variable];
@@ -2105,13 +2142,13 @@ public class DaedScript {
 						boolValue.vBool = gameVar.boolValue;
 						return new Result(boolValue, store);
 					default:
-						return expressionError(expression, store, "Unknown type from \"" + name + "." + variable + "\""); //Throw Error
+						return expressionError(expression, store, "Unknown type from \"" + cube.name + "." + variable + "\""); //Throw Error
 				}
 			} else {
-				return expressionError(expression, store, "ig \"" + name + "\" has no variable \"" + variable + "\""); //Throw Error
+				return expressionError(expression, store, "ig \"" + cube.name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
 		} else {
-			return expressionError(expression, store, "ig \"" + name + "\" does not exist in the current context"); //Throw Error	
+			return resultError(ig_result, "Expected ig"); //Throw Error
 		}
 	}
 
@@ -2122,10 +2159,10 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
-		string name = expression.eSetIgName;
+		Result ig_result = interpret(expression.eGetIg, env, store, ref gameEnv);
 		string variable = expression.eSetIgVariable;
-		if (gameEnv.tokenDict.ContainsKey(name)) {
-			GameObject token = gameEnv.tokenDict[name];
+		if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "token") {
+			GameObject token = ig_result.value.vIg;
 			TokenScript tokenScript = token.GetComponent<TokenScript>();
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			if (tokenScript.variables.ContainsKey(variable)) {
@@ -2160,7 +2197,7 @@ public class DaedScript {
 							return resultError(nv_result, "Expected bool"); //Throw Error
 						}
 					default:
-						return expressionError(expression, store, "Unknown type from \"" + name + "." + variable + "\""); //Throw Error
+						return expressionError(expression, store, "Unknown type from \"" + token.name + "." + variable + "\""); //Throw Error
 				}
 			} else {
 				switch(nv_result.value.valueType) {
@@ -2182,8 +2219,8 @@ public class DaedScript {
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
 				}
 			}
-		} else if (gameEnv.cubeDict.ContainsKey(name)) {
-			GameObject cube = gameEnv.cubeDict[name];
+		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "geometry") {
+			GameObject cube = ig_result.value.vIg;
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			CubeScript cubeScript = cube.GetComponent<CubeScript>();
 			if (cubeScript.variables.ContainsKey(variable)) {
@@ -2218,7 +2255,7 @@ public class DaedScript {
 							return resultError(nv_result, "Expected bool"); //Throw Error
 						}
 					default:
-						return expressionError(expression, store, "Unknown type from \"" + name + "." + variable + "\""); //Throw Error	
+						return expressionError(expression, store, "Unknown type from \"" + cube.name + "." + variable + "\""); //Throw Error	
 				}
 			} else {
 				switch(nv_result.value.valueType) {
@@ -2241,7 +2278,7 @@ public class DaedScript {
 				}
 			}
 		} else {
-			return expressionError(expression, store, "ig \"" + name + "\" does not exist in the current context"); //Throw Error	
+			return resultError(ig_result, "Expected ig"); //Throw Error
 		}
 	}
 
@@ -3233,6 +3270,496 @@ public class DaedScript {
 			return resultError(l_result, "Expected int");	
 		}
 	}
+
+	static Result Distance(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (l_result.value.valueType == "ig") {
+			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
+			if (r_result.value.valueType == "ig") {
+				Index l_index = GameUtils.GetIndex(l_result.value.vIg);
+				Index r_index = GameUtils.GetIndex(r_result.value.vIg);
+
+				int distance = Utils.distance(l_index, r_index);
+				Value distanceValue = new Value("int", expression.line, expression.character);
+				distanceValue.vInt = distance;
+				return new Result(distanceValue, r_result.store);
+			} else {
+				return resultError(r_result, "Expected ig");	
+			}
+		} else {
+			return resultError(l_result, "Expected ig");	
+		} 
+	}
+
+	static Result IgPosition(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (ig_result.value.valueType == "ig") {
+			Index index = GameUtils.GetIndex(ig_result.value.vIg);
+			Value xValue = new Value("int", expression.line, expression.character);
+			Value yValue = new Value("int", expression.line, expression.character);
+			Value zValue = new Value("int", expression.line, expression.character);
+			xValue.vInt = index.x;
+			yValue.vInt = index.y;
+			zValue.vInt = index.z;
+			Value indexValue = new Value("list", expression.line, expression.character);
+			indexValue.vList = new List<Value> {xValue, yValue, zValue};
+			return new Result(indexValue, ig_result.store);
+		} else {
+			return resultError(ig_result, "Expected ig");	
+		} 
+	}
+
+	static Result IgsAtPosition(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		int x;
+		int y;
+		int z;
+		Dictionary<string, Value> returnStore;
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result index_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (index_result.value.valueType == "list") {
+				List<Value> index = index_result.value.vList;
+				if (index[0].valueType == "int" && index[1].valueType == "int" && index[2].valueType == "int") {
+					x = index[0].vInt;
+					y = index[1].vInt;
+					z = index[2].vInt;
+					returnStore = index_result.store;
+					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+						return resultError(index_result, "Index out of bounds");
+					}
+				} else {
+					return resultError(index_result, "Expected list with three ints");
+				}
+			} else {
+				return resultError(index_result, "Expected list");	
+			}
+		} else if (arguments.Count == 3) {
+			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (x_result.value.valueType == "int") {
+				Result y_result = interpret(arguments[1], env, store, ref gameEnv);
+				if (y_result.value.valueType == "int") {
+					Result z_result = interpret(arguments[1], env, store, ref gameEnv);
+					if (y_result.value.valueType == "int") {
+						x = x_result.value.vInt;
+						y = y_result.value.vInt;
+						z = z_result.value.vInt;
+						returnStore = z_result.store;
+						if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+							Value indexValue = new Value("list", expression.line, expression.character);
+							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
+							Result index_result = new Result(indexValue, z_result.store);
+							return resultError(index_result, "Index out of bounds");
+						}						
+					} else {
+						return resultError(z_result, "Expected int");	
+					} 
+				} else {
+					return resultError(y_result, "Expected int");	
+				} 
+			} else {
+				return resultError(x_result, "Expected int");	
+			} 
+		} else {
+			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+		}
+
+		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
+		Value igListValue = new Value("list", expression.line, expression.character);
+		foreach (GameObject token in gameCoord.tokens) {
+			Value tokenValue = new Value("ig", expression.line, expression.character);
+			tokenValue.vIg = token;
+			igListValue.vList.Add(tokenValue);
+		}
+
+		if (gameCoord.cube != null) {
+			Value cubeValue = new Value("ig", expression.line, expression.character);
+			cubeValue.vIg = gameCoord.cube;
+			igListValue.vList.Add(cubeValue);
+		}
+
+		return new Result(igListValue, returnStore);
+	}
+
+	static Result TokensAtPosition(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		int x;
+		int y;
+		int z;
+		Dictionary<string, Value> returnStore;
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result index_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (index_result.value.valueType == "list") {
+				List<Value> index = index_result.value.vList;
+				if (index[0].valueType == "int" && index[1].valueType == "int" && index[2].valueType == "int") {
+					x = index[0].vInt;
+					y = index[1].vInt;
+					z = index[2].vInt;
+					returnStore = index_result.store;
+					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+						return resultError(index_result, "Index out of bounds");
+					}
+				} else {
+					return resultError(index_result, "Expected list with three ints");
+				}
+			} else {
+				return resultError(index_result, "Expected list");	
+			}
+		} else if (arguments.Count == 3) {
+			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (x_result.value.valueType == "int") {
+				Result y_result = interpret(arguments[1], env, store, ref gameEnv);
+				if (y_result.value.valueType == "int") {
+					Result z_result = interpret(arguments[1], env, store, ref gameEnv);
+					if (y_result.value.valueType == "int") {
+						x = x_result.value.vInt;
+						y = y_result.value.vInt;
+						z = z_result.value.vInt;
+						returnStore = z_result.store;
+						if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+							Value indexValue = new Value("list", expression.line, expression.character);
+							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
+							Result index_result = new Result(indexValue, z_result.store);
+							return resultError(index_result, "Index out of bounds");
+						}						
+					} else {
+						return resultError(z_result, "Expected int");	
+					} 
+				} else {
+					return resultError(y_result, "Expected int");	
+				} 
+			} else {
+				return resultError(x_result, "Expected int");	
+			} 
+		} else {
+			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+		}
+
+		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
+		Value igListValue = new Value("list", expression.line, expression.character);
+		foreach (GameObject token in gameCoord.tokens) {
+			Value tokenValue = new Value("ig", expression.line, expression.character);
+			tokenValue.vIg = token;
+			igListValue.vList.Add(tokenValue);
+		}
+
+		return new Result(igListValue, returnStore);
+	}
+
+	static Result GeometryAtPosition(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		int x;
+		int y;
+		int z;
+		Dictionary<string, Value> returnStore;
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result index_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (index_result.value.valueType == "list") {
+				List<Value> index = index_result.value.vList;
+				if (index[0].valueType == "int" && index[1].valueType == "int" && index[2].valueType == "int") {
+					x = index[0].vInt;
+					y = index[1].vInt;
+					z = index[2].vInt;
+					returnStore = index_result.store;
+					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+						return resultError(index_result, "Index out of bounds");
+					}
+				} else {
+					return resultError(index_result, "Expected list with three ints");
+				}
+			} else {
+				return resultError(index_result, "Expected list");	
+			}
+		} else if (arguments.Count == 3) {
+			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (x_result.value.valueType == "int") {
+				Result y_result = interpret(arguments[1], env, store, ref gameEnv);
+				if (y_result.value.valueType == "int") {
+					Result z_result = interpret(arguments[1], env, store, ref gameEnv);
+					if (y_result.value.valueType == "int") {
+						x = x_result.value.vInt;
+						y = y_result.value.vInt;
+						z = z_result.value.vInt;
+						returnStore = z_result.store;
+						if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+							Value indexValue = new Value("list", expression.line, expression.character);
+							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
+							Result index_result = new Result(indexValue, z_result.store);
+							return resultError(index_result, "Index out of bounds");
+						}						
+					} else {
+						return resultError(z_result, "Expected int");	
+					} 
+				} else {
+					return resultError(y_result, "Expected int");	
+				} 
+			} else {
+				return resultError(x_result, "Expected int");	
+			} 
+		} else {
+			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+		}
+
+		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
+		if (gameCoord.cube != null) {
+			Value cubeValue = new Value("ig", expression.line, expression.character);
+			cubeValue.vIg = gameCoord.cube;
+			return new Result(cubeValue, returnStore);
+		}
+
+		Value nullValue = new Value("null", expression.line, expression.character);
+		return new Result(nullValue, returnStore);
+	}
+
+	static Result IsPositionOccupied(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		int x;
+		int y;
+		int z;
+		Dictionary<string, Value> returnStore;
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count == 1) {
+			Result index_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (index_result.value.valueType == "list") {
+				List<Value> index = index_result.value.vList;
+				if (index[0].valueType == "int" && index[1].valueType == "int" && index[2].valueType == "int") {
+					x = index[0].vInt;
+					y = index[1].vInt;
+					z = index[2].vInt;
+					returnStore = index_result.store;
+					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+						return resultError(index_result, "Index out of bounds");
+					}
+				} else {
+					return resultError(index_result, "Expected list with three ints");
+				}
+			} else {
+				return resultError(index_result, "Expected list");	
+			}
+		} else if (arguments.Count == 3) {
+			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
+			if (x_result.value.valueType == "int") {
+				Result y_result = interpret(arguments[1], env, store, ref gameEnv);
+				if (y_result.value.valueType == "int") {
+					Result z_result = interpret(arguments[1], env, store, ref gameEnv);
+					if (y_result.value.valueType == "int") {
+						x = x_result.value.vInt;
+						y = y_result.value.vInt;
+						z = z_result.value.vInt;
+						returnStore = z_result.store;
+						if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
+							Value indexValue = new Value("list", expression.line, expression.character);
+							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
+							Result index_result = new Result(indexValue, z_result.store);
+							return resultError(index_result, "Index out of bounds");
+						}						
+					} else {
+						return resultError(z_result, "Expected int");	
+					} 
+				} else {
+					return resultError(y_result, "Expected int");	
+				} 
+			} else {
+				return resultError(x_result, "Expected int");	
+			} 
+		} else {
+			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+		}
+
+		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
+		Value occupiedValue = new Value("bool", expression.line, expression.character);
+		occupiedValue.vBool = false;
+		if (gameCoord.cube != null) {
+			occupiedValue.vBool = true;
+			return new Result(occupiedValue, returnStore);
+		}
+
+		foreach (GameObject token in gameCoord.tokens) {
+			TokenScript tokenScript = token.GetComponent<TokenScript>();
+			occupiedValue.vBool = (occupiedValue.vBool || tokenScript.occupies);
+		}
+		return new Result(occupiedValue, returnStore);
+	}
+
+	static Result IgOccupies(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (ig_result.value.valueType == "ig") {
+			bool occupies;
+			if (ig_result.value.vIgType == "Token") {
+				TokenScript tokenScript = ig_result.value.vIg.GetComponent<TokenScript>();
+				occupies = tokenScript.occupies;
+			} else {
+				occupies = true;
+			}
+
+			Value occupiesValue = new Value("bool", expression.line, expression.character);
+			occupiesValue.vBool = occupies;
+			return new Result(occupiesValue, ig_result.store);
+		} else {
+			return resultError(ig_result, "Expected ig");	
+		} 
+	}
+
+	static Result IgDimensions(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (ig_result.value.valueType == "ig") {
+			Value heightValue = new Value("int", expression.line, expression.character); 
+			Value widthValue = new Value("int", expression.line, expression.character); 
+			Value lengthValue = new Value("int", expression.line, expression.character); 
+			if (ig_result.value.vIgType == "Token") {
+				TokenScript tokenScript = ig_result.value.vIg.GetComponent<TokenScript>();
+				heightValue.vInt = tokenScript.height;
+				widthValue.vInt = tokenScript.width;
+				lengthValue.vInt = tokenScript.length;
+			} else {
+				heightValue.vInt = 1;
+				widthValue.vInt = 1;
+				lengthValue.vInt = 1;
+			}
+
+			Value dimenionsValue = new Value("list", expression.line, expression.character);
+			dimenionsValue.vList = new List<Value> {heightValue, lengthValue, widthValue};
+			return new Result(dimenionsValue, ig_result.store);
+		} else {
+			return resultError(ig_result, "Expected ig");	
+		} 
+	}
+
+	static Result IgHeight(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (ig_result.value.valueType == "ig") {
+			Value heightValue = new Value("int", expression.line, expression.character);  
+			if (ig_result.value.vIgType == "Token") {
+				TokenScript tokenScript = ig_result.value.vIg.GetComponent<TokenScript>();
+				heightValue.vInt = tokenScript.height;
+			} else {
+				heightValue.vInt = 1;
+			}
+			return new Result(heightValue, ig_result.store);
+		} else {
+			return resultError(ig_result, "Expected ig");	
+		} 
+	}
+
+	static Result IgLength(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (ig_result.value.valueType == "ig") {
+			Value lengthValue = new Value("int", expression.line, expression.character); 
+			if (ig_result.value.vIgType == "Token") {
+				TokenScript tokenScript = ig_result.value.vIg.GetComponent<TokenScript>();
+				lengthValue.vInt = tokenScript.length;
+			} else {
+				lengthValue.vInt = 1;
+			}
+			return new Result(lengthValue, ig_result.store);
+		} else {
+			return resultError(ig_result, "Expected ig");	
+		} 
+	}
+
+	static Result IgWidth(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (ig_result.value.valueType == "ig") { 
+			Value widthValue = new Value("int", expression.line, expression.character); 
+			if (ig_result.value.vIgType == "Token") {
+				TokenScript tokenScript = ig_result.value.vIg.GetComponent<TokenScript>();
+				widthValue.vInt = tokenScript.width;
+			} else {
+				widthValue.vInt = 1;
+			}
+			return new Result(widthValue, ig_result.store);
+		} else {
+			return resultError(ig_result, "Expected ig");	
+		} 
+	}
 }
 
 // ====================================================================================================================
@@ -3276,7 +3803,10 @@ public class Value {
 	public Expression vFunBody;
 	public Dictionary<String, String> vFunEnviroment;	
 
-	public List<Value> vList; //type=5
+	public List<Value> vList; //type=6
+
+	public GameObject vIg; //type=7
+	public string vIgType;
 
 	public Value() {
 	}
@@ -3338,11 +3868,12 @@ public class Expression {
 	public Expression eLetValue;
 
 	public string eId; //type=15
+	public string eIgName;
 
-	public string eIgName; //type=16
+	public Expression eGetIg; //type=16
 	public string eIgVariable;
 
-	public string eSetIgName; //type=17
+	public Expression eSetIg; //type=17
 	public string eSetIgVariable;
 	public Expression eSetIgValue;
 

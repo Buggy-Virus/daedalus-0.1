@@ -162,4 +162,8 @@ public class Utils {
         float y = (float)(radius * Math.Sin(Math.PI * piRadian));
         return new Vector3(x, y, 0);
     }
+
+    static public bool gameCoordExists(int x, int y, int z, GameCoord[,,] gameBoard) {
+        return (x < gameBoard.GetLength(0) && y < gameBoard.GetLength(1) && z < gameBoard.GetLength(2));
+    }
 }

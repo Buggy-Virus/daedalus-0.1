@@ -267,4 +267,16 @@ public class GameUtils {
         GameObject cube = quickCreateCube(cubePrefab, template, ref gameEnv);
         placeGraphicCube(ref cube, pos);
     }
+
+    // ========================================================================================================================== General Utility
+    static public Index GetIndex(GameObject gameObject) {
+        TokenScript tokenScript = gameObject.GetComponent<TokenScript>();
+        if (tokenScript != null) {
+            return tokenScript.index;
+        } else {
+            CubeScript cubeScript = gameObject.GetComponent<CubeScript>();
+            return cubeScript.index;
+        }
+    }
+
 }

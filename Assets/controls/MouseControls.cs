@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MouseControls : MonoBehaviour {
 
@@ -34,11 +35,17 @@ public class MouseControls : MonoBehaviour {
     MapScript mapScript;
     GameEnvScript gameEnvScript;
     GameEnv gameEnv;
+    GameObject editorPanel;
+    Dropdown layerDropdown;
+    Dropdown editorModeDropdown;
+    InputField tokenTypeInput;
+    InputField cubeTypeInput;
+
 
     // ======================================================================= Global Variables
     // Used for editor controls
-    public int CUBE_MODE = 0;
-    public int TOKEN_MODE = 1;
+    public const int GEOMETRY_MODE = 0;
+    public const int TOKEN_MODE = 1;
 
     // ================================== mouse state
     bool mouseDown;
@@ -63,11 +70,78 @@ public class MouseControls : MonoBehaviour {
 
     // ================================== Frame update Checkers
     bool lastEditor = true;
-    int lastActiveLayer = -1;
-    int lastEditorMode = -1;
     int lastPlayMode = -1;
-    string lastCubeType = "stone";
-    string lastTokenType = "goblin";
+
+    // ======================================================================= UI Functions
+
+    public void hamburgerButton() {
+        
+    }
+
+    public void gearButton() {
+
+    }
+
+    public void overlayButton() {
+
+    }
+    
+    public void editorButton() {
+        if (editor) {
+            editor = false;
+            editorPanel.SetActive(false); 
+        } else {
+            editor = true;
+            editorPanel.SetActive(true); 
+            changeCursor();
+        }
+    }
+
+    public void overWorldButton() {
+
+    }
+
+    void changeCursor() {
+        destroyCursor();
+        switch (editorMode) {
+            case GEOMETRY_MODE:
+                addCursor(gameEnvScript.gameEnv.cubeTemplates[cubeType].graphicObjectPrefab, "cursorCube");
+                break;
+            case TOKEN_MODE:
+                addCursor(gameEnvScript.gameEnv.tokenTemplates[tokenType].graphicObjectPrefab, "cursorToken");
+                break;
+        }
+    }
+
+    public void changeEditorMode() {
+        editorMode = Convert.ToInt32(editorModeDropdown.value);
+        changeCursor();
+    }
+
+    public void changeTokenType() {
+        if (gameEnvScript.gameEnv.tokenTemplates.ContainsKey(tokenTypeInput.text)) {
+            tokenType = tokenTypeInput.text;
+            changeCursor();
+        } else {
+            Debug.Log("Bad Token Type");
+        }
+    }
+
+    public void changeCubeType() {
+        if (gameEnvScript.gameEnv.cubeTemplates.ContainsKey(cubeTypeInput.text)) {
+            tokenType = cubeTypeInput.text;
+            changeCursor();
+        } else {
+            Debug.Log("Bad Cube Type");
+        }
+    }
+
+    public void changeActiveLayer() {
+        int layer = Convert.ToInt32(layerDropdown.value);
+        activeLayer = layer;
+        activeLayerObject = GameObject.Find("layer" + activeLayer.ToString());
+        activeLayerCollider = activeLayerObject.GetComponent<MeshCollider>();
+    }
 
     // ======================================================================= Editor Mode
     void editorControls() {
@@ -108,15 +182,6 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void updateActiveLayer() {
-        if (lastActiveLayer != activeLayer) {
-            activeLayerObject = GameObject.Find("layer" + activeLayer.ToString());
-            activeLayerCollider = activeLayerObject.GetComponent<MeshCollider>();
-
-            lastActiveLayer = activeLayer;
-        }
-    }
-
     // ================================== Cursor Handling Functions
     void destroyCursor() {
         try {
@@ -126,8 +191,8 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void addCursor (Vector3 curPosition, GameObject curCursorObject, string cursorName) {
-        cursorObject = Instantiate(curCursorObject, curPosition, Quaternion.identity, gameObject.transform);
+    void addCursor (GameObject curCursorObject, string cursorName) {
+        cursorObject = Instantiate(curCursorObject, gameObject.transform);
         cursorObjectRenderer = cursorObject.transform.GetChild(0).GetComponent<MeshRenderer>();
         cursorObjectRenderer.material.color = cursorTint;
         cursorObject.name = cursorName;
@@ -136,14 +201,7 @@ public class MouseControls : MonoBehaviour {
 
     // ================================== Cube Mode
     void cubeMode(Vector3 curPosition, Index curIndex) {
-        if (lastEditorMode != CUBE_MODE || lastCubeType != cubeType) {
-            Debug.Log("Cube mode");
-            destroyCursor();
-            Debug.Log((string)cubeType);
-            addCursor(curPosition, gameEnvScript.gameEnv.cubeTemplates[cubeType].graphicObjectPrefab, "cursorCube");
-            lastEditorMode = editorMode;
-            lastCubeType = cubeType;
-        }
+        
 
         if (!deleteMode) {
 	        if (mouseDown && curPosition != mouseDownPosition && !activeDrag) {
@@ -246,13 +304,7 @@ public class MouseControls : MonoBehaviour {
 
     // ================================== Token Mode
     void tokenMode(Vector3 curPosition, Index curIndex) {
-        if (lastEditorMode != TOKEN_MODE || lastTokenType != tokenType) {
-            Debug.Log("token mode");
-            destroyCursor();
-            addCursor(curPosition, gameEnvScript.gameEnv.tokenTemplates[tokenType].graphicObjectPrefab, "cursorToken");
-            lastEditorMode = editorMode;
-            lastTokenType = tokenType;
-        }
+        
 
         if (!deleteMode) {
 	        if (Input.GetMouseButtonDown(0)) {
@@ -279,16 +331,6 @@ public class MouseControls : MonoBehaviour {
             waitingInputRelational = false;
             waitingInputTargeted = false;
         }
-
-        if (playMode == 0 && lastPlayMode != 0) {
-            waitingAction = null;
-            waitingInputRelational = false;
-            waitingInputTargeted = false;
-        }
-
-        if (playMode != lastPlayMode) {
-            lastPlayMode = playMode;
-        }
     }
 
     public void gotGoodInput() {
@@ -311,13 +353,28 @@ public class MouseControls : MonoBehaviour {
 
     // ======================================================================= Basic Run
     void runControls() {
-        updateActiveLayer();
         if (editor) {
             editorControls();
         } else {
             playControls();
         }
-        lastEditor = editor;
+    }
+
+    void populateLayerDropDown() {
+        layerDropdown = GameObject.Find("Layer_Dropdown").GetComponent<Dropdown>();
+
+        List<string> options = new List<string>();
+        for (int i = 0; i < mapScript.sizeY; i++) {
+            options.Add(i.ToString());
+        }
+        layerDropdown.AddOptions(options);
+    }
+
+    void populateTypeInputs() {
+        cubeTypeInput = GameObject.Find("Cube_InputField").GetComponent<InputField>();
+        tokenTypeInput = GameObject.Find("Token_InputField").GetComponent<InputField>();
+        cubeTypeInput.text = cubeType;
+        tokenTypeInput.text = tokenType;
     }
 
     // ======================================================================= START/UPDATE
@@ -325,10 +382,15 @@ public class MouseControls : MonoBehaviour {
         mapScript = GameObject.Find("Map").GetComponent<MapScript>();
         gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
         gameEnv = gameEnvScript.gameEnv;
+        editorPanel = GameObject.Find("Editor_Panel");
+        editorModeDropdown = GameObject.Find("Mode_Dropdown").GetComponent<Dropdown>();
+        populateLayerDropDown();
+        populateTypeInputs();
+        changeActiveLayer();
+        changeCursor();
     }    
 
     void Update() {
-        updateActiveLayer();
         runControls();
     }
 }
