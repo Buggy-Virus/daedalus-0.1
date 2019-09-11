@@ -4251,10 +4251,10 @@ MonoBehaviour:
     type: 3}
   SELECT_MODE: 2
   INPUT_MODE: 1
-  selectedToken: {fileID: 0}
   selectedObject: {fileID: 0}
-  waitingInputRelational: 0
-  waitingInputTargeted: 0
+  camera: {fileID: 282840810}
+  panThreshold: 15
+  panSpeed: 5
   cursorTint: {r: 0, g: 0, b: 0, a: 0}
   cursorClickHighlight: {r: 0, g: 0, b: 0, a: 0}
   activeLayerObject: {fileID: 0}

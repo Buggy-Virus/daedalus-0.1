@@ -25,13 +25,11 @@ public class MouseControls : MonoBehaviour {
     // Used for play controls
     public int SELECT_MODE = 0;
     public int INPUT_MODE = 1;
-    public GameObject selectedToken;
     public GameObject selectedObject;
     public Action waitingAction;
-    public bool waitingInputRelational = false;
-    public bool waitingInputTargeted = false;
 
     // ======================================================================= Fetched References
+    public GameObject camera;
     MapScript mapScript;
     GameEnvScript gameEnvScript;
     GameEnv gameEnv;
@@ -40,6 +38,12 @@ public class MouseControls : MonoBehaviour {
     Dropdown editorModeDropdown;
     InputField tokenTypeInput;
     InputField cubeTypeInput;
+
+    // ======================================================================= Camera Controls Globals
+    public int panThreshold = 15; // distance from edge scrolling starts
+    public int panSpeed = 5;
+    int screenWidth;
+    int screenHeight;
 
 
     // ======================================================================= Global Variables
@@ -326,17 +330,17 @@ public class MouseControls : MonoBehaviour {
         if (lastEditor) {
             Debug.Log("select mode");
             destroyCursor();
-
             waitingAction = null;
-            waitingInputRelational = false;
-            waitingInputTargeted = false;
         }
+    }
+
+    public void waitForActionInput(Action action) {
+        playMode = 1;
+        waitingAction = action;
     }
 
     public void gotGoodInput() {
         waitingAction = null;
-        waitingInputRelational = false;
-        waitingInputTargeted = false;
         playMode = 0;
     }
 
@@ -346,9 +350,29 @@ public class MouseControls : MonoBehaviour {
 
     public void cancelInput() {
         waitingAction = null;
-        waitingInputRelational = false;
-        waitingInputTargeted = false;
         playMode = 0;
+    }
+
+    // ======================================================================= Camera Controls
+    void screenPan() {
+        Debug.Log(screenWidth);
+        Debug.Log(Input.mousePosition.x);
+        if (Input.mousePosition.x > screenWidth - panThreshold) {
+            Debug.Log("x");
+            camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on +X axis
+        }
+        if (Input.mousePosition.x < 0 + panThreshold) {
+            Debug.Log("-x");
+            camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +X axis
+        }
+        if (Input.mousePosition.y > screenHeight - panThreshold) {
+            Debug.Log("z");
+            camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +Z axis
+        }
+        if (Input.mousePosition.y < 0 + panThreshold) {
+            Debug.Log("-z");
+            camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on -Z axis
+        }
     }
 
     // ======================================================================= Basic Run
@@ -379,8 +403,10 @@ public class MouseControls : MonoBehaviour {
 
     // ======================================================================= START/UPDATE
     void Start() {
-        mapScript = GameObject.Find("Map").GetComponent<MapScript>();
-        gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
+        mapScript = GameObject.Find("Map").GetComponent<MapScript>(); // This can be assigned directly
+        gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>(); // This can be assigned directly
         gameEnv = gameEnvScript.gameEnv;
         editorPanel = GameObject.Find("Editor_Panel");
         editorModeDropdown = GameObject.Find("Mode_Dropdown").GetComponent<Dropdown>();
@@ -392,6 +418,7 @@ public class MouseControls : MonoBehaviour {
 
     void Update() {
         runControls();
+        screenPan();
     }
 }
 

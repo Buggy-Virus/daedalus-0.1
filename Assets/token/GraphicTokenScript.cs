@@ -50,28 +50,15 @@ public class GraphicTokenScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                controlScript.selectedObject = gameObject;
-                controlScript.selectedToken = token;
+                controlScript.selectedObject = token;
                 Debug.Log(controlScript.selectedObject.transform.name);
                 mouseDown = false;
-                buttonsActive = false;
+                showButtons();
             }
         }
     }
 
-    void showButtons(bool hit, RaycastHit hitInfo) {
-        if (controlScript.selectedObject == gameObject && hit && !buttonsActive) {
-            if (Input.GetMouseButtonDown(0)) {
-                mouseDown = true;
-            }
-
-            if (Input.GetMouseButtonUp(0) && mouseDown) {
-                buttonsActive = true;
-            }
-        }
-    }
-
-    void selecectionControls() {
+    void playMode() {
         if (!controlScript.editor && controlScript.playMode == 0 ) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
@@ -79,11 +66,19 @@ public class GraphicTokenScript : MonoBehaviour
 
             selectToken(hit, hitInfo);
 
-            showButtons(hit, hitInfo);
-
             if (Input.GetMouseButtonUp(0)) {
                 mouseDown = false;
             }
+
+            if (controlScript.selectedObject == token && !moveButton.activeSelf) {
+                showButtons();
+            }
+        }
+
+        if (!controlScript.editor && controlScript.playMode == 0 && controlScript.selectedObject == token && Input.GetKeyDown(KeyCode.Escape)) {
+            // ADD SHORTCUT
+            Debug.Log("Canceled Input");
+            controlScript.gotGoodInput();
         }
     }
 
@@ -116,7 +111,7 @@ public class GraphicTokenScript : MonoBehaviour
         button.transform.position = button_pos;
     }
 
-    void showButtons() {
+    public void showButtons() {
         Vector3 graphicObject_ui_position = Camera.main.WorldToScreenPoint(graphicObject_transform.position);
         placeButton(moveButton, graphicObject_ui_position, 0);
         placeButton(basicButton, graphicObject_ui_position, 1);
@@ -134,17 +129,6 @@ public class GraphicTokenScript : MonoBehaviour
         basicButton.SetActive(false);
         advancedButton.SetActive(false);
         miscButton.SetActive(false);
-    }
-
-    void buttons() {
-        if (buttonsActive && !buttonsActive_lf) {
-            Debug.Log("Showing Buttons");
-            showButtons();
-        } else if (!buttonsActive && buttonsActive_lf) {
-            Debug.Log("Hiding Buttons");
-            hideButtons();
-        }
-        buttonsActive_lf = buttonsActive;
     }
 
     // ================================================ Button Controls
@@ -179,14 +163,10 @@ public class GraphicTokenScript : MonoBehaviour
     public void callAction(Action action, ref GameEnv gameEnv) {
         if (!action.relational && !action.targeted) {
             ResolveActionsScript.resolveAction(ref token, action, ref gameEnv);
-        } else if (action.relational) {
-            controlScript.playMode = 1;
-            controlScript.waitingAction = action;
-            controlScript.waitingInputRelational = true;
+            controlScript.waitForActionInput(action);
         } else {
-            controlScript.playMode = 1;
-            controlScript.waitingAction = action;
-            controlScript.waitingInputTargeted = true;
+            controlScript.waitForActionInput(action);
+            hideButtons();
         }
     }
 
@@ -197,14 +177,14 @@ public class GraphicTokenScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedToken, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
+                ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedObject, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
                 controlScript.gotGoodInput();
             }
         }
     }
 
     void inputControls() {
-        if (!controlScript.editor && controlScript.playMode == 1 && controlScript.waitingInputRelational) {
+        if (!controlScript.editor && controlScript.playMode == 1 && controlScript.waitingAction.relational) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
@@ -239,8 +219,7 @@ public class GraphicTokenScript : MonoBehaviour
     }
 
     void Update() {
-        selecectionControls();
-        buttons();
+        playMode();
         move();
         inputControls();
     }

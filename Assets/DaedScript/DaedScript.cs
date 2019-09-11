@@ -40,7 +40,8 @@ public class DaedScript {
 		{"IgLength", IgLength},
 		{"IgWidth", IgWidth},
 		{"TokensAtPosition", TokensAtPosition},
-		{"GeometryAtPosition", GeometryAtPosition}
+		{"GeometryAtPosition", GeometryAtPosition},
+		{"Print", Print}
 	};
 
 	// ================================= Evaluate Functions ======================================================================
@@ -3758,6 +3759,27 @@ public class DaedScript {
 			return new Result(widthValue, ig_result.store);
 		} else {
 			return resultError(ig_result, "Expected ig");	
+		} 
+	}
+
+	static Result Print(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result string_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (string_result.value.valueType == "string") {
+			// Will print to the proper in game console in the future 
+			Debug.Log(string_result.value.vString);
+			return string_result;
+		} else {
+			return resultError(string_result, "Expected string");	
 		} 
 	}
 }

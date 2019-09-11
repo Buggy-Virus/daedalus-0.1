@@ -32,14 +32,14 @@ public class GraphicCubeScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedToken, ref cube, controlScript.waitingAction, ref cubeScript.gameEnv);
+                ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedObject, ref cube, controlScript.waitingAction, ref cubeScript.gameEnv);
                 controlScript.gotGoodInput();
             }
         }
     }
 
     void inputControls() {
-        if (!controlScript.editor && controlScript.playMode == 1 && controlScript.waitingInputTargeted) {
+        if (!controlScript.editor && controlScript.playMode == 1 && controlScript.waitingAction.targeted) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
