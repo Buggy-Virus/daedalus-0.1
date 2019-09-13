@@ -35,7 +35,7 @@ public class ResolveActionsScript : MonoBehaviour
         {
             resolveTargetedEffects(ref self, ref target, action.effects, ref gameEnv);
             if (action.aoe != 0) {
-                resolveAoe(ref self, target.GetComponent<CubeScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
+                resolveAoe(ref self, target.GetComponent<ShapeScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
             }
 
             resolveRelationalActions(ref self, ref target, action.followup_actions, ref gameEnv);
@@ -194,7 +194,7 @@ public class ResolveActionsScript : MonoBehaviour
                 Index cur_index = new Index(i, j, z);
 				if (Utils.distance(center, cur_index) <= radius) {
 					GameCoord gameCoord = gameEnv.mapScript.gameBoard[cur_index.x, cur_index.y, cur_index.z];
-					nearbyCubes.Add(gameCoord.cube);
+					nearbyCubes.Add(gameCoord.shape);
 				}
             }
         }
@@ -305,7 +305,7 @@ public class ResolveActionsScript : MonoBehaviour
             {
                 effect.givenName = effect.name;
             }
-            target.GetComponent<CubeScript>().effects[effect.givenName] = effect;
+            target.GetComponent<ShapeScript>().effects[effect.givenName] = effect;
         }
     }
 
@@ -515,7 +515,7 @@ public class ResolveActionsScript : MonoBehaviour
 	static public void procTargetedEffect(ref GameObject self, ref GameObject target, Effect effect, ref GameEnv gameEnv)
     {
         TokenScript selfScript = self.GetComponent<TokenScript>();
-        CubeScript targetScript = target.GetComponent<CubeScript>();
+        ShapeScript targetScript = target.GetComponent<ShapeScript>();
 
         Value conditionValue = DaedScript.evaluateSelfToken(effect.condition, ref self, ref gameEnv);
         if (conditionValue.valueType == "bool" && conditionValue.vBool)

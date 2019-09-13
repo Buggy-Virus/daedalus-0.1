@@ -16,6 +16,7 @@ public class GameEnvScript : MonoBehaviour
     public GameObject goblinPrefab;
     public GameObject adventurerPrefab;
     public GameObject stonePrefab;
+    public GameObject wallPrefab;
 
     void Start()
     {
@@ -25,13 +26,14 @@ public class GameEnvScript : MonoBehaviour
 
         gameEnv = new GameEnv();
 
-        gameEnv.cubesObject = GameObject.Find("Cubes");
+        gameEnv.shapesObject = GameObject.Find("Cubes");
         gameEnv.tokensObject = GameObject.Find("Tokens");
         gameEnv.mapScript = GameObject.Find("Map").GetComponent<MapScript>();
 
         AddActions();
         AddTokenTemplates();
         addCubeTemplates();
+        addWallTemplates();
     }
 
     void Update()
@@ -120,7 +122,7 @@ public class GameEnvScript : MonoBehaviour
     }
 
     public void addCubeTemplates() {
-        CubeTemplate stone = new CubeTemplate(
+        ShapeTemplate stone = new ShapeTemplate(
             stonePrefab,
             "stone",
             new Type("stone"),
@@ -135,6 +137,25 @@ public class GameEnvScript : MonoBehaviour
             }
         );
 
-        gameEnv.cubeTemplates.Add(stone.identifier, stone);
+        gameEnv.shapeTemplates.Add(stone.identifier, stone);
+    }
+
+    public void addWallTemplates() {
+        WallTemplate stone = new WallTemplate(
+            wallPrefab,
+            "stone",
+            new Type("stone"),
+            new List<Type>(),
+            new List<float>(),
+            new TemplateVariable(0.0), 
+            new List<Effect>(),
+            new Dictionary<string, TemplateVariable> {
+                { "Passable", new TemplateVariable(true) }, 
+                { "Difficult Terrain", new TemplateVariable(false) }, 
+                { "Hit Points", new TemplateVariable(80, 100) },
+            }
+        );
+
+        gameEnv.wallTemplates.Add(stone.identifier, stone);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeScript : MonoBehaviour {
+public class ShapeScript : MonoBehaviour {
     public GameEnv gameEnv;
 
     public string identifier;
@@ -27,7 +27,7 @@ public class CubeScript : MonoBehaviour {
         gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(gameObject);
         index = endIndex;
         gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Add(gameObject);
-        transform.GetComponentInChildren<GraphicCubeScript>().moveTo(new Vector3(endIndex.x, endIndex.y, endIndex.z));
+        transform.GetComponentInChildren<GraphicShapeScript>().moveTo(new Vector3(endIndex.x, endIndex.y, endIndex.z));
     }
     
 }

@@ -13,13 +13,14 @@ public class MouseControls : MonoBehaviour {
     public int playMode = 0;
     public int activeLayer = 0;
     public bool deleteMode = false;
-    public string cubeType = "stone";
+    public string shapeType = "stone";
+    public string wallType = "stone";
     public string tokenType = "goblin";
 
     // ======================================================================= Prefabs
     public GameObject dragPrefab;
     public GameObject tokenPrefab;
-    public GameObject cubePrefab;
+    public GameObject shapePrefab;
 
     // ======================================================================= Public Variables
     // Used for play controls
@@ -37,7 +38,7 @@ public class MouseControls : MonoBehaviour {
     Dropdown layerDropdown;
     Dropdown editorModeDropdown;
     InputField tokenTypeInput;
-    InputField cubeTypeInput;
+    InputField shapeTypeInput;
 
     // ======================================================================= Camera Controls Globals
     public int panThreshold = 15; // distance from edge scrolling starts
@@ -48,8 +49,9 @@ public class MouseControls : MonoBehaviour {
 
     // ======================================================================= Global Variables
     // Used for editor controls
-    public const int GEOMETRY_MODE = 0;
+    public const int SHAPE_MODE = 0;
     public const int TOKEN_MODE = 1;
+    public const int WALL_MODE = 2;
 
     // ================================== mouse state
     bool mouseDown;
@@ -108,11 +110,14 @@ public class MouseControls : MonoBehaviour {
     void changeCursor() {
         destroyCursor();
         switch (editorMode) {
-            case GEOMETRY_MODE:
-                addCursor(gameEnvScript.gameEnv.cubeTemplates[cubeType].graphicObjectPrefab, "cursorCube");
+            case SHAPE_MODE:
+                addCursor(gameEnvScript.gameEnv.shapeTemplates[shapeType].graphicObjectPrefab, "cursorCube");
                 break;
             case TOKEN_MODE:
                 addCursor(gameEnvScript.gameEnv.tokenTemplates[tokenType].graphicObjectPrefab, "cursorToken");
+                break;
+            case WALL_MODE:
+                addCursor(gameEnvScript.gameEnv.wallTemplates[wallType].graphicObjectPrefab, "cursorWall");
                 break;
         }
     }
@@ -132,8 +137,8 @@ public class MouseControls : MonoBehaviour {
     }
 
     public void changeCubeType() {
-        if (gameEnvScript.gameEnv.cubeTemplates.ContainsKey(cubeTypeInput.text)) {
-            tokenType = cubeTypeInput.text;
+        if (gameEnvScript.gameEnv.shapeTemplates.ContainsKey(shapeTypeInput.text)) {
+            tokenType = shapeTypeInput.text;
             changeCursor();
         } else {
             Debug.Log("Bad Cube Type");
@@ -167,19 +172,18 @@ public class MouseControls : MonoBehaviour {
 
             switch (editorMode) {
                 case 0:
-                    cubeMode(currentCoord, currentIndex);
+                    shapeMode(currentCoord, currentIndex);
+                    placeCursor(currentCoord);
                     break;
                 case 1:
                     tokenMode(currentCoord, currentIndex);
+                    placeCursor(currentCoord);
+                    break;
+                case 2: wallMode(Input.mousePosition);
                     break;
             }
 
-            if (activeCursor) {
-                if (!cursorObjectRenderer.enabled) {
-                    cursorObjectRenderer.enabled = true;
-                }
-                cursorObject.transform.position = currentCoord;
-            }
+            
 
         } else if (!activeLayerCollider.Raycast(ray, out hitInfo, Mathf.Infinity) && activeCursor) {
             cursorObjectRenderer.enabled = false;
@@ -195,6 +199,15 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
+    void placeCursor(Vector3 currentCoord) {
+        if (activeCursor) {
+            if (!cursorObjectRenderer.enabled) {
+                cursorObjectRenderer.enabled = true;
+            }
+            cursorObject.transform.position = currentCoord;
+        }
+    }
+
     void addCursor (GameObject curCursorObject, string cursorName) {
         cursorObject = Instantiate(curCursorObject, gameObject.transform);
         cursorObjectRenderer = cursorObject.transform.GetChild(0).GetComponent<MeshRenderer>();
@@ -204,9 +217,7 @@ public class MouseControls : MonoBehaviour {
     }
 
     // ================================== Cube Mode
-    void cubeMode(Vector3 curPosition, Index curIndex) {
-        
-
+    void shapeMode(Vector3 curPosition, Index curIndex) {
         if (!deleteMode) {
 	        if (mouseDown && curPosition != mouseDownPosition && !activeDrag) {
 	            activeDrag = true;
@@ -234,13 +245,13 @@ public class MouseControls : MonoBehaviour {
 	                for (int x = (int) Mathf.Min(mouseDownPosition.x, curPosition.x); x <= (int) Mathf.Max(mouseDownPosition.x, curPosition.x); x++) {
 	                    for (int z = (int)Mathf.Min(mouseDownPosition.z, curPosition.z); z <= (int)Mathf.Max(mouseDownPosition.z, curPosition.z); z++) {
 	                        iterIndex = new Index(x, y, z);
-                            GameUtils.createAndPlaceCube(cubePrefab, gameEnv.cubeTemplates[cubeType], ref gameEnv, iterIndex);
+                            GameUtils.createAndPlaceShape(shapePrefab, gameEnv.shapeTemplates[shapeType], ref gameEnv, iterIndex);
 	                    }
 	                }
 	                Destroy(dragObject);
 	            } else if (Utils.indexEqual(mouseDownIndex, curIndex)) {
 	            	Debug.Log("Placing Cube");
-                    GameUtils.createAndPlaceCube(cubePrefab, gameEnv.cubeTemplates[cubeType], ref gameEnv, curIndex);
+                    GameUtils.createAndPlaceShape(shapePrefab, gameEnv.shapeTemplates[shapeType], ref gameEnv, curIndex);
 	            }
 	            
 	            mouseDown = false;
@@ -300,10 +311,10 @@ public class MouseControls : MonoBehaviour {
 
     void deleteCube(Index curIndex) {
     	GameCoord gameCoord = mapScript.gameBoard[curIndex.x, curIndex.y, curIndex.z];
-    	if (gameCoord.cube != null) {
-            Destroy(gameCoord.cube);
+    	if (gameCoord.shape != null) {
+            Destroy(gameCoord.shape);
         }
-    	gameCoord.cube = null;
+    	gameCoord.shape = null;
     }
 
     // ================================== Token Mode
@@ -317,6 +328,30 @@ public class MouseControls : MonoBehaviour {
 
 	        if (Input.GetMouseButtonUp(0)) {
 	            GameUtils.createAndPlaceToken(tokenPrefab, gameEnv.tokenTemplates[tokenType], ref gameEnv, curIndex);
+	        }
+
+	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
+	            cursorObjectRenderer.material.color = normalColor;
+	        }
+        }
+    }
+
+    // ================================== Wall Mode
+    void wallMode(Vector3 mousePosition) {
+        Vector3 wallPosition;
+        wallPosition.x = (float)(Math.Round(mousePosition.x + 0.5f) - 0.5);
+        wallPosition.y = (float)(Math.Round(mousePosition.y + 0.5f));
+        wallPosition.z = (float)(Math.Round(mousePosition.z + 0.5f) - 0.5);
+        Debug.Log(wallPosition);
+        placeCursor(wallPosition);
+
+        if (!deleteMode) {
+	        if (Input.GetMouseButtonDown(0)) {
+	            cursorObjectRenderer.material.color = cursorClickHighlight;
+	        }
+
+	        if (Input.GetMouseButtonUp(0)) {
+	            GameUtils.createAndPlaceWall(tokenPrefab, gameEnv.wallTemplates[wallType], ref gameEnv, wallPosition);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
@@ -355,22 +390,16 @@ public class MouseControls : MonoBehaviour {
 
     // ======================================================================= Camera Controls
     void screenPan() {
-        Debug.Log(screenWidth);
-        Debug.Log(Input.mousePosition.x);
         if (Input.mousePosition.x > screenWidth - panThreshold) {
-            Debug.Log("x");
             camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on +X axis
         }
         if (Input.mousePosition.x < 0 + panThreshold) {
-            Debug.Log("-x");
             camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +X axis
         }
         if (Input.mousePosition.y > screenHeight - panThreshold) {
-            Debug.Log("z");
             camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +Z axis
         }
         if (Input.mousePosition.y < 0 + panThreshold) {
-            Debug.Log("-z");
             camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on -Z axis
         }
     }
@@ -395,9 +424,9 @@ public class MouseControls : MonoBehaviour {
     }
 
     void populateTypeInputs() {
-        cubeTypeInput = GameObject.Find("Cube_InputField").GetComponent<InputField>();
+        shapeTypeInput = GameObject.Find("Cube_InputField").GetComponent<InputField>();
         tokenTypeInput = GameObject.Find("Token_InputField").GetComponent<InputField>();
-        cubeTypeInput.text = cubeType;
+        shapeTypeInput.text = shapeType;
         tokenTypeInput.text = tokenType;
     }
 

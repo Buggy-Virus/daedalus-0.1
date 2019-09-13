@@ -51,7 +51,7 @@ public class testDaeDaedScript : MonoBehaviour
         gameEnvScript = GameObject.Find("GameLogic").GetComponent<GameEnvScript>();
 
         tokenEnv = gameEnvScript.gameEnv.tokenDict;
-		cubeEnv = gameEnvScript.gameEnv.cubeDict;
+		cubeEnv = gameEnvScript.gameEnv.shapeDict;
     }
 
     string test_int1 = "100;";

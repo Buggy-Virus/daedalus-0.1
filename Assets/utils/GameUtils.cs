@@ -149,7 +149,7 @@ public class GameUtils {
     }
 
     static public void deleteGraphicToken(ref GameObject token) {
-        CubeScript tokenScript = token.GetComponent<CubeScript>();
+        ShapeScript tokenScript = token.GetComponent<ShapeScript>();
         Index index = tokenScript.index;
         tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(token);
         tokenScript.graphicObject.SetActive(false);
@@ -157,33 +157,33 @@ public class GameUtils {
     }
 
     static public void deleteToken(ref GameObject token) {
-        CubeScript tokenScript = token.GetComponent<CubeScript>();
+        ShapeScript tokenScript = token.GetComponent<ShapeScript>();
         if (tokenScript.onMap) {
-            deleteGraphicCube(ref token);
+            deleteGraphicToken(ref token);
         }
         GameObject.Destroy(token);
     }
 
-    // ========================================================================================================================== Cube Stuff
-    static public GameObject quickCreateCube(GameObject cubePrefab, CubeTemplate template, ref GameEnv gameEnv) {
+    // ========================================================================================================================== Shape Stuff
+    static public GameObject quickCreateShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv) {
         System.Random random = new System.Random();
 
-        GameObject cube = GameObject.Instantiate(cubePrefab, gameEnv.cubesObject.transform);
-        CubeScript cubeScript = cube.GetComponent<CubeScript>();
-        cubeScript.gameEnv = gameEnv;
-        cubeScript.identifier = template.identifier;
-        cube.name = template.identifier + "_" + System.Guid.NewGuid();
-        gameEnv.tokenDict[cube.name] = cube;
+        GameObject shape = GameObject.Instantiate(shapePrefab, gameEnv.shapesObject.transform);
+        ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+        shapeScript.gameEnv = gameEnv;
+        shapeScript.identifier = template.identifier;
+        shape.name = template.identifier + "_" + System.Guid.NewGuid();
+        gameEnv.shapeDict[shape.name] = shape;
 
-        cubeScript.graphicObjectPrefab = template.graphicObjectPrefab;
+        shapeScript.graphicObjectPrefab = template.graphicObjectPrefab;
 
-        cubeScript.type = template.type;
-        cubeScript.materialTypes = template.materialTypes;
-        cubeScript.materialTypesDistribution = template.materialTypesDistribution;
+        shapeScript.type = template.type;
+        shapeScript.materialTypes = template.materialTypes;
+        shapeScript.materialTypesDistribution = template.materialTypesDistribution;
 
         GameVar transparency_calculation = parseTemplateVariable(template.transparency, ref gameEnv);
         if (transparency_calculation.type == "double") {
-            cubeScript.transparency = (float)transparency_calculation.doubleValue;
+            shapeScript.transparency = (float)transparency_calculation.doubleValue;
         } else {
             // Throw Error
         } 
@@ -195,66 +195,217 @@ public class GameUtils {
             } else {
                 effect.givenName = effect.name;
             }
-            cubeScript.effects[effect.givenName] = effect;
+            shapeScript.effects[effect.givenName] = effect;
         }
 
         foreach (KeyValuePair<string, TemplateVariable> var in template.initVariableList) {
-            cubeScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
+            shapeScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
         }
 
-        GameObject graphicCube = GameObject.Instantiate(cubeScript.graphicObjectPrefab, cube.transform);
-        cubeScript.graphicObject = graphicCube;
-        graphicCube.GetComponent<GraphicCubeScript>().cube = cube;
-        graphicCube.GetComponent<GraphicCubeScript>().cubeScript = cubeScript;
-        graphicCube.SetActive(false);
+        GameObject graphicShape = GameObject.Instantiate(shapeScript.graphicObjectPrefab, shape.transform);
+        shapeScript.graphicObject = graphicShape;
+        graphicShape.GetComponent<GraphicShapeScript>().shape = shape;
+        graphicShape.GetComponent<GraphicShapeScript>().shapeScript = shapeScript;
+        graphicShape.SetActive(false);
 
-        return cube;
+        return shape;
     }
 
-    static public void placeGraphicCube(ref GameObject cube, Index pos) {
-        CubeScript cubeScript = cube.GetComponent<CubeScript>();
-        cubeScript.onMap = true;
-        float cubeSize = cubeScript.gameEnv.cubeSize;
+    static public void placeGraphicShape(ref GameObject shape, Index pos) {
+        ShapeScript shapceScript = shape.GetComponent<ShapeScript>();
+        shapceScript.onMap = true;
+        float cubeSize = shapceScript.gameEnv.cubeSize;
 
-        cubeScript.gameEnv.mapScript.gameBoard[pos.x, pos.y, pos.z].cube = cube;
-        cubeScript.index = pos;
+        shapceScript.gameEnv.mapScript.gameBoard[pos.x, pos.y, pos.z].shape = shape;
+        shapceScript.index = pos;
 
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
-        cubeScript.graphicObject.SetActive(true);
-        cubeScript.graphicObject.transform.position = placePos;
-        cubeScript.graphicObject.GetComponent<GraphicCubeScript>().goingTo = placePos;
+        shapceScript.graphicObject.SetActive(true);
+        shapceScript.graphicObject.transform.position = placePos;
+        shapceScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
     }
 
-    static public void placeGraphicCube(ref GameObject cube, Vector3 pos) {
-        CubeScript cubeScript = cube.GetComponent<CubeScript>();
-        cubeScript.onMap = true;
-        float cubeSize = cubeScript.gameEnv.cubeSize;
+    static public void placeGraphicShape(ref GameObject shape, Vector3 pos) {
+        ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+        shapeScript.onMap = true;
+        float cubeSize = shapeScript.gameEnv.cubeSize;
 
         Index index = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
 
-        cubeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].cube = cube;
-        cubeScript.index = index;
+        shapeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].shape = shape;
+        shapeScript.index = index;
 
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
-        cubeScript.graphicObject.SetActive(true);
-        cubeScript.graphicObject.transform.position = placePos;
-        cubeScript.graphicObject.GetComponent<GraphicCubeScript>().goingTo = placePos;
+        shapeScript.graphicObject.SetActive(true);
+        shapeScript.graphicObject.transform.position = placePos;
+        shapeScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
     }
 
-    static public void deleteGraphicCube(ref GameObject cube) {
-        CubeScript cubeScript = cube.GetComponent<CubeScript>();
-        Index index = cubeScript.index;
-        cubeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].cube = null;
-        cubeScript.graphicObject.SetActive(false);
-        cubeScript.onMap = false;
+    static public void deleteGraphicShape(ref GameObject shape) {
+        ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+        Index index = shapeScript.index;
+        shapeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].shape = null;
+        shapeScript.graphicObject.SetActive(false);
+        shapeScript.onMap = false;
     }
 
-    static public void deleteCube(ref GameObject cube) {
-        CubeScript cubeScript = cube.GetComponent<CubeScript>();
-        if (cubeScript.onMap) {
-            deleteGraphicCube(ref cube);
+    static public void deleteShape(ref GameObject shape) {
+        ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+        if (shapeScript.onMap) {
+            deleteGraphicShape(ref shape);
         }
-        GameObject.Destroy(cube);
+        GameObject.Destroy(shape);
+    }
+
+    // ========================================================================================================================== Wall Stuff
+    static public GameObject quickCreateWall(GameObject wallPrefab, WallTemplate template, ref GameEnv gameEnv) {
+        System.Random random = new System.Random();
+
+        GameObject wall = GameObject.Instantiate(wallPrefab, gameEnv.shapesObject.transform);
+        WallScript wallScript = wall.GetComponent<WallScript>();
+        wallScript.gameEnv = gameEnv;
+        wallScript.identifier = template.identifier;
+        wall.name = template.identifier + "_" + System.Guid.NewGuid();
+        gameEnv.wallDict[wall.name] = wall;
+
+        wallScript.graphicObjectPrefab = template.graphicObjectPrefab;
+
+        wallScript.type = template.type;
+        wallScript.materialTypes = template.materialTypes;
+        wallScript.materialTypesDistribution = template.materialTypesDistribution;
+
+        GameVar transparency_calculation = parseTemplateVariable(template.transparency, ref gameEnv);
+        if (transparency_calculation.type == "double") {
+            wallScript.transparency = (float)transparency_calculation.doubleValue;
+        } else {
+            // Throw Error
+        } 
+
+        foreach (Effect effect in template.effects) {
+            if (effect.stacks) {
+                effect.givenName = effect.name + "_" + System.Guid.NewGuid();
+                
+            } else {
+                effect.givenName = effect.name;
+            }
+            wallScript.effects[effect.givenName] = effect;
+        }
+
+        foreach (KeyValuePair<string, TemplateVariable> var in template.initVariableList) {
+            wallScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
+        }
+
+        GameObject graphicWall = GameObject.Instantiate(wallScript.graphicObjectPrefab, wall.transform, false);
+        wallScript.graphicObject = graphicWall;
+        graphicWall.SetActive(false);
+
+        return wall;
+    }
+
+    static public void placeGraphicWall(ref GameObject wall, Index index_1, Index index_2) {
+        WallScript wallScript = wall.GetComponent<WallScript>();
+        wallScript.onMap = true;
+        float cubeSize = wallScript.gameEnv.cubeSize;
+
+        if (index_1.x == index_2.x) {
+            if (index_1.z > index_2.z) {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_z = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_zz = wall;
+                wallScript.index_z = index_1;
+                wallScript.index_zz = index_2;
+            } else {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_zz = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_z = wall;
+                wallScript.index_zz = index_1;
+                wallScript.index_z = index_2;
+            }
+        } else {
+            if (index_1.x > index_2.x) {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_x = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_xx = wall;
+                wallScript.index_x = index_1;
+                wallScript.index_xx = index_2;
+            } else {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_xx = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_x = wall;
+                wallScript.index_xx = index_1;
+                wallScript.index_x = index_2;
+            }
+        }
+
+        Vector3 placePos = new Vector3((index_1.x + index_2.x) * cubeSize / 2,(index_1.y + index_2.y) * cubeSize / 2, (index_1.z + index_2.z) * cubeSize / 2);
+        wallScript.graphicObject.SetActive(true);
+        wall.transform.position = placePos;
+        // wallScript.graphicObject.GetComponent<GraphicWallScript>().goingTo = placePos;
+    }
+
+    static public void placeGraphicWall(ref GameObject wall, Vector3 pos) {
+        WallScript wallScript = wall.GetComponent<WallScript>();
+        wallScript.onMap = true;
+        float cubeSize = wallScript.gameEnv.cubeSize;
+
+        Index index_1 = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
+        Index index_2 = new Index(Mathf.CeilToInt(pos.x / cubeSize), Mathf.CeilToInt(pos.y / cubeSize), Mathf.CeilToInt(pos.z / cubeSize));
+
+        if (index_1.x == index_2.x) {
+            if (index_1.z > index_2.z) {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_z = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_zz = wall;
+                wallScript.index_z = index_1;
+                wallScript.index_zz = index_2;
+            } else {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_zz = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_z = wall;
+                wallScript.index_zz = index_1;
+                wallScript.index_z = index_2;
+            }
+        } else {
+            if (index_1.x > index_2.x) {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_x = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_xx = wall;
+                wallScript.index_x = index_1;
+                wallScript.index_xx = index_2;
+            } else {
+                wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_xx = wall;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_x = wall;
+                wallScript.index_xx = index_1;
+                wallScript.index_x = index_2;
+            }
+        }
+
+        wallScript.graphicObject.SetActive(true);
+        wall.transform.position = pos;
+        // shapeScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
+    }
+
+    static public void deleteGraphicWall(ref GameObject wall) {
+        WallScript wallScript = wall.GetComponent<WallScript>();
+        Index index_x = wallScript.index_x;
+        Index index_xx = wallScript.index_xx;
+        Index index_z = wallScript.index_z;
+        Index index_zz = wallScript.index_zz;
+        if (index_x != null) {
+            wallScript.gameEnv.mapScript.gameBoard[index_x.x, index_x.y, index_x.z].wall_x = null;
+        }
+        if (index_z != null) {
+            wallScript.gameEnv.mapScript.gameBoard[index_z.x, index_z.y, index_z.z].wall_z = null;
+        }
+        if (index_xx != null) {
+            wallScript.gameEnv.mapScript.gameBoard[index_xx.x, index_xx.y, index_xx.z].wall_xx = null;
+        }
+        if (index_zz != null) {
+            wallScript.gameEnv.mapScript.gameBoard[index_zz.x, index_zz.y, index_zz.z].wall_x = null;
+        }
+        wallScript.graphicObject.SetActive(false);
+        wallScript.onMap = false;
+    }
+
+    static public void deleteWall(ref GameObject wall) {
+        WallScript wallScript = wall.GetComponent<WallScript>();
+        if (wallScript.onMap) {
+            deleteGraphicWall(ref wall);
+        }
+        GameObject.Destroy(wall);
     }
 
     // ========================================================================================================================== Testing Functions
@@ -263,9 +414,14 @@ public class GameUtils {
         placeGraphicToken(ref token, pos);
     }
 
-    static public void createAndPlaceCube(GameObject cubePrefab, CubeTemplate template, ref GameEnv gameEnv, Index pos) {
-        GameObject cube = quickCreateCube(cubePrefab, template, ref gameEnv);
-        placeGraphicCube(ref cube, pos);
+    static public void createAndPlaceShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv, Index pos) {
+        GameObject cube = quickCreateShape(shapePrefab, template, ref gameEnv);
+        placeGraphicShape(ref cube, pos);
+    }
+
+    static public void createAndPlaceWall(GameObject wallPrefab, WallTemplate template, ref GameEnv gameEnv, Vector3 pos) {
+        GameObject cube = quickCreateWall(wallPrefab, template, ref gameEnv);
+        placeGraphicWall(ref cube, pos);
     }
 
     // ========================================================================================================================== General Utility
@@ -274,7 +430,7 @@ public class GameUtils {
         if (tokenScript != null) {
             return tokenScript.index;
         } else {
-            CubeScript cubeScript = gameObject.GetComponent<CubeScript>();
+            ShapeScript cubeScript = gameObject.GetComponent<ShapeScript>();
             return cubeScript.index;
         }
     }

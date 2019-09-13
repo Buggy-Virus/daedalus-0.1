@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeTemplate {
+public class ShapeTemplate {
     public GameObject graphicObjectPrefab;
     public string identifier;
 
@@ -16,7 +16,7 @@ public class CubeTemplate {
 
     public Dictionary<string, TemplateVariable> initVariableList;
 
-    public CubeTemplate(
+    public ShapeTemplate(
         GameObject go,
         string id,
         Type t,

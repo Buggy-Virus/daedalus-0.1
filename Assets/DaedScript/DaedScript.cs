@@ -117,7 +117,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
-		gameEnv.cubeDict.Add("self", self);
+		gameEnv.shapeDict.Add("self", self);
 
 		Value value = interpret(
 			desugar(parse(tokenize(input))), 
@@ -126,7 +126,7 @@ public class DaedScript {
 			ref gameEnv
 		).value;
 
-		gameEnv.cubeDict.Remove("self");
+		gameEnv.shapeDict.Remove("self");
 
 		return value;
 	}
@@ -162,7 +162,7 @@ public class DaedScript {
 	) 
 	{
 		gameEnv.tokenDict.Add("self", self);
-		gameEnv.cubeDict.Add("target", target);
+		gameEnv.shapeDict.Add("target", target);
 		
 		Value value = interpret(
 			desugar(parse(tokenize(input))), 
@@ -172,7 +172,7 @@ public class DaedScript {
 		).value;
 
 		gameEnv.tokenDict.Remove("self");
-		gameEnv.cubeDict.Remove("target");
+		gameEnv.shapeDict.Remove("target");
 
 		return value;
 	}
@@ -2074,8 +2074,8 @@ public class DaedScript {
 			igValue.vIg = gameEnv.tokenDict[name];
 			igValue.vIgType = "token";
 			return new Result(igValue, store);
-		} else if (gameEnv.cubeDict.ContainsKey(name)) {
-			igValue.vIg = gameEnv.cubeDict[name];
+		} else if (gameEnv.shapeDict.ContainsKey(name)) {
+			igValue.vIg = gameEnv.shapeDict[name];
 			igValue.vIgType = "geometry";
 			return new Result(igValue, store);
 		} else {
@@ -2121,10 +2121,10 @@ public class DaedScript {
 				return expressionError(expression, store, "ig \"" + token.name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
 		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "geometry") {
-			GameObject cube = ig_result.value.vIg;
-			CubeScript cubeScript = cube.GetComponent<CubeScript>();
-			if (cubeScript.variables.ContainsKey(variable)) {
-				GameVar gameVar = cubeScript.variables[variable];
+			GameObject shape = ig_result.value.vIg;
+			ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+			if (shapeScript.variables.ContainsKey(variable)) {
+				GameVar gameVar = shapeScript.variables[variable];
 				switch(gameVar.type) {
 					case "int":
 						Value intValue = new Value("int", expression.line, expression.character);
@@ -2143,10 +2143,10 @@ public class DaedScript {
 						boolValue.vBool = gameVar.boolValue;
 						return new Result(boolValue, store);
 					default:
-						return expressionError(expression, store, "Unknown type from \"" + cube.name + "." + variable + "\""); //Throw Error
+						return expressionError(expression, store, "Unknown type from \"" + shape.name + "." + variable + "\""); //Throw Error
 				}
 			} else {
-				return expressionError(expression, store, "ig \"" + cube.name + "\" has no variable \"" + variable + "\""); //Throw Error
+				return expressionError(expression, store, "ig \"" + shape.name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
 		} else {
 			return resultError(ig_result, "Expected ig"); //Throw Error
@@ -2221,11 +2221,11 @@ public class DaedScript {
 				}
 			}
 		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "geometry") {
-			GameObject cube = ig_result.value.vIg;
+			GameObject shape = ig_result.value.vIg;
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
-			CubeScript cubeScript = cube.GetComponent<CubeScript>();
-			if (cubeScript.variables.ContainsKey(variable)) {
-				GameVar gameVar = cubeScript.variables[variable];
+			ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+			if (shapeScript.variables.ContainsKey(variable)) {
+				GameVar gameVar = shapeScript.variables[variable];
 				switch(gameVar.type) {
 					case "int":
 						if (nv_result.value.valueType == "int") {
@@ -2256,23 +2256,23 @@ public class DaedScript {
 							return resultError(nv_result, "Expected bool"); //Throw Error
 						}
 					default:
-						return expressionError(expression, store, "Unknown type from \"" + cube.name + "." + variable + "\""); //Throw Error	
+						return expressionError(expression, store, "Unknown type from \"" + shape.name + "." + variable + "\""); //Throw Error	
 				}
 			} else {
 				switch(nv_result.value.valueType) {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
+						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
 						return nv_result;
 					case "double":
-						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vDouble));
+						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vDouble));
 						return nv_result;
 					case "string":
-						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vString));
+						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vString));
 						return nv_result;
 					case "bool":
-						cubeScript.variables.Add(variable, new GameVar(nv_result.value.vBool));
+						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vBool));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
@@ -3397,10 +3397,10 @@ public class DaedScript {
 			igListValue.vList.Add(tokenValue);
 		}
 
-		if (gameCoord.cube != null) {
-			Value cubeValue = new Value("ig", expression.line, expression.character);
-			cubeValue.vIg = gameCoord.cube;
-			igListValue.vList.Add(cubeValue);
+		if (gameCoord.shape != null) {
+			Value shapeValue = new Value("ig", expression.line, expression.character);
+			shapeValue.vIg = gameCoord.shape;
+			igListValue.vList.Add(shapeValue);
 		}
 
 		return new Result(igListValue, returnStore);
@@ -3536,10 +3536,10 @@ public class DaedScript {
 		}
 
 		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
-		if (gameCoord.cube != null) {
-			Value cubeValue = new Value("ig", expression.line, expression.character);
-			cubeValue.vIg = gameCoord.cube;
-			return new Result(cubeValue, returnStore);
+		if (gameCoord.shape != null) {
+			Value shapeValue = new Value("ig", expression.line, expression.character);
+			shapeValue.vIg = gameCoord.shape;
+			return new Result(shapeValue, returnStore);
 		}
 
 		Value nullValue = new Value("null", expression.line, expression.character);
@@ -3608,7 +3608,7 @@ public class DaedScript {
 		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
 		Value occupiedValue = new Value("bool", expression.line, expression.character);
 		occupiedValue.vBool = false;
-		if (gameCoord.cube != null) {
+		if (gameCoord.shape != null) {
 			occupiedValue.vBool = true;
 			return new Result(occupiedValue, returnStore);
 		}

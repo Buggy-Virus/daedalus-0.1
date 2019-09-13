@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraphicCubeScript : MonoBehaviour
+public class GraphicWallScript : MonoBehaviour
 {
     // ================================================ CONFIGUREABLE VARIABLES
-    public float moveSpeed = 10f;
+    // public float moveSpeed = 10f;
 
     // ================================================ PUBLIC ATTRIBUTES
-	public GameObject cube;
-    public CubeScript cubeScript;
+    public WallScript wallScript;
     public Transform graphicObject_transform;
     public Collider graphicObject_collider;
 
     // ================================================ FETCHED REFERENCES
-    MouseControls controlScript;
+    GameObject wall;
+    MouseControls controlScript; // Maybe this can be added directly for every prefab
 
     // ================================================ GLOBAL VARIABLES
+    bool setupGraphicObject = false;
     // input variables
     bool mouseDown = false;
 
     // movement variables
-    public Vector3 goingTo;
+    // public Vector3 goingTo;
 
     // ================================================ Call Actions
 
@@ -32,7 +33,7 @@ public class GraphicCubeScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedObject, ref cube, controlScript.waitingAction, ref cubeScript.gameEnv);
+                ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedObject, ref wall, controlScript.waitingAction, ref wallScript.gameEnv);
                 controlScript.gotGoodInput();
             }
         }
@@ -52,20 +53,33 @@ public class GraphicCubeScript : MonoBehaviour
         }
     }
     
-    // ================================================ Movement
-    public void moveTo(Vector3 endPos) {
-        goingTo = endPos;
-    }
+    // // ================================================ Movement
+    // public void moveTo(Vector3 endPos) {
+    //     goingTo = endPos;
+    // }
 
-    void move() {
-        if (transform.position != goingTo) {
-            transform.position = Vector3.MoveTowards(transform.position, goingTo, moveSpeed * Time.deltaTime);
-        } 
+    // void move() {
+    //     if (transform.position != goingTo) {
+    //         transform.position = Vector3.MoveTowards(transform.position, goingTo, moveSpeed * Time.deltaTime);
+    //     } 
+    // }
+
+    // ================================================ Setup Graphic Object
+    void settingUpGraphicObject() {
+        if (!setupGraphicObject) {
+            try {
+                graphicObject_transform = gameObject.transform.GetChild(0);
+                graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
+            } catch { 
+                Debug.Log("GraphicObject not added yet");
+            }
+        }
     }
 
     // ================================================ START/UPDATE
     void Start() {
-        controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
+        wall = gameObject;
+        wallScript = gameObject.GetComponent<WallScript>();
         graphicObject_transform = gameObject.transform.GetChild(0);
         graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
     }
@@ -73,6 +87,6 @@ public class GraphicCubeScript : MonoBehaviour
     void Update()
     {
         inputControls();
-        move();
+        // move();
     }
 }
