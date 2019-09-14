@@ -66,6 +66,7 @@ public class GameUtils {
     static public GameObject quickCreateToken(GameObject tokenPrefab, TokenTemplate template, ref GameEnv gameEnv) {
         GameObject token = GameObject.Instantiate(tokenPrefab, gameEnv.tokensObject.transform);
         TokenScript tokenScript = token.GetComponent<TokenScript>();
+        GraphicTokenScript graphicTokenScript = token.GetComponent<GraphicTokenScript>();
         tokenScript.gameEnv = gameEnv;
         tokenScript.identifier = template.identifier;
         token.name = template.identifier + "_" + System.Guid.NewGuid();
@@ -107,11 +108,14 @@ public class GameUtils {
             tokenScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
         }
 
-        GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, token.transform);
-        tokenScript.graphicObject = graphicToken;
-        graphicToken.GetComponent<GraphicTokenScript>().token = token;
-        graphicToken.GetComponent<GraphicTokenScript>().tokenScript = tokenScript;
+        GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, token.transform, false);
+        // graphicToken.transform.position = new Vector3(0.5f, 0.5f, 0.5f);
         graphicToken.SetActive(false);
+        graphicTokenScript.tokenScript = tokenScript;
+        graphicTokenScript.graphicObject_transform = graphicToken.transform;
+        graphicTokenScript.graphicObject_collider = graphicToken.transform.GetComponent<Collider>();
+        tokenScript.graphicObject = graphicToken;
+        tokenScript.graphicTokenScript = graphicTokenScript;
 
         return token;
     }
@@ -127,7 +131,7 @@ public class GameUtils {
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
 
         tokenScript.graphicObject.SetActive(true);
-        tokenScript.graphicObject.transform.position = placePos;  
+        token.transform.position = placePos;  
         tokenScript.graphicObject.GetComponent<GraphicTokenScript>().goingTo = placePos;     
     }
 
@@ -144,8 +148,8 @@ public class GameUtils {
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
 
         tokenScript.graphicObject.SetActive(true);
-        tokenScript.graphicObject.transform.position = placePos; 
-        tokenScript.graphicObject.GetComponent<GraphicTokenScript>().goingTo = placePos;   
+        token.transform.position = placePos; 
+        token.GetComponent<GraphicTokenScript>().goingTo = placePos;   
     }
 
     static public void deleteGraphicToken(ref GameObject token) {
@@ -166,10 +170,9 @@ public class GameUtils {
 
     // ========================================================================================================================== Shape Stuff
     static public GameObject quickCreateShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv) {
-        System.Random random = new System.Random();
-
         GameObject shape = GameObject.Instantiate(shapePrefab, gameEnv.shapesObject.transform);
         ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+        GraphicShapeScript graphicShapeScript = shape.GetComponent<GraphicShapeScript>();
         shapeScript.gameEnv = gameEnv;
         shapeScript.identifier = template.identifier;
         shape.name = template.identifier + "_" + System.Guid.NewGuid();
@@ -202,11 +205,14 @@ public class GameUtils {
             shapeScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
         }
 
-        GameObject graphicShape = GameObject.Instantiate(shapeScript.graphicObjectPrefab, shape.transform);
-        shapeScript.graphicObject = graphicShape;
-        graphicShape.GetComponent<GraphicShapeScript>().shape = shape;
-        graphicShape.GetComponent<GraphicShapeScript>().shapeScript = shapeScript;
+        GameObject graphicShape = GameObject.Instantiate(shapeScript.graphicObjectPrefab, shape.transform, false);
+        // graphicShape.transform.position = new Vector3(0.5f, 0.5f, 0.5f);
         graphicShape.SetActive(false);
+        graphicShapeScript.shapeScript = shapeScript;
+        graphicShapeScript.graphicObject_transform = graphicShape.transform;
+        graphicShapeScript.graphicObject_collider = graphicShape.transform.GetComponent<Collider>();
+        shapeScript.graphicObject = graphicShape;
+        shapeScript.graphicShapeScript = graphicShapeScript;
 
         return shape;
     }
@@ -221,8 +227,8 @@ public class GameUtils {
 
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
         shapceScript.graphicObject.SetActive(true);
-        shapceScript.graphicObject.transform.position = placePos;
-        shapceScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
+        shape.transform.position = placePos;
+        shape.GetComponent<GraphicShapeScript>().goingTo = placePos;
     }
 
     static public void placeGraphicShape(ref GameObject shape, Vector3 pos) {
@@ -237,7 +243,7 @@ public class GameUtils {
 
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
         shapeScript.graphicObject.SetActive(true);
-        shapeScript.graphicObject.transform.position = placePos;
+        shape.transform.position = placePos;
         shapeScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
     }
 
@@ -259,10 +265,9 @@ public class GameUtils {
 
     // ========================================================================================================================== Wall Stuff
     static public GameObject quickCreateWall(GameObject wallPrefab, WallTemplate template, ref GameEnv gameEnv) {
-        System.Random random = new System.Random();
-
         GameObject wall = GameObject.Instantiate(wallPrefab, gameEnv.shapesObject.transform);
         WallScript wallScript = wall.GetComponent<WallScript>();
+        GraphicWallScript graphicWallScript = wall.GetComponent<GraphicWallScript>();
         wallScript.gameEnv = gameEnv;
         wallScript.identifier = template.identifier;
         wall.name = template.identifier + "_" + System.Guid.NewGuid();
@@ -296,8 +301,13 @@ public class GameUtils {
         }
 
         GameObject graphicWall = GameObject.Instantiate(wallScript.graphicObjectPrefab, wall.transform, false);
-        wallScript.graphicObject = graphicWall;
+        // graphicWall.transform.position = new Vector3(0.5f, 0.5f, 0.5f);
         graphicWall.SetActive(false);
+        graphicWallScript.wallScript = wallScript;
+        graphicWallScript.graphicObject_transform = graphicWall.transform;
+        graphicWallScript.graphicObject_collider = graphicWall.transform.GetComponent<Collider>();
+        wallScript.graphicObject = graphicWall;
+        wallScript.graphicWallScript = graphicWallScript;
 
         return wall;
     }

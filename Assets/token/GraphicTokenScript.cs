@@ -211,8 +211,6 @@ public class GraphicTokenScript : MonoBehaviour
     // ================================================ START/UPDATE
     void Start() {
         controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
-        graphicObject_transform = gameObject.transform.GetChild(0);
-        graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
         canvas_transfrom = gameObject.transform.GetChild(1);
         mouseDown = false; 
         createButtons();

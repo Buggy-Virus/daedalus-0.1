@@ -30,7 +30,7 @@ public class MouseControls : MonoBehaviour {
     public Action waitingAction;
 
     // ======================================================================= Fetched References
-    public GameObject camera;
+    public GameObject main_camera;
     MapScript mapScript;
     GameEnvScript gameEnvScript;
     GameEnv gameEnv;
@@ -204,13 +204,13 @@ public class MouseControls : MonoBehaviour {
             if (!cursorObjectRenderer.enabled) {
                 cursorObjectRenderer.enabled = true;
             }
-            cursorObject.transform.position = currentCoord;
+            cursorObject.transform.position = currentCoord + new Vector3(0.5f, 0.5f, 0.5f);
         }
     }
 
     void addCursor (GameObject curCursorObject, string cursorName) {
         cursorObject = Instantiate(curCursorObject, gameObject.transform);
-        cursorObjectRenderer = cursorObject.transform.GetChild(0).GetComponent<MeshRenderer>();
+        cursorObjectRenderer = cursorObject.GetComponent<MeshRenderer>();
         cursorObjectRenderer.material.color = cursorTint;
         cursorObject.name = cursorName;
         activeCursor = true;
@@ -391,16 +391,16 @@ public class MouseControls : MonoBehaviour {
     // ======================================================================= Camera Controls
     void screenPan() {
         if (Input.mousePosition.x > screenWidth - panThreshold) {
-            camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on +X axis
+            main_camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on +X axis
         }
         if (Input.mousePosition.x < 0 + panThreshold) {
-            camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +X axis
+            main_camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +X axis
         }
         if (Input.mousePosition.y > screenHeight - panThreshold) {
-            camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +Z axis
+            main_camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +Z axis
         }
         if (Input.mousePosition.y < 0 + panThreshold) {
-            camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on -Z axis
+            main_camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on -Z axis
         }
     }
 

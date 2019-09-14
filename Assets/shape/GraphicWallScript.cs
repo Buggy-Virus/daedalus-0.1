@@ -64,24 +64,11 @@ public class GraphicWallScript : MonoBehaviour
     //     } 
     // }
 
-    // ================================================ Setup Graphic Object
-    void settingUpGraphicObject() {
-        if (!setupGraphicObject) {
-            try {
-                graphicObject_transform = gameObject.transform.GetChild(0);
-                graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
-            } catch { 
-                Debug.Log("GraphicObject not added yet");
-            }
-        }
-    }
-
     // ================================================ START/UPDATE
     void Start() {
         wall = gameObject;
         wallScript = gameObject.GetComponent<WallScript>();
-        graphicObject_transform = gameObject.transform.GetChild(0);
-        graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
+        controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
     }
 
     void Update()

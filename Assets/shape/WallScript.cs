@@ -10,6 +10,7 @@ public class WallScript : MonoBehaviour
 	public string graphicAsset;
     public GameObject graphicObjectPrefab;
     public GameObject graphicObject;
+    public GraphicWallScript graphicWallScript;
     public bool onMap = false;
 
     public Index index_xx;

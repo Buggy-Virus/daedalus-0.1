@@ -26,7 +26,7 @@ public class GameEnvScript : MonoBehaviour
 
         gameEnv = new GameEnv();
 
-        gameEnv.shapesObject = GameObject.Find("Cubes");
+        gameEnv.shapesObject = GameObject.Find("Shapes");
         gameEnv.tokensObject = GameObject.Find("Tokens");
         gameEnv.mapScript = GameObject.Find("Map").GetComponent<MapScript>();
 

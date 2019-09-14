@@ -9,6 +9,7 @@ public class ShapeScript : MonoBehaviour {
 	public string graphicAsset;
     public GameObject graphicObjectPrefab;
     public GameObject graphicObject;
+    public GraphicShapeScript graphicShapeScript;
     public bool onMap = false;
 
     public Index index;
@@ -27,7 +28,6 @@ public class ShapeScript : MonoBehaviour {
         gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(gameObject);
         index = endIndex;
         gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Add(gameObject);
-        transform.GetComponentInChildren<GraphicShapeScript>().moveTo(new Vector3(endIndex.x, endIndex.y, endIndex.z));
-    }
-    
+        graphicShapeScript.moveTo(new Vector3(endIndex.x, endIndex.y, endIndex.z));
+    } 
 }

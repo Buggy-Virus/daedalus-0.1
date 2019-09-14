@@ -17,6 +17,7 @@ public class GraphicShapeScript : MonoBehaviour
     MouseControls controlScript;
 
     // ================================================ GLOBAL VARIABLES
+    bool setupGraphicObject = false;
     // input variables
     bool mouseDown = false;
 
@@ -65,9 +66,8 @@ public class GraphicShapeScript : MonoBehaviour
 
     // ================================================ START/UPDATE
     void Start() {
+        shape = gameObject;
         controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
-        graphicObject_transform = gameObject.transform.GetChild(0);
-        graphicObject_collider = graphicObject_transform.GetComponent<Collider>();
     }
 
     void Update()
