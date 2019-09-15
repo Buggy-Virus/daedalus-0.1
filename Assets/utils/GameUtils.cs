@@ -132,7 +132,7 @@ public class GameUtils {
 
         tokenScript.graphicObject.SetActive(true);
         token.transform.position = placePos;  
-        tokenScript.graphicObject.GetComponent<GraphicTokenScript>().goingTo = placePos;     
+        token.GetComponent<GraphicTokenScript>().goingTo = placePos;     
     }
 
     static public void placeGraphicToken(ref GameObject token, Vector3 pos) {
@@ -244,7 +244,7 @@ public class GameUtils {
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
         shapeScript.graphicObject.SetActive(true);
         shape.transform.position = placePos;
-        shapeScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
+        shape.GetComponent<GraphicShapeScript>().goingTo = placePos;
     }
 
     static public void deleteGraphicShape(ref GameObject shape) {
@@ -312,7 +312,7 @@ public class GameUtils {
         return wall;
     }
 
-    static public void placeGraphicWall(ref GameObject wall, Index index_1, Index index_2) {
+    static public void placeGraphicWall(ref GameObject wall, Index index_1, Index index_2, float rotation) {
         WallScript wallScript = wall.GetComponent<WallScript>();
         wallScript.onMap = true;
         float cubeSize = wallScript.gameEnv.cubeSize;
@@ -346,45 +346,53 @@ public class GameUtils {
         Vector3 placePos = new Vector3((index_1.x + index_2.x) * cubeSize / 2,(index_1.y + index_2.y) * cubeSize / 2, (index_1.z + index_2.z) * cubeSize / 2);
         wallScript.graphicObject.SetActive(true);
         wall.transform.position = placePos;
+        wallScript.graphicObject.transform.eulerAngles = new Vector3(0, rotation, 0);
         // wallScript.graphicObject.GetComponent<GraphicWallScript>().goingTo = placePos;
     }
 
-    static public void placeGraphicWall(ref GameObject wall, Vector3 pos) {
+    static public void placeGraphicWall(ref GameObject wall, Vector3 pos, float rotation) {
         WallScript wallScript = wall.GetComponent<WallScript>();
         wallScript.onMap = true;
         float cubeSize = wallScript.gameEnv.cubeSize;
+        Debug.Log(pos);
 
         Index index_1 = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
         Index index_2 = new Index(Mathf.CeilToInt(pos.x / cubeSize), Mathf.CeilToInt(pos.y / cubeSize), Mathf.CeilToInt(pos.z / cubeSize));
+        Debug.Log(index_1.x);
+        Debug.Log(index_1.z);
+        Debug.Log(index_2.x);
+        Debug.Log(index_2.z);
+
 
         if (index_1.x == index_2.x) {
             if (index_1.z > index_2.z) {
                 wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_z = wall;
-                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_zz = wall;
                 wallScript.index_z = index_1;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_zz = wall;
                 wallScript.index_zz = index_2;
             } else {
                 wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_zz = wall;
-                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_z = wall;
                 wallScript.index_zz = index_1;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_z = wall;
                 wallScript.index_z = index_2;
             }
         } else {
             if (index_1.x > index_2.x) {
                 wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_x = wall;
-                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_xx = wall;
                 wallScript.index_x = index_1;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_xx = wall;
                 wallScript.index_xx = index_2;
             } else {
                 wallScript.gameEnv.mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_xx = wall;
-                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_x = wall;
                 wallScript.index_xx = index_1;
+                wallScript.gameEnv.mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_x = wall;
                 wallScript.index_x = index_2;
             }
         }
 
         wallScript.graphicObject.SetActive(true);
         wall.transform.position = pos;
+        wallScript.graphicObject.transform.eulerAngles = new Vector3(0, rotation, 0);
         // shapeScript.graphicObject.GetComponent<GraphicShapeScript>().goingTo = placePos;
     }
 
@@ -429,9 +437,9 @@ public class GameUtils {
         placeGraphicShape(ref cube, pos);
     }
 
-    static public void createAndPlaceWall(GameObject wallPrefab, WallTemplate template, ref GameEnv gameEnv, Vector3 pos) {
+    static public void createAndPlaceWall(GameObject wallPrefab, WallTemplate template, ref GameEnv gameEnv, Vector3 pos, float rotation) {
         GameObject cube = quickCreateWall(wallPrefab, template, ref gameEnv);
-        placeGraphicWall(ref cube, pos);
+        placeGraphicWall(ref cube, pos, rotation);
     }
 
     // ========================================================================================================================== General Utility

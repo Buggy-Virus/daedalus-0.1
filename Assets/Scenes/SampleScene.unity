@@ -2020,6 +2020,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Token
       m_Image: {fileID: 0}
+    - m_Text: Wall
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -4243,6 +4245,7 @@ MonoBehaviour:
   editorMode: 0
   playMode: 0
   activeLayer: 0
+  rotation: 0
   deleteMode: 0
   shapeType: stone
   wallType: stone
@@ -4251,6 +4254,8 @@ MonoBehaviour:
   tokenPrefab: {fileID: 4017560335620846353, guid: 2700dede2fb7d234f9ef1006bd073e24,
     type: 3}
   shapePrefab: {fileID: 6620400664257333476, guid: b2a914a86ea111848953755b4085a369,
+    type: 3}
+  wallPrefab: {fileID: 4367524051237451264, guid: 9928cbcd93ccb374fa755ef2a63c7a26,
     type: 3}
   SELECT_MODE: 2
   INPUT_MODE: 1

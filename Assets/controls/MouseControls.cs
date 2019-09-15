@@ -12,6 +12,7 @@ public class MouseControls : MonoBehaviour {
     public int editorMode = 0;
     public int playMode = 0;
     public int activeLayer = 0;
+    public float rotation;
     public bool deleteMode = false;
     public string shapeType = "stone";
     public string wallType = "stone";
@@ -21,6 +22,7 @@ public class MouseControls : MonoBehaviour {
     public GameObject dragPrefab;
     public GameObject tokenPrefab;
     public GameObject shapePrefab;
+    public GameObject wallPrefab;
 
     // ======================================================================= Public Variables
     // Used for play controls
@@ -173,13 +175,13 @@ public class MouseControls : MonoBehaviour {
             switch (editorMode) {
                 case 0:
                     shapeMode(currentCoord, currentIndex);
-                    placeCursor(currentCoord);
+                    placeCursor(currentCoord, 0);
                     break;
                 case 1:
                     tokenMode(currentCoord, currentIndex);
-                    placeCursor(currentCoord);
+                    placeCursor(currentCoord, 0);
                     break;
-                case 2: wallMode(Input.mousePosition);
+                case 2: wallMode(hitInfo.point, currentCoord);
                     break;
             }
 
@@ -199,12 +201,13 @@ public class MouseControls : MonoBehaviour {
         }
     }
 
-    void placeCursor(Vector3 currentCoord) {
+    void placeCursor(Vector3 currentCoord, float rotation) {
         if (activeCursor) {
             if (!cursorObjectRenderer.enabled) {
                 cursorObjectRenderer.enabled = true;
             }
             cursorObject.transform.position = currentCoord + new Vector3(0.5f, 0.5f, 0.5f);
+            cursorObject.transform.eulerAngles = new Vector3(0, rotation, 0);
         }
     }
 
@@ -337,13 +340,20 @@ public class MouseControls : MonoBehaviour {
     }
 
     // ================================== Wall Mode
-    void wallMode(Vector3 mousePosition) {
+    void wallMode(Vector3 mousePosition, Vector3 currentCoord) {
         Vector3 wallPosition;
-        wallPosition.x = (float)(Math.Round(mousePosition.x + 0.5f) - 0.5);
-        wallPosition.y = (float)(Math.Round(mousePosition.y + 0.5f));
-        wallPosition.z = (float)(Math.Round(mousePosition.z + 0.5f) - 0.5);
-        Debug.Log(wallPosition);
-        placeCursor(wallPosition);
+        wallPosition.y = currentCoord.y;
+        float wall_rotation = 0;
+        if (Math.Abs(Math.Round(mousePosition.x) - mousePosition.x) < Math.Abs(Math.Round(mousePosition.z) - mousePosition.z)) {
+            wallPosition.x = (float)(Math.Round(mousePosition.x)) - 0.5f;
+            wallPosition.z = currentCoord.z;
+            wall_rotation = 90;
+        } else {
+            wallPosition.x = currentCoord.x;
+            wallPosition.z = (float)(Math.Round(mousePosition.z)) - 0.5f;
+        }
+
+        placeCursor(wallPosition, wall_rotation);
 
         if (!deleteMode) {
 	        if (Input.GetMouseButtonDown(0)) {
@@ -351,7 +361,7 @@ public class MouseControls : MonoBehaviour {
 	        }
 
 	        if (Input.GetMouseButtonUp(0)) {
-	            GameUtils.createAndPlaceWall(tokenPrefab, gameEnv.wallTemplates[wallType], ref gameEnv, wallPosition);
+	            GameUtils.createAndPlaceWall(wallPrefab, gameEnv.wallTemplates[wallType], ref gameEnv, wallPosition, wall_rotation);
 	        }
 
 	        if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1)) {
@@ -391,16 +401,44 @@ public class MouseControls : MonoBehaviour {
     // ======================================================================= Camera Controls
     void screenPan() {
         if (Input.mousePosition.x > screenWidth - panThreshold) {
-            main_camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on +X axis
+            Vector3 newPosition = main_camera.transform.position + new Vector3(panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on +X axis
+            if (newPosition.x > mapScript.sizeX) {
+                newPosition.x = mapScript.sizeX;
+            }
+            if (newPosition.z < 0) {
+                newPosition.z = 0;
+            }
+            main_camera.transform.position = newPosition;
         }
         if (Input.mousePosition.x < 0 + panThreshold) {
-            main_camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +X axis
+            Vector3 newPosition = main_camera.transform.position + new Vector3(-1 * panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +X axis
+            if (newPosition.x < 0) {
+                newPosition.x = 0;
+            }
+            if (newPosition.z > mapScript.sizeZ) {
+                newPosition.z = mapScript.sizeZ;
+            }
+            main_camera.transform.position = newPosition;
         }
         if (Input.mousePosition.y > screenHeight - panThreshold) {
-            main_camera.transform.position += new Vector3(panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +Z axis
+            Vector3 newPosition = main_camera.transform.position + new Vector3(panSpeed * Time.deltaTime, 0, panSpeed * Time.deltaTime); // move on +Z axis
+            if (newPosition.x > mapScript.sizeX) {
+                newPosition.x = mapScript.sizeX;
+            }
+            if (newPosition.z > mapScript.sizeZ) {
+                newPosition.z = mapScript.sizeZ;
+            }
+            main_camera.transform.position = newPosition;
         }
         if (Input.mousePosition.y < 0 + panThreshold) {
-            main_camera.transform.position += new Vector3(-1 * panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on -Z axis
+            Vector3 newPosition = main_camera.transform.position + new Vector3(-1 * panSpeed * Time.deltaTime, 0, -1 * panSpeed * Time.deltaTime); // move on -Z axis
+            if (newPosition.x < 0) {
+                newPosition.x = 0;
+            }
+            if (newPosition.z < 0) {
+                newPosition.z = 0;
+            }
+            main_camera.transform.position = newPosition;
         }
     }
 
