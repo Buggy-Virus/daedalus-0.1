@@ -6,7 +6,11 @@ using UnityEngine.UI;
 public class GraphicTokenScript : MonoBehaviour
 {
     // ================================================ PREFABS
-    public GameObject actionsButtonPrefab;
+    public GameObject canvasPrefab;
+    public GameObject moveButtonPrefab;
+    public GameObject basicButtonPrefab;
+    public GameObject advancedButtonPrefab;
+    public GameObject miscButtonPrefab;
     public GameObject actionMenuPrefab;
     public GameObject actionMenuButtonPrefab;
 
@@ -19,7 +23,7 @@ public class GraphicTokenScript : MonoBehaviour
     // ================================================ PUBLIC ATTRIBUTES
 	public GameObject token;
     public TokenScript tokenScript;
-    public Transform canvas_transfrom;
+    public GameObject canvas;
     public Transform graphicObject_transform;
     public Collider graphicObject_collider;
 
@@ -70,7 +74,7 @@ public class GraphicTokenScript : MonoBehaviour
                 mouseDown = false;
             }
 
-            if (controlScript.selectedObject == token && !moveButton.activeSelf) {
+            if (controlScript.selectedObject == token && controlScript.playMode == 0) {
                 showButtons();
             }
         }
@@ -85,22 +89,23 @@ public class GraphicTokenScript : MonoBehaviour
     // ================================================ BUTTONS
     void createButtons() {
         List<GameObject> buttonList = new List<GameObject>();
-        for (int i = 0; i < num_buttons; i++) {
-            GameObject newButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
-            newButton.SetActive(false);
-            buttonList.Add(newButton);
-        }
-
-        moveButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
+        moveButton = Instantiate(moveButtonPrefab, canvas.transform, false);
         moveButton.name = "MoveButton";
-        basicButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
+        moveButton.SetActive(false);
+        basicButton = Instantiate(basicButtonPrefab, canvas.transform, false);
         basicButton.name = "BasicButton";
-        advancedButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
+        basicButton.SetActive(false);
+        advancedButton = Instantiate(advancedButtonPrefab, canvas.transform, false);
         advancedButton.name = "advancedButton";
-        miscButton = Instantiate(actionsButtonPrefab, canvas_transfrom);
+        advancedButton.SetActive(false);
+        miscButton = Instantiate(miscButtonPrefab, canvas.transform, false);
         miscButton.name = "miscButton";
+        miscButton.SetActive(false);
 
+        moveButton.GetComponent<Button>().onClick.AddListener(moveButtonOnClick);
         basicButton.GetComponent<Button>().onClick.AddListener(basicButtonOnClick);
+        advancedButton.GetComponent<Button>().onClick.AddListener(advancedButtonOnClick);
+        miscButton.GetComponent<Button>().onClick.AddListener(miscButtonOnClick);
     }
 
     void placeButton(GameObject button, Vector3 tokenPosition, int Incremement) {
@@ -133,24 +138,45 @@ public class GraphicTokenScript : MonoBehaviour
 
     // ================================================ Button Controls
 
+    void moveButtonOnClick() {
+        Debug.Log("Clicked Move Button");
+        Debug.Log("Printing token name:" + token.name);
+
+        createActionMenu(1);
+    }
+
     void basicButtonOnClick() {
         Debug.Log("Clicked Basic Button");
         Debug.Log("Printing token name:" + token.name);
 
-        createActionMenu();
+        createActionMenu(2);
     }
 
-    void createActionMenu() {
-        GameObject actionMenu = Instantiate(actionMenuPrefab, canvas_transfrom);
+    void advancedButtonOnClick() {
+        Debug.Log("Clicked Advanced Button");
+        Debug.Log("Printing token name:" + token.name);
+
+        createActionMenu(3);
+    }
+
+    void miscButtonOnClick() {
+        Debug.Log("Clicked Misc Button");
+        Debug.Log("Printing token name:" + token.name);
+
+        createActionMenu(4);
+    }
+
+    void createActionMenu(int menu) {
+        GameObject actionMenu = Instantiate(actionMenuPrefab, canvas.transform);
         Transform actionMenuContent = actionMenu.transform.Find("Viewport").Find("Content");
-        Debug.Log(actionMenuContent);
         foreach(KeyValuePair<string, Action> action in tokenScript.actions) {
-            Debug.Log("Here");
-            GameObject actionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
-            actionButton.name = action.Key;
-            Button actionButtonButton = actionButton.GetComponent<Button>();
-            actionButtonButton.GetComponentInChildren<Text>().text = action.Key;
-            actionButtonButton.onClick.AddListener(delegate{callAction(action.Value, ref tokenScript.gameEnv);});
+            if (action.Value.actionType == menu) {
+                GameObject actionButton = Instantiate(actionMenuButtonPrefab, actionMenuContent);
+                actionButton.name = action.Key;
+                Button actionButtonButton = actionButton.GetComponent<Button>();
+                actionButtonButton.GetComponentInChildren<Text>().text = action.Key;
+                actionButtonButton.onClick.AddListener(delegate{callAction(action.Value, ref tokenScript.gameEnv);});
+            }  
         }
     }
 
@@ -161,10 +187,12 @@ public class GraphicTokenScript : MonoBehaviour
     // ================================================ Call Actions
 
     public void callAction(Action action, ref GameEnv gameEnv) {
+        Debug.Log("Call Action");
         if (!action.relational && !action.targeted) {
+            Debug.Log("Calling Self Action");
             ResolveActionsScript.resolveAction(ref token, action, ref gameEnv);
-            controlScript.waitForActionInput(action);
         } else {
+            Debug.Log("Waiting For Input");
             controlScript.waitForActionInput(action);
             hideButtons();
         }
@@ -211,7 +239,6 @@ public class GraphicTokenScript : MonoBehaviour
     // ================================================ START/UPDATE
     void Start() {
         controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
-        canvas_transfrom = gameObject.transform.GetChild(0);
         mouseDown = false; 
         createButtons();
     }

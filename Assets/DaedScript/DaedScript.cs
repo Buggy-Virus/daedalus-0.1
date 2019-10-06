@@ -41,7 +41,10 @@ public class DaedScript {
 		{"IgWidth", IgWidth},
 		{"TokensAtPosition", TokensAtPosition},
 		{"GeometryAtPosition", GeometryAtPosition},
-		{"Print", Print}
+		{"Print", Print},
+		{"IsNull", IsNull},
+		{"ExistsWall", ExistsWall},
+		{"GetWall", GetWall}
 	};
 
 	// ================================= Evaluate Functions ======================================================================
@@ -85,10 +88,35 @@ public class DaedScript {
 
 		return interpret(
 			desugar_expression, 
+			gameEnv.env,
+			gameEnv.store,
+			ref gameEnv
+		).value;
+	}
+
+	public static Value evaluateClean(
+		string input, 
+		ref GameObject self,
+		ref GameEnv gameEnv
+	) {
+		return interpret(
+			desugar(parse(tokenize(input))), 
 			new Dictionary<string, string>(),
 			new Dictionary<string, Value>(),
 			ref gameEnv
 		).value;
+	}
+
+	public static Result evaluateToResult(
+		string input, 
+		ref GameEnv gameEnv) 
+	{
+		return interpret(
+			desugar(parse(tokenize(input))), 
+			gameEnv.env,
+			gameEnv.store,
+			ref gameEnv
+		);
 	}
 
 	public static Value evaluateSelfToken(
@@ -101,8 +129,8 @@ public class DaedScript {
 
 		Value value = interpret(
 			desugar(parse(tokenize(input))), 
-			new Dictionary<string, string>(),
-			new Dictionary<string, Value>(),
+			gameEnv.env,
+			gameEnv.store,
 			ref gameEnv
 		).value;
 
@@ -121,8 +149,8 @@ public class DaedScript {
 
 		Value value = interpret(
 			desugar(parse(tokenize(input))), 
-			new Dictionary<string, string>(),
-			new Dictionary<string, Value>(),
+			gameEnv.env,
+			gameEnv.store,
 			ref gameEnv
 		).value;
 
@@ -143,8 +171,8 @@ public class DaedScript {
 
 		Value value = interpret(
 			desugar(parse(tokenize(input))), 
-			new Dictionary<string, string>(),
-			new Dictionary<string, Value>(),
+			gameEnv.env,
+			gameEnv.store,
 			ref gameEnv
 		).value;
 
@@ -166,8 +194,8 @@ public class DaedScript {
 		
 		Value value = interpret(
 			desugar(parse(tokenize(input))), 
-			new Dictionary<string, string>(),
-			new Dictionary<string, Value>(),
+			gameEnv.env,
+			gameEnv.store,
 			ref gameEnv
 		).value;
 
@@ -226,6 +254,7 @@ public class DaedScript {
 							switch(curAtom.value) {
 								case "if":
 								case "else":
+								case "elif":
 								case "lambda":
 								case "let":
 								case "var":
@@ -233,6 +262,7 @@ public class DaedScript {
 								case "function":
 								case "for":
 								case "each":
+								case "return":
 									curAtom.atomType = "keyword";
 									break;
 								case "true":
@@ -483,6 +513,8 @@ public class DaedScript {
 							return parseFunction(atomList, pos + 1);
 						case "for":
 							return parseFor(atomList, pos + 1);
+						case "return":
+							return parseReturn(atomList, pos + 1);
 						default:
 							return parseError(atomList[pos], pos, "Undefined keyword"); // throw error
 					}
@@ -812,11 +844,15 @@ public class DaedScript {
 			ParseResult alterResult = parseDo(atomList, pos, true);
 			ifExpression.eIfAlter = alterResult.expression;
 			pos = alterResult.position;
+		} else if (atomEquals(atomList[pos], "keyword", "elif")) {
+			pos += 1;
 
-			return new ParseResult(ifExpression, pos);
-		} else {
-			return parseError(atomList[pos], pos, "Expected \"else\""); // throw error
+			ParseResult elifResult = parseIf(atomList, pos);
+			ifExpression.eIfElif = elifResult.expression;
+			pos = elifResult.position;
 		}
+
+		return new ParseResult(ifExpression, pos);
 	}
 
 	static ParseResult parseLambda(List<Atom> atomList, int pos) {
@@ -878,6 +914,16 @@ public class DaedScript {
 		} else {
 			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
+	}
+
+	static ParseResult parseReturn(List<Atom> atomList, int pos) {
+		Expression returnExpression = new Expression("e-return", atomList[pos].line, atomList[pos].character - 1);
+
+		ParseResult returnValueResult = parseSingle(atomList, pos, false);
+		returnExpression.eReturn = returnValueResult.expression;
+		pos = returnValueResult.position;
+		
+		return new ParseResult(returnExpression, pos);
 	}
 
 	static ParseResult parseWhile(List<Atom> atomList, int pos) {
@@ -1059,7 +1105,12 @@ public class DaedScript {
 			case "e-if": //e-if
 				expression.eIfCond = desugar(expression.eIfCond);
 				expression.eIfConsq = desugar(expression.eIfConsq);
-				expression.eIfAlter = desugar(expression.eIfAlter);
+				if (expression.eIfAlter != null) {
+					expression.eIfAlter = desugar(expression.eIfAlter);
+				}
+				if (expression.eIfElif != null) {
+					expression.eIfElif = desugar(expression.eIfElif);
+				}
 				return expression;
 			case "e-lam": //e-lam
 				expression.eLamBody = desugar(expression.eLamBody);
@@ -1896,7 +1947,13 @@ public class DaedScript {
 			if (cond_result.value.vBool) {
 				return interpret(expression.eIfConsq, env, cond_result.store, ref gameEnv);
 			} else {
-				return interpret(expression.eIfAlter, env, cond_result.store, ref gameEnv);
+				if (expression.eIfAlter != null) {
+					return interpret(expression.eIfAlter, env, cond_result.store, ref gameEnv);
+				} else if (expression.eIfElif != null) {
+					return interpret(expression.eIfElif, env, cond_result.store, ref gameEnv);
+				} else {
+					return new Result(new Value("null", expression.line, expression.character), cond_result.store);
+				}
 			}
 		} else {
 			return resultError(cond_result, "Expected bool"); //Throw Error
@@ -1950,9 +2007,9 @@ public class DaedScript {
 		Dictionary<string, string> env, 
 		Dictionary<string, Value> store, 
 		ref GameEnv gameEnv
-	) 
-	{
+	) {
 		string name = expression.eSetName;
+		Utils.printEnvStore(env, store);
 		if (env.ContainsKey(name)) {
 			string pointer = env[name];
 			if (store.ContainsKey(pointer)) {
@@ -1960,10 +2017,10 @@ public class DaedScript {
 				newValue_result.store[pointer] = newValue_result.value;
 				return new Result(newValue_result.value, newValue_result.store);
 			} else {
-				return expressionError(expression, store, "Unset variable" + name); //Throw Error
+				return expressionError(expression, store, "Unset variable " + name); //Throw Error
 			}
 		} else {
-			return expressionError(expression, store, "Unbound variable" + name); //Throw Error
+			return expressionError(expression, store, "Unbound variable " + name); //Throw Error
 		}
 	}
 
@@ -1995,6 +2052,7 @@ public class DaedScript {
 			}
 			
 		}
+		last_result.env = env;
 		return last_result;
 	}
 
@@ -2052,13 +2110,13 @@ public class DaedScript {
 	{
 		string name = expression.eId;
 		if (env.ContainsKey(name)) {
-			if (store.ContainsKey(name)) {
+			if (store.ContainsKey(env[name])) {
 				return new Result(store[env[name]], store);
 			} else {
-				return expressionError(expression, store, "Unset variable" + name); //Throw Error
+				return expressionError(expression, store, "Unset variable " + name); //Throw Error
 			}
 		} else {
-			return expressionError(expression, store, "Unbound variable" + name); //Throw Error
+			return expressionError(expression, store, "Unbound variable " + name); //Throw Error
 		}
 	}
 
@@ -2076,10 +2134,10 @@ public class DaedScript {
 			return new Result(igValue, store);
 		} else if (gameEnv.shapeDict.ContainsKey(name)) {
 			igValue.vIg = gameEnv.shapeDict[name];
-			igValue.vIgType = "geometry";
+			igValue.vIgType = "shape";
 			return new Result(igValue, store);
 		} else {
-			return expressionError(expression, store, "No Ig of name \"" + name); //Throw Error
+			return expressionError(expression, store, "No Ig of name \"" + name + "\""); //Throw Error
 		}
 	}
 
@@ -2120,7 +2178,7 @@ public class DaedScript {
 			} else {
 				return expressionError(expression, store, "ig \"" + token.name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
-		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "geometry") {
+		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "shape") {
 			GameObject shape = ig_result.value.vIg;
 			ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
 			if (shapeScript.variables.ContainsKey(variable)) {
@@ -2220,7 +2278,7 @@ public class DaedScript {
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
 				}
 			}
-		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "geometry") {
+		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "shape") {
 			GameObject shape = ig_result.value.vIg;
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
@@ -3782,6 +3840,208 @@ public class DaedScript {
 			return resultError(string_result, "Expected string");	
 		} 
 	}
+
+	static Result IsNull(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Value isNull = new Value("bool", expression.line, expression.character);
+
+		Result result = interpret(arguments[0], env, store, ref gameEnv);
+		if (result.value.valueType == "null") {
+			isNull.vBool = true;
+			
+		} else {
+			isNull.vBool = false;	
+		} 
+
+		return new Result(isNull, result.store); 
+	}
+
+	static Result ExistsWall(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		int x_1;
+		int y_1;
+		int z_1;
+		int x_2;
+		int y_2;
+		int z_2;
+		Result first_result = interpret(arguments[0], env, store, ref gameEnv);
+		Result second_result;
+		if (first_result.value.valueType == "list") {
+			List<Value> first = first_result.value.vList;
+			if (first[0].valueType == "int" && first[1].valueType == "int" && first[2].valueType == "int" && first.Count() == 3) {
+				x_1 = first[0].vInt;
+				y_1 = first[1].vInt;
+				z_1 = first[2].vInt;
+
+				if (!Utils.gameCoordExists(x_1, y_1, z_1, gameEnv.mapScript.gameBoard)) {
+					return resultError(first_result, "Index out of bounds");
+				}
+
+				second_result = interpret(arguments[1], env, first_result.store, ref gameEnv);
+				if (second_result.value.valueType == "list") {
+					List<Value> second = second_result.value.vList;
+					if (first[0].valueType == "int" && first[1].valueType == "int" && first[2].valueType == "int" && first.Count() == 3) {
+						x_2 = first[0].vInt;
+						y_2 = first[1].vInt;
+						z_2 = first[2].vInt;
+
+						if (!Utils.gameCoordExists(x_2, y_2, z_2, gameEnv.mapScript.gameBoard)) {
+							return resultError(first_result, "Index out of bounds");
+						}
+					} else {
+						return resultError(second_result, "Expected list with three ints");
+					}
+				} else {
+					return resultError(second_result, "Expected list");
+				}
+			} else {
+				return resultError(first_result, "Expected list with three ints");
+			}
+		} else {
+			return resultError(first_result, "Expected list");	
+		}
+
+		Value exists = new Value("bool", expression.line, expression.character);
+
+		if (x_1 == x_2) {
+			if (z_1 == z_2 + 1) {
+				if (gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_z != null) {
+					exists.vBool = true;
+					return new Result(exists, second_result.store); 
+				} else {
+					exists.vBool = false;
+					return new Result(exists, second_result.store); 
+				}
+			} else if (z_1 == z_2 - 1) {
+				if (gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_zz != null) {
+					exists.vBool = true;
+					return new Result(exists, second_result.store); 
+				} else {
+					exists.vBool = false;
+					return new Result(exists, second_result.store); 
+				}
+			}
+		} else if (z_1 == z_2) {
+			if (x_1 == x_2 + 1) {
+				if (gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_x != null) {
+					exists.vBool = true;
+					return new Result(exists, second_result.store); 
+				} else {
+					exists.vBool = false;
+					return new Result(exists, second_result.store); 
+				}
+			} else if (x_1 == x_2 - 1) {
+				if (gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_xx != null) {
+					exists.vBool = true;
+					return new Result(exists, second_result.store); 
+				} else {
+					exists.vBool = false;
+					return new Result(exists, second_result.store); 
+				}
+			}
+		}
+
+		return new Result(new Value("null", expression.line, expression.character), second_result.store);
+	}
+
+	static Result GetWall(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		int x_1;
+		int y_1;
+		int z_1;
+		int x_2;
+		int y_2;
+		int z_2;
+		Result first_result = interpret(arguments[0], env, store, ref gameEnv);
+		Result second_result;
+		if (first_result.value.valueType == "list") {
+			List<Value> first = first_result.value.vList;
+			if (first[0].valueType == "int" && first[1].valueType == "int" && first[2].valueType == "int" && first.Count() == 3) {
+				x_1 = first[0].vInt;
+				y_1 = first[1].vInt;
+				z_1 = first[2].vInt;
+
+				if (!Utils.gameCoordExists(x_1, y_1, z_1, gameEnv.mapScript.gameBoard)) {
+					return resultError(first_result, "Index out of bounds");
+				}
+
+				second_result = interpret(arguments[1], env, first_result.store, ref gameEnv);
+				if (second_result.value.valueType == "list") {
+					List<Value> second = second_result.value.vList;
+					if (first[0].valueType == "int" && first[1].valueType == "int" && first[2].valueType == "int" && first.Count() == 3) {
+						x_2 = first[0].vInt;
+						y_2 = first[1].vInt;
+						z_2 = first[2].vInt;
+
+						if (!Utils.gameCoordExists(x_2, y_2, z_2, gameEnv.mapScript.gameBoard)) {
+							return resultError(first_result, "Index out of bounds");
+						}
+					} else {
+						return resultError(second_result, "Expected list with three ints");
+					}
+				} else {
+					return resultError(second_result, "Expected list");
+				}
+			} else {
+				return resultError(first_result, "Expected list with three ints");
+			}
+		} else {
+			return resultError(first_result, "Expected list");	
+		}
+
+		Value wall = new Value("ig", expression.line, expression.character);
+
+		if (x_1 == x_2) {
+			if (z_1 == z_2 + 1 && gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_z != null) {
+				wall.vIg = gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_z;
+				wall.vIgType = "shape";
+				return new Result(wall, second_result.store); 
+			} else if (z_1 == z_2 - 1 && gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_zz != null) {
+				wall.vIg = gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_z;
+				wall.vIgType = "shape";
+				return new Result(wall, second_result.store); 
+			}
+		} else if (z_1 == z_2) {
+			if (x_1 == x_2 + 1 && gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_x != null) {
+				wall.vIg = gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_z;
+				wall.vIgType = "shape";
+				return new Result(wall, second_result.store); 
+			} else if (x_1 == x_2 - 1 && gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_xx != null) {
+				wall.vIg = gameEnv.mapScript.gameBoard[x_1,y_1,z_1].wall_xx;
+				wall.vIgType = "shape";
+				return new Result(wall, second_result.store); 
+			}
+		}
+
+		return new Result(new Value("null", expression.line, expression.character), second_result.store);
+	}
 }
 
 // ====================================================================================================================
@@ -3800,6 +4060,7 @@ public class DaedScript {
 public class Result {
 	public Value value;
 	public Dictionary<string, Value> store;
+	public Dictionary<string, string> env;
 
 	public Result(Value val, Dictionary<string, Value> str) {
 		value = val;
@@ -3871,6 +4132,7 @@ public class Expression {
 	public Expression eIfCond; // type=8
 	public Expression eIfConsq;
 	public Expression eIfAlter;
+	public Expression eIfElif;
 
 	public List<string> eLamParams;
 	public Expression eLamBody;

@@ -4,9 +4,16 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - token: {instanceID: 0}
-  - tokenCanvasPrefab: {fileID: 1252568480488130, guid: a22808023c5567b44aa2553544588a43,
+  - canvasPrefab: {fileID: 1630674671960168240, guid: 0560f269e99b791479032da60cd0dcf9,
       type: 3}
+  - actionsButtonPrefab: {instanceID: 0}
+  - actionMenuPrefab: {instanceID: 0}
+  - actionMenuButtonPrefab: {instanceID: 0}
+  - token: {instanceID: 0}
+  - tokenScript: {instanceID: 0}
+  - canvas: {instanceID: 0}
+  - graphicObject_transform: {instanceID: 0}
+  - graphicObject_collider: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

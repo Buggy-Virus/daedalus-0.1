@@ -111,11 +111,15 @@ public class GameUtils {
         GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, token.transform, false);
         // graphicToken.transform.position = new Vector3(0.5f, 0.5f, 0.5f);
         graphicToken.SetActive(false);
+        graphicTokenScript.token = token;
         graphicTokenScript.tokenScript = tokenScript;
         graphicTokenScript.graphicObject_transform = graphicToken.transform;
         graphicTokenScript.graphicObject_collider = graphicToken.transform.GetComponent<Collider>();
         tokenScript.graphicObject = graphicToken;
         tokenScript.graphicTokenScript = graphicTokenScript;
+
+        GameObject tokenCavas = GameObject.Instantiate(graphicTokenScript.canvasPrefab, token.transform);
+        graphicTokenScript.canvas = tokenCavas;
 
         return token;
     }

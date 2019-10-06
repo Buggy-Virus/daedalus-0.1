@@ -25,6 +25,9 @@ public class GameEnv
     public Dictionary<string, ShapeTemplate> shapeTemplates;
     public Dictionary<string, WallTemplate> wallTemplates;
 
+    public Dictionary<string, Value> store;
+    public Dictionary<string, string> env;
+
     public GameEnv(){
         tokenDict = new Dictionary<string, GameObject>();
         shapeDict = new Dictionary<string, GameObject>();
@@ -34,5 +37,7 @@ public class GameEnv
         wallTemplates = new Dictionary<string, WallTemplate>();
         actionDict = new Dictionary<string, Action>();
         effectDict = new Dictionary<string, Effect>();
+        store = new Dictionary<string, Value>();
+        env = new Dictionary<string, string>();
     }
 }

@@ -76,10 +76,6 @@ public class MouseControls : MonoBehaviour {
     public GameObject activeLayerObject;
     Collider activeLayerCollider;
 
-    // ================================== Frame update Checkers
-    bool lastEditor = true;
-    int lastPlayMode = -1;
-
     // ======================================================================= UI Functions
 
     public void hamburgerButton() {
@@ -98,6 +94,7 @@ public class MouseControls : MonoBehaviour {
         if (editor) {
             editor = false;
             editorPanel.SetActive(false); 
+            destroyCursor();
         } else {
             editor = true;
             editorPanel.SetActive(true); 
@@ -372,16 +369,15 @@ public class MouseControls : MonoBehaviour {
 
     // ======================================================================= Play Mode
     void playControls() {
-        if (lastEditor) {
-            Debug.Log("select mode");
-            destroyCursor();
-            waitingAction = null;
-        }
+
     }
 
     public void waitForActionInput(Action action) {
+        Debug.Log("waitForActionInput Called");
         playMode = 1;
         waitingAction = action;
+        Debug.Log(action);
+        Debug.Log(waitingAction);
     }
 
     public void gotGoodInput() {

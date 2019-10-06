@@ -532,7 +532,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163879375}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.000041889}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000021931}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 393044462}
@@ -545,8 +545,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 224.8, y: 199.5}
-  m_SizeDelta: {x: -449.5, y: -399}
+  m_AnchoredPosition: {x: 487.59, y: 254}
+  m_SizeDelta: {x: -975.08, y: -507.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &163879377
 MonoBehaviour:
@@ -872,7 +872,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &246738984
 MonoBehaviour:
@@ -961,13 +961,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282840810}
-  m_LocalRotation: {x: 0.23941277, y: 0.3723109, z: -0.09833023, w: 0.8912897}
-  m_LocalPosition: {x: -2.36, y: 3.78, z: -2.62}
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: -2.3599997, y: 3.7799997, z: -46.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 29.999, y: 45.396004, z: 0.19800001}
+  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!1 &287787376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,7 +1164,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 298926527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00015842}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1097270713}
@@ -1180,8 +1180,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 224.82, y: 130.42}
-  m_SizeDelta: {x: -449.45, y: -316.85}
+  m_AnchoredPosition: {x: 491.1, y: 146.38}
+  m_SizeDelta: {x: -982.01, y: -348.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &298926529
 MonoBehaviour:
@@ -2103,7 +2103,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &803062067
 GameObject:
@@ -3115,7 +3115,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1373510492
 GameObject:
@@ -3336,7 +3336,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1449091643
 GameObject:
@@ -3402,7 +3402,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1456969233
 GameObject:
@@ -4100,7 +4100,7 @@ RectTransform:
   - {fileID: 163879376}
   - {fileID: 298926528}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4227,7 +4227,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1826583476
 MonoBehaviour:
@@ -4251,7 +4251,7 @@ MonoBehaviour:
   wallType: stone
   tokenType: goblin
   dragPrefab: {fileID: 1477668792116364, guid: 13d1af1fa5e8aaf4cb01ebfd4f39babb, type: 3}
-  tokenPrefab: {fileID: 4017560335620846353, guid: 2700dede2fb7d234f9ef1006bd073e24,
+  tokenPrefab: {fileID: 8913515695155247463, guid: 90440cb5a8961054a8d2c702757f2f32,
     type: 3}
   shapePrefab: {fileID: 6620400664257333476, guid: b2a914a86ea111848953755b4085a369,
     type: 3}

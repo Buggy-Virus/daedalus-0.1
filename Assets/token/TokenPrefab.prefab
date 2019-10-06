@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4017560335620846353
+--- !u!1 &8913515695155247463
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1360690454562146315}
-  - component: {fileID: 9194786142641407455}
-  - component: {fileID: 4807547236814175884}
-  - component: {fileID: 8091380215159001617}
+  - component: {fileID: 8623480348753830312}
+  - component: {fileID: 8913515695155247465}
+  - component: {fileID: 8913515695155247464}
   m_Layer: 0
   m_Name: TokenPrefab
   m_TagString: Untagged
@@ -19,32 +18,63 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1360690454562146315
-RectTransform:
+--- !u!4 &8623480348753830312
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017560335620846353}
+  m_GameObject: {fileID: 8913515695155247463}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 59.299316, y: -46.21911, z: 58.193226}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
---- !u!114 &9194786142641407455
+--- !u!114 &8913515695155247465
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017560335620846353}
+  m_GameObject: {fileID: 8913515695155247463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: febbde5671fa86544a25604b44c03345, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasPrefab: {fileID: 1630674671960168240, guid: 0560f269e99b791479032da60cd0dcf9,
+    type: 3}
+  moveButtonPrefab: {fileID: 5192428096263405456, guid: cf5c2dff0f21f1140ba518418bcd439b,
+    type: 3}
+  basicButtonPrefab: {fileID: 7683047026966829283, guid: 80811a75eae596a419606d7896b8f584,
+    type: 3}
+  advancedButtonPrefab: {fileID: 3904387099615626502, guid: c08580404e562094f803dee1aa2ae30f,
+    type: 3}
+  miscButtonPrefab: {fileID: 1482703107684221837, guid: 80993c0c9c15c59478b155c007ad5591,
+    type: 3}
+  actionMenuPrefab: {fileID: 2508494432840256472, guid: 549174223ad9fa947a1170113ac156be,
+    type: 3}
+  actionMenuButtonPrefab: {fileID: 8430872489970413681, guid: 68ee5d32682a49945b2030cf89e4c5ad,
+    type: 3}
+  moveSpeed: 10
+  button_radius: 65
+  button_start: 0.5
+  button_interval: 0.25
+  token: {fileID: 0}
+  tokenScript: {fileID: 0}
+  canvas: {fileID: 0}
+  graphicObject_transform: {fileID: 0}
+  graphicObject_collider: {fileID: 0}
+  goingTo: {x: 0, y: 0, z: 0}
+--- !u!114 &8913515695155247464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8913515695155247463}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0d6e4cfd8c5cc94ab465733fbdb0cbb, type: 3}
@@ -63,52 +93,3 @@ MonoBehaviour:
   length: 0
   height: 0
   occupies: 0
---- !u!223 &4807547236814175884
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017560335620846353}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &8091380215159001617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4017560335620846353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: febbde5671fa86544a25604b44c03345, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionsButtonPrefab: {fileID: 1400434103368138, guid: 820426675c23d404b9370c91d6c30f3f,
-    type: 3}
-  actionMenuPrefab: {fileID: 1400434103368138, guid: 820426675c23d404b9370c91d6c30f3f,
-    type: 3}
-  actionMenuButtonPrefab: {fileID: 1400434103368138, guid: 820426675c23d404b9370c91d6c30f3f,
-    type: 3}
-  moveSpeed: 10
-  button_radius: 65
-  button_start: 0.5
-  button_interval: 0.25
-  token: {fileID: 0}
-  tokenScript: {fileID: 0}
-  canvas_transfrom: {fileID: 0}
-  graphicObject_transform: {fileID: 0}
-  graphicObject_collider: {fileID: 0}
-  goingTo: {x: 0, y: 0, z: 0}
