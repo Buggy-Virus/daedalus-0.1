@@ -205,8 +205,12 @@ public class GraphicTokenScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedObject, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
-                controlScript.gotGoodInput();
+                if (ResolveActionsScript.resolveRelationalConditions(controlScript.selectedObject, token, controlScript.waitingAction.call_conditions, tokenScript.gameEnv)) {
+                    ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedObject, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
+                    controlScript.gotGoodInput();
+                } else {
+                    controlScript.gotBadInput();
+                }
             }
         }
     }

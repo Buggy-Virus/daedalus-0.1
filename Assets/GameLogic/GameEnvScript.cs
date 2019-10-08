@@ -74,113 +74,105 @@ public class GameEnvScript : MonoBehaviour
             null
         );
 
-        Action nullAction = new Action(
-            "Null-Action",
-            4,
+        Action nullAction = Utils.createAction(
+            new Dictionary<string, string>() { 
+                { "name", "Null-Action" } 
+            },
+            new Dictionary<string, bool>() { 
+                { "relational", false },
+                { "targeted", false }
+            },
+            new Dictionary<string, int>() {
+                { "actionType", 4 }, 
+                { "aoe", -1 }
+            },
             null,
             null,
+            new Dictionary<string, List<Effect>>() { 
+                { "effects", new List<Effect> { nullActionEffect } } 
+            }
+        );
+
+        Effect BasicMoveEffect = Utils.createEffect(
+            new Dictionary<string, string>() { 
+                { "name", "Basic-Move-Effect" },
+                {"self_displace", "Get_Shape_Top($target);"}
+            },
+            new Dictionary<string, bool>() { 
+                { "relational", false },
+                { "targeted", true },
+                { "instant", true },
+            },
             null,
-            new List<Effect> { nullActionEffect },
-            -1,
-            null,
-            null,
-            null,
+            new Dictionary<string, List<string>>() { 
+                { "scripts", new List<string> { "Basic_Move_Script($self, $target);" } } 
+            },
             null
         );
 
-        Effect BasicMoveEffect = new Effect(
-            "Basic-Move-Effect",
+        Action BasicMove = Utils.createAction(
+            new Dictionary<string, string>() { 
+                { "name", "Basic-Move" } 
+            },
+            new Dictionary<string, bool>() { 
+                { "relational", false },
+                { "targeted", true }
+            },
+            new Dictionary<string, int>() { 
+                { "actionType", 1 },
+                { "minRange", 1 },
+                { "maxRange", 1 },
+                { "aoe", -1 }
+            },
+            new Dictionary<string, List<string>>() { 
+                { "available_conditions", new List<string> { "Can_Move($self);" } },
+                { "call_conditions", new List<string> { "Basic_Move_Call_Condition($self, $target);" } }
+            },  
             null,
-            new List<string> { "Basic_Move_Script($self, $target);" },
-            "Get_Shape_Top($target);",
+            new Dictionary<string, List<Effect>>() { 
+                { "effects", new List<Effect> { BasicMoveEffect } } 
+            }
+        );
+
+        Effect BasicAttacKEffect = Utils.createEffect(
+            new Dictionary<string, string>() { 
+                { "name", "Basic-Attack-Effect" }
+            },
+            new Dictionary<string, bool>() { 
+                { "relational", true },
+                { "targeted", false },
+                { "instant", true },
+            },
             null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            new Dictionary<string, List<string>>() { 
+                { "scripts", new List<string> { "Deduct_Standard_Action($self);" } },
+                { "conditions", new List<string> { "Basic_Attack_Hit_Condition($self, $target)" } },
+                { "conditional_scripts", new List<string> { "Basic_Attack_Script($self, $target);" } },
+            },
             null
         );
 
-        Action BasicMove = new Action(
-            "Basic-Move",
-            1,
+        Action BasicAttack = Utils.createAction(
+            new Dictionary<string, string>() { 
+                { "name", "Basic-Attack" } 
+            },
+            new Dictionary<string, bool>() { 
+                { "relational", true },
+                { "targeted", false }
+            },
+            new Dictionary<string, int>() { 
+                { "actionType", 2 },
+                { "minRange", 1 },
+                { "maxRange", 1 },
+                { "aoe", -1 }
+            },
+            new Dictionary<string, List<string>>() { 
+                { "available_conditions", new List<string> { "Has_Standard_Action($self);" } }
+            },  
             null,
-            new List<string> { "Can_Move($self);" },
-            new List<string> { "Basic_Move_Call_Condition($self, $target);"},
-            null,
-            new List<Effect> { BasicMoveEffect },
-            -1,
-            null,
-            null,
-            null,
-            null
-        );
-
-        Effect ResolveBasicAttackEffect = new Effect(
-            "Resolve-Basic-Attack-Effect",
-            null,
-            new List<string> { "Basic_Attack_Script($self, $target);" },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
-        
-        Action ResolveBasicAttack = new Action(
-            "Resolve-Basic-Attack",
-            0,
-            null,
-            null,
-            null,
-            new List<string> { "Basic_Attack_Hit_Condition($self, $target)" },
-            new List<Effect> { ResolveBasicAttackEffect },
-            -1,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
-
-        Effect BasicAttackEffect = new Effect(
-            "Basic-Attack-Effect",
-            null,
-            new List<string> { "Deduct_Standard_Action($self);" },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
-
-        Action BasicAttack = new Action(
-            "Basic-Attack",
-            2,
-            null,
-            new List<string> { "Has_Standard_Action($self);" },
-            null,
-            null,
-            new List<Effect> { BasicAttackEffect },
-            -1,
-            null,
-            null,
-            new List<Action> { ResolveBasicAttack },
-            null,
-            null,
-            null
+            new Dictionary<string, List<Effect>>() { 
+                { "effects", new List<Effect> { BasicAttacKEffect } } 
+            }
         );
 
         gameEnv.actionDict.Add(nullAction.name, nullAction);
@@ -320,6 +312,7 @@ public class GameEnvScript : MonoBehaviour
     public void populateStore() {
         string path = "Assets/GameLogic/pathfinder_test.txt";
         string pathfinderScript = Utils.readTextFile(path);
+        Debug.Log(pathfinderScript);
         addScriptToStore(pathfinderScript, ref gameEnv);
     }
 }

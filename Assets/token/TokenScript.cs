@@ -31,7 +31,7 @@ public class TokenScript : MonoBehaviour {
 
     public Dictionary<string, Effect> effects = new Dictionary<string, Effect>();
 
-    public Dictionary<string, GameVar> variables = new Dictionary<string, GameVar>();
+    public Dictionary<string, Value> variables = new Dictionary<string, Value>();
 
     public void moveTo(Index endIndex) {
         gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(gameObject);

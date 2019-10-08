@@ -191,16 +191,16 @@ public class Utils {
     }
 
     static public string readTextFile(string file_path) {
-        StreamReader inp_stm = new StreamReader(file_path);
+        StreamReader reader = new StreamReader(file_path);
 
-        string inp_ln = "";
+        string text = "";
 
-        while(!inp_stm.EndOfStream) {
-            inp_ln += inp_stm.ReadLine( );
+        while(!reader.EndOfStream) {
+            text += reader.ReadLine( ) + "\n";
         }
 
-        inp_stm.Close( );  
-        return inp_ln;
+        reader.Close( );  
+        return text;
     }
 
     static public Action createAction(

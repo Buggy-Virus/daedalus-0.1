@@ -189,6 +189,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
+		Debug.Log(input);
 		gameEnv.tokenDict.Add("self", self);
 		gameEnv.shapeDict.Add("target", target);
 		
@@ -319,6 +320,15 @@ public class DaedScript {
 									buildingAtom = false;
 								}
 								break;
+							case "-":
+								if (Char.IsDigit(curChar)) {
+									curAtom.atomType = "number";
+									curAtom.value += curChar.ToString();
+								} else {
+									atomList.Add(curAtom);
+									buildingAtom = false;
+								}
+								break;
 							default:
 								atomList.Add(curAtom);
 								buildingAtom = false;
@@ -442,6 +452,7 @@ public class DaedScript {
 	static ParseResult parseError(Atom atom, int pos, string message) {
 		Expression error = new Expression("error", atom.line, atom.character);
 		error.eErrorMessage = "ParseError:" + message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
+		// Debug.Log("Error at (" + atom.line + "," + atom.character + "): " + error.eErrorMessage);
 		return new ParseResult(error, pos);
 	}
 
@@ -1258,6 +1269,7 @@ public class DaedScript {
 	) {
 		Value errorValue = new Value("error", error.line, error.character); 
 		errorValue.errorMessage = "Error at (" + error.line + "," + error.character + "): " + error.eErrorMessage;
+		Debug.Log(errorValue.errorMessage);
 		return new Result(errorValue, store); //Throw Error	
 	}
 
@@ -1291,6 +1303,7 @@ public class DaedScript {
 				errorValue.errorMessage += error.valueType + ",unknown value type)";
 				break;
 		}
+		Debug.Log(errorValue.errorMessage);
 		return new Result(errorValue, errorResult.store); //Throw Error	
 	}
 
@@ -1368,6 +1381,7 @@ public class DaedScript {
 				errorValue.errorMessage += error.expressionType + ",unknown expression type)";
 				break;
 		}
+		Debug.Log(errorValue.errorMessage);
 		return new Result(errorValue, store); //Throw Error	
 	}
 
@@ -1846,9 +1860,13 @@ public class DaedScript {
 				Result r_result = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result.value.valueType) {
 					case("int"):
-						if (Math.Abs(r_result.value.vDouble) < l_result.value.vString.Length) {
+						if (Math.Abs(r_result.value.vInt) < l_result.value.vString.Length) {
 							Value returnValue = new Value("string", expression.line, expression.character);
-							returnValue.vString = l_result.value.vString[r_result.value.vInt].ToString();
+							if (r_result.value.vInt < 0) {
+								returnValue.vString = l_result.value.vString[l_result.value.vString.Length + r_result.value.vInt].ToString();
+							} else {
+								returnValue.vString = l_result.value.vString[r_result.value.vInt].ToString();
+							}
 							return new Result(returnValue, r_result.store);
 						} else {
 							return resultError(r_result, "Index out of range"); //Throw Error
@@ -1860,8 +1878,12 @@ public class DaedScript {
 				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
 				switch(r_result_list.value.valueType) {
 					case("int"):
-						if (Math.Abs(r_result_list.value.vDouble) < l_result.value.vList.Count) {
-							return new Result(l_result.value.vList[r_result_list.value.vInt], r_result_list.store);
+						if (Math.Abs(r_result_list.value.vInt) < l_result.value.vList.Count) {
+							if (r_result_list.value.vInt < 0) {
+								return new Result(l_result.value.vList[l_result.value.vList.Count() + r_result_list.value.vInt], r_result_list.store);
+							} else {
+								return new Result(l_result.value.vList[r_result_list.value.vInt], r_result_list.store);
+							}
 						} else {
 							return resultError(r_result_list, "Index out of range"); //Throw Error	
 						}
@@ -1911,12 +1933,18 @@ public class DaedScript {
 								case "string":
 									Value returnValue = new Value("string", expression.line, expression.character);
 									int idx = l_result.value.vInt;
+									if (idx < 0) {
+										idx = t_result.value.vString.Length + idx;
+									}
 									int num = r_result.value.vInt - idx;
 									returnValue.vString = t_result.value.vString.Substring(idx, num);
 									return new Result(returnValue, t_result.store);
 								case "list":	
 									Value returnValue_list = new Value("list", expression.line, expression.character);
 									int idx_list = l_result.value.vInt;
+									if (idx_list < 0) {
+										idx_list = t_result.value.vList.Count() + idx_list;
+									}
 									int num_list = r_result.value.vInt - idx_list;
 									returnValue_list.vList = t_result.value.vList.GetRange(idx_list, num_list);
 									return new Result(returnValue_list, t_result.store);
@@ -2154,24 +2182,34 @@ public class DaedScript {
 			GameObject token = ig_result.value.vIg;
 			TokenScript tokenScript = token.GetComponent<TokenScript>();
 			if (tokenScript.variables.ContainsKey(variable)) {
-				GameVar gameVar = tokenScript.variables[variable];
-				switch(gameVar.type) {
+				Value value = tokenScript.variables[variable];
+				switch(value.valueType) {
 					case "int":
 						Value intValue = new Value("int", expression.line, expression.character);
-						intValue.vInt = gameVar.intValue;
+						intValue.vInt = value.vInt;
 						return new Result(intValue, store);
 					case "double":
 						Value doubleValue = new Value("double", expression.line, expression.character);
-						doubleValue.vDouble = gameVar.doubleValue;
+						doubleValue.vDouble = value.vDouble;
 						return new Result(doubleValue, store);
 					case "string":
 						Value stringValue = new Value("string", expression.line, expression.character);
-						stringValue.vString= gameVar.stringValue;
+						stringValue.vString= value.vString;
 						return new Result(stringValue, store);
 					case "bool":
 						Value boolValue = new Value("bool", expression.line, expression.character);
-						boolValue.vBool = gameVar.boolValue;
+						boolValue.vBool = value.vBool;
 						return new Result(boolValue, store);
+					case "function":
+						Value functionValue = new Value("function", expression.line, expression.character);
+						functionValue.vFunBody = value.vFunBody;
+						functionValue.vFunParams = value.vFunParams;
+						functionValue.vFunEnviroment = value.vFunEnviroment;
+						return new Result(functionValue, store);
+					case "list":
+						Value listValue = new Value("list", expression.line, expression.character);
+						listValue.vList = value.vList;
+						return new Result(listValue, store);
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + token.name + "." + variable + "\""); //Throw Error
 				}
@@ -2182,24 +2220,34 @@ public class DaedScript {
 			GameObject shape = ig_result.value.vIg;
 			ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
 			if (shapeScript.variables.ContainsKey(variable)) {
-				GameVar gameVar = shapeScript.variables[variable];
-				switch(gameVar.type) {
+				Value value = shapeScript.variables[variable];
+				switch(value.valueType) {
 					case "int":
 						Value intValue = new Value("int", expression.line, expression.character);
-						intValue.vInt = gameVar.intValue;
+						intValue.vInt = value.vInt;
 						return new Result(intValue, store);
 					case "double":
 						Value doubleValue = new Value("double", expression.line, expression.character);
-						doubleValue.vDouble = gameVar.doubleValue;
+						doubleValue.vDouble = value.vDouble;
 						return new Result(doubleValue, store);
 					case "string":
 						Value stringValue = new Value("string", expression.line, expression.character);
-						stringValue.vString= gameVar.stringValue;
+						stringValue.vString= value.vString;
 						return new Result(stringValue, store);
 					case "bool":
 						Value boolValue = new Value("bool", expression.line, expression.character);
-						boolValue.vBool = gameVar.boolValue;
+						boolValue.vBool = value.vBool;
 						return new Result(boolValue, store);
+					case "function":
+						Value functionValue = new Value("function", expression.line, expression.character);
+						functionValue.vFunBody = value.vFunBody;
+						functionValue.vFunParams = value.vFunParams;
+						functionValue.vFunEnviroment = value.vFunEnviroment;
+						return new Result(functionValue, store);
+					case "list":
+						Value listValue = new Value("list", expression.line, expression.character);
+						listValue.vList = value.vList;
+						return new Result(listValue, store);
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + shape.name + "." + variable + "\""); //Throw Error
 				}
@@ -2225,35 +2273,51 @@ public class DaedScript {
 			TokenScript tokenScript = token.GetComponent<TokenScript>();
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			if (tokenScript.variables.ContainsKey(variable)) {
-				GameVar gameVar = tokenScript.variables[variable];
-				switch(gameVar.type) {
+				Value value = tokenScript.variables[variable];
+				switch(value.valueType) {
 					case "int":
 						if (nv_result.value.valueType == "int") {
-							gameVar.intValue = nv_result.value.vInt;
+							value.vInt = nv_result.value.vInt;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected int"); //Throw Error
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
-							gameVar.doubleValue = nv_result.value.vDouble;
+							value.vDouble = nv_result.value.vDouble;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected double"); //Throw Error
 						}
 					case "string":
 						if (nv_result.value.valueType == "string") {
-							gameVar.stringValue = nv_result.value.vString;
+							value.vString = nv_result.value.vString;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected string"); //Throw Error
 						}
 					case "bool":
 						if (nv_result.value.valueType == "bool") {
-							gameVar.boolValue = nv_result.value.vBool;
+							value.vBool = nv_result.value.vBool;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected bool"); //Throw Error
+						}
+					case "function":
+						if (nv_result.value.valueType == "function") {
+							value.vFunBody = nv_result.value.vFunBody;
+							value.vFunParams = nv_result.value.vFunParams;
+							value.vFunEnviroment = nv_result.value.vFunEnviroment;
+							return nv_result;
+						} else {
+							return resultError(nv_result, "Expected function"); //Throw Error
+						}
+					case "list":
+						if (nv_result.value.valueType == "list") {
+							value.vList = nv_result.value.vList;
+							return nv_result;
+						} else {
+							return resultError(nv_result, "Expected list"); //Throw Error
 						}
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + token.name + "." + variable + "\""); //Throw Error
@@ -2263,16 +2327,22 @@ public class DaedScript {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
+						tokenScript.variables.Add(variable, new Value(nv_result.value.vInt));
 						return nv_result;
 					case "double":
-						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vDouble));
+						tokenScript.variables.Add(variable, new Value(nv_result.value.vDouble));
 						return nv_result;
 					case "string":
-						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vString));
+						tokenScript.variables.Add(variable, new Value(nv_result.value.vString, ""));
 						return nv_result;
 					case "bool":
-						tokenScript.variables.Add(variable, new GameVar(nv_result.value.vBool));
+						tokenScript.variables.Add(variable, new Value(nv_result.value.vBool));
+						return nv_result;
+					case "function":
+						tokenScript.variables.Add(variable, new Value(nv_result.value.vFunParams, nv_result.value.vFunEnviroment, nv_result.value.vFunBody));
+						return nv_result;
+					case "list":
+						tokenScript.variables.Add(variable, new Value(nv_result.value.vList));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
@@ -2283,35 +2353,51 @@ public class DaedScript {
 			Result nv_result = interpret(expression.eSetIgValue, env, store, ref gameEnv);
 			ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
 			if (shapeScript.variables.ContainsKey(variable)) {
-				GameVar gameVar = shapeScript.variables[variable];
-				switch(gameVar.type) {
+				Value value = shapeScript.variables[variable];
+				switch(value.valueType) {
 					case "int":
 						if (nv_result.value.valueType == "int") {
-							gameVar.intValue = nv_result.value.vInt;
+							value.vInt = nv_result.value.vInt;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected int"); //Throw Error
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
-							gameVar.doubleValue = nv_result.value.vDouble;
+							value.vDouble = nv_result.value.vDouble;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected double"); //Throw Error
 						}
 					case "string":
 						if (nv_result.value.valueType == "string") {
-							gameVar.stringValue = nv_result.value.vString;
+							value.vString = nv_result.value.vString;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected string"); //Throw Error
 						}
 					case "bool":
 						if (nv_result.value.valueType == "bool") {
-							gameVar.boolValue = nv_result.value.vBool;
+							value.vBool = nv_result.value.vBool;
 							return nv_result;
 						} else {
 							return resultError(nv_result, "Expected bool"); //Throw Error
+						}
+					case "function":
+						if (nv_result.value.valueType == "function") {
+							value.vFunBody = nv_result.value.vFunBody;
+							value.vFunParams = nv_result.value.vFunParams;
+							value.vFunEnviroment = nv_result.value.vFunEnviroment;
+							return nv_result;
+						} else {
+							return resultError(nv_result, "Expected function"); //Throw Error
+						}
+					case "list":
+						if (nv_result.value.valueType == "list") {
+							value.vList = nv_result.value.vList;
+							return nv_result;
+						} else {
+							return resultError(nv_result, "Expected list"); //Throw Error
 						}
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + shape.name + "." + variable + "\""); //Throw Error	
@@ -2321,16 +2407,22 @@ public class DaedScript {
 					case "error":
 						return resultError(nv_result, "Expected bool"); //Throw Error
 					case "int":
-						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vInt));
+						shapeScript.variables.Add(variable, new Value(nv_result.value.vInt));
 						return nv_result;
 					case "double":
-						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vDouble));
+						shapeScript.variables.Add(variable, new Value(nv_result.value.vDouble));
 						return nv_result;
 					case "string":
-						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vString));
+						shapeScript.variables.Add(variable, new Value(nv_result.value.vString, ""));
 						return nv_result;
 					case "bool":
-						shapeScript.variables.Add(variable, new GameVar(nv_result.value.vBool));
+						shapeScript.variables.Add(variable, new Value(nv_result.value.vBool));
+						return nv_result;
+					case "function":
+						shapeScript.variables.Add(variable, new Value(nv_result.value.vFunParams, nv_result.value.vFunEnviroment, nv_result.value.vFunBody));
+						return nv_result;
+					case "list":
+						shapeScript.variables.Add(variable, new Value(nv_result.value.vList));
 						return nv_result;
 					default:
 						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
@@ -4103,6 +4195,43 @@ public class Value {
 		line = l;
 		character = c;
 	}
+
+	public Value(string x, string y) {
+        valueType = "string";
+        vString = x;
+    }
+
+    public Value(bool x) {
+        valueType = "bool";
+        vBool = x;
+    }
+
+    public Value(int x) {
+        valueType = "int";
+        vInt = x;
+    }
+
+    public Value(double x) {
+        valueType = "double";
+        vDouble = x;
+    }
+
+	public Value(List<string> p, Dictionary<string, string> e, Expression b) {
+        valueType = "function";
+        vFunParams = p;
+		vFunEnviroment = e;
+		vFunBody = b;
+    }
+
+	public Value(List<Value> l) {
+        valueType = "list";
+        vList = l;
+    }
+
+    public Value(string x, bool y) {
+        valueType = "error";
+        errorMessage = x;
+    }
 }
 
 public class Expression {

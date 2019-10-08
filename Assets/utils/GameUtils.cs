@@ -5,60 +5,60 @@ using UnityEngine;
 
 public class GameUtils {
     
-    static GameVar parseTemplateVariable(TemplateVariable var, ref GameEnv gameEnv) {
+    static Value parseTemplateVariable(TemplateVariable var, ref GameEnv gameEnv) {
         System.Random random = new System.Random();
         Value result;
         switch(var.type) {
             case "stringConstant":
-                return new GameVar(var.stringConstant);
+                return new Value(var.stringConstant, "");
             case "boolConstant":
-                return new GameVar(var.boolConstant);
+                return new Value(var.boolConstant);
             case "intConstant":
-                return new GameVar(var.intConstant);
+                return new Value(var.intConstant);
             case "doubleConstant":
-                return new GameVar(var.doubleConstant);
+                return new Value(var.doubleConstant);
             case "stringList":
-                return new GameVar(var.stringList[random.Next(var.stringList.Count)]);
+                return new Value(var.stringList[random.Next(var.stringList.Count)], "");
             case "intList":
-                return new GameVar(var.intList[random.Next(var.intList.Count)]);
+                return new Value(var.intList[random.Next(var.intList.Count)]);
             case "doubleList":
-                return new GameVar(var.doubleList[random.Next(var.doubleList.Count)]);
+                return new Value(var.doubleList[random.Next(var.doubleList.Count)]);
             case "intRange":
-                return new GameVar(random.Next(var.intMin, var.intMax));
+                return new Value(random.Next(var.intMin, var.intMax));
             case "doubleRange":
-                return new GameVar(var.doubleMin + (var.doubleMax - var.doubleMin) * random.NextDouble());
+                return new Value(var.doubleMin + (var.doubleMax - var.doubleMin) * random.NextDouble());
             case "boolProbablity":
-                return new GameVar(random.NextDouble() < var.boolProbability);
+                return new Value(random.NextDouble() < var.boolProbability);
             case "stringCalculation":
                 result = DaedScript.evaluate(var.stringCalculation, ref gameEnv);
                 if (result.valueType == "string") {
-                    return new GameVar(result.vString);
+                    return new Value(result.vString, "");
                 } else {
-                    return new GameVar("Expected string, got: " + result.valueType);
+                    return new Value("Expected string, got: " + result.valueType, false);
                 }
             case "intCalculation":
                 result = DaedScript.evaluate(var.intCalculation, ref gameEnv);
                 if (result.valueType == "int") {
-                    return new GameVar(result.vInt);
+                    return new Value(result.vInt);
                 } else {
-                    return new GameVar("Expected int, got: " + result.valueType);
+                    return new Value("Expected int, got: " + result.valueType, false);
                 }
             case "doubleCalculation":
                 result = DaedScript.evaluate(var.doubleCalculation, ref gameEnv);
                 if (result.valueType == "double") {
-                    return new GameVar(result.vString);
+                    return new Value(result.vString);
                 } else {
-                    return new GameVar("Expected double, got: " + result.valueType);
+                    return new Value("Expected double, got: " + result.valueType, false);
                 }
             case "boolCalculation":
                 result = DaedScript.evaluate(var.boolCalculation, ref gameEnv);
                 if (result.valueType == "bool") {
-                    return new GameVar(result.vString);
+                    return new Value(result.vString);
                 } else {
-                    return new GameVar("Expected bool, got: " + result.valueType);
+                    return new Value("Expected bool, got: " + result.valueType, false);
                 }
             default:
-                return new GameVar();
+                return new Value();
         }
     }
 
@@ -74,9 +74,9 @@ public class GameUtils {
 
         tokenScript.graphicObjectPrefab = template.graphicObjectPrefab;
 
-        GameVar alias_calculation = parseTemplateVariable(template.aliasList, ref gameEnv);
-        if (alias_calculation.type == "string") {
-            tokenScript.alias = alias_calculation.stringValue;
+        Value alias_calculation = parseTemplateVariable(template.aliasList, ref gameEnv);
+        if (alias_calculation.valueType == "string") {
+            tokenScript.alias = alias_calculation.vString;
         } else {
             // Throw Error
         } 
@@ -188,9 +188,9 @@ public class GameUtils {
         shapeScript.materialTypes = template.materialTypes;
         shapeScript.materialTypesDistribution = template.materialTypesDistribution;
 
-        GameVar transparency_calculation = parseTemplateVariable(template.transparency, ref gameEnv);
-        if (transparency_calculation.type == "double") {
-            shapeScript.transparency = (float)transparency_calculation.doubleValue;
+        Value transparency_calculation = parseTemplateVariable(template.transparency, ref gameEnv);
+        if (transparency_calculation.valueType == "double") {
+            shapeScript.transparency = (float)transparency_calculation.vDouble;
         } else {
             // Throw Error
         } 
@@ -283,9 +283,9 @@ public class GameUtils {
         wallScript.materialTypes = template.materialTypes;
         wallScript.materialTypesDistribution = template.materialTypesDistribution;
 
-        GameVar transparency_calculation = parseTemplateVariable(template.transparency, ref gameEnv);
-        if (transparency_calculation.type == "double") {
-            wallScript.transparency = (float)transparency_calculation.doubleValue;
+        Value transparency_calculation = parseTemplateVariable(template.transparency, ref gameEnv);
+        if (transparency_calculation.valueType == "double") {
+            wallScript.transparency = (float)transparency_calculation.vDouble;
         } else {
             // Throw Error
         } 
@@ -293,7 +293,6 @@ public class GameUtils {
         foreach (Effect effect in template.effects) {
             if (effect.stacks) {
                 effect.givenName = effect.name + "_" + System.Guid.NewGuid();
-                
             } else {
                 effect.givenName = effect.name;
             }

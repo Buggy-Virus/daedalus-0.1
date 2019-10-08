@@ -26,7 +26,7 @@ public class WallScript : MonoBehaviour
 
 	public Dictionary<string, Effect> effects;
 
-    public Dictionary<string, GameVar> variables = new Dictionary<string, GameVar>();
+    public Dictionary<string, Value> variables = new Dictionary<string, Value>();
 
     // public void moveTo(Index endIndex_1, endIndex_2) {
     //     gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(gameObject);

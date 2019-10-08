@@ -832,7 +832,7 @@ GameObject:
   m_Component:
   - component: {fileID: 246738982}
   - component: {fileID: 246738980}
-  - component: {fileID: 246738984}
+  - component: {fileID: 246738981}
   m_Layer: 0
   m_Name: GameLogic
   m_TagString: Untagged
@@ -860,6 +860,26 @@ MonoBehaviour:
     type: 3}
   wallPrefab: {fileID: 8447705756805218108, guid: d68e5759f31c944409418aad6b352449,
     type: 3}
+--- !u!114 &246738981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246738978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c172fe9899dfb454bab0e1107da129b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eval_int: 0
+  eval_double: 0
+  eval_bool: 0
+  eval_string: 0
+  eval_list: 0
+  eval_operator: 0
+  eval_nested_operator: 0
+  eval_mixed_operator: 0
 --- !u!4 &246738982
 Transform:
   m_ObjectHideFlags: 0
@@ -874,18 +894,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &246738984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246738978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c172fe9899dfb454bab0e1107da129b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &282840810
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class ResolveActionsScript : MonoBehaviour {
         resolveEffects(ref self, action.effects, ref gameEnv);
         resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
         
-        if (resolveConditions(self, action.conditions, gameEnv)) {
+        if (action.conditions != null && resolveConditions(self, action.conditions, gameEnv)) {
             Debug.Log("Passed Conditions");
             resolveEffects(ref self, action.conditional_effects, ref gameEnv);
             resolveAoe(ref self, self.GetComponent<TokenScript>().index, action.conditional_aoe, action.conditional_aoe_relational_actions, action.conditional_aoe_targeted_actions, ref gameEnv);
@@ -23,7 +23,7 @@ public class ResolveActionsScript : MonoBehaviour {
         resolveRelationalEffects(ref self, ref target, action.effects, ref gameEnv);
         resolveAoe(ref self, target.GetComponent<TokenScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
 
-        if (resolveRelationalConditions(self, target, action.conditions, gameEnv)) {
+        if (action.conditions != null && resolveRelationalConditions(self, target, action.conditions, gameEnv)) {
             resolveRelationalEffects(ref self, ref target, action.conditional_effects, ref gameEnv);
             resolveAoe(ref self, target.GetComponent<TokenScript>().index, action.conditional_aoe, action.conditional_aoe_relational_actions, action.conditional_aoe_targeted_actions, ref gameEnv);
             resolveRelationalActions(ref self, ref target, action.conditional_followup_actions, ref gameEnv);
@@ -39,7 +39,7 @@ public class ResolveActionsScript : MonoBehaviour {
         resolveAoe(ref self, target.GetComponent<ShapeScript>().index, action.aoe, action.aoe_relational_actions, action.aoe_targeted_actions, ref gameEnv);
         resolveTargetedActions(ref self, ref target, action.followup_actions, ref gameEnv);
 
-        if (resolveTargetedConditions(self, target, action.conditions, gameEnv)) {
+        if (action.conditions != null && resolveTargetedConditions(self, target, action.conditions, gameEnv)) {
             resolveTargetedEffects(ref self, ref target, action.conditional_effects, ref gameEnv);
             resolveAoe(ref self, target.GetComponent<ShapeScript>().index, action.conditional_aoe, action.conditional_aoe_relational_actions, action.conditional_aoe_targeted_actions, ref gameEnv);
         }
@@ -315,7 +315,7 @@ public class ResolveActionsScript : MonoBehaviour {
             }
         }
 
-        if (resolveConditions(self, effect.conditions, gameEnv)) {
+        if (effect.conditions != null && resolveConditions(self, effect.conditions, gameEnv)) {
             Debug.Log("Passed Conditions");
             if (effect.conditional_scripts != null) {
                 foreach (String script in effect.conditional_scripts) {
@@ -477,7 +477,7 @@ public class ResolveActionsScript : MonoBehaviour {
             }
         }
 
-        if (resolveRelationalConditions(self, target, effect.conditions, gameEnv)) {
+        if (effect.conditions != null && resolveRelationalConditions(self, target, effect.conditions, gameEnv)) {
             if (effect.conditional_scripts != null) {
                 foreach (string script in effect.conditional_scripts) {
                     DaedScript.evaluateSelfTokenTargetToken(script, ref self, ref target, ref gameEnv);
@@ -735,7 +735,7 @@ public class ResolveActionsScript : MonoBehaviour {
             }
         }
 
-        if (resolveTargetedConditions(self, target, effect.conditions, gameEnv)) {
+        if (effect.conditions != null && resolveTargetedConditions(self, target, effect.conditions, gameEnv)) {
             if (effect.conditional_scripts != null) {
                 foreach (string script in effect.conditional_scripts) {
                         DaedScript.evaluateSelfToken(script, ref self, ref gameEnv);

@@ -26,15 +26,19 @@ public class GraphicShapeScript : MonoBehaviour
 
     // ================================================ Call Actions
 
-    public void callTargetedACtion(bool hit, RaycastHit hitInfo) {
+    public void callTargetedAction(bool hit, RaycastHit hitInfo) {
         if (hit) {
             if (Input.GetMouseButtonDown(0)) {
                 mouseDown = true;
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedObject, ref shape, controlScript.waitingAction, ref shapeScript.gameEnv);
-                controlScript.gotGoodInput();
+                if (ResolveActionsScript.resolveTargetedConditions(controlScript.selectedObject, shape, controlScript.waitingAction.call_conditions, shapeScript.gameEnv)) {
+                    ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedObject, ref shape, controlScript.waitingAction, ref shapeScript.gameEnv);
+                    controlScript.gotGoodInput();
+                } else {
+                    controlScript.gotBadInput();
+                }
             }
         }
     }
@@ -45,7 +49,7 @@ public class GraphicShapeScript : MonoBehaviour
             RaycastHit hitInfo;
             bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
 
-            callTargetedACtion(hit, hitInfo);
+            callTargetedAction(hit, hitInfo);
 
             if (Input.GetMouseButtonUp(0)) {
                 mouseDown = false;

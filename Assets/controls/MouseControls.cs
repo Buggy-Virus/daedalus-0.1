@@ -376,11 +376,10 @@ public class MouseControls : MonoBehaviour {
         Debug.Log("waitForActionInput Called");
         playMode = 1;
         waitingAction = action;
-        Debug.Log(action);
-        Debug.Log(waitingAction);
     }
 
     public void gotGoodInput() {
+        Debug.Log("Got An Input");
         waitingAction = null;
         playMode = 0;
     }
