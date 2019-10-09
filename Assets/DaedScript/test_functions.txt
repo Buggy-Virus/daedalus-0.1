@@ -1,0 +1,165 @@
+function test_func_1() {
+    Print("test_func_1");
+}
+
+test_func_1();
+
+function test_func_2(x) {
+    Print(x);
+}
+
+test_func_2("test_func_2");
+
+function test_func_3() {
+    Print("test_func_3");
+    let x = 7;
+    Print(ToString(x));
+    Print(ToString(x + 7));
+}
+
+test_func_3();
+
+function test_func_4(x) {
+    Print("test_func_4");
+    let y = x;
+    Print(ToString(y));
+    y = 10;
+    Print(ToString(y));
+    y = y + 2;
+    Print(ToString(y));
+}
+
+test_func_4(5);
+
+function test_func_5(x, y) {
+    Print("test_func_5");
+    Print(ToString(x));
+    Print(ToString(y));
+}
+
+test_func_5(6, 5);
+test_func_5("x", "y");
+
+function test_func_6(x) {
+    Print("test_func_6");
+    if (x) {
+        Print("passed");
+    } else {
+        Print("failed");
+    }
+}
+
+test_func_6(true);
+test_func_6(false);
+
+function test_func_7(x, y) {
+    Print("test_func_7");
+    if (x) {
+        Print("passed");
+    } elif (y) {
+        Print("passed elif");
+    } else {
+        Print("failed");
+    }
+}
+
+test_func_7(false, true);
+test_func_7(false, false);
+
+function test_func_8(x) {
+    if (x == 10) {
+        Print("test_func_8");
+    }
+
+    if (x > 0) {
+        test_func_8(x - 1);
+    } else {
+        Print("finished");
+    }
+}
+
+test_func_8(10);
+
+function test_func_9(x) {
+    Print("test_func_9");
+    x = x + 1;
+    Print(ToString(x));
+}
+
+test_func_9(1);
+
+function test_func_10() {
+    Print("test_func_10");
+    function also_test_func_10() {
+        Print("also_test_func_10");
+    }
+
+    also_test_func_10();
+}
+
+test_func_10();
+
+function test_func_11() {
+    Print("test_func_11");
+
+    let x = true;
+
+    while (x) {
+        x = false;
+    }
+
+    Print("finished");
+}
+
+test_func_11();
+
+function test_func_12() {
+    Print("test_func_12");
+
+    let x = 10;
+
+    while (x > 0) {
+        x = x - 1;
+    }
+
+    Print("finished");
+}
+
+test_func_12();
+
+function test_func_13() {
+    Print("test_func_13");
+
+    let x = [1, 2, 3, 4, 5];
+
+    foreach (num in x) {
+        Print(ToString(num));
+    }
+}
+
+test_func_13();
+
+function test_func_14() {
+    Print("test_func_14");
+
+    let x = [1, 2, 3, 4, 5];
+    let y = 0;
+
+    foreach (num in x) {
+        y = y + num;
+    }
+
+    x = "this is an x value";
+
+    Print(ToString(y));
+}
+
+test_func_14();
+
+function tf_15() {
+    Print("tf_15");
+
+    Print(x);
+}
+
+tf_15();

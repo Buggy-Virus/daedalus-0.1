@@ -880,6 +880,7 @@ MonoBehaviour:
   eval_operator: 0
   eval_nested_operator: 0
   eval_mixed_operator: 0
+  eval_test_file_1: 0
 --- !u!4 &246738982
 Transform:
   m_ObjectHideFlags: 0

@@ -261,14 +261,14 @@ public class DaedScript {
 								case "var":
 								case "while":
 								case "function":
-								case "for":
+								case "foreach":
 								case "each":
 								case "return":
+								case "in":
 									curAtom.atomType = "keyword";
 									break;
 								case "true":
 								case "false":
-								case "in":
 									curAtom.atomType = "bool";
 									break;
 							}
@@ -452,7 +452,7 @@ public class DaedScript {
 	static ParseResult parseError(Atom atom, int pos, string message) {
 		Expression error = new Expression("error", atom.line, atom.character);
 		error.eErrorMessage = "ParseError:" + message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
-		// Debug.Log("Error at (" + atom.line + "," + atom.character + "): " + error.eErrorMessage);
+		Debug.Log("Error at (" + atom.line + "," + atom.character + "): " + error.eErrorMessage);
 		return new ParseResult(error, pos);
 	}
 
@@ -522,8 +522,8 @@ public class DaedScript {
 							return parseWhile(atomList, pos + 1);
 						case "function":
 							return parseFunction(atomList, pos + 1);
-						case "for":
-							return parseFor(atomList, pos + 1);
+						case "foreach":
+							return parseForeach(atomList, pos + 1);
 						case "return":
 							return parseReturn(atomList, pos + 1);
 						default:
@@ -861,6 +861,8 @@ public class DaedScript {
 			ParseResult elifResult = parseIf(atomList, pos);
 			ifExpression.eIfElif = elifResult.expression;
 			pos = elifResult.position;
+		} else {
+			pos -= 1;
 		}
 
 		return new ParseResult(ifExpression, pos);
@@ -945,52 +947,48 @@ public class DaedScript {
 		pos = condResult.position + 1;
 
 		ParseResult bodyResult = parseDo(atomList, pos, true);
-		whileExpression.eLamBody = bodyResult.expression;
+		whileExpression.eWhileBody = bodyResult.expression;
 		pos = bodyResult.position;
 
 		return new ParseResult(whileExpression, pos);
 	}
 
-	static ParseResult parseFor(List<Atom> atomList, int pos) {
+	static ParseResult parseForeach(List<Atom> atomList, int pos) {
 		Expression forExpression = new Expression("e-foreach", atomList[pos].line, atomList[pos].character);
 
-		if (atomEquals(atomList[pos], "keyword", "each")) {
+		if (atomEquals(atomList[pos], "punctuation", "(")) {
 			pos += 1;
 
-			if (atomEquals(atomList[pos], "punctuation", "(")) {
+			if (atomList[pos].atomType == "identifier") {
+				forExpression.eForeachVariable = atomList[pos].value;
 				pos += 1;
 
-				if (atomList[pos].atomType == "identifier") {
-					forExpression.eForVariable = atomList[pos].value;
+				if (atomEquals(atomList[pos], "keyword", "in")) {
 					pos += 1;
 
-					if (atomEquals(atomList[pos], "keyword", "in")) {
+					ParseResult iterResult = parseSingle(atomList, pos, false);
+					forExpression.eForeachIter = iterResult.expression;
+					pos = iterResult.position + 1;
+
+					if (atomEquals(atomList[pos], "punctuation", ")")) {
 						pos += 1;
 
-						ParseResult iterResult = parseSingle(atomList, pos, false);
-						forExpression.eForIter = iterResult.expression;
-						pos = iterResult.position + 1;
+						ParseResult bodyResult = parseDo(atomList, pos, true);
+						forExpression.eForeachBody = bodyResult.expression;
+						pos = bodyResult.position;
 
-						if (atomEquals(atomList[pos], "punctuation", ")")) {
-							pos += 1;
-
-							ParseResult bodyResult = parseDo(atomList, pos, true);
-							forExpression.eForBody = bodyResult.expression;
-							return new ParseResult(forExpression, pos);	
-						} else {
-							return parseError(atomList[pos], pos, "Expected \")\""); // throw error
-						}
+						return new ParseResult(forExpression, pos);	
 					} else {
-						return parseError(atomList[pos], pos, "Expected \"in\""); // throw error
+						return parseError(atomList[pos], pos, "Expected \")\""); // throw error
 					}
 				} else {
-					return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+					return parseError(atomList[pos], pos, "Expected \"in\""); // throw error
 				}
 			} else {
-				return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
+				return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 			}
 		} else {
-			return parseError(atomList[pos], pos, "Expected \"each\""); // throw error
+			return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
 		}
 	}
 
@@ -1149,9 +1147,9 @@ public class DaedScript {
 			case "e-return":
 				expression.eReturn = desugar(expression.eReturn);
 				return expression;
-			case "e-for":
-				expression.eForIter = desugar(expression.eForIter);
-				expression.eForBody = desugar(expression.eForBody);
+			case "e-foreach":
+				expression.eForeachIter = desugar(expression.eForeachIter);
+				expression.eForeachBody = desugar(expression.eForeachBody);
 				return expression;
 			case "e-eval":
 				return desugarEval(expression);
@@ -1166,12 +1164,12 @@ public class DaedScript {
 		if (builtInFunctions.ContainsKey(expression.eEvalId)) {
 			Expression bFuncExpression = new Expression("e-builtin-func", expression.line, expression.character);
 			bFuncExpression.eBuiltinFuncId = expression.eEvalId;
-			bFuncExpression.eBuiltinFuncArguments = expression.eEvalArguments;
+			bFuncExpression.eBuiltinFuncArguments = expression.eEvalArguments.Select(desugar).ToList();
 
 			return bFuncExpression;
 		} else {
 			Expression appExpression = new Expression("e-app", expression.line, expression.character);
-			appExpression.eAppArguments = expression.eEvalArguments;
+			appExpression.eAppArguments = expression.eEvalArguments.Select(desugar).ToList();
 
 			Expression idExpression = new Expression("e-id", expression.line, expression.character);
 			idExpression.eId = expression.eEvalId;
@@ -1998,7 +1996,7 @@ public class DaedScript {
 		Value returnValue = new Value("function", expression.line, expression.character);
 		returnValue.vFunParams = expression.eLamParams;
 		returnValue.vFunBody = expression.eLamBody;
-		returnValue.vFunEnviroment = env;
+		returnValue.vFunEnviroment = new Dictionary<string, string>(env);
 		return new Result(returnValue, store);
 	}
 
@@ -2016,15 +2014,17 @@ public class DaedScript {
 			}
 
 			Dictionary<string, Value> appStore = func_result.store;
+			Dictionary<string, string> appEnv = new Dictionary<string, string>(env);
 			for (int i = 0; i < expression.eAppArguments.Count; i++) {
 				Expression arg = expression.eAppArguments[i];
 				string param = func_result.value.vFunParams[i];
 				Result arg_result = interpret(arg, env, appStore, ref gameEnv);
 				string loc = System.Guid.NewGuid().ToString();
-				func_result.value.vFunEnviroment.Add(param, loc);
-				appStore.Add(loc, arg_result.value);
+				func_result.value.vFunEnviroment[param] = loc; // We don't use the saved enviroment, unsure why we would // TODO
+				appEnv[param] = loc; // Like you want the enviroment at the time of the application of the function, why not
+				appStore[loc] = arg_result.value;
 			}
-			return interpret(func_result.value.vFunBody, func_result.value.vFunEnviroment, appStore, ref gameEnv); 
+			return interpret(func_result.value.vFunBody, appEnv, appStore, ref gameEnv); 
 		} else {
 			return resultError(func_result, "Expected function"); //Throw Error
 		}
@@ -2037,7 +2037,6 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) {
 		string name = expression.eSetName;
-		Utils.printEnvStore(env, store);
 		if (env.ContainsKey(name)) {
 			string pointer = env[name];
 			if (store.ContainsKey(pointer)) {
@@ -2067,8 +2066,8 @@ public class DaedScript {
 			if (expr.expressionType == "e-let") {
 				Result define_result = interpret(expr.eLetValue, env, last_result.store, ref gameEnv);
 				string loc = System.Guid.NewGuid().ToString();
-				env.Add(expr.eLetName, loc);
-				define_result.store.Add(loc, define_result.value);
+				env[expr.eLetName] = loc;
+				define_result.store[loc] = define_result.value;
 				last_result = define_result;
 			} else if (expr.expressionType == "e-return") {
 				return interpret(expr.eReturn, env, last_result.store, ref gameEnv);
@@ -2116,17 +2115,25 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	)
 	{
-		string loc = System.Guid.NewGuid().ToString();
-		env.Add(expression.eForVariable, loc);
-		Result lastResult = new Result(new Value("null", expression.line, expression.character), store);
-		foreach (Expression expr in expression.eForIter.eList) {
-			Result exprResult = interpret(expr, env, store, ref gameEnv);
-			store[loc] = exprResult.value;
-			Result bodyResult = interpret(expression.eForBody, env, store, ref gameEnv);
-			lastResult = bodyResult;
-			store = bodyResult.store;
+		Result lastResult = new Result(new Value("list", expression.line, expression.character), store);
+		lastResult.value.vList = new List<Value>();
+		Result listResult = interpret(expression.eForeachIter, env, store, ref gameEnv);
+		lastResult.store = listResult.store;
+		if (listResult.value.valueType == "list") {
+			foreach (Value val in listResult.value.vList) {
+				Dictionary<string, string> bodyEnv = new Dictionary<string, string>(env);
+				Dictionary<string, Value> bodyStore = new Dictionary<string, Value>(listResult.store); 
+				string loc = System.Guid.NewGuid().ToString();
+				lastResult.store[loc] = val;
+				bodyEnv[expression.eForeachVariable] = loc;
+				Result bodyResult = interpret(expression.eForeachBody, bodyEnv, lastResult.store, ref gameEnv);
+				lastResult.store = bodyResult.store;
+				lastResult.value.vList.Add(bodyResult.value);
+			}
+			return lastResult; 
+		} else {
+			return resultError(listResult, "Expected list"); //Throw Error
 		}
-		return lastResult; 
 	}
 
 	static Result interpId(
@@ -2491,8 +2498,11 @@ public class DaedScript {
 			case "double":
 				returnValue.vString = inputResult.value.vInt.ToString();
 				break;
+			case "string":
+				returnValue.vString = inputResult.value.vString;
+				break;
 			default:
-				return resultError(inputResult, "Expected bool, int or double");	
+				return resultError(inputResult, "Expected string, bool, int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -4297,9 +4307,9 @@ public class Expression {
 
 	//Sugar
 
-	public Expression eForIter; //type=102
-	public string eForVariable;
-	public Expression eForBody;
+	public Expression eForeachIter; //type=102
+	public string eForeachVariable;
+	public Expression eForeachBody;
 
 	public string eFuncId;
 	public List<string> eFuncParams;

@@ -18,6 +18,7 @@ public class testDaedScript : MonoBehaviour
     public bool eval_operator;
     public bool eval_nested_operator;
     public bool eval_mixed_operator;
+    public bool eval_test_file_1;
 
     void printValue(Value val) {
         string printString = "type: " + val.valueType + ", value: ";
@@ -746,6 +747,13 @@ public class testDaedScript : MonoBehaviour
             printValue(DaedScript.evaluate(test_mixedOperators22,  ref gameEnvScript.gameEnv));
             Debug.Log("==== End Mixed Operator Tests ====");
             eval_mixed_operator = false;
+        }
+
+        if (eval_test_file_1) {
+            string path = "Assets/DaedScript/test_functions.txt";
+            string pathfinderScript = Utils.readTextFile(path);
+            printValue(DaedScript.evaluate(pathfinderScript, ref gameEnvScript.gameEnv));
+            eval_test_file_1 = false;
         }
     }
 }
