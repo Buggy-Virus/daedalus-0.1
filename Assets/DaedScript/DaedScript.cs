@@ -637,7 +637,7 @@ public class DaedScript {
 									// Debug.Log("out of parseSingle through punc");
 									return new ParseResult(lastExpression, pos - 1);
 								} else {
-									return parseError(atomList[pos], pos, "Expected operator or punctuation"); // throw error
+									return parseError(atomList[pos], pos, "Expected operator or punctuation to close expression"); // throw error
 								}
 						}
 						break;
@@ -745,7 +745,7 @@ public class DaedScript {
 			if (atomEquals(atomList[pos], "punctuation", "]")) {
 				return new ParseResult(subExpression, pos);
 			} else {
-				return parseError(atomList[pos], pos, "Expected \"]\""); // throw error
+				return parseError(atomList[pos], pos, "Index into list expected \"]\""); // throw error
 			}
 		} else if (atomEquals(atomList[pos], "punctuation", "]")) {
 			if (atomEquals(atomList[pos + 1], "operator", "=")) {
@@ -768,7 +768,7 @@ public class DaedScript {
 				return new ParseResult(indexExpression, pos);
 			}
 		} else {
-			return parseError(atomList[pos], pos, "Expected \"]\""); // throw error
+			return parseError(atomList[pos], pos, "Index into list expected \"]\""); // throw error
 		}
 	}	
 
@@ -787,11 +787,11 @@ public class DaedScript {
 			} else if (atomEquals(atomList[pos], "punctuation", "]")) {
 				break;
 			} else {
-				return parseError(atomList[pos], pos, "Expected \",\" or \"]\""); // throw error
+				return parseError(atomList[pos], pos, "List expected \",\" or \"]\""); // throw error
 			}
 
 			if (pos == atomList.Count) {
-				return parseError(atomList[pos], pos, "Expected \",\" or \"]\""); // throw error
+				return parseError(atomList[pos], pos, "List expected \",\" or \"]\""); // throw error
 			}
 		}
 
@@ -819,11 +819,11 @@ public class DaedScript {
 						} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 							break;
 						} else {
-							return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+							return parseError(atomList[pos], pos, "Function arguments expected \",\" or \")\""); // throw error
 						}
 
 						if (pos == atomList.Count) {
-							return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+							return parseError(atomList[pos], pos, "Function arguments expected \",\" or \")\""); // throw error
 						}
 					}
 				}
@@ -835,10 +835,10 @@ public class DaedScript {
 
 				return new ParseResult(funcExpression, pos);
 			} else {
-				return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
+				return parseError(atomList[pos], pos, "Function arguments expected \"(\""); // throw error
 			}
 		} else {
-			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+			return parseError(atomList[pos], pos, "Function declaration expected identifier"); // throw error
 		}
 	}
 
@@ -902,11 +902,11 @@ public class DaedScript {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
-						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+						return parseError(atomList[pos], pos, "Lambda arguments Expected \",\" or \")\""); // throw error
 					}
 
 					if (pos == atomList.Count) {
-						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+						return parseError(atomList[pos], pos, "Lambda arguments Expected \",\" or \")\""); // throw error
 					}
 				}
 			}
@@ -919,7 +919,7 @@ public class DaedScript {
 
 			return new ParseResult(lamExpression, pos);
 		} else {
-			return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
+			return parseError(atomList[pos], pos, "Lambda arguments Expected \"(\""); // throw error
 		}
 	}
 
@@ -939,10 +939,10 @@ public class DaedScript {
 				
 				return new ParseResult(letExpression, pos);
 			} else {
-				return parseError(atomList[pos], pos, "Expected \"=\""); // throw error
+				return parseError(atomList[pos], pos, "Let expected \"=\""); // throw error
 			}
 		} else {
-			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+			return parseError(atomList[pos], pos, "Let expected identifier"); // throw error
 		}
 	}
 
@@ -996,16 +996,16 @@ public class DaedScript {
 
 						return new ParseResult(forExpression, pos);	
 					} else {
-						return parseError(atomList[pos], pos, "Expected \")\""); // throw error
+						return parseError(atomList[pos], pos, "Foreach expected \")\""); // throw error
 					}
 				} else {
-					return parseError(atomList[pos], pos, "Expected \"in\""); // throw error
+					return parseError(atomList[pos], pos, "Foreach expected \"in\""); // throw error
 				}
 			} else {
-				return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+				return parseError(atomList[pos], pos, "Foreach expected identifier"); // throw error
 			}
 		} else {
-			return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
+			return parseError(atomList[pos], pos, "Foreach expected \"(\""); // throw error
 		}
 	}
 
@@ -1044,11 +1044,11 @@ public class DaedScript {
 					} else if (atomEquals(atomList[pos], "punctuation", ")")) {
 						break;
 					} else {
-						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+						return parseError(atomList[pos], pos, "Function application arguments expected \",\" or \")\""); // throw error
 					}
 
 					if (pos == atomList.Count) {
-						return parseError(atomList[pos], pos, "Expected \",\" or \")\""); // throw error
+						return parseError(atomList[pos], pos, "Function application arguments expected \",\" or \")\""); // throw error
 					}
 				}
 				evalExpression.eEvalArguments = argumentList;
@@ -1075,7 +1075,7 @@ public class DaedScript {
 			igExpression.eIgName = atomList[pos].value;
 			return new ParseResult(igExpression, pos);
 		} else {
-			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+			return parseError(atomList[pos], pos, "Expected ig name"); // throw error
 		}
 	}
 
@@ -1103,7 +1103,7 @@ public class DaedScript {
 				return new ParseResult(igVarExpression, pos - 1);
 			}
 		} else {
-			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
+			return parseError(atomList[pos], pos, "Expected ig name"); // throw error
 		}
 	}
 
@@ -1544,10 +1544,10 @@ public class DaedScript {
 						}					
 						return new Result(returnValue, r_result.store);
 					default:
-						return resultError(r_result, "Expected int or double"); //Throw Error	
+						return resultError(r_result, expression.eOperatorOp + " operator expected int or double on right side"); //Throw Error	
 				}
 			default:
-				return resultError(l_result, "Expected int or double"); //Throw Error	
+				return resultError(l_result, expression.eOperatorOp + " operator expected int or double on left side"); //Throw Error	
 		}
 	}
 
@@ -1639,7 +1639,7 @@ public class DaedScript {
 						}	
 						return new Result(returnValue, r_result.store);				
 					default:
-						return resultError(r_result, "Expected int or double"); //Throw Error	
+						return resultError(r_result, "+ operator expected int or double on right side due to int or double on left side"); //Throw Error	
 				}
 			case("string"):
 				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1649,7 +1649,7 @@ public class DaedScript {
 						returnValue.vString = l_result.value.vString + r_result_string.value.vString;
 						return new Result(returnValue, r_result_string.store);	
 					default:
-						return resultError(r_result_string, "Expected string"); //Throw Error
+						return resultError(r_result_string, "+ operator expected string on right side due to string on left side"); //Throw Error
 				}
 			case("list"):
 				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1659,10 +1659,10 @@ public class DaedScript {
 						returnValue.vList = l_result.value.vList.Concat(r_result_list.value.vList).ToList();
 						return new Result(returnValue, r_result_list.store);
 					default:
-						return resultError(r_result_list, "Expected list"); //Throw Error	
+						return resultError(r_result_list, "+ operator expected list on right side due to list on left side"); //Throw Error	
 				}
 			default:
-				return resultError(l_result, "Expected int, double, string, or list"); //Throw Error	
+				return resultError(l_result, "+ operator expected int, double, string, or list on left side"); //Throw Error	
 		}
 	}
 
@@ -1694,7 +1694,7 @@ public class DaedScript {
 						}	
 						return new Result(returnValue, r_result.store);				
 					default:
-						return resultError(r_result, "Expected int or double"); //Throw Error	
+						return resultError(r_result, "== operator expected int or double on right side due to int or double on left side"); //Throw Error	
 				}
 			case("string"):
 				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1704,7 +1704,7 @@ public class DaedScript {
 						returnValue.vBool = l_result.value.vString == r_result_string.value.vString;
 						return new Result(returnValue, r_result_string.store);	
 					default:
-						return resultError(r_result_string, "Expected string"); //Throw Error
+						return resultError(r_result_string, "== operator expected string on right side due to string on left side"); //Throw Error
 				}
 			case("bool"):
 				Result r_result_bool = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1714,10 +1714,10 @@ public class DaedScript {
 						returnValue.vBool = l_result.value.vBool == r_result_bool.value.vBool;
 						return new Result(returnValue, r_result_bool.store);	
 					default:
-						return resultError(r_result_bool, "Expected bool"); //Throw Error	
+						return resultError(r_result_bool, "== operator expected bool on right side due to bool on left side"); //Throw Error	
 				}
 			default:
-				return resultError(l_result, "Expected int, double, string, or bool"); //Throw Error
+				return resultError(l_result, "== operator expected int, double, string, or bool on left side"); //Throw Error
 		}
 	}
 
@@ -1749,7 +1749,7 @@ public class DaedScript {
 						}	
 						return new Result(returnValue, r_result.store);				
 					default:
-						return resultError(r_result, "Expected int or double"); //Throw Error	
+						return resultError(r_result, "!= operator expected int or double on right side due to ing or double on left side"); //Throw Error	
 				}
 			case("string"):
 				Result r_result_string = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1759,7 +1759,7 @@ public class DaedScript {
 						returnValue.vBool = l_result.value.vString != r_result_string.value.vString;
 						return new Result(returnValue, r_result_string.store);	
 					default:
-						return resultError(r_result_string, "Expected string"); //Throw Error
+						return resultError(r_result_string, "!= operator expected string on right side due to string on left side"); //Throw Error
 				}
 			case("bool"):
 				Result r_result_bool = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1769,10 +1769,10 @@ public class DaedScript {
 						returnValue.vBool = l_result.value.vBool != r_result_bool.value.vBool;
 						return new Result(returnValue, r_result_bool.store);	
 					default:
-						return resultError(r_result_bool, "Expected bool"); //Throw Error	
+						return resultError(r_result_bool, "!= operator expected bool on right side due to bool on left side"); //Throw Error	
 				}
 			default:
-				return resultError(l_result, "Expected int, double, string, or bool"); //Throw Error
+				return resultError(l_result, "!= operator expected int, double, string, or bool on left side"); //Throw Error
 		}
 	}
 
@@ -1806,10 +1806,10 @@ public class DaedScript {
 						}					
 						return new Result(returnValue, r_result.store);
 					default:
-						return resultError(r_result, "Expected int or double"); //Throw Error
+						return resultError(r_result, expression.eOperatorOp + " operator expected int or double on right side"); //Throw Error
 				}
 			default:
-				return resultError(l_result, "Expected int or double"); //Throw Error
+				return resultError(l_result, expression.eOperatorOp + " operator expected int or double on left side"); //Throw Error
 		}
 	}
 
@@ -1861,10 +1861,10 @@ public class DaedScript {
 				returnValue.vBool = boolFunc(l_result.value.vBool, r_result.value.vBool);
 				return new Result(returnValue, r_result.store);
 			} else {
-				return resultError(r_result, "Expected bool"); //Throw Error
+				return resultError(r_result, expression.eOperatorOp + " operator expected bool on right side"); //Throw Error
 			}
 		} else {
-			return resultError(l_result, "Expected bool"); //Throw Error
+			return resultError(l_result, expression.eOperatorOp + " operator expected bool on left side"); //Throw Error
 		}
 	}
 
@@ -1903,10 +1903,10 @@ public class DaedScript {
 							}
 							return new Result(returnValue, r_result.store);
 						} else {
-							return resultError(r_result, "Index out of range"); //Throw Error
+							return resultError(r_result, "Index out of range of string"); //Throw Error
 						}
 					default:
-						return resultError(r_result, "Expected int"); //Throw Error
+						return resultError(r_result, "Expected int for index"); //Throw Error
 				}
 			case("list"):
 				Result r_result_list = interpret(expression.eOperatorRight, env, l_result.store, ref gameEnv);
@@ -1919,13 +1919,13 @@ public class DaedScript {
 								return new Result(l_result.value.vList[r_result_list.value.vInt], r_result_list.store);
 							}
 						} else {
-							return resultError(r_result_list, "Index out of range"); //Throw Error	
+							return resultError(r_result_list, "Index out of range of list"); //Throw Error	
 						}
 					default:
-						return resultError(r_result_list, "Expected int"); //Throw Error
+						return resultError(r_result_list, "Expected int for index"); //Throw Error
 				}
 			default:
-				return resultError(l_result, "Expected list or string"); //Throw Error	
+				return resultError(l_result, "Expected list or string to index into"); //Throw Error	
 		}
 	}
 
@@ -1983,13 +1983,13 @@ public class DaedScript {
 									returnValue_list.vList = t_result.value.vList.GetRange(idx_list, num_list);
 									return new Result(returnValue_list, t_result.store);
 								default:
-									return resultError(r_result, "Expected list or string"); //Throw Error	
+									return resultError(t_result, "Expected list or string to index into"); //Throw Error	
 							}				
 					default:
-						return resultError(r_result, "Expected int"); //Throw Error	
+						return resultError(r_result, "Expected int for index"); //Throw Error	
 				}
 			default:
-				return resultError(l_result, "Expected int"); //Throw Error
+				return resultError(l_result, "Expected int for index"); //Throw Error
 		}
 			
 	}
@@ -2018,7 +2018,7 @@ public class DaedScript {
 				}
 			}
 		} else {
-			return resultError(cond_result, "Expected bool"); //Throw Error
+			return resultError(cond_result, "if statement expected bool"); //Throw Error
 		}
 	}
 
@@ -2062,7 +2062,7 @@ public class DaedScript {
 			}
 			return interpret(func_result.value.vFunBody, appEnv, appStore, ref gameEnv); 
 		} else {
-			return resultError(func_result, "Expected function"); //Throw Error
+			return resultError(func_result, "Application of function expected function"); //Throw Error
 		}
 	}
 
@@ -2106,13 +2106,13 @@ public class DaedScript {
 					}
 					return new Result(list_result.value, newValue_result.store);
 				} else {
-					return resultError(list_result, "Index out of range"); //Throw Error
+					return resultError(list_result, "Index out of range of list"); //Throw Error
 				}
 			} else {
-				return resultError(list_result, "Expected int"); //Throw Error
+				return resultError(list_result, "Expected int for index"); //Throw Error
 			}
 		} else {
-			return resultError(list_result, "Expected list"); //Throw Error
+			return resultError(list_result, "Expected list for indexing into"); //Throw Error
 		}
 	}
 
@@ -2170,7 +2170,7 @@ public class DaedScript {
 				return new Result(new Value("null", expression.line, expression.character), cond_result.store);
 			}
 		} else {
-			return resultError(cond_result, "Expected bool"); //Throw Error
+			return resultError(cond_result, "While statement expected bool"); //Throw Error
 		}
 	}
 
@@ -2199,7 +2199,7 @@ public class DaedScript {
 			}
 			return lastResult; 
 		} else {
-			return resultError(listResult, "Expected list"); //Throw Error
+			return resultError(listResult, "Foreach statement expected list"); //Throw Error
 		}
 	}
 
@@ -2329,7 +2329,7 @@ public class DaedScript {
 				return expressionError(expression, store, "ig \"" + shape.name + "\" has no variable \"" + variable + "\""); //Throw Error
 			}
 		} else {
-			return resultError(ig_result, "Expected ig"); //Throw Error
+			return resultError(ig_result, "Get ig variable expected ig"); //Throw Error
 		}
 	}
 
@@ -2354,28 +2354,28 @@ public class DaedScript {
 							value.vInt = nv_result.value.vInt;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected int"); //Throw Error
+							return resultError(nv_result, "int ig variable expected int"); //Throw Error
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
 							value.vDouble = nv_result.value.vDouble;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected double"); //Throw Error
+							return resultError(nv_result, "double ig variable expected double"); //Throw Error
 						}
 					case "string":
 						if (nv_result.value.valueType == "string") {
 							value.vString = nv_result.value.vString;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected string"); //Throw Error
+							return resultError(nv_result, "string ig variable expected string"); //Throw Error
 						}
 					case "bool":
 						if (nv_result.value.valueType == "bool") {
 							value.vBool = nv_result.value.vBool;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected bool"); //Throw Error
+							return resultError(nv_result, "bool ig variable expected Expected bool"); //Throw Error
 						}
 					case "function":
 						if (nv_result.value.valueType == "function") {
@@ -2384,14 +2384,14 @@ public class DaedScript {
 							value.vFunEnviroment = nv_result.value.vFunEnviroment;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected function"); //Throw Error
+							return resultError(nv_result, "function ig variable expected function"); //Throw Error
 						}
 					case "list":
 						if (nv_result.value.valueType == "list") {
 							value.vList = nv_result.value.vList;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected list"); //Throw Error
+							return resultError(nv_result, "list ig variable expected list"); //Throw Error
 						}
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + token.name + "." + variable + "\""); //Throw Error
@@ -2399,7 +2399,7 @@ public class DaedScript {
 			} else {
 				switch(nv_result.value.valueType) {
 					case "error":
-						return resultError(nv_result, "Expected bool"); //Throw Error
+						return resultError(nv_result, "Got error for ig variable value"); //Throw Error
 					case "int":
 						tokenScript.variables.Add(variable, new Value(nv_result.value.vInt));
 						return nv_result;
@@ -2419,7 +2419,7 @@ public class DaedScript {
 						tokenScript.variables.Add(variable, new Value(nv_result.value.vList));
 						return nv_result;
 					default:
-						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
+						return resultError(nv_result, "Ig variable expected int, double, string, bool, function or list"); //Throw Error
 				}
 			}
 		} else if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "shape") {
@@ -2434,28 +2434,28 @@ public class DaedScript {
 							value.vInt = nv_result.value.vInt;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected int"); //Throw Error
+							return resultError(nv_result, "int ig variable expected int"); //Throw Error
 						}
 					case "double":
 						if (nv_result.value.valueType == "double") {
 							value.vDouble = nv_result.value.vDouble;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected double"); //Throw Error
+							return resultError(nv_result, "double ig variable expected double"); //Throw Error
 						}
 					case "string":
 						if (nv_result.value.valueType == "string") {
 							value.vString = nv_result.value.vString;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected string"); //Throw Error
+							return resultError(nv_result, "string ig variable expected string"); //Throw Error
 						}
 					case "bool":
 						if (nv_result.value.valueType == "bool") {
 							value.vBool = nv_result.value.vBool;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected bool"); //Throw Error
+							return resultError(nv_result, "bool ig variable expected bool"); //Throw Error
 						}
 					case "function":
 						if (nv_result.value.valueType == "function") {
@@ -2464,14 +2464,14 @@ public class DaedScript {
 							value.vFunEnviroment = nv_result.value.vFunEnviroment;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected function"); //Throw Error
+							return resultError(nv_result, "function ig variable expected function"); //Throw Error
 						}
 					case "list":
 						if (nv_result.value.valueType == "list") {
 							value.vList = nv_result.value.vList;
 							return nv_result;
 						} else {
-							return resultError(nv_result, "Expected list"); //Throw Error
+							return resultError(nv_result, "list ig variable expected list"); //Throw Error
 						}
 					default:
 						return expressionError(expression, store, "Unknown type from \"" + shape.name + "." + variable + "\""); //Throw Error	
@@ -2479,7 +2479,7 @@ public class DaedScript {
 			} else {
 				switch(nv_result.value.valueType) {
 					case "error":
-						return resultError(nv_result, "Expected bool"); //Throw Error
+						return resultError(nv_result, "Got error for ig variable value"); //Throw Error
 					case "int":
 						shapeScript.variables.Add(variable, new Value(nv_result.value.vInt));
 						return nv_result;
@@ -2499,7 +2499,7 @@ public class DaedScript {
 						shapeScript.variables.Add(variable, new Value(nv_result.value.vList));
 						return nv_result;
 					default:
-						return resultError(nv_result, "Expected int, double, string or bool"); //Throw Error
+						return resultError(nv_result, "Ig variable expected int, double, string, bool, function or list"); //Throw Error
 				}
 			}
 		} else {
@@ -2549,7 +2549,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "ToString expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2569,7 +2569,7 @@ public class DaedScript {
 				returnValue.vString = inputResult.value.vString;
 				break;
 			default:
-				return resultError(inputResult, "Expected string, bool, int or double");	
+				return resultError(inputResult, "ToString expected string, bool, int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -2582,7 +2582,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "ToInt expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2595,14 +2595,14 @@ public class DaedScript {
 				if (isNumeric) {
 					returnValue.vInt = outInt;
 				} else {
-					return resultError(inputResult, "Unable to convert string to int");
+					return resultError(inputResult, "ToInt unable to convert string to int");
 				}
 				break;
 			case "double":
 				returnValue.vInt = (int)Math.Floor(inputResult.value.vDouble);
 				break;
 			default:
-				return resultError(inputResult, "Expected string or double");	
+				return resultError(inputResult, "ToInt expected string or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -2615,7 +2615,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "ToDouble expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2628,14 +2628,14 @@ public class DaedScript {
 				if (isNumeric) {
 					returnValue.vDouble = outDouble;
 				} else {
-					return resultError(inputResult, "Unable to convert string to double");
+					return resultError(inputResult, "ToDouble unable to convert string to double");
 				}
 				break;
 			case "int":
 				returnValue.vDouble = (double)inputResult.value.vInt;
 				break;
 			default:
-				return resultError(inputResult, "Expected string or int");	
+				return resultError(inputResult, "ToDouble expected string or int");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -2648,7 +2648,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "ToBool expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2684,7 +2684,7 @@ public class DaedScript {
 				}
 				break;
 			default:
-				return resultError(inputResult, "Expected string, int or double");	
+				return resultError(inputResult, "ToBool expected string, int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -2697,7 +2697,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Abs expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2712,7 +2712,7 @@ public class DaedScript {
 				returnValue.vInt = Math.Abs(inputResult.value.vInt);
 				break;
 			default:
-				return resultError(inputResult, "Expected int or double");	
+				return resultError(inputResult, "Abs expected int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	} 
@@ -2746,7 +2746,7 @@ public class DaedScript {
 						maxValue = latestResult.value;
 						break;
 					default:
-						return resultError(latestResult, "Expected a set of arguments of int or double");
+						return resultError(latestResult, "Max expected a set of arguments of int or double");
 				}
 			} else if (maxValue.valueType == latestResult.value.valueType) {
 				switch(latestResult.value.valueType) {
@@ -2774,7 +2774,7 @@ public class DaedScript {
 						}
 						break;
 					default:
-						return resultError(latestResult, "Expected a set of arguments of int or double");
+						return resultError(latestResult, "Max expected a set of arguments of int or double");
 				}
 			}
 		}
@@ -2794,7 +2794,7 @@ public class DaedScript {
 						maxValue = val;
 						break;
 					default:
-						return resultError(new Result(val, store), "Expected a set of arguments of all int or double");
+						return resultError(new Result(val, store), "MaxList expected a set of arguments of all int or double");
 				}
 			} else if (maxValue.valueType == val.valueType) {
 				switch(val.valueType) {
@@ -2822,7 +2822,7 @@ public class DaedScript {
 						}
 						break;
 					default:
-						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+						return resultError(new Result(val, store), "MaxList expected a set of arguments of int or double");
 				}
 			}
 		}
@@ -2858,7 +2858,7 @@ public class DaedScript {
 						minValue = latestResult.value;
 						break;
 					default:
-						return resultError(latestResult, "Expected a set of arguments of int or double");
+						return resultError(latestResult, "Min expected a set of arguments of int or double");
 				}
 			} else if (minValue.valueType == latestResult.value.valueType) {
 				switch(latestResult.value.valueType) {
@@ -2886,7 +2886,7 @@ public class DaedScript {
 						}
 						break;
 					default:
-						return resultError(latestResult, "Expected a set of arguments of int or double");
+						return resultError(latestResult, "Min expected a set of arguments of int or double");
 				}
 			}
 		}
@@ -2906,7 +2906,7 @@ public class DaedScript {
 						minValue = val;
 						break;
 					default:
-						return resultError(new Result(val, store), "Expected a set of arguments of all int or double");
+						return resultError(new Result(val, store), "MinList expected a set of arguments of all int or double");
 				}
 			} else if (minValue.valueType == val.valueType) {
 				switch(val.valueType) {
@@ -2934,7 +2934,7 @@ public class DaedScript {
 						}
 						break;
 					default:
-						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+						return resultError(new Result(val, store), "MinList expected a set of arguments of int or double");
 				}
 			}
 		}
@@ -2949,7 +2949,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Floor expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2964,7 +2964,7 @@ public class DaedScript {
 				returnValue.vInt = inputResult.value.vInt;
 				break;
 			default:
-				return resultError(inputResult, "Expected int or double");	
+				return resultError(inputResult, "Floor expected int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	} 
@@ -2977,7 +2977,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Ceil expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -2992,7 +2992,7 @@ public class DaedScript {
 				returnValue.vInt = inputResult.value.vInt;
 				break;
 			default:
-				return resultError(inputResult, "Expected int or double");	
+				return resultError(inputResult, "Ceil expected int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -3005,7 +3005,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Round expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -3020,7 +3020,7 @@ public class DaedScript {
 				returnValue.vInt = inputResult.value.vInt;
 				break;
 			default:
-				return resultError(inputResult, "Expected int or double");	
+				return resultError(inputResult, "Round expected int or double");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -3033,7 +3033,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Factorial expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -3045,10 +3045,10 @@ public class DaedScript {
 					returnValue.vInt = factorialHelper(inputResult.value.vInt);
 					return new Result(returnValue, inputResult.store);
 				} else {
-					return resultError(inputResult, "int must be greater than 1");
+					return resultError(inputResult, "Factorial int must be greater than 1");
 				}
 			default:
-				return resultError(inputResult, "Expected int");	
+				return resultError(inputResult, "Factorial expected int");	
 		}
 	}
 
@@ -3068,7 +3068,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Binomial expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3079,10 +3079,10 @@ public class DaedScript {
 				returnValue.vInt = binomialHelper(l_result.value.vInt, r_result.value.vInt);
 				return new Result(returnValue, r_result.store);
 			} else {
-				return resultError(r_result, "Expected int");	
+				return resultError(r_result, "Binomial expected int for the second argument");	
 			}
 		} else {
-			return resultError(l_result, "Expected int");	
+			return resultError(l_result, "Binomial expected int for the first argument");	
 		}
 	}	
 
@@ -3103,7 +3103,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Log expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3126,10 +3126,10 @@ public class DaedScript {
 						}
 						return new Result(returnValue, r_result.store);
 					default:
-						return resultError(r_result, "Expected int or double");
+						return resultError(r_result, "Log expected int or double for the second argument");
 				}
 			default:
-				return resultError(l_result, "Expected int or double");
+				return resultError(l_result, "Log expected int or double for the first argument");
 		}
 	}	
 
@@ -3141,7 +3141,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Logn expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -3155,7 +3155,7 @@ public class DaedScript {
 				returnValue.vDouble = Math.Log(inputResult.value.vInt);
 				break;
 			default:
-				return resultError(inputResult, "Expected double or int");	
+				return resultError(inputResult, "Logn expected double or int");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -3189,7 +3189,7 @@ public class DaedScript {
 						sumValue = latestResult.value;
 						break;
 					default:
-						return resultError(latestResult, "Expected a set of arguments of int or double");
+						return resultError(latestResult, "Sum expected a set of arguments of int or double");
 				}
 			} else if (sumValue.valueType == latestResult.value.valueType) {
 				switch(latestResult.value.valueType) {
@@ -3210,7 +3210,7 @@ public class DaedScript {
 						sumValue.vDouble = (double)sumValue.vInt + (double)latestResult.value.vInt;
 						break;
 					default:
-						return resultError(latestResult, "Expected a set of arguments of int or double");
+						return resultError(latestResult, "Sum expected a set of arguments of int or double");
 				}
 			}
 		}
@@ -3230,7 +3230,7 @@ public class DaedScript {
 						sumValue = val;
 						break;
 					default:
-						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+						return resultError(new Result(val, store), "SumList expected a set of arguments of int or double");
 				}
 			} else if (sumValue.valueType == val.valueType) {
 				switch(val.valueType) {
@@ -3251,7 +3251,7 @@ public class DaedScript {
 						sumValue.vDouble = (double)sumValue.vInt + (double)val.vInt;
 						break;
 					default:
-						return resultError(new Result(val, store), "Expected a set of arguments of int or double");
+						return resultError(new Result(val, store), "SumList expected a set of arguments of int or double");
 				}
 			}
 		}
@@ -3266,7 +3266,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Len expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -3280,7 +3280,7 @@ public class DaedScript {
 				returnValue.vInt = inputResult.value.vList.Count;
 				break;
 			default:
-				return resultError(inputResult, "Expected list or string");	
+				return resultError(inputResult, "Len expected list or string");	
 		}
 		return new Result(returnValue, inputResult.store);
 	}
@@ -3293,7 +3293,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Range expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result inputResult = interpret(arguments[0], env, store, ref gameEnv);
@@ -3308,7 +3308,7 @@ public class DaedScript {
 				}
 				return new Result(returnValue, inputResult.store);
 			default:
-				return resultError(inputResult, "Expected int");	
+				return resultError(inputResult, "Range expected int");	
 		}
 	}
 
@@ -3320,20 +3320,20 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Append expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "list") {
 			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "error") {
-				return resultError(r_result, "Passed error to list");
+				return resultError(r_result, "Passed error to list in Append");
 			}
 
 			l_result.value.vList.Add(r_result.value);
 			return new Result(l_result.value, r_result.store);
 		} else {
-			return resultError(l_result, "Expected list");	
+			return resultError(l_result, "Append expected list");	
 		}
 	}	
 
@@ -3345,7 +3345,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 3) {
-			return expressionError(expression, store, "Expected 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Inset expected 3 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3358,16 +3358,16 @@ public class DaedScript {
 
 				Result t_result = interpret(arguments[2], env, r_result.store, ref gameEnv);
 				if (t_result.value.valueType == "error") {
-				return resultError(t_result, "Passed error to list");
+				return resultError(t_result, "Insert passed error to list");
 				}
 
 				l_result.value.vList.Insert(r_result.value.vInt, t_result.value);
 				return new Result(l_result.value, t_result.store);
 			} else {
-				return resultError(l_result, "Expected int");
+				return resultError(l_result, "Insert expected int for second argument");
 			}
 		} else {
-			return resultError(l_result, "Expected list");	
+			return resultError(l_result, "Insert expected list for first argument");	
 		}
 	}
 
@@ -3379,7 +3379,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "RandInt expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3389,17 +3389,17 @@ public class DaedScript {
 				switch(r_result.value.valueType) {
 					case "int":
 						if (l_result.value.vInt >= r_result.value.vInt) {
-							return resultError(r_result, "Second argument passed must be greater than first argument passed");	
+							return resultError(r_result, "RandInt second argument passed must be greater than first argument passed");	
 						}
 						Value returnValue = new Value("int", expression.line, expression.character);
 						System.Random rnd = new System.Random();
 						returnValue.vInt = rnd.Next(l_result.value.vInt, r_result.value.vInt);
 						return new Result(returnValue, r_result.store);
 					default:
-						return resultError(r_result, "Expected int");
+						return resultError(r_result, "RandInt expected int for second argument");
 				}
 			default:
-				return resultError(l_result, "Expected int");
+				return resultError(l_result, "RandInt expected int for first argument");
 		}
 	}	
 
@@ -3411,7 +3411,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 0) {
-			return expressionError(expression, store, "Expected 0 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Rand expected 0 arguments, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Value returnValue = new Value("double", expression.line, expression.character);
@@ -3428,7 +3428,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Contains expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3448,7 +3448,7 @@ public class DaedScript {
 			returnValue.vBool = false;
 			return new Result(returnValue, r_result.store);			
 		} else {
-			return resultError(l_result, "Expected int");	
+			return resultError(l_result, "Contains expected list for first argument");	
 		}
 	}
 	
@@ -3476,7 +3476,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IndexOf expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3493,9 +3493,9 @@ public class DaedScript {
 					return new Result(returnValue, r_result.store);	
 				}
 			}
-			return resultError(r_result, "List does not contain value");		
+			return resultError(r_result, "IndexOf list does not contain value");		
 		} else {
-			return resultError(l_result, "Expected int");	
+			return resultError(l_result, "IndexOf expected list for first argument");	
 		}
 	}
 
@@ -3507,7 +3507,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Distance expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3526,16 +3526,16 @@ public class DaedScript {
 						distanceValue.vInt = distance;
 						return new Result(distanceValue, r_result.store);
 					} else {
-						return resultError(r_result, "Expected list with three ints");
+						return resultError(r_result, "Distance expected list with three ints for second argument");
 					}
 				} else {
-					return resultError(r_result, "Expected list");	
+					return resultError(r_result, "Distance expected list for second argument");	
 				}
 			} else {
-				return resultError(l_result, "Expected list with three ints");
+				return resultError(l_result, "Distance expected list with three ints for first argument");
 			}
 		} else {
-			return resultError(l_result, "Expected list");		
+			return resultError(l_result, "Distance expected list for first argument");		
 		} 
 	}
 
@@ -3547,7 +3547,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgDistance expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3562,10 +3562,10 @@ public class DaedScript {
 				distanceValue.vInt = distance;
 				return new Result(distanceValue, r_result.store);
 			} else {
-				return resultError(r_result, "Expected ig");	
+				return resultError(r_result, "IgDistance expected ig for second argument");	
 			}
 		} else {
-			return resultError(l_result, "Expected ig");	
+			return resultError(l_result, "IgDistance expected ig for first argument");	
 		} 
 	}
 
@@ -3577,7 +3577,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgPosition expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3593,7 +3593,7 @@ public class DaedScript {
 			indexValue.vList = new List<Value> {xValue, yValue, zValue};
 			return new Result(indexValue, ig_result.store);
 		} else {
-			return resultError(ig_result, "Expected ig");	
+			return resultError(ig_result, "IgPosition expected ig");	
 		} 
 	}
 
@@ -3618,13 +3618,13 @@ public class DaedScript {
 					z = index[2].vInt;
 					returnStore = index_result.store;
 					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
-						return resultError(index_result, "Index out of bounds");
+						return resultError(index_result, "Index out of bounds of map");
 					}
 				} else {
-					return resultError(index_result, "Expected list with three ints");
+					return resultError(index_result, "IgsAtPosition expected list with three ints");
 				}
 			} else {
-				return resultError(index_result, "Expected list");	
+				return resultError(index_result, "IgsAtPosition expected list");	
 			}
 		} else if (arguments.Count == 3) {
 			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3641,19 +3641,19 @@ public class DaedScript {
 							Value indexValue = new Value("list", expression.line, expression.character);
 							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
 							Result index_result = new Result(indexValue, z_result.store);
-							return resultError(index_result, "Index out of bounds");
+							return resultError(index_result, "Index out of bounds of map");
 						}						
 					} else {
-						return resultError(z_result, "Expected int");	
+						return resultError(z_result, "IgsAtPosition expected int for third argument");	
 					} 
 				} else {
-					return resultError(y_result, "Expected int");	
+					return resultError(y_result, "IgsAtPosition expected int for second argument");	
 				} 
 			} else {
-				return resultError(x_result, "Expected int");	
+				return resultError(x_result, "IgsAtPosition expected int for first argument");	
 			} 
 		} else {
-			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgsAtPosition expected 1 or 3 arguments, got " + arguments.Count.ToString()); //Throw Error	
 		}
 
 		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
@@ -3694,13 +3694,13 @@ public class DaedScript {
 					z = index[2].vInt;
 					returnStore = index_result.store;
 					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
-						return resultError(index_result, "Index out of bounds");
+						return resultError(index_result, "Index out of bounds of map");
 					}
 				} else {
-					return resultError(index_result, "Expected list with three ints");
+					return resultError(index_result, "TokensAtPosition expected list with three ints");
 				}
 			} else {
-				return resultError(index_result, "Expected list");	
+				return resultError(index_result, "TokensAtPosition expected list");	
 			}
 		} else if (arguments.Count == 3) {
 			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3717,19 +3717,19 @@ public class DaedScript {
 							Value indexValue = new Value("list", expression.line, expression.character);
 							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
 							Result index_result = new Result(indexValue, z_result.store);
-							return resultError(index_result, "Index out of bounds");
+							return resultError(index_result, "Index out of bounds of map");
 						}						
 					} else {
-						return resultError(z_result, "Expected int");	
+						return resultError(z_result, "TokensAtPosition expected int for third argument");	
 					} 
 				} else {
-					return resultError(y_result, "Expected int");	
+					return resultError(y_result, "TokensAtPosition expected int for second argument");	
 				} 
 			} else {
-				return resultError(x_result, "Expected int");	
+				return resultError(x_result, "TokensAtPosition expected int for first argument");	
 			} 
 		} else {
-			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "TokensAtPosition expected 1 or 3 arguments, got " + arguments.Count.ToString()); //Throw Error	
 		}
 
 		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
@@ -3764,13 +3764,13 @@ public class DaedScript {
 					z = index[2].vInt;
 					returnStore = index_result.store;
 					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
-						return resultError(index_result, "Index out of bounds");
+						return resultError(index_result, "Index out of bounds of map");
 					}
 				} else {
-					return resultError(index_result, "Expected list with three ints");
+					return resultError(index_result, "GeometryAtPosition expected list with three ints");
 				}
 			} else {
-				return resultError(index_result, "Expected list");	
+				return resultError(index_result, "GeometryAtPosition expected list");	
 			}
 		} else if (arguments.Count == 3) {
 			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3787,19 +3787,19 @@ public class DaedScript {
 							Value indexValue = new Value("list", expression.line, expression.character);
 							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
 							Result index_result = new Result(indexValue, z_result.store);
-							return resultError(index_result, "Index out of bounds");
+							return resultError(index_result, "Index out of bounds of map");
 						}						
 					} else {
-						return resultError(z_result, "Expected int");	
+						return resultError(z_result, "GeometryAtPosition expected int for third argument");	
 					} 
 				} else {
-					return resultError(y_result, "Expected int");	
+					return resultError(y_result, "GeometryAtPosition expected int for second argument");	
 				} 
 			} else {
-				return resultError(x_result, "Expected int");	
+				return resultError(x_result, "GeometryAtPosition expected int for first argument");	
 			} 
 		} else {
-			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "GeometryAtPosition expected 1 or 3 arguments, got " + arguments.Count.ToString()); //Throw Error	
 		}
 
 		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
@@ -3834,13 +3834,13 @@ public class DaedScript {
 					z = index[2].vInt;
 					returnStore = index_result.store;
 					if (!Utils.gameCoordExists(x, y, z, gameEnv.mapScript.gameBoard)) {
-						return resultError(index_result, "Index out of bounds");
+						return resultError(index_result, "Index out of bounds of map");
 					}
 				} else {
-					return resultError(index_result, "Expected list with three ints");
+					return resultError(index_result, "IsPositionOccupied expected list with three ints");
 				}
 			} else {
-				return resultError(index_result, "Expected list");	
+				return resultError(index_result, "IsPositionOccupied expected list");	
 			}
 		} else if (arguments.Count == 3) {
 			Result x_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3857,19 +3857,19 @@ public class DaedScript {
 							Value indexValue = new Value("list", expression.line, expression.character);
 							indexValue.vList = new List<Value> {x_result.value, y_result.value, z_result.value};
 							Result index_result = new Result(indexValue, z_result.store);
-							return resultError(index_result, "Index out of bounds");
+							return resultError(index_result, "Index out of bounds of map");
 						}						
 					} else {
-						return resultError(z_result, "Expected int");	
+						return resultError(z_result, "IsPositionOccupied expected int for third argument");	
 					} 
 				} else {
-					return resultError(y_result, "Expected int");	
+					return resultError(y_result, "IsPositionOccupied expected int for second argument");	
 				} 
 			} else {
-				return resultError(x_result, "Expected int");	
+				return resultError(x_result, "IsPositionOccupied expected int for first argument");	
 			} 
 		} else {
-			return expressionError(expression, store, "Expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IsPositionOccupied expected 1 or 3 argument, got " + arguments.Count.ToString()); //Throw Error	
 		}
 
 		GameCoord gameCoord = gameEnv.mapScript.gameBoard[x,y,z];
@@ -3895,7 +3895,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgOccupies expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3912,7 +3912,7 @@ public class DaedScript {
 			occupiesValue.vBool = occupies;
 			return new Result(occupiesValue, ig_result.store);
 		} else {
-			return resultError(ig_result, "Expected ig");	
+			return resultError(ig_result, "IgOccupies expected ig");	
 		} 
 	}
 
@@ -3924,7 +3924,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgDimensions expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3947,7 +3947,7 @@ public class DaedScript {
 			dimenionsValue.vList = new List<Value> {heightValue, lengthValue, widthValue};
 			return new Result(dimenionsValue, ig_result.store);
 		} else {
-			return resultError(ig_result, "Expected ig");	
+			return resultError(ig_result, "IgDimensions expected ig");	
 		} 
 	}
 
@@ -3959,7 +3959,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgHeight expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3973,7 +3973,7 @@ public class DaedScript {
 			}
 			return new Result(heightValue, ig_result.store);
 		} else {
-			return resultError(ig_result, "Expected ig");	
+			return resultError(ig_result, "IgHeight expected ig");	
 		} 
 	}
 
@@ -3985,7 +3985,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgLength expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -3999,7 +3999,7 @@ public class DaedScript {
 			}
 			return new Result(lengthValue, ig_result.store);
 		} else {
-			return resultError(ig_result, "Expected ig");	
+			return resultError(ig_result, "IgLength expected ig");	
 		} 
 	}
 
@@ -4011,7 +4011,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IgWidth expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result ig_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -4025,7 +4025,7 @@ public class DaedScript {
 			}
 			return new Result(widthValue, ig_result.store);
 		} else {
-			return resultError(ig_result, "Expected ig");	
+			return resultError(ig_result, "IgWidth expected ig");	
 		} 
 	}
 
@@ -4037,7 +4037,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Print expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result string_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -4046,7 +4046,7 @@ public class DaedScript {
 			Debug.Log(string_result.value.vString);
 			return string_result;
 		} else {
-			return resultError(string_result, "Expected string");	
+			return resultError(string_result, "Print expected string");	
 		} 
 	}
 
@@ -4058,7 +4058,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "Type expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Result string_result = interpret(arguments[0], env, store, ref gameEnv);
@@ -4074,7 +4074,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 1) {
-			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "IsNull expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		Value isNull = new Value("bool", expression.line, expression.character);
@@ -4098,7 +4098,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "ExistsWall expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		int x_1;
@@ -4117,7 +4117,7 @@ public class DaedScript {
 				z_1 = first[2].vInt;
 
 				if (!Utils.gameCoordExists(x_1, y_1, z_1, gameEnv.mapScript.gameBoard)) {
-					return resultError(first_result, "Index out of bounds");
+					return resultError(first_result, "Index out of bounds of map");
 				}
 
 				second_result = interpret(arguments[1], env, first_result.store, ref gameEnv);
@@ -4129,19 +4129,19 @@ public class DaedScript {
 						z_2 = first[2].vInt;
 
 						if (!Utils.gameCoordExists(x_2, y_2, z_2, gameEnv.mapScript.gameBoard)) {
-							return resultError(first_result, "Index out of bounds");
+							return resultError(first_result, "Index out of bounds of map");
 						}
 					} else {
-						return resultError(second_result, "Expected list with three ints");
+						return resultError(second_result, "ExistsWall Expected list with three ints for second argument");
 					}
 				} else {
-					return resultError(second_result, "Expected list");
+					return resultError(second_result, "ExistsWall expected list for second argument");
 				}
 			} else {
-				return resultError(first_result, "Expected list with three ints");
+				return resultError(first_result, "ExistsWall expected list with three ints for first argument");
 			}
 		} else {
-			return resultError(first_result, "Expected list");	
+			return resultError(first_result, "ExistsWall expected list for first argument");	
 		}
 
 		Value exists = new Value("bool", expression.line, expression.character);
@@ -4195,7 +4195,7 @@ public class DaedScript {
 	) {
 		List<Expression> arguments = expression.eBuiltinFuncArguments;
 		if (arguments.Count != 2) {
-			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+			return expressionError(expression, store, "GetWall expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
 		} 
 
 		int x_1;
@@ -4214,7 +4214,7 @@ public class DaedScript {
 				z_1 = first[2].vInt;
 
 				if (!Utils.gameCoordExists(x_1, y_1, z_1, gameEnv.mapScript.gameBoard)) {
-					return resultError(first_result, "Index out of bounds");
+					return resultError(first_result, "Index out of bounds of map");
 				}
 
 				second_result = interpret(arguments[1], env, first_result.store, ref gameEnv);
@@ -4226,19 +4226,19 @@ public class DaedScript {
 						z_2 = first[2].vInt;
 
 						if (!Utils.gameCoordExists(x_2, y_2, z_2, gameEnv.mapScript.gameBoard)) {
-							return resultError(first_result, "Index out of bounds");
+							return resultError(first_result, "Index out of bounds of map");
 						}
 					} else {
-						return resultError(second_result, "Expected list with three ints");
+						return resultError(second_result, "GetWall expected list with three ints for second argument");
 					}
 				} else {
-					return resultError(second_result, "Expected list");
+					return resultError(second_result, "GetWall expected list for second argument");
 				}
 			} else {
-				return resultError(first_result, "Expected list with three ints");
+				return resultError(first_result, "GetWall expected list with three ints for first argument");
 			}
 		} else {
-			return resultError(first_result, "Expected list");	
+			return resultError(first_result, "GetWall expected list for first argument");	
 		}
 
 		Value wall = new Value("ig", expression.line, expression.character);
