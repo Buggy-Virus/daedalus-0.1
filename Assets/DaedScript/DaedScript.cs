@@ -42,6 +42,7 @@ public class DaedScript {
 		{"TokensAtPosition", TokensAtPosition},
 		{"GeometryAtPosition", GeometryAtPosition},
 		{"Print", Print},
+		{"Type", Type},
 		{"IsNull", IsNull},
 		{"ExistsWall", ExistsWall},
 		{"GetWall", GetWall}
@@ -60,6 +61,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
+		Debug.Log(input);
 		List<Atom> atomList = tokenize(input);
 
 		// Debug.Log("===== NEW EVALUATION =====");
@@ -125,6 +127,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
+		Debug.Log(input);
 		gameEnv.tokenDict.Add("self", self);
 
 		Value value = interpret(
@@ -145,6 +148,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
+		Debug.Log(input);
 		gameEnv.shapeDict.Add("self", self);
 
 		Value value = interpret(
@@ -166,6 +170,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
+		Debug.Log(input);
 		gameEnv.tokenDict.Add("self", self);
 		gameEnv.tokenDict.Add("target", target);
 
@@ -451,8 +456,7 @@ public class DaedScript {
 
 	static ParseResult parseError(Atom atom, int pos, string message) {
 		Expression error = new Expression("error", atom.line, atom.character);
-		error.eErrorMessage = "ParseError:" + message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
-		Debug.Log("Error at (" + atom.line + "," + atom.character + "): " + error.eErrorMessage);
+		error.eErrorMessage = "ParseError at (" + atom.line + "," + atom.character + "):" + message + ", got: (" + atom.atomType + ",\"" + atom.value + "\")";
 		return new ParseResult(error, pos);
 	}
 
@@ -744,12 +748,25 @@ public class DaedScript {
 				return parseError(atomList[pos], pos, "Expected \"]\""); // throw error
 			}
 		} else if (atomEquals(atomList[pos], "punctuation", "]")) {
-			Expression indexExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 2);
-			indexExpression.eOperatorOp = "[]";
-			indexExpression.eOperatorLeft = lastExpression;
-			indexExpression.eOperatorRight = firstResult.expression;
+			if (atomEquals(atomList[pos + 1], "operator", "=")) {
+				pos += 2;
 
-			return new ParseResult(indexExpression, pos);
+				Expression setListExpression = new Expression("e-set-list", atomList[pos].line, atomList[pos].character);
+				ParseResult valueResult = parseSingle(atomList, pos, false);
+				setListExpression.eSetList = lastExpression;
+				setListExpression.eSetListIndex = firstResult.expression;
+				setListExpression.eSetListValue = valueResult.expression;
+				pos = valueResult.position;
+
+				return new ParseResult(setListExpression, pos);
+			} else {
+				Expression indexExpression = new Expression("e-op", atomList[pos].line, atomList[pos].character - 2);
+				indexExpression.eOperatorOp = "[]";
+				indexExpression.eOperatorLeft = lastExpression;
+				indexExpression.eOperatorRight = firstResult.expression;
+
+				return new ParseResult(indexExpression, pos);
+			}
 		} else {
 			return parseError(atomList[pos], pos, "Expected \"]\""); // throw error
 		}
@@ -1037,6 +1054,11 @@ public class DaedScript {
 				evalExpression.eEvalArguments = argumentList;
 
 				return new ParseResult(evalExpression, pos);
+			} else if (atomEquals(atomList[pos], "punctuation", "[")) {
+				Expression idExpression = new Expression("e-id", atomList[pos].line, atomList[pos].character - 1);
+				idExpression.eId = identifierName;
+				pos += 1;
+				return parseIndex(atomList, pos, idExpression);
 			} else {
 				Expression idExpression = new Expression("e-id", atomList[pos].line, atomList[pos].character - 1);
 				idExpression.eId = identifierName;
@@ -1051,7 +1073,7 @@ public class DaedScript {
 		if (atomList[pos].atomType == "identifier") {
 			Expression igExpression = new Expression("e-ig", atomList[pos].line, atomList[pos].character - 1);
 			igExpression.eIgName = atomList[pos].value;
-			return new ParseResult(igExpression, pos - 1);
+			return new ParseResult(igExpression, pos);
 		} else {
 			return parseError(atomList[pos], pos, "Expected identifier"); // throw error
 		}
@@ -1131,6 +1153,11 @@ public class DaedScript {
 			case "e-set": //e-set
 				expression.eSetValue = desugar(expression.eSetValue);
 				return expression;
+			case "e-set-list": //e-set-list
+				expression.eSetList = desugar(expression.eSetList);
+				expression.eSetListIndex = desugar(expression.eSetListIndex);
+				expression.eSetListValue = desugar(expression.eSetListValue);
+				return expression;
 			case "e-do": //e-do
 				expression.eDo = expression.eDo.Select(desugar).ToList();
 				return expression;
@@ -1141,8 +1168,12 @@ public class DaedScript {
 			case "e-let": //e-let
 				expression.eLetValue = desugar(expression.eLetValue);
 				return expression;
+			case "e-get-var": //e-ig
+				expression.eGetIg = desugar(expression.eGetIg);
+				return expression;
 			case "e-set-var": //e-set-variable
 				expression.eSetIgValue = desugar(expression.eSetIgValue);
+				expression.eSetIg = desugar(expression.eSetIg);
 				return expression;
 			case "e-return":
 				expression.eReturn = desugar(expression.eReturn);
@@ -1230,6 +1261,8 @@ public class DaedScript {
 				return interpApp(expression, env, store, ref gameEnv);
 			case "e-set": //e-set
 				return interpSet(expression, env, store, ref gameEnv);
+			case "e-set-list": //e-set-list
+				return interpSetList(expression, env, store, ref gameEnv);
 			case "e-do": //e-do
 				return interpDo(expression, env, store, ref gameEnv);	
 			case "e-while": //e-while
@@ -1341,6 +1374,9 @@ public class DaedScript {
 				break;
 			case "e-set": //e-set
 				errorValue.errorMessage += error.expressionType + ",\"" + error.eSetName + "\")";
+				break;
+			case "e-set-list": //e-set-list
+				errorValue.errorMessage += error.expressionType + ",<setListElementExpressionObject>)";
 				break;
 			case "e-do": //e-do
 				errorValue.errorMessage += error.expressionType + ",<doExpressionObject>)";
@@ -2051,6 +2087,35 @@ public class DaedScript {
 		}
 	}
 
+	static Result interpSetList(
+		Expression expression, 
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		Result list_result = interpret(expression.eSetList, env, store, ref gameEnv);
+		if (list_result.value.valueType == "list") {
+			Result index_result = interpret(expression.eSetListIndex, env, list_result.store, ref gameEnv);
+			if (index_result.value.valueType == "int") {
+				if (Math.Abs(index_result.value.vInt) < list_result.value.vList.Count()) {
+					Result newValue_result = interpret(expression.eSetListValue, env, index_result.store, ref gameEnv);
+					if (index_result.value.vInt >= 0) {
+						list_result.value.vList[index_result.value.vInt] = newValue_result.value;
+					} else {
+						list_result.value.vList[list_result.value.vList.Count() + index_result.value.vInt] = newValue_result.value;
+					}
+					return new Result(list_result.value, newValue_result.store);
+				} else {
+					return resultError(list_result, "Index out of range"); //Throw Error
+				}
+			} else {
+				return resultError(list_result, "Expected int"); //Throw Error
+			}
+		} else {
+			return resultError(list_result, "Expected list"); //Throw Error
+		}
+	}
+
 	static Result interpDo(
 		Expression expression, 
 		Dictionary<string, string> env, 
@@ -2070,10 +2135,12 @@ public class DaedScript {
 				define_result.store[loc] = define_result.value;
 				last_result = define_result;
 			} else if (expr.expressionType == "e-return") {
-				return interpret(expr.eReturn, env, last_result.store, ref gameEnv);
+				Result return_result = interpret(expr.eReturn, env, last_result.store, ref gameEnv);
+				return_result.returned = true;
+				return return_result;
 			} else {
 				last_result = interpret(expr, env, last_result.store, ref gameEnv);
-				if (last_result.value.valueType == "error") {
+				if (last_result.value.valueType == "error" || last_result.returned) {
 					return last_result;
 				}
 			}
@@ -2273,7 +2340,7 @@ public class DaedScript {
 		ref GameEnv gameEnv
 	) 
 	{
-		Result ig_result = interpret(expression.eGetIg, env, store, ref gameEnv);
+		Result ig_result = interpret(expression.eSetIg, env, store, ref gameEnv);
 		string variable = expression.eSetIgVariable;
 		if (ig_result.value.valueType == "ig" && ig_result.value.vIgType == "token") {
 			GameObject token = ig_result.value.vIg;
@@ -3444,6 +3511,46 @@ public class DaedScript {
 		} 
 
 		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (l_result.value.valueType == "list") {
+			List<Value> l_index = l_result.value.vList;
+			if (l_index[0].valueType == "int" && l_index[1].valueType == "int" && l_index[2].valueType == "int") {
+				Index l_vector = new Index(l_index[0].vInt, l_index[1].vInt, l_index[2].vInt);
+				Result r_result = interpret(arguments[1], env, store, ref gameEnv);
+				if (r_result.value.valueType == "list") {
+					List<Value> r_index = r_result.value.vList;
+					if (r_index[0].valueType == "int" && r_index[1].valueType == "int" && r_index[2].valueType == "int") { 
+						Index r_vector = new Index(r_index[0].vInt, r_index[1].vInt, r_index[2].vInt);
+
+						int distance = Utils.distance(l_vector, r_vector);
+						Value distanceValue = new Value("int", expression.line, expression.character);
+						distanceValue.vInt = distance;
+						return new Result(distanceValue, r_result.store);
+					} else {
+						return resultError(r_result, "Expected list with three ints");
+					}
+				} else {
+					return resultError(r_result, "Expected list");	
+				}
+			} else {
+				return resultError(l_result, "Expected list with three ints");
+			}
+		} else {
+			return resultError(l_result, "Expected list");		
+		} 
+	}
+
+	static Result IgDistance(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 2) {
+			return expressionError(expression, store, "Expected 2 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result l_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (l_result.value.valueType == "ig") {
 			Result r_result = interpret(arguments[1], env, l_result.store, ref gameEnv);
 			if (r_result.value.valueType == "ig") {
@@ -3943,6 +4050,22 @@ public class DaedScript {
 		} 
 	}
 
+	static Result Type(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result string_result = interpret(arguments[0], env, store, ref gameEnv);
+		Debug.Log(string_result.value.valueType);
+		return string_result;	
+	}
+
 	static Result IsNull(
 		Expression expression,
 		Dictionary<string, string> env, 
@@ -4163,6 +4286,7 @@ public class Result {
 	public Value value;
 	public Dictionary<string, Value> store;
 	public Dictionary<string, string> env;
+	public bool returned;
 
 	public Result(Value val, Dictionary<string, Value> str) {
 		value = val;
@@ -4281,6 +4405,10 @@ public class Expression {
 
 	public string eSetName; // type=11
 	public Expression eSetValue;
+
+	public Expression eSetList;
+	public Expression eSetListIndex;
+	public Expression eSetListValue;
 
 	public List<Expression> eDo; //type=12
 

@@ -1,0 +1,77 @@
+let ig_var = $TEST;
+let x = "here";
+
+function if_1() {
+    Print("if_1");
+
+    Print(x);
+    Print(ToString(ig_var.hp));
+    Print(ToString($TEST.hp));
+}
+
+if_1();
+
+function if_2() {
+    Print("if_2");
+
+    Print(ToString($TEST.hp));
+    Print(ToString($TEST.str));
+    Print(ToString($TEST.dex));
+    Print(ToString($TEST.con));
+    Print(ToString($TEST.int));
+    Print(ToString($TEST.wis));
+    Print(ToString($TEST.cha));
+    Print(ToString($TEST.bab));
+    Print(ToString($TEST.weapon_damage));
+    Print(ToString($TEST.AC));
+
+    Print(ToString($TEST.move_cheap_diagnol));
+}
+
+if_2();
+
+function if_3() {
+    Print("if_3");
+
+    $TEST.move_cheap_diagnol = false;
+
+    Print(ToString($TEST.move_cheap_diagnol));
+}
+
+if_3();
+
+function if_4() {
+    Print("if_4");
+
+    Print(ToString($TEST.move_cheap_diagnol));
+    $TEST.move_cheap_diagnol = true;
+}
+
+if_4();
+
+function if_5() {
+    Print("if_5");
+
+    Print(ToString(ig_var.hp));
+}
+
+if_5();
+
+function if_6(x) {
+    Print("if_6");
+
+    Print(ToString(x.hp));
+}
+
+if_6($TEST);
+if_6(ig_var);
+
+function if_7() {
+    Print("if_7");
+
+    $TEST.new_var = "a new variable";
+
+    Print($TEST.new_var);
+}
+
+if_7();

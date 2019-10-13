@@ -14,52 +14,95 @@ function Has_Move(self) {
 
 function Is_Diagnol(pos_1, pos_2) {
     Print('Is_Diagnol Called');
-    return Abs(pos_1[0] - pos_2[0]) == 1 && Abs(pos_1[2] - pos_2[2]) == 1;
+    return (Abs(pos_1[0] - pos_2[0]) == 1) && (Abs(pos_1[2] - pos_2[2]) == 1);
 }
 
 function Get_Shape_Top(shape) { 
     Print('Get_Shape_Top Called');
     let pos = IgPosition(shape);
-    pos[2] = pos[2] + 1;
+    pos[1] = pos[1] + 1;
     return pos;
 }
 
 function Basic_Move_Call_Condition(self, target) {
     Print('Basic_Move_Call_Condition Called');
     let self_pos = IgPosition(self);
-    let move_pos = get_shape_top(target);
+    let move_pos = Get_Shape_Top(target);
     if (target.occupiable
-        && self_pos[1] == move_pos[1]
-        && Distance(self_pos, move_pos) == 1) 
+        && (self_pos[1] == move_pos[1])
+        && (Distance(self_pos, move_pos) == 1)) 
     {
         let move_cost = 1;
-        if (is_diagnol(self_pos, move_pos) && !self.move_cheap_diagnol) {
+        if (Is_Diagnol(self_pos, move_pos) && (!self.move_cheap_diagnol)) {
             move_cost = 2;
-        };
+        }
         if (target.difficult_terrain) {
             move_cost = 2 * move_cost;
-        };
+        }
         return self.move_points >= move_cost;
-    };
-    return false;
+    } else {
+        return false;
+    }
 }
 
 function Basic_Move_Script(self, target) {
     Print('Basic_Move_Script Called');
     let self_pos = IgPosition(self);
-    let move_pos = get_shape_top(target);
+    let move_pos = Get_Shape_Top(target);
     let move_cost = 1;
-    if (is_diagnol(self_pos, move_pos)) {
+    if (Is_Diagnol(self_pos, move_pos)) {
         if (self.move_cheap_diagnol) {
             self.move_cheap_diagnol = false;
         } else {
             let move_cost = 2;
             self.move_cheap_diagnol = true;
         }
-    };
+    }
     if (target.difficult_terrain) {
         move_cost = 2 * move_cost;
-    };
+    }
     self.move_points = self.move_points - move_cost;
     self.move_action_points = self.move_action_points - 1;
+}
+
+function Has_Standard_Action(self) {
+    Print('Has_Standard_Action Called');
+    return self.standard_action_points > 0;
+}
+
+function Deduct_Standard_Action(self) {
+    Print('Deduct_Standard_Action Called');
+    self.standard_action_points = self.standard_action_points - 1;
+}
+
+function Calculate_Attack(self) {
+    Print('Calculate_Attack Called');
+    return self.bab + Floor((self.str - 10) / 2) + RandInt(0, 20);
+}
+
+function Calculate_Ac(self) {
+    Print('Calculate_Ac Called');
+    return self.ac + Floor((self.dex - 10) / 2);
+}
+
+function Basic_Attack_Hit_Condition(self, target) {
+    Print('Basic_Attack_Hit_Condition Called');
+    return Calculate_Attack(self) >= Calculate_Ac(target);
+}
+
+function Calculate_Attack_Damage(self) {
+    Print('Calculate_Damage Called');
+    return Min(Floor((self.str - 10) / 2), 0) + RandInt(0, self.weapon_damage);
+}
+
+function Deal_Damage(self, damage) {
+    Print('Deal_Damage Called');
+    self.hp = self.hp - damage;
+}
+
+function Basic_Attack_Script(self, target) {
+    Print('Basic_Attack_Script Called');
+    let old_hp = target.hp;
+    Deal_Damage(target, Calculate_Attack_Damage(self));
+    Print('The Target HP went from ' + ToString(old_hp) + ' to ' + ToString(target.hp) + '!');
 }

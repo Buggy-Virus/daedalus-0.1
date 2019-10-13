@@ -872,6 +872,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c172fe9899dfb454bab0e1107da129b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tokenPrefab: {fileID: 8913515695155247463, guid: 90440cb5a8961054a8d2c702757f2f32,
+    type: 3}
   eval_int: 0
   eval_double: 0
   eval_bool: 0
@@ -881,6 +883,7 @@ MonoBehaviour:
   eval_nested_operator: 0
   eval_mixed_operator: 0
   eval_test_file_1: 0
+  eval_test_ig_1: 0
 --- !u!4 &246738982
 Transform:
   m_ObjectHideFlags: 0

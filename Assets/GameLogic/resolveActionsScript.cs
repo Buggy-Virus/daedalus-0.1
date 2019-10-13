@@ -615,7 +615,7 @@ public class ResolveActionsScript : MonoBehaviour {
 
         if (effect.scripts != null) {
             foreach (string script in effect.scripts) {
-                    DaedScript.evaluateSelfToken(script, ref self, ref gameEnv);
+                    DaedScript.evaluateSelfTokenTargetCube(script, ref self, ref target, ref gameEnv);
             }
         }
 
@@ -738,7 +738,7 @@ public class ResolveActionsScript : MonoBehaviour {
         if (effect.conditions != null && resolveTargetedConditions(self, target, effect.conditions, gameEnv)) {
             if (effect.conditional_scripts != null) {
                 foreach (string script in effect.conditional_scripts) {
-                        DaedScript.evaluateSelfToken(script, ref self, ref gameEnv);
+                        DaedScript.evaluateSelfTokenTargetCube(script, ref self, ref target, ref gameEnv);
                 }
             }
 

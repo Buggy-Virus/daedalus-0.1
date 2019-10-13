@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class testDaedScript : MonoBehaviour
 {
+    public GameObject tokenPrefab;
     GameEnvScript gameEnvScript;
 	public Dictionary<string, GameObject> tokenEnv;
     public Dictionary<string, GameObject> cubeEnv;
@@ -19,6 +20,7 @@ public class testDaedScript : MonoBehaviour
     public bool eval_nested_operator;
     public bool eval_mixed_operator;
     public bool eval_test_file_1;
+    public bool eval_test_ig_1;
 
     void printValue(Value val) {
         string printString = "type: " + val.valueType + ", value: ";
@@ -754,6 +756,18 @@ public class testDaedScript : MonoBehaviour
             string pathfinderScript = Utils.readTextFile(path);
             printValue(DaedScript.evaluate(pathfinderScript, ref gameEnvScript.gameEnv));
             eval_test_file_1 = false;
+        }
+
+        if (eval_test_ig_1) {
+            GameObject test_token = GameUtils.quickCreateToken(tokenPrefab, gameEnvScript.gameEnv.tokenTemplates["goblin"], ref gameEnvScript.gameEnv, "TEST");
+
+            string path = "Assets/DaedScript/test_ig_functions.txt";
+            string testIfFile = Utils.readTextFile(path);
+            printValue(DaedScript.evaluate(testIfFile, ref gameEnvScript.gameEnv));
+            
+            
+            GameUtils.deleteToken(ref test_token);
+            eval_test_ig_1 = false;
         }
     }
 }

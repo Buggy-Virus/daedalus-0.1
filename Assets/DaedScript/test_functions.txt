@@ -159,7 +159,21 @@ test_func_14();
 function tf_15() {
     Print("tf_15");
 
-    Print(x);
+    Print("now just here");
 }
 
 tf_15();
+
+function tf_16(){
+    Print("tf_16");
+
+    let x = [1, 2, 3];
+
+    Print(ToString(x[1]));
+
+    x[1] = 10;
+
+    Print(ToString(x[1]));
+}
+
+tf_16();

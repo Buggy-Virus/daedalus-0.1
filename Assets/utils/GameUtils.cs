@@ -124,6 +124,67 @@ public class GameUtils {
         return token;
     }
 
+    static public GameObject quickCreateToken(GameObject tokenPrefab, TokenTemplate template, ref GameEnv gameEnv, string name) {
+        GameObject token = GameObject.Instantiate(tokenPrefab, gameEnv.tokensObject.transform);
+        TokenScript tokenScript = token.GetComponent<TokenScript>();
+        GraphicTokenScript graphicTokenScript = token.GetComponent<GraphicTokenScript>();
+        tokenScript.gameEnv = gameEnv;
+        tokenScript.identifier = template.identifier;
+        token.name = name;
+        gameEnv.tokenDict[name] = token;
+
+        tokenScript.graphicObjectPrefab = template.graphicObjectPrefab;
+
+        Value alias_calculation = parseTemplateVariable(template.aliasList, ref gameEnv);
+        if (alias_calculation.valueType == "string") {
+            tokenScript.alias = alias_calculation.vString;
+        } else {
+            // Throw Error
+        } 
+
+        tokenScript.type = template.type;
+        tokenScript.materialTypes = template.materialTypes;
+        tokenScript.materialTypesDistribution = template.materialTypesDistribution;
+
+        tokenScript.width = template.width;
+        tokenScript.length = template.length;
+        tokenScript.height = template.height;
+
+        foreach (Effect effect in template.effects) {
+            if (effect.stacks) {
+                effect.givenName = effect.name + "_" + System.Guid.NewGuid();
+                
+            } else {
+                effect.givenName = effect.name;
+            }
+            tokenScript.effects[effect.givenName] = effect;
+        }
+
+        tokenScript.actions = new Dictionary<string, Action>();
+        foreach (Action action in template.availableActions) {
+            tokenScript.actions.Add(action.name, action);
+        }
+        
+        foreach (KeyValuePair<string, TemplateVariable> var in template.initVariableList) {
+            tokenScript.variables[var.Key] = parseTemplateVariable(var.Value, ref gameEnv);
+        }
+
+        GameObject graphicToken = GameObject.Instantiate(tokenScript.graphicObjectPrefab, token.transform, false);
+        // graphicToken.transform.position = new Vector3(0.5f, 0.5f, 0.5f);
+        graphicToken.SetActive(false);
+        graphicTokenScript.token = token;
+        graphicTokenScript.tokenScript = tokenScript;
+        graphicTokenScript.graphicObject_transform = graphicToken.transform;
+        graphicTokenScript.graphicObject_collider = graphicToken.transform.GetComponent<Collider>();
+        tokenScript.graphicObject = graphicToken;
+        tokenScript.graphicTokenScript = graphicTokenScript;
+
+        GameObject tokenCavas = GameObject.Instantiate(graphicTokenScript.canvasPrefab, token.transform);
+        graphicTokenScript.canvas = tokenCavas;
+
+        return token;
+    }
+
     static public void placeGraphicToken(ref GameObject token, Index pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         tokenScript.onMap = true;
@@ -157,7 +218,7 @@ public class GameUtils {
     }
 
     static public void deleteGraphicToken(ref GameObject token) {
-        ShapeScript tokenScript = token.GetComponent<ShapeScript>();
+        TokenScript tokenScript = token.GetComponent<TokenScript>();
         Index index = tokenScript.index;
         tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(token);
         tokenScript.graphicObject.SetActive(false);
@@ -165,7 +226,8 @@ public class GameUtils {
     }
 
     static public void deleteToken(ref GameObject token) {
-        ShapeScript tokenScript = token.GetComponent<ShapeScript>();
+        TokenScript tokenScript = token.GetComponent<TokenScript>();
+        tokenScript.gameEnv.tokenDict.Remove(token.name);
         if (tokenScript.onMap) {
             deleteGraphicToken(ref token);
         }

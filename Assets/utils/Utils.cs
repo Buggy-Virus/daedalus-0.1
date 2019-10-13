@@ -496,4 +496,31 @@ public class Utils {
 
         return return_effect;
     }
+
+    void printIgVariables(GameObject ig) {
+        TokenScript tokenScript = ig.GetComponent<TokenScript>();
+        ShapeScript shapeScript = ig.GetComponent<ShapeScript>();
+        if (tokenScript != null) {
+            foreach (KeyValuePair<string, Value> var in tokenScript.variables) {
+                string value = "";
+                switch(var.Value.valueType) {
+                    case "int":
+                        value = var.Value.vInt.ToString();
+                        break;
+                    case "double":
+                        value = var.Value.vDouble.ToString();
+                        break;
+                    case "bool":
+                        value = var.Value.vBool.ToString();
+                        break;
+                    case "string":
+                        value = var.Value.vString;
+                        break;
+                }
+                Debug.Log(var.Key + " : " + value);
+            }
+        } else if (shapeScript != null) {
+
+        }
+    }
 }

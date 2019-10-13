@@ -146,7 +146,7 @@ public class GameEnvScript : MonoBehaviour
             null,
             new Dictionary<string, List<string>>() { 
                 { "scripts", new List<string> { "Deduct_Standard_Action($self);" } },
-                { "conditions", new List<string> { "Basic_Attack_Hit_Condition($self, $target)" } },
+                { "conditions", new List<string> { "Basic_Attack_Hit_Condition($self, $target);" } },
                 { "conditional_scripts", new List<string> { "Basic_Attack_Script($self, $target);" } },
             },
             null
@@ -207,7 +207,7 @@ public class GameEnvScript : MonoBehaviour
                 { "cha", new TemplateVariable(4, 12) },
                 { "bab", new TemplateVariable(2) },
                 { "weapon_damage", new TemplateVariable(8) },
-                { "AC", new TemplateVariable(15) },
+                { "ac", new TemplateVariable(15) },
                 { "standard_action_score", new TemplateVariable(5) },
                 { "standard_action_points", new TemplateVariable(5) },
                 { "move_action_score", new TemplateVariable(6) },
@@ -244,7 +244,7 @@ public class GameEnvScript : MonoBehaviour
                 { "cha", new TemplateVariable(10, 14) },
                 { "bab", new TemplateVariable(4) },
                 { "weapon_damage", new TemplateVariable(10) },
-                { "AC", new TemplateVariable(18) },
+                { "ac", new TemplateVariable(18) },
                 { "standard_action_score", new TemplateVariable(5) },
                 { "standard_action_points", new TemplateVariable(5) },
                 { "move_action_score", new TemplateVariable(6) },
@@ -269,9 +269,9 @@ public class GameEnvScript : MonoBehaviour
             new TemplateVariable(0.0), 
             new List<Effect>(),
             new Dictionary<string, TemplateVariable> {
-                { "Passable", new TemplateVariable(true) }, 
-                { "Difficult Terrain", new TemplateVariable(false) }, 
-                { "Hit Points", new TemplateVariable(80, 100) },
+                { "occupiable", new TemplateVariable(true) }, 
+                { "difficult_terrain", new TemplateVariable(false) }, 
+                { "hp", new TemplateVariable(80, 100) },
             }
         );
 
@@ -288,9 +288,9 @@ public class GameEnvScript : MonoBehaviour
             new TemplateVariable(0.0), 
             new List<Effect>(),
             new Dictionary<string, TemplateVariable> {
-                { "Passable", new TemplateVariable(true) }, 
-                { "Difficult Terrain", new TemplateVariable(false) }, 
-                { "Hit Points", new TemplateVariable(80, 100) },
+                { "occupiable", new TemplateVariable(true) }, 
+                { "difficult_terrain", new TemplateVariable(false) }, 
+                { "hp", new TemplateVariable(80, 100) },
             }
         );
 
