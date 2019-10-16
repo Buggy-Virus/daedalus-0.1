@@ -33,11 +33,19 @@ public class GraphicShapeScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                if (ResolveActionsScript.resolveTargetedConditions(controlScript.selectedObject, shape, controlScript.waitingAction.call_conditions, shapeScript.gameEnv)) {
+                int distance = Utils.distance(shapeScript.index, controlScript.selectedTokenScript.index);
+                if (controlScript.waitingAction.minRange < 0 || distance < controlScript.waitingAction.minRange) {
+                    controlScript.gotBadInput();
+                    Debug.Log("Distance to target below minimum range");
+                } else if (controlScript.waitingAction.maxRange < 0 || distance > controlScript.waitingAction.maxRange) {
+                    controlScript.gotBadInput();
+                    Debug.Log("Distance to target above maximum range");
+                } else if (!ResolveActionsScript.resolveTargetedConditions(controlScript.selectedObject, shape, controlScript.waitingAction.call_conditions, shapeScript.gameEnv)) {
+                    controlScript.gotBadInput();
+                    Debug.Log("Failed call condition");
+                } else {
                     ResolveActionsScript.resolveTargetedAction(ref controlScript.selectedObject, ref shape, controlScript.waitingAction, ref shapeScript.gameEnv);
                     controlScript.gotGoodInput();
-                } else {
-                    controlScript.gotBadInput();
                 }
             }
         }

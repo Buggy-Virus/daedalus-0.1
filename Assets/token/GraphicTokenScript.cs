@@ -55,6 +55,7 @@ public class GraphicTokenScript : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
                 controlScript.selectedObject = token;
+                controlScript.selectedTokenScript = tokenScript;
                 Debug.Log(controlScript.selectedObject.transform.name);
                 mouseDown = false;
                 showButtons();
@@ -205,11 +206,19 @@ public class GraphicTokenScript : MonoBehaviour
             }
 
             if (Input.GetMouseButtonUp(0) && mouseDown) {
-                if (ResolveActionsScript.resolveRelationalConditions(controlScript.selectedObject, token, controlScript.waitingAction.call_conditions, tokenScript.gameEnv)) {
+                int distance = Utils.distance(tokenScript.index, controlScript.selectedTokenScript.index);
+                if (controlScript.waitingAction.minRange < 0 || distance < controlScript.waitingAction.minRange) {
+                    controlScript.gotBadInput();
+                    Debug.Log("Distance to target below minimum range");
+                } else if (controlScript.waitingAction.maxRange < 0 || distance > controlScript.waitingAction.maxRange) {
+                    controlScript.gotBadInput();
+                    Debug.Log("Distance to target above maximum range");
+                } else if (!ResolveActionsScript.resolveRelationalConditions(controlScript.selectedObject, token, controlScript.waitingAction.call_conditions, tokenScript.gameEnv)) {
+                    controlScript.gotBadInput();
+                    Debug.Log("Failed call condition");
+                } else {
                     ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedObject, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
                     controlScript.gotGoodInput();
-                } else {
-                    controlScript.gotBadInput();
                 }
             }
         }

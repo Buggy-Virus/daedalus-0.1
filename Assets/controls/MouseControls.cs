@@ -29,6 +29,8 @@ public class MouseControls : MonoBehaviour {
     public int SELECT_MODE = 0;
     public int INPUT_MODE = 1;
     public GameObject selectedObject;
+    public TokenScript selectedTokenScript;
+    public ShapeScript selectedShapeScript;
     public Action waitingAction;
 
     // ======================================================================= Fetched References
@@ -480,7 +482,7 @@ public class MouseControls : MonoBehaviour {
 
     void Update() {
         runControls();
-        screenPan();
+        // screenPan();
     }
 }
 
