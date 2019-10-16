@@ -28,6 +28,8 @@ public class GameEnv
     public Dictionary<string, Value> store;
     public Dictionary<string, string> env;
 
+    public ConsoleScript console;
+
     public GameEnv(){
         tokenDict = new Dictionary<string, GameObject>();
         shapeDict = new Dictionary<string, GameObject>();

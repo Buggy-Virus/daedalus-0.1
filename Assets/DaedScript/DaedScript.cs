@@ -1327,6 +1327,9 @@ public class DaedScript {
 			case "function": //e-op
 				errorValue.errorMessage += error.valueType + ",<functionValueObject>)";
 				break;
+			case "ig":
+				errorValue.errorMessage += error.valueType + ",\"" + error.vIg.name  + "\")";
+				break;
 			case "error":
 				errorValue.errorMessage += error.valueType + "," + error.errorMessage + ")";
 				break;
@@ -2129,6 +2132,9 @@ public class DaedScript {
 			// The change to the env is only relevent across other Do expressions
 			// In the same Do statement
 			if (expr.expressionType == "e-let") {
+				if (builtInFunctions.ContainsKey(expr.eLetName)) {
+					return expressionError(expr, last_result.store, "Id " + expr.eLetName + " reserved for a builtin function");
+				}
 				Result define_result = interpret(expr.eLetValue, env, last_result.store, ref gameEnv);
 				string loc = System.Guid.NewGuid().ToString();
 				env[expr.eLetName] = loc;
@@ -4043,6 +4049,7 @@ public class DaedScript {
 		Result string_result = interpret(arguments[0], env, store, ref gameEnv);
 		if (string_result.value.valueType == "string") {
 			// Will print to the proper in game console in the future 
+			gameEnv.console.ConsoleLog(string_result.value.vString);
 			Debug.Log(string_result.value.vString);
 			return string_result;
 		} else {
@@ -4266,6 +4273,27 @@ public class DaedScript {
 		}
 
 		return new Result(new Value("null", expression.line, expression.character), second_result.store);
+	}
+
+	static Result CombatLog(
+		Expression expression,
+		Dictionary<string, string> env, 
+		Dictionary<string, Value> store, 
+		ref GameEnv gameEnv
+	) {
+		List<Expression> arguments = expression.eBuiltinFuncArguments;
+		if (arguments.Count != 1) {
+			return expressionError(expression, store, "Print expected 1 argument, got " + arguments.Count.ToString()); //Throw Error	
+		} 
+
+		Result string_result = interpret(arguments[0], env, store, ref gameEnv);
+		if (string_result.value.valueType == "string") {
+			// Will print to the proper in game console in the future 
+			gameEnv.console.CombatLog(string_result.value.vString);
+			return string_result;
+		} else {
+			return resultError(string_result, "Print expected string");	
+		} 
 	}
 }
 

@@ -497,7 +497,7 @@ public class Utils {
         return return_effect;
     }
 
-    void printIgVariables(GameObject ig) {
+    public static void printIgVariables(GameObject ig) {
         TokenScript tokenScript = ig.GetComponent<TokenScript>();
         ShapeScript shapeScript = ig.GetComponent<ShapeScript>();
         if (tokenScript != null) {
@@ -521,6 +521,33 @@ public class Utils {
             }
         } else if (shapeScript != null) {
 
+        }
+    }
+
+    public static string ValueToString(Value value) {
+        switch(value.valueType) {
+            case "string":
+                return value.vString;
+            case "int":
+                return value.vInt.ToString();
+            case "double":
+                return value.vDouble.ToString();
+            case "ig":
+                return String.Concat("<ig $", value.vIg.name, ">");
+            case "function":
+                return String.Concat("<function>");
+            case "List":
+                string listString = "[";
+                foreach (Value val in value.vList) {
+                    listString += ValueToString(val) + ", ";
+                }
+                if (listString != "[") {
+                    listString = listString.Substring(0, listString.Length - 2);
+                }
+                listString += "]";
+                return listString;
+            default:
+                return "<Error: Got an unknown value Type>";
         }
     }
 }

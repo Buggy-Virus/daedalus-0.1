@@ -30,6 +30,8 @@ public class GameEnvScript : MonoBehaviour
         gameEnv.shapesObject = GameObject.Find("Shapes");
         gameEnv.tokensObject = GameObject.Find("Tokens");
         gameEnv.mapScript = GameObject.Find("Map").GetComponent<MapScript>();
+        gameEnv.console = GameObject.Find("Log_Panel").GetComponent<ConsoleScript>();
+        gameEnv.console.gameEnv = gameEnv;
 
         populateStore();
         AddActions();
