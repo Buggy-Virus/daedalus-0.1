@@ -25,7 +25,7 @@ public class Action {
 	public List<Action> aoe_relational_actions;
 	public List<Action> aoe_targeted_actions;
 
-	bool repeat;
+	public bool repeat;
 	public List<Action> followup_actions;
 	public List<Action> target_followup_actions;
 	

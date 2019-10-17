@@ -235,6 +235,9 @@ public class Utils {
                     case "targeted":
                         return_action.targeted = bool_arg.Value;
                         break; 
+                    case "repeat":
+                        return_action.repeat = bool_arg.Value;
+                        break;
                     case "targeted_repeat":
                         return_action.targeted_repeat = bool_arg.Value;
                         break; 
