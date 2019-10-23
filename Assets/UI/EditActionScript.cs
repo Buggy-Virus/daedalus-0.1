@@ -471,7 +471,34 @@ public class EditActionScript : MonoBehaviour
         }
     }
 
-    public void LoadAction(Action load) {
+    public void LoadScripts(List<string> scripts, GameObject uiText, GameObject uiAdd, GameObject uiRemove, List<GameObject> uiInputs) {
+        if (scripts != null) {
+            foreach(String script in scripts) {
+                AddScriptInput(uiText, uiAdd, uiRemove, uiInputs);
+                uiInputs[uiInputs.Count - 1].GetComponent<InputField>().text = script;
+            }
+        }
+    }
+
+    public void LoadActions(List<Action> actions, GameObject uiText, GameObject uiAdd, GameObject uiRemove, List<GameObject> uiInputs) {
+        if (actions != null) {
+            foreach(Action action in actions) {
+                AddActionInput(uiText, uiAdd, uiRemove, uiInputs);
+                uiInputs[uiInputs.Count - 1].GetComponent<InputField>().text = action.name;
+            }
+        }
+    }
+
+    public void LoadEffects(List<Effect> effects, GameObject uiText, GameObject uiAdd, GameObject uiRemove, List<GameObject> uiInputs) {
+        if (effects != null) {
+            foreach(Effect effect in effects) {
+                AddEffectInput(uiText, uiAdd, uiRemove, uiInputs);
+                uiInputs[uiInputs.Count - 1].GetComponent<InputField>().text = effect.name;
+            }
+        }
+    }
+
+    public void LoadEditAction(Action load) {
         name_input.GetComponent<InputField>().text = load.name;
 
         relational_toggle.GetComponent<Toggle>().isOn = load.relational;
@@ -481,133 +508,94 @@ public class EditActionScript : MonoBehaviour
         minRange_input.GetComponent<InputField>().text = load.minRange.ToString();
         maxRange_input.GetComponent<InputField>().text = load.maxRange.ToString();
 
-        if (load.show_conditions != null) {
-            foreach(String script in load.show_conditions) {
-                AddScriptInput(showConditions_text, showConditions_add, showConditions_remove, showConditions_inputs);
-                showConditions_inputs[showConditions_inputs.Count - 1].GetComponent<InputField>().text = script;
-            }
-        }
+        LoadScripts(load.show_conditions, showConditions_text, showConditions_add, showConditions_remove, showConditions_inputs);
+        LoadScripts(load.available_conditions, availableConditions_text, availableConditions_add, availableConditions_remove, availableConditions_inputs);
+        LoadScripts(load.call_conditions, callConditions_text, callConditions_add, callConditions_remove, callConditions_inputs);
 
-        if (load.available_conditions != null) {
-            foreach(String script in load.available_conditions) {
-                AddScriptInput(availableConditions_text, availableConditions_add, availableConditions_remove, availableConditions_inputs);
-                availableConditions_inputs[availableConditions_inputs.Count - 1].GetComponent<InputField>().text = script;
-            }
-        }
-
-        if (load.call_conditions != null) {
-            foreach(String script in load.call_conditions) {
-                AddScriptInput(callConditions_text, callConditions_add, callConditions_remove, callConditions_inputs);
-                callConditions_inputs[callConditions_inputs.Count - 1].GetComponent<InputField>().text = script;
-            }
-        }
-
-        if (load.effects != null) {
-            foreach(Effect effect in load.effects) {
-                AddEffectInput(effects_text, effects_add, effects_remove, effects_inputs);
-                effects_inputs[effects_inputs.Count - 1].GetComponent<InputField>().text = effect.name;
-            }
-        }
+        LoadEffects(load.effects, effects_text, effects_add, effects_remove, effects_inputs);
 
         aoe_toggle.GetComponent<Toggle>().isOn = load.aoe;
 
         aoeRadius_input.GetComponent<InputField>().text = load.aoe_radius.ToString();
 
-        if (load.aoe_relational_actions != null) {
-            foreach(Action action in load.aoe_relational_actions) {
-                AddEffectInput(aoeRelationalActions_text, aoeRelationalActions_add, aoeRelationalActions_remove, aoeRelationalActions_inputs);
-                aoeRelationalActions_inputs[aoeRelationalActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
+        LoadActions(load.aoe_relational_actions, aoeRelationalActions_text, aoeRelationalActions_add, aoeRelationalActions_remove, aoeRelationalActions_inputs);
+        LoadActions(load.aoe_targeted_actions, aoeTargetedActions_text, aoeTargetedActions_add, aoeTargetedActions_remove, aoeTargetedActions_inputs);
 
-        if (load.aoe_targeted_actions != null) {
-            foreach(Action action in load.aoe_targeted_actions) {
-                AddEffectInput(aoeTargetedActions_text, aoeTargetedActions_add, aoeTargetedActions_remove, aoeTargetedActions_inputs);
-                aoeTargetedActions_inputs[aoeTargetedActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
+        LoadActions(load.followup_actions, followupActions_text, followupActions_add, followupActions_remove, followupActions_inputs);
+        LoadActions(load.target_followup_actions, targetFollowupActions_text, targetFollowupActions_add, targetFollowupActions_remove, targetFollowupActions_inputs);
+        LoadActions(load.targeted_followup_actions, targetedFollowupActions_text, targetedFollowupActions_add, targetedFollowupActions_remove, targetedFollowupActions_inputs);
 
-        if (load.followup_actions != null) {
-            foreach(Action action in load.followup_actions) {
-                AddEffectInput(followupActions_text, followupActions_add, followupActions_remove, followupActions_inputs);
-                followupActions_inputs[followupActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
+        LoadScripts(load.conditions, conditions_text, conditions_add, conditions_remove, conditions_inputs);
 
-        if (load.target_followup_actions != null) {
-            foreach(Action action in load.target_followup_actions) {
-                AddEffectInput(targetFollowupActions_text, targetFollowupActions_add, targetFollowupActions_remove, targetFollowupActions_inputs);
-                targetFollowupActions_inputs[targetFollowupActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
-
-        if (load.targeted_followup_actions != null) {
-            foreach(Action action in load.targeted_followup_actions) {
-                AddEffectInput(targetedFollowupActions_text, targetedFollowupActions_add, targetedFollowupActions_remove, targetedFollowupActions_inputs);
-                targetedFollowupActions_inputs[targetedFollowupActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
-
-        if (load.conditions != null) {
-            foreach(String script in load.conditions) {
-                AddScriptInput(conditions_text, conditions_add, conditions_remove, conditions_inputs);
-                conditions_inputs[conditions_inputs.Count - 1].GetComponent<InputField>().text = script;
-            }
-        }
-
-        if (load.conditional_effects != null) {
-            foreach(Effect effect in load.conditional_effects) {
-                AddEffectInput(conditional_effects_text, conditional_effects_add, conditional_effects_remove, conditional_effects_inputs);
-                conditional_effects_inputs[conditional_effects_inputs.Count - 1].GetComponent<InputField>().text = effect.name;
-            }
-        }
+        LoadEffects(load.conditional_effects, conditional_effects_text, conditional_effects_add, conditional_effects_remove, conditional_effects_inputs);
 
         conditional_aoe_toggle.GetComponent<Toggle>().isOn = load.conditional_aoe;
 
         conditional_aoeRadius_input.GetComponent<InputField>().text = load.conditional_aoe_radius.ToString();
 
-        if (load.conditional_aoe_relational_actions != null) {
-            foreach(Action action in load.conditional_aoe_relational_actions) {
-                AddEffectInput(conditional_aoeRelationalActions_text, conditional_aoeRelationalActions_add, conditional_aoeRelationalActions_remove, conditional_aoeRelationalActions_inputs);
-                conditional_aoeRelationalActions_inputs[conditional_aoeRelationalActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
+        LoadActions(load.conditional_aoe_relational_actions, conditional_aoeRelationalActions_text, conditional_aoeRelationalActions_add, conditional_aoeRelationalActions_remove, conditional_aoeRelationalActions_inputs);
+        LoadActions(load.conditional_aoe_targeted_actions, conditional_aoeTargetedActions_text, conditional_aoeTargetedActions_add, conditional_aoeTargetedActions_remove, conditional_aoeTargetedActions_inputs);
 
-        if (load.conditional_aoe_targeted_actions != null) {
-            foreach(Action action in load.conditional_aoe_targeted_actions) {
-                AddEffectInput(conditional_aoeTargetedActions_text, conditional_aoeTargetedActions_add, conditional_aoeTargetedActions_remove, conditional_aoeTargetedActions_inputs);
-                conditional_aoeTargetedActions_inputs[conditional_aoeTargetedActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
+        LoadActions(load.conditional_followup_actions, conditional_followupActions_text, conditional_followupActions_add, conditional_followupActions_remove, conditional_followupActions_inputs);
+        LoadActions(load.conditional_target_followup_actions, conditional_targetFollowupActions_text, conditional_targetFollowupActions_add, conditional_targetFollowupActions_remove, conditional_targetFollowupActions_inputs);
+        LoadActions(load.conditional_targeted_followup_actions, conditional_targetedFollowupActions_text, conditional_targetedFollowupActions_add, conditional_targetedFollowupActions_remove, conditional_targetedFollowupActions_inputs);
 
-        if (load.conditional_followup_actions != null) {
-            foreach(Action action in load.conditional_followup_actions) {
-                AddEffectInput(conditional_followupActions_text, conditional_followupActions_add, conditional_followupActions_remove, conditional_followupActions_inputs);
-                conditional_followupActions_inputs[conditional_followupActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
-
-        if (load.conditional_target_followup_actions != null) {
-            foreach(Action action in load.conditional_target_followup_actions) {
-                AddEffectInput(conditional_targetFollowupActions_text, conditional_targetFollowupActions_add, conditional_targetFollowupActions_remove, conditional_targetFollowupActions_inputs);
-                conditional_targetFollowupActions_inputs[conditional_targetFollowupActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
-
-        if (load.conditional_targeted_followup_actions != null) {
-            foreach(Action action in load.conditional_targeted_followup_actions) {
-                AddEffectInput(conditional_targetedFollowupActions_text, conditional_targetedFollowupActions_add, conditional_targetedFollowupActions_remove, conditional_targetedFollowupActions_inputs);
-                conditional_targetedFollowupActions_inputs[conditional_targetedFollowupActions_inputs.Count - 1].GetComponent<InputField>().text = action.name;
-            }
-        }
-
-        repeat_toggle.GetComponent<Toggle>().isOn = load.repeat;;
+        repeat_toggle.GetComponent<Toggle>().isOn = load.repeat;
 
         targetedRepeat_toggle.GetComponent<Toggle>().isOn = load.targeted_repeat;
     }
 
-    public void ClearAction() {
+    void ClearInputs(GameObject addButton, GameObject removeButton, List<GameObject> inputs) {
+        for (int i = 0; i < inputs.Count; i++) {
+            RemoveInput(inputs, removeButton, addButton);
+        }
+    }
 
+    public void ClearEditAction() {
+        name_input.GetComponent<InputField>().text = "";
+
+        relational_toggle.GetComponent<Toggle>().isOn = false;
+        targeted_toggle.GetComponent<Toggle>().isOn = false;
+        selfTargetable_toggle.GetComponent<Toggle>().isOn = false;
+
+        minRange_input.GetComponent<InputField>().text = "0";
+        maxRange_input.GetComponent<InputField>().text = "0";
+
+        ClearInputs(showConditions_add, showConditions_remove, showConditions_inputs);
+        ClearInputs(availableConditions_add, availableConditions_remove, availableConditions_inputs);
+        ClearInputs(callConditions_add, callConditions_remove, callConditions_inputs);
+
+        ClearInputs(effects_add, effects_remove, effects_inputs);
+
+        aoe_toggle.GetComponent<Toggle>().isOn = false;
+
+        aoeRadius_input.GetComponent<InputField>().text = "0";
+
+        ClearInputs(aoeRelationalActions_add, aoeRelationalActions_remove, aoeRelationalActions_inputs);
+        ClearInputs(aoeTargetedActions_add, aoeTargetedActions_remove, aoeTargetedActions_inputs);
+
+        ClearInputs(followupActions_add, followupActions_remove, followupActions_inputs);
+        ClearInputs(targetFollowupActions_add, targetFollowupActions_remove, targetFollowupActions_inputs);
+        ClearInputs(targetedFollowupActions_add, targetedFollowupActions_remove, targetedFollowupActions_inputs);
+
+        ClearInputs(conditions_add, conditions_remove, conditions_inputs);
+
+        ClearInputs(conditional_effects_add, conditional_effects_remove, conditional_effects_inputs);
+
+        conditional_aoe_toggle.GetComponent<Toggle>().isOn = false;
+
+        conditional_aoeRadius_input.GetComponent<InputField>().text = "0";
+
+        ClearInputs(conditional_aoeRelationalActions_add, conditional_aoeRelationalActions_remove, conditional_aoeRelationalActions_inputs);
+        ClearInputs(conditional_aoeTargetedActions_add, conditional_aoeTargetedActions_remove, conditional_aoeTargetedActions_inputs);
+
+        ClearInputs(conditional_followupActions_add, conditional_followupActions_remove, conditional_followupActions_inputs);
+        ClearInputs(conditional_targetFollowupActions_add, conditional_targetFollowupActions_remove, conditional_targetFollowupActions_inputs);
+        ClearInputs(conditional_targetedFollowupActions_add, conditional_targetedFollowupActions_remove, conditional_targetedFollowupActions_inputs);
+
+        repeat_toggle.GetComponent<Toggle>().isOn = false;
+
+        targetedRepeat_toggle.GetComponent<Toggle>().isOn = false;
     }
 
     // Start is called before the first frame update
