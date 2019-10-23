@@ -20,8 +20,8 @@ public class Action {
 
 	public List<Effect> effects;
 
-	public int aoe;
-
+	public bool aoe;
+	public int aoe_radius;
 	public List<Action> aoe_relational_actions;
 	public List<Action> aoe_targeted_actions;
 
@@ -35,7 +35,8 @@ public class Action {
 
 	public List<Effect> conditional_effects;
 
-	public int conditional_aoe;
+	public bool conditional_aoe;
+	public int conditional_aoe_radius;
 
 	public List<Action> conditional_aoe_relational_actions;
 	public List<Action> conditional_aoe_targeted_actions;
@@ -57,7 +58,8 @@ public class Action {
 		List<string> a_c,
 		List<string> c,
 		List<Effect> e,
-		int a,
+		bool a,
+		int a_r,
 		List<Action> a_r_a,
 		List<Action> a_t_a,
 		List<Action> f_a,
@@ -72,6 +74,7 @@ public class Action {
 		conditions = c;
 		effects = e;
 		aoe = a;
+		aoe_radius = a_r;
 		aoe_relational_actions = a_r_a;
 		aoe_targeted_actions = a_t_a;
 		followup_actions = f_a;
@@ -86,7 +89,8 @@ public class Action {
 		List<string> c_c,
 		List<string> c,
 		List<Effect> e,
-		int a,
+		bool a,
+		int a_r,
 		List<Action> a_r_a,
 		List<Action> a_t_a,
 		List<Action> f_a,
@@ -104,6 +108,7 @@ public class Action {
 		conditions = c;
 		effects = e;
 		aoe = a;
+		aoe_radius = a_r;
 		aoe_relational_actions = a_r_a;
 		aoe_targeted_actions = a_t_a;
 		followup_actions = f_a;
@@ -120,7 +125,8 @@ public class Action {
 		List<string> c_c,
 		List<string> c,
 		List<Effect> e,
-		int a,
+		bool a,
+		int a_r,
 		List<Action> a_r_a,
 		List<Action> a_t_a,
 		List<Action> f_a,
@@ -136,6 +142,7 @@ public class Action {
 		conditions = c;
 		effects = e;
 		aoe = a;
+		aoe_radius = a_r;
 		aoe_relational_actions = a_r_a;
 		aoe_targeted_actions = a_t_a;
 		followup_actions = f_a;

@@ -235,6 +235,12 @@ public class Utils {
                     case "targeted":
                         return_action.targeted = bool_arg.Value;
                         break; 
+                    case "aoe":
+                        return_action.aoe = bool_arg.Value;
+                        break; 
+                    case "conditional_aoe":
+                        return_action.conditional_aoe = bool_arg.Value;
+                        break; 
                     case "repeat":
                         return_action.repeat = bool_arg.Value;
                         break;
@@ -263,11 +269,11 @@ public class Utils {
                         case "minRange":
                         return_action.minRange = int_arg.Value;
                         break; 
-                        case "aoe":
-                        return_action.aoe = int_arg.Value;
+                        case "aoe_radius":
+                        return_action.aoe_radius = int_arg.Value;
                         break; 
-                        case "conditional_aoe":
-                        return_action.conditional_aoe = int_arg.Value;
+                        case "conditional_aoe_radius":
+                        return_action.conditional_aoe_radius = int_arg.Value;
                         break; 
                 }
             }
