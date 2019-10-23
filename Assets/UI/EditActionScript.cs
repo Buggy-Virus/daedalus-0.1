@@ -181,6 +181,65 @@ public class EditActionScript : MonoBehaviour
         };
     }
 
+    void AddScripts(List<GameObject> inputs, ref List<string> scripts) {
+        if (inputs.Count > 0) {
+            scripts = new List<string>();
+            foreach (GameObject input in inputs) {
+                string inputText = input.GetComponent<InputField>().text;
+                if (inputText != "") {
+                    scripts.Add(inputText);
+                }
+            }
+        }
+    }
+
+    bool AddEffects(List<GameObject> inputs, ref List<Effect> effects, ref string error) {
+        if (inputs.Count > 0) {
+            effects = new List<Effect>();
+            foreach (GameObject input in inputs) {
+                string inputText = input.GetComponent<InputField>().text;
+                if (inputText != "") {
+                    if (gameEnv.effectDict.containsKey(inputText)) {
+                        effects.Add(gameEnv.effectDict[inputText]);
+                    } else {
+                        error += "Cannot add effect, no effect of name: " + inputText;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool AddActions(List<GameObject> inputs, ref List<Action> actions, ref string error, bool relational, bool targeted, bool either) {
+        if (inputs.Count > 0) {
+            actions = new List<Action>();
+            foreach (GameObject input in inputs) {
+                string inputText = input.GetComponent<InputField>().text;
+                if (inputText != "") {
+                    if (!gameEnv.actionDict.containsKey(inputText)) {
+                        error += "Cannot add action, no action of name: " + inputText;
+                        return true;
+                    } else if (relational && !gameEnv.actionDict[inputText].relational) {
+                        error += "Cannot add action, following action is not relatioanl: " + inputText;
+                        return true;
+                    } else if (targeted && !gameEnv.actionDict[inputText].targeted) {
+                        error += "Cannot add action, following action is not targeted: " + inputText;
+                        return true;
+                    } else if (either && !gameEnv.actionDict[inputText].relational && !gameEnv.actionDict[inputText].targeted) {
+                        error += "Cannot add action, following action is not relational or targeted: " + inputText;
+                        return true;
+                    } else {
+                        actions.Add(gameEnv.actionDict[inputText]);
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     int EditActionHelper(ref string error) {
         Action editAction = new Action();
         editAction.name = name_input.GetComponent<InputField>().text;
@@ -202,49 +261,12 @@ public class EditActionScript : MonoBehaviour
             return 1;
         }
 
-        if (showConditions_inputs.Count > 0) {
-            editAction.show_conditions = new List<string>();
-            foreach (GameObject input in showConditions_inputs) {
-                string showConditionInput = input.GetComponent<InputField>().text;
-                if (showConditionInput != "") {
-                    editAction.show_conditions.Add(showConditionInput);
-                }
-            }
-        }
-        
-        if (availableConditions_inputs.Count > 0) {
-            editAction.available_conditions = new List<string>();
-            foreach (GameObject input in availableConditions_inputs) {
-                string availableConditionInput = input.GetComponent<InputField>().text;
-                if (availableConditionInput != "") {
-                    editAction.available_conditions.Add(availableConditionInput);
-                }
-            }
-        }
+        AddScripts(showConditions_inputs, ref editAction.show_conditions);
+        AddScripts(availableConditions_inputs, ref editAction.available_conditions);
+        AddScripts(callConditions_inputs, ref editAction.call_conditions);
 
-        if (callConditions_inputs.Count > 0) {
-            editAction.call_conditions = new List<string>();
-            foreach (GameObject input in callConditions_inputs) {
-                string callConditionInput = input.GetComponent<InputField>().text;
-                if (callConditionInput != "") {
-                    editAction.call_conditions.Add(callConditionInput);
-                }
-            }
-        }
-
-        if (effects_inputs.Count > 0) {
-            editAction.effects = new List<Effect>();
-            foreach (GameObject input in effects_inputs) {
-                string effectInput = input.GetComponent<InputField>().text;
-                if (effectInput != "") {
-                    if (gameEnv.effectDict.containsKey(effectInput)) {
-                        editAction.effects.Add(gameEnv.effectDict[effectInput]);
-                    } else {
-                        error += "Cannot add effect, no effect of name: " + effectInput;
-                        return 1;
-                    }
-                }
-            }
+        if (AddEffects(effects_inputs, ref editAction.effects, ref error)) {
+            return 1;
         }
 
         editAction.aoe = aoe_toggle.GetComponent<Toggle>().isOn;
@@ -254,113 +276,27 @@ public class EditActionScript : MonoBehaviour
             return 1;
         }
 
-        if (aoeRelationalActions_inputs.Count > 0) {
-            editAction.aoe_relational_actions = new List<Action>();
-            foreach (GameObject input in aoeRelationalActions_inputs) {
-                string aoeRelationalAction = input.GetComponent<InputField>().text;
-                if (aoeRelationalAction != "") {
-                    if (!gameEnv.actionDict.containsKey(aoeRelationalAction)) {
-                        error += "Cannot add aoe relational action, no action of name: " + aoeRelationalAction;
-                        return 1;
-                    } else if (!gameEnv.actionDict[aoeRelationalAction].relational) {
-                        error += "Cannot add aoe relational action, following action is not relatioanl: " + aoeRelationalAction;
-                        return 1;
-                    } else {
-                        editAction.aoe_relational_actions.Add(gameEnv.actionDict[aoeRelationalAction]);
-                    }
-                }
-            }
+        if (AddActions(aoeRelationalActions_inputs, ref editAction.aoe_relational_actions, ref error, true, false, false)) {
+            return 1;
+        }
+        if (AddActions(aoeTargetedActions_inputs, ref editAction.aoe_targeted_actions, ref error, false, true, false)) {
+            return 1;
         }
 
-        if (aoeTargetedActions_inputs.Count > 0) {
-            editAction.aoe_targeted_actions = new List<Action>();
-            foreach (GameObject input in aoeTargetedActions_inputs) {
-                string aoeTargetedAction = input.GetComponent<InputField>().text;
-                if (aoeTargetedAction != "") {
-                    if (!gameEnv.actionDict.containsKey(aoeTargetedAction)) {
-                        error += "Cannot add aoe targeted action, no action of name: " + aoeTargetedAction;
-                        return 1;
-                    } else if (!gameEnv.actionDict[aoeTargetedAction].relational) {
-                        error += "Cannot add aoe targeted action, following action is not targeted: " + aoeTargetedAction;
-                        return 1;
-                    } else {
-                        editAction.aoe_targeted_actions.Add(gameEnv.actionDict[aoeTargetedAction]);
-                    }
-                }
-            }
+        if (AddActions(followupActions_inputs, ref editAction.followup_actions, ref error, false, false, false)) {
+            return 1;
+        }
+        if (AddActions(targetFollowupActions_inputs, ref editAction.target_followup_actions, ref error, false, false, false)) {
+            return 1;
+        }
+        if (AddActions(targetedFollowupActions_inputs, ref editAction.targeted_followup_actions, ref error, false, false, true)) {
+            return 1;
         }
 
-        if (followupActions_inputs.Count > 0) {
-            editAction.followup_actions = new List<Action>();
-            foreach (GameObject input in followupActions_inputs) {
-                string follwupAction = input.GetComponent<InputField>().text;
-                if (follwupAction != "") {
-                    if (gameEnv.actionDict.containsKey(follwupAction)) {
-                        editAction.followup_actions.Add(gameEnv.actionDict[follwupAction]);
-                    } else {
-                        error += "Cannot add followup action, no action of name: " + follwupAction;
-                        return 1;
-                    }
-                }
-            }
-        }
+        AddScripts(conditions_inputs, ref editAction.conditions);
 
-        if (targetFollowupActions_inputs.Count > 0) {
-            editAction.target_followup_actions = new List<Action>();
-            foreach (GameObject input in targetFollowupActions_inputs) {
-                string targetFollowupAction = input.GetComponent<InputField>().text;
-                if (targetFollowupAction != "") {
-                    if (gameEnv.actionDict.containsKey(targetFollowupAction)) {
-                        editAction.target_followup_actions.Add(gameEnv.actionDict[targetFollowupAction]);
-                    } else {
-                        error += "Cannot add followup action, no action of name: " + targetFollowupAction;
-                        return 1;
-                    }
-                }
-            }
-        }
-
-        if (targetedFollowupActions_inputs.Count > 0) {
-            editAction.targeted_followup_actions = new List<Action>();
-            foreach (GameObject input in targetedFollowupActions_inputs) {
-                string targetedFollowupAction = input.GetComponent<InputField>().text;
-                if (targetedFollowupAction != "") {
-                    if (!gameEnv.actionDict.containsKey(targetedFollowupAction)) {
-                        error += "Cannot add targeted followup action, no action of name: " + targetedFollowupAction;
-                        return 1;
-                    } else if (!gameEnv.actionDict[targetedFollowupAction].relational && !gameEnv.actionDict[targetedFollowupAction].targeted) {
-                        error += "Cannot add targeted followup action, following action is not targeted or relational: " + targetedFollowupAction;
-                        return 1;
-                    } else {
-                        editAction.targeted_followup_actions.Add(gameEnv.actionDict[targetedFollowupAction]);
-                    }
-                }
-            }
-        }
-
-        if (conditions_inputs.Count > 0) {
-            editAction.conditions = new List<string>();
-            foreach (GameObject input in conditions_inputs) {
-                string conditionInput = input.GetComponent<InputField>().text;
-                if (conditionInput != "") {
-                    editAction.conditions.Add(conditionInput);
-                }
-            }
-        }
-
-        if (conditional_effects_inputs.Count > 0) {
-            editAction.conditional_effects = new List<Effect>();
-            foreach (GameObject input in conditional_effects_inputs) {
-                string effectInput = input.GetComponent<InputField>().text;
-                if (effectInput != "") {
-                    if (gameEnv.effectDict.containsKey(effectInput)) {
-                        editAction.conditional_effects.Add(gameEnv.effectDict[effectInput]);
-                    } else {
-                        error += "Cannot add conditional effect, no effect of name: " + effectInput;
-                        return 1;
-                    }
-                }
-            }
+        if (AddEffects(conditional_effects_inputs, ref editAction.conditional_effects, ref error)) {
+            return 1;
         }
 
         editAction.conditional_aoe = conditional_aoe_toggle.GetComponent<Toggle>().isOn;
@@ -370,88 +306,21 @@ public class EditActionScript : MonoBehaviour
             return 1;
         }
 
-        if (conditional_aoeRelationalActions_inputs.Count > 0) {
-            editAction.conditional_aoe_relational_actions = new List<Action>();
-            foreach (GameObject input in conditional_aoeRelationalActions_inputs) {
-                string aoeRelationalAction = input.GetComponent<InputField>().text;
-                if (aoeRelationalAction != "") {
-                    if (!gameEnv.actionDict.containsKey(aoeRelationalAction)) {
-                        error += "Cannot add aoe relational action, no action of name: " + aoeRelationalAction;
-                        return 1;
-                    } else if (!gameEnv.actionDict[aoeRelationalAction].relational) {
-                        error += "Cannot add aoe relational action, following action is not relatioanl: " + aoeRelationalAction;
-                        return 1;
-                    } else {
-                        editAction.conditional_aoe_relational_actions.Add(gameEnv.actionDict[aoeRelationalAction]);
-                    }
-                }
-            }
+        if (AddActions(conditional_aoeRelationalActions_inputs, ref editAction.conditional_aoe_relational_actions, ref error, true, false, false)) {
+            return 1;
+        }
+        if (AddActions(conditional_aoeTargetedActions_inputs, ref editAction.conditional_aoe_targeted_actions, ref error, false, true, false)) {
+            return 1;
         }
 
-        if (conditional_aoeTargetedActions_inputs.Count > 0) {
-            editAction.conditional_aoe_targeted_actions = new List<Action>();
-            foreach (GameObject input in conditional_aoeTargetedActions_inputs) {
-                string aoeTargetedAction = input.GetComponent<InputField>().text;
-                if (aoeTargetedAction != "") {
-                    if (!gameEnv.actionDict.containsKey(aoeTargetedAction)) {
-                        error += "Cannot add aoe targeted action, no action of name: " + aoeTargetedAction;
-                        return 1;
-                    } else if (!gameEnv.actionDict[aoeTargetedAction].relational) {
-                        error += "Cannot add aoe targeted action, following action is not targeted: " + aoeTargetedAction;
-                        return 1;
-                    } else {
-                        editAction.conditional_aoe_targeted_actions.Add(gameEnv.actionDict[aoeTargetedAction]);
-                    }
-                }
-            }
+        if (AddActions(conditional_followupActions_inputs, ref editAction.conditional_followup_actions, ref error, false, false, false)) {
+            return 1;
         }
-
-        if (conditional_followupActions_inputs.Count > 0) {
-            editAction.conditional_followup_actions = new List<Action>();
-            foreach (GameObject input in conditional_followupActions_inputs) {
-                string follwupAction = input.GetComponent<InputField>().text;
-                if (follwupAction != "") {
-                    if (gameEnv.actionDict.containsKey(follwupAction)) {
-                        editAction.conditional_followup_actions.Add(gameEnv.actionDict[follwupAction]);
-                    } else {
-                        error += "Cannot add followup action, no action of name: " + follwupAction;
-                        return 1;
-                    }
-                }
-            }
+        if (AddActions(conditional_targetFollowupActions_inputs, ref editAction.conditional_target_followup_actions, ref error, false, false, false)) {
+            return 1;
         }
-
-        if (conditional_targetFollowupActions_inputs.Count > 0) {
-            editAction.conditional_target_followup_actions = new List<Action>();
-            foreach (GameObject input in conditional_targetFollowupActions_inputs) {
-                string targetFollowupAction = input.GetComponent<InputField>().text;
-                if (targetFollowupAction != "") {
-                    if (gameEnv.actionDict.containsKey(targetFollowupAction)) {
-                        editAction.conditional_target_followup_actions.Add(gameEnv.actionDict[targetFollowupAction]);
-                    } else {
-                        error += "Cannot add followup action, no action of name: " + targetFollowupAction;
-                        return 1;
-                    }
-                }
-            }
-        }
-
-        if (conditional_targetedFollowupActions_inputs.Count > 0) {
-            editAction.conditional_targeted_followup_actions = new List<Action>();
-            foreach (GameObject input in conditional_targetedFollowupActions_inputs) {
-                string targetedFollowupAction = input.GetComponent<InputField>().text;
-                if (targetedFollowupAction != "") {
-                    if (!gameEnv.actionDict.containsKey(targetedFollowupAction)) {
-                        error += "Cannot add targeted followup action, no action of name: " + targetedFollowupAction;
-                        return 1;
-                    } else if (!gameEnv.actionDict[targetedFollowupAction].relational && !gameEnv.actionDict[targetedFollowupAction].targeted) {
-                        error += "Cannot add targeted followup action, following action is not targeted or relational: " + targetedFollowupAction;
-                        return 1;
-                    } else {
-                        editAction.conditional_targeted_followup_actions.Add(gameEnv.actionDict[targetedFollowupAction]);
-                    }
-                }
-            }
+        if (AddActions(conditional_targetedFollowupActions_inputs, ref editAction.conditional_targeted_followup_actions, ref error, false, false, true)) {
+            return 1;
         }
 
         editAction.repeat = repeat_toggle.GetComponent<Toggle>().isOn;
