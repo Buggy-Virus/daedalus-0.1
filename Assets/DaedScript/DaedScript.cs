@@ -87,7 +87,6 @@ public class DaedScript {
 		// Debug.Log(expression.eDo[0].eErrorMessage);	
 		// // Debug.Log(expression.eDo[0].eOperatorRight.eInt);
 		// Debug.Log("End of Expression Info");
-
 		return interpret(
 			desugar_expression, 
 			gameEnv.env,
@@ -485,11 +484,7 @@ public class DaedScript {
 			return parseError(atomList[pos], pos, "Expected \"{\""); // throw error
 		}
 
-		while (
-			pos < atomList.Count 
-			&& !(bookended && atomEquals(atomList[pos], "punctuation", "}"))
-			) 
-		{
+		while (pos < atomList.Count && !(bookended && atomEquals(atomList[pos], "punctuation", "}"))) {
 			ParseResult singleResult = parseSingle(atomList, pos, false);
 			doExpression.eDo.Add(singleResult.expression);
 			pos = singleResult.position + 1;
@@ -499,7 +494,7 @@ public class DaedScript {
 	}
 
 	static ParseResult parseSingle(List<Atom> atomList, int pos, bool bookended) {
-		// Debug.Log("parseSingle");
+		Debug.Log("parseSingle");
 		Expression lastExpression = new Expression("error", atomList[pos].line, atomList[pos].character);
 		bool seenExpression = false;
 
@@ -509,8 +504,7 @@ public class DaedScript {
 			return parseError(atomList[pos], pos, "Expected \"(\""); // throw error
 		}
 
-		while (pos < atomList.Count) 
-		{
+		while (pos < atomList.Count) {
 			Atom curAtom = atomList[pos]; 
 			if (!seenExpression) {
 				if (curAtom.atomType == "keyword") {
@@ -656,7 +650,7 @@ public class DaedScript {
 		if (seenExpression && atomEquals(atomList[pos - 1], "punctuation", ";")) {
 			return new ParseResult(lastExpression, pos - 1);
 		}
-		return parseError(atomList[pos - 1], pos, "No expression returned from parseSingle"); // throw error
+		return parseError(atomList[pos - 1], pos, "No expression returned from parseSingle on \"" + atomList[pos].value + "\", expected an \";\""); // throw error
 	}
 
 	static ParseResult parseSingleHelper(List<Atom> atomList, int pos) {

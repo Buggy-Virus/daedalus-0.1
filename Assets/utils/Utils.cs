@@ -457,7 +457,7 @@ public class Utils {
             foreach(KeyValuePair<string, List<string>> string_list_arg in string_lists) {
                 switch(string_list_arg.Key) {
                     case "conditions":
-                        return_effect.conditions = string_list_arg.Value;
+                        return_effect.procConditions = string_list_arg.Value;
                         break; 
                     case "endConditions":
                         return_effect.endConditions = string_list_arg.Value;
@@ -555,8 +555,10 @@ public class Utils {
                 }
                 listString += "]";
                 return listString;
+            case "error":
+                return value.errorMessage;
             default:
-                return "<Error: Got an unknown value Type>";
+                return "<Error: Got an unknown value Type: " + value.valueType + ">";
         }
     }
 }

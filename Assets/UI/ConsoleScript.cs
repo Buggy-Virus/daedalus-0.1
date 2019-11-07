@@ -15,6 +15,8 @@ public class ConsoleScript : MonoBehaviour
 
     List<Message> messages = new List<Message>();
 
+    List<string> expressionList;
+
     public void FilterConsole(int type) {
         if (type == 0) {
             consoleLog = !consoleLog;
@@ -65,8 +67,14 @@ public class ConsoleScript : MonoBehaviour
         string input = inputText.text;
         if (input.Length > 3 && input.Substring(0,3) == "\\s ") {
             try {
+                char endCharacter = input[input.Length - 1]; 
+                if (endCharacter != '}' && endCharacter != ';') {
+                    input += ';';
+                }
+                
                 Value result = DaedScript.evaluate(input.Substring(3), ref gameEnv);
                 ConsoleLog(Utils.ValueToString(result));
+                expressionList.Add(input);
             } catch {
                 ConsoleLog("Unable To Parse Script: \"" + input.Substring(3) + "\"");
             }
@@ -82,12 +90,4 @@ public class ConsoleScript : MonoBehaviour
             Enter();
         }
     }
-
-    // void Start() {
-    //     inputText.OnSubmit(Enter());
-    //     inputText.onSubmit.AddListener(delegate { inputSubmitCallBack(); });
-    //     if(inputText.isFocused && inputText.text != "" && Input.GetKey(KeyCode.Return)) {
-    //         Enter();
-    //     }
-    // }
 }

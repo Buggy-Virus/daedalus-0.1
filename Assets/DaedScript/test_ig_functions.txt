@@ -23,7 +23,7 @@ function if_2() {
     Print(ToString($TEST.cha));
     Print(ToString($TEST.bab));
     Print(ToString($TEST.weapon_damage));
-    Print(ToString($TEST.AC));
+    Print(ToString($TEST.ac));
 
     Print(ToString($TEST.move_cheap_diagnol));
 }

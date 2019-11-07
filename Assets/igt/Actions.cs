@@ -161,7 +161,7 @@ public class Effect {
 
 
 	public bool instant;
-	public List<string> conditions;
+	public List<string> procConditions;
 	public List<string> endConditions;
 	public int frequency;
 	public int timeLeft;
@@ -184,6 +184,7 @@ public class Effect {
 	public List<Action> targeted_followup_actions;
 	public List<Action> target_targeted_followup_actions;
 
+	public List<string> conditions;
 	public List<string> conditional_scripts;
 	
 	public string conditional_target_displace;
@@ -221,7 +222,7 @@ public class Effect {
 		targeted = false;
 		name = n;
 		instant = false;
-		conditions = c;
+		procConditions = c;
 		endConditions = e_c;
 		frequency = f;
 		scripts = s;
@@ -245,7 +246,7 @@ public class Effect {
 		targeted = false;
 		name = n;
 		instant = true;
-		conditions = c;
+		procConditions = c;
 		scripts = s;
 		self_displace = d;
 		followup_actions = f_a;
@@ -275,7 +276,7 @@ public class Effect {
 		targeted = false;
 		name = n;
 		instant = false;
-		conditions = c;
+		procConditions = c;
 		endConditions = e_c;
 		frequency = f;
 		scripts = s;
@@ -314,7 +315,7 @@ public class Effect {
 		targeted = false;
 		name = n;
 		instant = true;
-		conditions = c;
+		procConditions = c;
 		scripts = s;
 		self_displace = s_d;
 		self_displace_para = s_d_para;
@@ -351,7 +352,7 @@ public class Effect {
 		targeted = true;
 		name = n;
 		instant = false;
-		conditions = c;
+		procConditions = c;
 		endConditions = e_c;
 		frequency = f;
 		scripts = s;
@@ -386,7 +387,7 @@ public class Effect {
 		targeted = true;
 		name = n;
 		instant = true;
-		conditions = c;
+		procConditions = c;
 		scripts = s;
 		self_displace = s_d;
 		self_displace_para = s_d_para;
