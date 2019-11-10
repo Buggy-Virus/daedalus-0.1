@@ -8,6 +8,7 @@ public class Action {
 	public bool relational;
 	public bool selfTargetable;
 	public bool targeted;
+	public bool wallTargeted;
 
 	public int maxRange;
 	public int minRange;
@@ -156,7 +157,8 @@ public class Effect {
 	public GameObject relative;
 
 	public bool relational;
-	public bool targeted;	
+	public bool targeted;
+	public bool wallTargeted;	
 	public bool stacks;
 
 

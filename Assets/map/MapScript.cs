@@ -14,10 +14,24 @@ public class MapScript : MonoBehaviour {
 
     public GameObject layerPrefab;
 
+    public List<GameObject> Layers = new List<GameObject>();
+
+    public MeshCollider UpdateActiveLayer(int activeLayer) {
+        for (int i = 0; i < Layers.Count; i ++) {
+            if (i <= activeLayer) {
+                Layers[i].GetComponent<MeshRenderer>().enabled = true;
+            } else {
+                Layers[i].GetComponent<MeshRenderer>().enabled = false;
+            }
+        }
+        return Layers[activeLayer].GetComponent<MeshCollider>();
+    }
+
     // Use this for initialization
     void Start() {
         for (int i = 0; i < sizeY; i++) {
             var layer = Instantiate(layerPrefab, new Vector3(transform.position.x, transform.position.y + i * cubeSize, transform.position.z), Quaternion.identity, transform);
+            Layers.Add(layer);
             layer.name = "layer" + i.ToString();
         }
 

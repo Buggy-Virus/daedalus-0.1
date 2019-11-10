@@ -121,6 +121,8 @@ public class GameUtils {
         GameObject tokenCavas = GameObject.Instantiate(graphicTokenScript.canvasPrefab, token.transform);
         graphicTokenScript.canvas = tokenCavas;
 
+        graphicTokenScript.enabled = false;
+
         return token;
     }
 
@@ -182,11 +184,14 @@ public class GameUtils {
         GameObject tokenCavas = GameObject.Instantiate(graphicTokenScript.canvasPrefab, token.transform);
         graphicTokenScript.canvas = tokenCavas;
 
+        graphicTokenScript.enabled = false;
+
         return token;
     }
 
     static public void placeGraphicToken(ref GameObject token, Index pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
+        GraphicTokenScript graphicTokenScript = token.GetComponent<GraphicTokenScript>();
         tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
 
@@ -197,11 +202,14 @@ public class GameUtils {
 
         tokenScript.graphicObject.SetActive(true);
         token.transform.position = placePos;  
-        token.GetComponent<GraphicTokenScript>().goingTo = placePos;     
+        
+        graphicTokenScript.enabled = true;
+        graphicTokenScript.goingTo = placePos;     
     }
 
     static public void placeGraphicToken(ref GameObject token, Vector3 pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
+        GraphicTokenScript graphicTokenScript = token.GetComponent<GraphicTokenScript>();
         tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
 
@@ -214,7 +222,9 @@ public class GameUtils {
 
         tokenScript.graphicObject.SetActive(true);
         token.transform.position = placePos; 
-        token.GetComponent<GraphicTokenScript>().goingTo = placePos;   
+        
+        graphicTokenScript.enabled = true;
+        graphicTokenScript.goingTo = placePos;   
     }
 
     static public void deleteGraphicToken(ref GameObject token) {
@@ -223,6 +233,7 @@ public class GameUtils {
         tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(token);
         tokenScript.graphicObject.SetActive(false);
         tokenScript.onMap = false;
+        token.GetComponent<GraphicTokenScript>().enabled = false;
     }
 
     static public void deleteToken(ref GameObject token) {
@@ -279,12 +290,14 @@ public class GameUtils {
         graphicShapeScript.graphicObject_collider = graphicShape.transform.GetComponent<Collider>();
         shapeScript.graphicObject = graphicShape;
         shapeScript.graphicShapeScript = graphicShapeScript;
+        graphicShapeScript.enabled = false;
 
         return shape;
     }
 
     static public void placeGraphicShape(ref GameObject shape, Index pos) {
         ShapeScript shapceScript = shape.GetComponent<ShapeScript>();
+        GraphicShapeScript graphicShapeScript = shape.GetComponent<GraphicShapeScript>();
         shapceScript.onMap = true;
         float cubeSize = shapceScript.gameEnv.cubeSize;
 
@@ -294,11 +307,13 @@ public class GameUtils {
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
         shapceScript.graphicObject.SetActive(true);
         shape.transform.position = placePos;
-        shape.GetComponent<GraphicShapeScript>().goingTo = placePos;
+        graphicShapeScript.enabled = true;
+        graphicShapeScript.goingTo = placePos;
     }
 
     static public void placeGraphicShape(ref GameObject shape, Vector3 pos) {
         ShapeScript shapeScript = shape.GetComponent<ShapeScript>();
+        GraphicShapeScript graphicShapeScript = shape.GetComponent<GraphicShapeScript>();
         shapeScript.onMap = true;
         float cubeSize = shapeScript.gameEnv.cubeSize;
 
@@ -309,8 +324,8 @@ public class GameUtils {
 
         Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
         shapeScript.graphicObject.SetActive(true);
-        shape.transform.position = placePos;
-        shape.GetComponent<GraphicShapeScript>().goingTo = placePos;
+        graphicShapeScript.enabled = true;
+        graphicShapeScript.goingTo = placePos;
     }
 
     static public void deleteGraphicShape(ref GameObject shape) {
@@ -319,6 +334,7 @@ public class GameUtils {
         shapeScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].shape = null;
         shapeScript.graphicObject.SetActive(false);
         shapeScript.onMap = false;
+        shape.GetComponent<GraphicShapeScript>().enabled = false;
     }
 
     static public void deleteShape(ref GameObject shape) {
@@ -329,6 +345,20 @@ public class GameUtils {
         GameObject.Destroy(shape);
     }
 
+    static public void deleteShapeAtPos(Vector3 pos, ref MapScript mapScript) {
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        int z = Mathf.FloorToInt(pos.z);
+
+        GameObject shape = mapScript.gameBoard[x,y,z].shape;
+        mapScript.gameBoard[x,y,z].shape = null;
+        GameObject.Destroy(shape);
+    }
+
+    // ==========================================================================================================================
+    // ==========================================================================================================================
+    // ==========================================================================================================================
+    // ==========================================================================================================================
     // ========================================================================================================================== Wall Stuff
     static public GameObject quickCreateWall(GameObject wallPrefab, WallTemplate template, ref GameEnv gameEnv) {
         GameObject wall = GameObject.Instantiate(wallPrefab, gameEnv.shapesObject.transform);
@@ -419,15 +449,9 @@ public class GameUtils {
         WallScript wallScript = wall.GetComponent<WallScript>();
         wallScript.onMap = true;
         float cubeSize = wallScript.gameEnv.cubeSize;
-        Debug.Log(pos);
 
         Index index_1 = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
         Index index_2 = new Index(Mathf.CeilToInt(pos.x / cubeSize), Mathf.CeilToInt(pos.y / cubeSize), Mathf.CeilToInt(pos.z / cubeSize));
-        Debug.Log(index_1.x);
-        Debug.Log(index_1.z);
-        Debug.Log(index_2.x);
-        Debug.Log(index_2.z);
-
 
         if (index_1.x == index_2.x) {
             if (index_1.z > index_2.z) {
@@ -491,13 +515,50 @@ public class GameUtils {
         GameObject.Destroy(wall);
     }
 
+    static public void deleteWallAtPos(Vector3 pos, ref MapScript mapScript) {
+        float cubeSize = mapScript.cubeSize;
+
+        Index index_1 = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
+        Index index_2 = new Index(Mathf.CeilToInt(pos.x / cubeSize), Mathf.CeilToInt(pos.y / cubeSize), Mathf.CeilToInt(pos.z / cubeSize));
+
+        GameObject wall;
+
+        if (index_1.x == index_2.x) {
+            if (index_1.z > index_2.z) {
+                wall = mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_z;
+                mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_z = null;
+                mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_zz = null;
+            } else {
+                wall = mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_zz;
+                mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_zz = null;
+                mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_z = null;
+            }
+        } else {
+            if (index_1.x > index_2.x) {
+                wall = mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_x;
+                mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_x = null;
+                mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_xx = null;
+            } else {
+                wall = mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_xx;
+                mapScript.gameBoard[index_1.x, index_1.y, index_1.z].wall_xx = null;
+                mapScript.gameBoard[index_2.x, index_2.y, index_2.z].wall_x = null;
+            }
+        }
+
+        GameObject.Destroy(wall);
+    }
+
+    // ==========================================================================================================================
+    // ==========================================================================================================================
+    // ==========================================================================================================================
+    // ==========================================================================================================================
     // ========================================================================================================================== Testing Functions
     static public void createAndPlaceToken(GameObject tokenPrefab, TokenTemplate template, ref GameEnv gameEnv, Index pos) {
         GameObject token = quickCreateToken(tokenPrefab, template, ref gameEnv);
         placeGraphicToken(ref token, pos);
     }
 
-    static public void createAndPlaceShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv, Index pos) {
+    static public void createAndPlaceShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv, Vector3 pos) {
         GameObject cube = quickCreateShape(shapePrefab, template, ref gameEnv);
         placeGraphicShape(ref cube, pos);
     }
@@ -507,6 +568,10 @@ public class GameUtils {
         placeGraphicWall(ref cube, pos, rotation);
     }
 
+    // ==========================================================================================================================
+    // ==========================================================================================================================
+    // ==========================================================================================================================
+    // ==========================================================================================================================
     // ========================================================================================================================== General Utility
     static public Index GetIndex(GameObject gameObject) {
         TokenScript tokenScript = gameObject.GetComponent<TokenScript>();

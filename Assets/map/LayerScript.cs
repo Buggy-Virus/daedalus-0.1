@@ -69,20 +69,7 @@ public class LayerScript : MonoBehaviour {
         mesh.triangles = triangles;
         mesh.normals = normals;
 
-        meshFilter = GetComponent<MeshFilter>();
-        meshRenderer = GetComponent<MeshRenderer>();
-        meshCollider = GetComponent<MeshCollider>();
-
-        meshFilter.mesh = mesh;
-        meshCollider.sharedMesh = mesh;
-    }
-
-    // Update is called once per frame
-    void Update() {
-        if (transform.position.y <= controlScript.activeLayer && !meshRenderer.enabled) {
-            meshRenderer.enabled = true;
-        } else if (transform.position.y > controlScript.activeLayer && meshRenderer.enabled) {
-            meshRenderer.enabled = false;
-        }
+        GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 }

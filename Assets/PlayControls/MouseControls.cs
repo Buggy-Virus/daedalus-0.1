@@ -247,13 +247,13 @@ public class MouseControls : MonoBehaviour {
 	                for (int x = (int) Mathf.Min(mouseDownPosition.x, curPosition.x); x <= (int) Mathf.Max(mouseDownPosition.x, curPosition.x); x++) {
 	                    for (int z = (int)Mathf.Min(mouseDownPosition.z, curPosition.z); z <= (int)Mathf.Max(mouseDownPosition.z, curPosition.z); z++) {
 	                        iterIndex = new Index(x, y, z);
-                            GameUtils.createAndPlaceShape(shapePrefab, gameEnv.shapeTemplates[shapeType], ref gameEnv, iterIndex);
+                            GameUtils.createAndPlaceShape(shapePrefab, gameEnv.shapeTemplates[shapeType], ref gameEnv, curPosition);
 	                    }
 	                }
 	                Destroy(dragObject);
 	            } else if (Utils.indexEqual(mouseDownIndex, curIndex)) {
 	            	Debug.Log("Placing Cube");
-                    GameUtils.createAndPlaceShape(shapePrefab, gameEnv.shapeTemplates[shapeType], ref gameEnv, curIndex);
+                    GameUtils.createAndPlaceShape(shapePrefab, gameEnv.shapeTemplates[shapeType], ref gameEnv, curPosition);
 	            }
 	            
 	            mouseDown = false;

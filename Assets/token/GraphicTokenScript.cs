@@ -28,11 +28,10 @@ public class GraphicTokenScript : MonoBehaviour
     public Collider graphicObject_collider;
 
     // ================================================ FETCHED REFERENCES
-    MouseControls controlScript;
+    PlayControlsScript controlScript;
 
     // ================================================ GLOBAL VARIABLES
     // selection variables
-    bool mouseDown;
 
     // button variables
     int num_buttons = 4;
@@ -40,52 +39,9 @@ public class GraphicTokenScript : MonoBehaviour
     GameObject basicButton;
     GameObject advancedButton;
     GameObject miscButton;
-    bool buttonsActive;
-    bool buttonsActive_lf;
 
     // movement variables
     public Vector3 goingTo;
-
-    // ================================================ SELECTION CONTROLS
-    void selectToken(bool hit, RaycastHit hitInfo) {
-        if (hit && controlScript.selectedObject != gameObject) {
-            if (Input.GetMouseButtonDown(0)) {
-                mouseDown = true;
-            }
-
-            if (Input.GetMouseButtonUp(0) && mouseDown) {
-                controlScript.selectedObject = token;
-                controlScript.selectedTokenScript = tokenScript;
-                Debug.Log(controlScript.selectedObject.transform.name);
-                mouseDown = false;
-                showButtons();
-            }
-        }
-    }
-
-    void playMode() {
-        if (!controlScript.editor && controlScript.playMode == 0 ) {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
-            bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
-
-            selectToken(hit, hitInfo);
-
-            if (Input.GetMouseButtonUp(0)) {
-                mouseDown = false;
-            }
-
-            if (controlScript.selectedObject == token && controlScript.playMode == 0) {
-                showButtons();
-            }
-        }
-
-        if (!controlScript.editor && controlScript.playMode == 0 && controlScript.selectedObject == token && Input.GetKeyDown(KeyCode.Escape)) {
-            // ADD SHORTCUT
-            Debug.Log("Canceled Input");
-            controlScript.gotGoodInput();
-        }
-    }
 
     // ================================================ BUTTONS
     void createButtons() {
@@ -130,7 +86,7 @@ public class GraphicTokenScript : MonoBehaviour
         miscButton.SetActive(true);
     }
 
-    void hideButtons() {
+    public void hideButtons() {
         moveButton.SetActive(false);
         basicButton.SetActive(false);
         advancedButton.SetActive(false);
@@ -181,12 +137,7 @@ public class GraphicTokenScript : MonoBehaviour
         }
     }
 
-    void destroyActionMenu() {
-
-    }
-
     // ================================================ Call Actions
-
     public void callAction(Action action, ref GameEnv gameEnv) {
         Debug.Log("Call Action");
         if (!action.relational && !action.targeted) {
@@ -196,45 +147,6 @@ public class GraphicTokenScript : MonoBehaviour
             Debug.Log("Waiting For Input");
             controlScript.waitForActionInput(action);
             hideButtons();
-        }
-    }
-
-    public void callRelationalAction(bool hit, RaycastHit hitInfo) {
-        if (hit && (controlScript.selectedObject != token || controlScript.waitingAction.selfTargetable)) {
-            if (Input.GetMouseButtonDown(0)) {
-                mouseDown = true;
-            }
-
-            if (Input.GetMouseButtonUp(0) && mouseDown) {
-                int distance = Utils.distance(tokenScript.index, controlScript.selectedTokenScript.index);
-                if (controlScript.waitingAction.minRange < 0 || distance < controlScript.waitingAction.minRange) {
-                    controlScript.gotBadInput();
-                    Debug.Log("Distance to target below minimum range");
-                } else if (controlScript.waitingAction.maxRange < 0 || distance > controlScript.waitingAction.maxRange) {
-                    controlScript.gotBadInput();
-                    Debug.Log("Distance to target above maximum range");
-                } else if (!ResolveActionsScript.resolveRelationalConditions(controlScript.selectedObject, token, controlScript.waitingAction.call_conditions, tokenScript.gameEnv)) {
-                    controlScript.gotBadInput();
-                    Debug.Log("Failed call condition");
-                } else {
-                    ResolveActionsScript.resolveRelationalAction(ref controlScript.selectedObject, ref token, controlScript.waitingAction, ref tokenScript.gameEnv);
-                    controlScript.gotGoodInput();
-                }
-            }
-        }
-    }
-
-    void inputControls() {
-        if (!controlScript.editor && controlScript.playMode == 1 && controlScript.waitingAction.relational) {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
-            bool hit = graphicObject_collider.Raycast(ray, out hitInfo, Mathf.Infinity);
-
-            callRelationalAction(hit, hitInfo);
-
-            if (Input.GetMouseButtonUp(0)) {
-                mouseDown = false;
-            }
         }
     }
 
@@ -251,14 +163,11 @@ public class GraphicTokenScript : MonoBehaviour
 
     // ================================================ START/UPDATE
     void Start() {
-        controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
-        mouseDown = false; 
+        controlScript = GameObject.Find("PlayControls").GetComponent<PlayControlsScript>();
         createButtons();
     }
 
     void Update() {
-        playMode();
         move();
-        inputControls();
     }
 }

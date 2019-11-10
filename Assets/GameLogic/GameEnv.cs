@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class GameEnv
 {
-    public int inGameTime;
-
+    public bool playMode = true;
     public float cubeSize = 1;
-
     public MapScript mapScript;
+    public int inGameTime;
 
     public GameObject tokensObject;
     public GameObject shapesObject;
