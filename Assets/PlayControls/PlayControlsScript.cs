@@ -8,7 +8,7 @@ public class PlayControlsScript : MonoBehaviour
     GameEnv gameEnv;
 
     // ================================== mode variables
-    public bool playMode = true;
+    public bool selectMode = true;
 
     // ================================== mouse handling
     GameObject mdObject;
@@ -26,14 +26,14 @@ public class PlayControlsScript : MonoBehaviour
     // ================================== Input Functions
     public void waitForActionInput(Action action) {
         Debug.Log("waitForActionInput Called");
-        playMode = false;
+        selectMode = false;
         waitingAction = action;
     }
 
     public void gotGoodInput() {
         Debug.Log("Got An Input");
         waitingAction = null;
-        playMode = true;
+        selectMode = true;
     }
 
     public void gotBadInput() {
@@ -42,7 +42,22 @@ public class PlayControlsScript : MonoBehaviour
 
     public void cancelInput() {
         waitingAction = null;
-        playMode = true;
+        selectMode = true;
+    }
+
+    public void clearInputs() {
+        if (selectedTokenScript != null) {
+            selectedTokenScript.graphicTokenScript.hideButtons();
+        }
+
+        waitingAction = null;
+        selectMode = true;
+
+        selectedObject = null;
+        selectedShapeScript = null;
+        selectedTokenScript = null;
+
+        mdObject = null;
     }
 
     void deselect() {
@@ -56,7 +71,7 @@ public class PlayControlsScript : MonoBehaviour
         selectedTokenScript.graphicTokenScript.showButtons();
     }
 
-    void selectMode(ref GameObject hitObject) {
+    void selectRun(ref GameObject hitObject) {
         TokenScript tokenScript = hitObject.GetComponent<TokenScript>();
         if (tokenScript != null) {
             selectNew(ref hitObject, ref tokenScript);
@@ -95,7 +110,7 @@ public class PlayControlsScript : MonoBehaviour
         }
     }
 
-    void inputMode(ref GameObject hitObject) {
+    void inputRun(ref GameObject hitObject) {
         TokenScript tokenScript = hitObject.GetComponent<TokenScript>();
         ShapeScript shapeScript = hitObject.GetComponent<ShapeScript>();
         WallScript wallScript = hitObject.GetComponent<WallScript>();
@@ -123,10 +138,10 @@ public class PlayControlsScript : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
         if(Physics.Raycast(ray, out hitPoint, Mathf.Infinity)) {
             GameObject hitObject = hitPoint.collider.gameObject;
-            if (playMode) {               
-                selectMode(ref hitObject);
+            if (selectMode) {               
+                selectRun(ref hitObject);
             } else {
-                inputMode(ref hitObject);
+                inputRun(ref hitObject);
             }
         }
         mdObject = null;

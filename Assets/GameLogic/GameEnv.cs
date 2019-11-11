@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class GameEnv
 {
-    public bool playMode = true;
     public float cubeSize = 1;
     public MapScript mapScript;
     public int inGameTime;

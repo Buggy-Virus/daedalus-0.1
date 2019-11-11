@@ -19,6 +19,9 @@ public class GameEnvScript : MonoBehaviour
     public GameObject stonePrefab;
     public GameObject wallPrefab;
 
+    public MapScript mapScript;
+    public ConsoleScript console;
+
     void Start()
     {
         typeDict = new Dictionary<string, Type>();
@@ -29,8 +32,8 @@ public class GameEnvScript : MonoBehaviour
 
         gameEnv.shapesObject = GameObject.Find("Shapes");
         gameEnv.tokensObject = GameObject.Find("Tokens");
-        gameEnv.mapScript = GameObject.Find("Map").GetComponent<MapScript>();
-        gameEnv.console = GameObject.Find("Log_Panel").GetComponent<ConsoleScript>();
+        gameEnv.mapScript = mapScript;
+        gameEnv.console = console;
         gameEnv.console.gameEnv = gameEnv;
 
         populateStore();

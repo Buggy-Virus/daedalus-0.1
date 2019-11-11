@@ -95,6 +95,7 @@ public class MapEditorScript : MonoBehaviour
         string input = shapeInput.text;
         if (gameEnv.shapeDict.ContainsKey(input)) {
             shapeType = gameEnv.shapeTemplates[input];
+            refreshCursor();
         } else {
             gameEnv.console.ConsoleLog("No shape template: \"" + input + "\"");
         }
@@ -104,6 +105,7 @@ public class MapEditorScript : MonoBehaviour
         string input = wallInput.text;
         if (gameEnv.shapeDict.ContainsKey(input)) {
             wallType = gameEnv.wallTemplates[input];
+            refreshCursor();
         } else {
             gameEnv.console.ConsoleLog("No wall template: \"" + input + "\"");
         }
@@ -116,12 +118,8 @@ public class MapEditorScript : MonoBehaviour
     // ==================================
     // ================================== Cursor
     // ==================================
-    void destroyCursor() {
-        try {
-            Destroy(cursorObject);
-        } catch { 
-            Debug.Log("Error Destroying Cursor");
-        }
+    public void deactivateCurosr() {
+        
     }
 
     void placeCursor(Vector3 currentCoord, float rotation) {
@@ -142,6 +140,24 @@ public class MapEditorScript : MonoBehaviour
         activeCursor = true;
     }
 
+    public void refreshCursor() {
+        if (cursorObject != null) {
+            Destroy(cursorObject);
+        }
+
+        switch(mode) {
+            case 0:
+                addCursor(shapeType.graphicObjectPrefab, "ShapeCursor");
+                break;
+            case 1:
+                addCursor(wallType.graphicObjectPrefab, "ShapeCursor");
+                break;
+            case 2:
+                // TODO
+                break;
+        }
+    }
+
     // ==================================
     // ================================== Mouse Handling
     // ==================================
@@ -157,8 +173,10 @@ public class MapEditorScript : MonoBehaviour
         mdPos = curPos;
     }
 
-    void clearInput() {
-        cursorObjectRenderer.material.color = normalColor;
+    public void clearInput() {
+        if (cursorObject != null) {
+            cursorObjectRenderer.material.color = normalColor;
+        }
         md = false;
         dragObject.SetActive(false);
         activeDrag = false;

@@ -10,16 +10,10 @@ public class LayerScript : MonoBehaviour {
     float cubeSize;
 
     MapScript mapScript;
-    MouseControls controlScript;
-
-    MeshFilter meshFilter;
-    MeshRenderer meshRenderer;
-    MeshCollider meshCollider;
-
+    
     // Use this for initialization
     void Start() {
         mapScript = GameObject.Find("Map").GetComponent<MapScript>();
-        controlScript = GameObject.Find("Controls").GetComponent<MouseControls>();
         sizeX = mapScript.sizeX;
         sizeZ = mapScript.sizeZ;
         cubeSize = mapScript.cubeSize;
