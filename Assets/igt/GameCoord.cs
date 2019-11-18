@@ -14,11 +14,9 @@ public class GameCoord : MonoBehaviour {
 	public GameObject wall_xx;
 	public GameObject wall_x;
 	public List<GameObject> tokens;
-	public List<Character> characters;
-	public Tile downTile;
-	public Tile upTile;
+	public GameObject occupyingToken;
+	public Tile Tile;
 
-    
     public GameCoord (int inpX, int inpY, int inpZ) {
     	x = inpX;
     	y = inpY;

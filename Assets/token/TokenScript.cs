@@ -13,6 +13,7 @@ public class TokenScript : MonoBehaviour {
     public GameObject graphicObject;
     public GraphicTokenScript graphicTokenScript;
     public bool onMap = false;
+    public bool persistent = false;
 
     public string alias;
 

@@ -42,8 +42,6 @@ public class MapEditorScript : MonoBehaviour
     // ================================== mouse state Variables
     bool md;
     Vector3 mdPos;
-    Index mdInd;
-    Index mouseUpIndex;
 
     // ================================== cursor Variables
     bool activeCursor = false;

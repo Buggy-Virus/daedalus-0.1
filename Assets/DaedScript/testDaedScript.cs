@@ -766,7 +766,7 @@ public class testDaedScript : MonoBehaviour
             printValue(DaedScript.evaluate(testIfFile, ref gameEnvScript.gameEnv));
             
             
-            GameUtils.deleteToken(ref test_token);
+            GameUtils.deleteToken(test_token);
             eval_test_ig_1 = false;
         }
     }

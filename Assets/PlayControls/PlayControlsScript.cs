@@ -64,7 +64,7 @@ public class PlayControlsScript : MonoBehaviour
         selectedTokenScript.graphicTokenScript.hideButtons();
     }
 
-    void selectNew(ref GameObject selected, ref TokenScript tokenScript) {
+    public void selectNew(GameObject selected, TokenScript tokenScript) {
         deselect();
         selectedObject = selected;
         selectedTokenScript = tokenScript;
@@ -74,7 +74,7 @@ public class PlayControlsScript : MonoBehaviour
     void selectRun(ref GameObject hitObject) {
         TokenScript tokenScript = hitObject.GetComponent<TokenScript>();
         if (tokenScript != null) {
-            selectNew(ref hitObject, ref tokenScript);
+            selectNew(hitObject, tokenScript);
         }
     }
 

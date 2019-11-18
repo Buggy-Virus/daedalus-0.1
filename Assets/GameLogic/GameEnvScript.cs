@@ -20,9 +20,10 @@ public class GameEnvScript : MonoBehaviour
     public GameObject wallPrefab;
 
     public MapScript mapScript;
+    public PlayControlsScript playControlsScript;
     public ConsoleScript console;
 
-    void Start()
+    void Awake()
     {
         typeDict = new Dictionary<string, Type>();
         typeDict.Add("testCube", new Type("cube"));
@@ -33,6 +34,7 @@ public class GameEnvScript : MonoBehaviour
         gameEnv.shapesObject = GameObject.Find("Shapes");
         gameEnv.tokensObject = GameObject.Find("Tokens");
         gameEnv.mapScript = mapScript;
+        gameEnv.playControlsScript = playControlsScript;
         gameEnv.console = console;
         gameEnv.console.gameEnv = gameEnv;
 

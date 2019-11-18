@@ -115,6 +115,7 @@ public class GameUtils {
         graphicTokenScript.tokenScript = tokenScript;
         graphicTokenScript.graphicObject_transform = graphicToken.transform;
         graphicTokenScript.graphicObject_collider = graphicToken.transform.GetComponent<Collider>();
+        graphicTokenScript.controlScript = gameEnv.playControlsScript;
         tokenScript.graphicObject = graphicToken;
         tokenScript.graphicTokenScript = graphicTokenScript;
 
@@ -178,6 +179,7 @@ public class GameUtils {
         graphicTokenScript.tokenScript = tokenScript;
         graphicTokenScript.graphicObject_transform = graphicToken.transform;
         graphicTokenScript.graphicObject_collider = graphicToken.transform.GetComponent<Collider>();
+        graphicTokenScript.controlScript = gameEnv.playControlsScript;
         tokenScript.graphicObject = graphicToken;
         tokenScript.graphicTokenScript = graphicTokenScript;
 
@@ -189,45 +191,62 @@ public class GameUtils {
         return token;
     }
 
-    static public void placeGraphicToken(ref GameObject token, Index pos) {
+    static public int placeGraphicToken(GameObject token, Index pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         GraphicTokenScript graphicTokenScript = token.GetComponent<GraphicTokenScript>();
+        GameCoord gameCoord = tokenScript.gameEnv.mapScript.gameBoard[pos.x, pos.y, pos.z];
+        if (tokenScript.occupies && (gameCoord.shape != null || gameCoord.occupyingToken != null)) {
+            Debug.Log("Position is already occupied");
+            return 1;
+        } else if (tokenScript.occupies) {
+            gameCoord.occupyingToken = token;
+        } else {
+            gameCoord.tokens.Add(token);
+        }
+
         tokenScript.onMap = true;
+        tokenScript.index = new Index(pos);
+
         float cubeSize = tokenScript.gameEnv.cubeSize;
-
-        tokenScript.gameEnv.mapScript.gameBoard[pos.x, pos.y, pos.z].tokens.Add(token);
-        tokenScript.index = pos;
-
         Vector3 placePos = new Vector3(pos.x * cubeSize, pos.y * cubeSize, pos.z * cubeSize);
-
         tokenScript.graphicObject.SetActive(true);
         token.transform.position = placePos;  
         
         graphicTokenScript.enabled = true;
-        graphicTokenScript.goingTo = placePos;     
+        graphicTokenScript.goingTo = placePos; 
+
+        return 0;    
     }
 
-    static public void placeGraphicToken(ref GameObject token, Vector3 pos) {
+    static public int placeGraphicToken(GameObject token, Vector3 pos) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         GraphicTokenScript graphicTokenScript = token.GetComponent<GraphicTokenScript>();
-        tokenScript.onMap = true;
         float cubeSize = tokenScript.gameEnv.cubeSize;
-
         Index index = new Index(Mathf.FloorToInt(pos.x / cubeSize), Mathf.FloorToInt(pos.y / cubeSize), Mathf.FloorToInt(pos.z / cubeSize));
+        GameCoord gameCoord = tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z];
 
-        tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Add(token);
+        if (tokenScript.occupies && (gameCoord.shape != null || gameCoord.occupyingToken != null)) {
+            Debug.Log("Position is already occupied");
+            return 1;
+        } else if (tokenScript.occupies) {
+            gameCoord.occupyingToken = token;
+        } else {
+            gameCoord.tokens.Add(token);
+        }
+
+        tokenScript.onMap = true;
         tokenScript.index = index;
 
-        Vector3 placePos = new Vector3(index.x * cubeSize, index.y * cubeSize, index.z * cubeSize);
-
         tokenScript.graphicObject.SetActive(true);
-        token.transform.position = placePos; 
+        token.transform.position = pos; 
         
         graphicTokenScript.enabled = true;
-        graphicTokenScript.goingTo = placePos;   
+        graphicTokenScript.goingTo = pos;   
+
+        return 0;
     }
 
-    static public void deleteGraphicToken(ref GameObject token) {
+    static public void deleteGraphicToken(GameObject token) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         Index index = tokenScript.index;
         tokenScript.gameEnv.mapScript.gameBoard[index.x, index.y, index.z].tokens.Remove(token);
@@ -236,15 +255,43 @@ public class GameUtils {
         token.GetComponent<GraphicTokenScript>().enabled = false;
     }
 
-    static public void deleteToken(ref GameObject token) {
+    static public void deleteToken(GameObject token) {
         TokenScript tokenScript = token.GetComponent<TokenScript>();
         tokenScript.gameEnv.tokenDict.Remove(token.name);
         if (tokenScript.onMap) {
-            deleteGraphicToken(ref token);
+            deleteGraphicToken(token);
         }
         GameObject.Destroy(token);
     }
 
+    static public void deleteTokensAtPos(Vector3 pos, ref MapScript mapScript) {
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        int z = Mathf.FloorToInt(pos.z);
+
+        foreach (GameObject token in mapScript.gameBoard[x,y,z].tokens) {
+            if (token.GetComponent<TokenScript>().persistent) {
+                deleteGraphicToken(token);
+            } else {
+                deleteToken(token);
+            }
+        }
+    }
+
+    static public void removeTokensAtPos(Vector3 pos, ref MapScript mapScript) {
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        int z = Mathf.FloorToInt(pos.z);
+
+        foreach (GameObject token in mapScript.gameBoard[x,y,z].tokens) {
+            deleteGraphicToken(token);
+        }
+    }
+
+    // ========================================================================================================================== Shape Stuff
+    // ========================================================================================================================== Shape Stuff
+    // ========================================================================================================================== Shape Stuff
+    // ========================================================================================================================== Shape Stuff
     // ========================================================================================================================== Shape Stuff
     static public GameObject quickCreateShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv) {
         GameObject shape = GameObject.Instantiate(shapePrefab, gameEnv.shapesObject.transform);
@@ -553,9 +600,14 @@ public class GameUtils {
     // ==========================================================================================================================
     // ==========================================================================================================================
     // ========================================================================================================================== Testing Functions
+    static public void createAndPlaceToken(GameObject tokenPrefab, TokenTemplate template, ref GameEnv gameEnv, Vector3 pos) {
+        GameObject token = quickCreateToken(tokenPrefab, template, ref gameEnv);
+        placeGraphicToken(token, pos);
+    }
+
     static public void createAndPlaceToken(GameObject tokenPrefab, TokenTemplate template, ref GameEnv gameEnv, Index pos) {
         GameObject token = quickCreateToken(tokenPrefab, template, ref gameEnv);
-        placeGraphicToken(ref token, pos);
+        placeGraphicToken(token, pos);
     }
 
     static public void createAndPlaceShape(GameObject shapePrefab, ShapeTemplate template, ref GameEnv gameEnv, Vector3 pos) {

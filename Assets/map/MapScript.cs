@@ -19,16 +19,18 @@ public class MapScript : MonoBehaviour {
     public MeshCollider UpdateActiveLayer(int activeLayer) {
         for (int i = 0; i < Layers.Count; i ++) {
             if (i <= activeLayer) {
-                Layers[i].GetComponent<MeshRenderer>().enabled = true;
+                Layers[i].SetActive(true);
+                Layers[i].GetComponent<MeshCollider>().enabled = false;
             } else {
-                Layers[i].GetComponent<MeshRenderer>().enabled = false;
+                Layers[i].SetActive(false);
             }
         }
+        Layers[activeLayer].GetComponent<MeshCollider>().enabled = true;
         return Layers[activeLayer].GetComponent<MeshCollider>();
     }
 
     // Use this for initialization
-    void Start() {
+    void Awake() {
         for (int i = 0; i < sizeY; i++) {
             var layer = Instantiate(layerPrefab, new Vector3(transform.position.x, transform.position.y + i * cubeSize, transform.position.z), Quaternion.identity, transform);
             Layers.Add(layer);
@@ -44,7 +46,6 @@ public class MapScript : MonoBehaviour {
                     gameBoard[x, y, z].y = y;
                     gameBoard[x, y, z].z = z;
                     gameBoard[x, y, z].tokens = new List<GameObject>();
-                    gameBoard[x, y, z].characters = new List<Character>();
                 }
             }
         }

@@ -28,7 +28,7 @@ public class GraphicTokenScript : MonoBehaviour
     public Collider graphicObject_collider;
 
     // ================================================ FETCHED REFERENCES
-    PlayControlsScript controlScript;
+    public PlayControlsScript controlScript;
 
     // ================================================ GLOBAL VARIABLES
     // selection variables
@@ -163,7 +163,6 @@ public class GraphicTokenScript : MonoBehaviour
 
     // ================================================ START/UPDATE
     void Start() {
-        controlScript = GameObject.Find("PlayControls").GetComponent<PlayControlsScript>();
         createButtons();
     }
 

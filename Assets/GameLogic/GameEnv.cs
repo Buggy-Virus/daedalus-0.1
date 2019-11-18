@@ -7,6 +7,7 @@ public class GameEnv
 {
     public float cubeSize = 1;
     public MapScript mapScript;
+    public PlayControlsScript playControlsScript;
     public int inGameTime;
 
     public GameObject tokensObject;

@@ -6,7 +6,7 @@ public class ModeScript : MonoBehaviour
 {
 
     // ================================================ Mode Variables
-    int mode = 0;
+    public int mode = 0;
 
     int playMode = 0;
     int mapMode = 1;
@@ -138,6 +138,8 @@ public class ModeScript : MonoBehaviour
     // ================================================ Token Mode
     public void startTokenMode() {
         tokenEditor.gameObject.SetActive(true);
+        tokenEditor.clearInput();
+        // tokenEditor.changeActiveLayer();
         mode = tokenMode;
     }
 
@@ -290,12 +292,6 @@ public class ModeScript : MonoBehaviour
         } else {
             editorPanel.SetActive(true);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame

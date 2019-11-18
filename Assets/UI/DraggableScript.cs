@@ -10,25 +10,14 @@ public class DraggableScript : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 	private Vector3 startPosition;
 	public bool shouldReturn;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-
 	public void OnPointerDown(PointerEventData dt) {
 		isMouseDown = true;
-
-		Debug.Log ("Draggable Mouse Down");
-
 		startPosition = target.localPosition;
 		startMousePosition = Input.mousePosition;
 	}
 
 	public void OnPointerUp(PointerEventData dt) {
-		Debug.Log ("Draggable mouse up");
-
 		isMouseDown = false;
-
 		if (shouldReturn) {
 			target.localPosition = startPosition;
 		}
@@ -38,11 +27,8 @@ public class DraggableScript : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 	void Update () {
 		if (isMouseDown) {
 			Vector3 currentPosition = Input.mousePosition;
-
 			Vector3 diff = currentPosition - startMousePosition;
-
 			Vector3 pos = startPosition + diff;
-
 			target.localPosition = pos;
 		}
 	}
